@@ -26,7 +26,7 @@ FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} as jupyter
 
 RUN python -m pip install --no-cache-dir jupyter matplotlib
 # Pin ipykernel and nbformat; see https://github.com/ipython/ipykernel/issues/422
-RUN python -m pip install --no-cache-dir jupyter_http_over_ws ipykernel==5.1.1 nbformat==4.4.0
+RUN python -m pip install --no-cache-dir jupyter_http_over_ws ipykernel nbformat
 RUN jupyter serverextension enable --py jupyter_http_over_ws
 
 RUN mkdir -p /tf-base/ && chmod -R a+rwx /tf-base/
