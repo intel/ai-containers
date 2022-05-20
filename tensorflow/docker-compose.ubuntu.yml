@@ -6,7 +6,7 @@ services:
     # env_file:
     #   - ./base/config/base.env
     #   - ./base/config/${BASE_IMAGE_NAME}.env
-    image: tf-base:${TF_PACKAGE_VERSION}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
+    image: ${FINAL_IMAGE_NAME}:${TF_PACKAGE_VERSION}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
     build:
       context: ./base
       args:
@@ -26,11 +26,11 @@ services:
 
 ## Jupyter
   jupyter:
-    image: tf-base:${TF_PACKAGE_VERSION}-jupyter-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
+    image: ${FINAL_IMAGE_NAME}:${TF_PACKAGE_VERSION}-jupyter-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
     build:
       context: ./jupyter
       args:
-        BASE_IMAGE_NAME: tf-base
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
     depends_on:
       base:
@@ -38,12 +38,12 @@ services:
 
 ## OpenMPI
   openmpi:
-    image: tf-base:${TF_PACKAGE_VERSION}-openmpi-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
+    image: ${FINAL_IMAGE_NAME}:${TF_PACKAGE_VERSION}-openmpi-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
     build:
       context: ./horovod
       dockerfile: Dockerfile.openmpi
       args:
-        BASE_IMAGE_NAME: tf-base
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
     depends_on:
       base:
@@ -51,12 +51,12 @@ services:
 
 ## MPICH
   mpich:
-    image: tf-base:${TF_PACKAGE_VERSION}-mpich-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
+    image: ${FINAL_IMAGE_NAME}:${TF_PACKAGE_VERSION}-mpich-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
     build:
       context: ./horovod
       dockerfile: Dockerfile.mpich
       args:
-        BASE_IMAGE_NAME: tf-base
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
     depends_on:
       base:
@@ -64,12 +64,12 @@ services:
 
 ## OpenMPI+Horovod Devel
   openmpi-horovod-dev:
-    image: tf-base:${TF_PACKAGE_VERSION}-openmpi-horovod-dev-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
+    image: ${FINAL_IMAGE_NAME}:${TF_PACKAGE_VERSION}-openmpi-horovod-dev-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
     build:
       context: ./horovod
       target: dev
       args:
-        BASE_IMAGE_NAME: tf-base
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-openmpi-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
         HOROVOD_VERSION: v0.24.3
     depends_on:
@@ -78,12 +78,12 @@ services:
 
 ## MPICH+Horovod Devel
   mpich-horovod-dev:
-    image: tf-base:${TF_PACKAGE_VERSION}-mpich-horovod-dev-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
+    image: ${FINAL_IMAGE_NAME}:${TF_PACKAGE_VERSION}-mpich-horovod-dev-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
     build:
       context: ./horovod
       target: dev
       args:
-        BASE_IMAGE_NAME: tf-base
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-mpich-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
         HOROVOD_VERSION: v0.24.3
     depends_on:
@@ -92,12 +92,12 @@ services:
 
 ## OpenMPI+Horovod Prod
   openmpi-horovod:
-    image: tf-base:${TF_PACKAGE_VERSION}-openmpi-horovod-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
+    image: ${FINAL_IMAGE_NAME}:${TF_PACKAGE_VERSION}-openmpi-horovod-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
     build:
       context: ./horovod
       target: prod
       args:
-        BASE_IMAGE_NAME: tf-base
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-openmpi-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
         HOROVOD_VERSION: v0.24.3
     depends_on:
@@ -106,12 +106,12 @@ services:
 
 ## MPICH+Horovod Prod
   mpich-horovod:
-    image: tf-base:${TF_PACKAGE_VERSION}-mpich-horovod-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
+    image: ${FINAL_IMAGE_NAME}:${TF_PACKAGE_VERSION}-mpich-horovod-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
     build:
       context: ./horovod
       target: prod
       args:
-        BASE_IMAGE_NAME: tf-base
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-mpich-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}
         HOROVOD_VERSION: v0.24.3
     depends_on:
