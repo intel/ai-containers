@@ -3,7 +3,7 @@ FINAL_IMAGE_NAME ?= tf-base
 BASE_IMAGE_NAME ?= ubuntu
 BASE_IMAGE_TAG ?= 20.04
 TF_PACKAGE ?= intel-tensorflow
-TF_PACKAGE_VERSION ?= 2.8.0 
+TF_PACKAGE_VERSION ?= 2.9.1 
 
 # Docker build and run Proxy values
 DOCKER_BUILD_ARGS ?= --build-arg ftp_proxy=${ftp_proxy} --build-arg FTP_PROXY=${FTP_PROXY} --build-arg http_proxy=${http_proxy} --build-arg HTTP_PROXY=${HTTP_PROXY} --build-arg https_proxy=${https_proxy} --build-arg HTTPS_PROXY=${HTTPS_PROXY} --build-arg no_proxy=${no_proxy} --build-arg NO_PROXY=${NO_PROXY} --build-arg socks_proxy=${socks_proxy} --build-arg SOCKS_PROXY=${SOCKS_PROXY}
@@ -16,7 +16,7 @@ tf-base:
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 TF_PACKAGE=${TF_PACKAGE} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
-	 docker compose --file=./docker-compose.${BASE_IMAGE_NAME}.yml build ${DOCKER_BUILD_ARGS} base
+	 docker compose build ${DOCKER_BUILD_ARGS} base
 
 jupyter: tf-base
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
@@ -25,7 +25,7 @@ jupyter: tf-base
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 TF_PACKAGE=${TF_PACKAGE} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
-	 docker compose --file=./docker-compose.${BASE_IMAGE_NAME}.yml build ${DOCKER_BUILD_ARGS} jupyter
+	 docker compose build ${DOCKER_BUILD_ARGS} jupyter
 
 openmpi: tf-base
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
@@ -34,7 +34,7 @@ openmpi: tf-base
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 TF_PACKAGE=${TF_PACKAGE} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
-	 docker compose --file=./docker-compose.${BASE_IMAGE_NAME}.yml build ${DOCKER_BUILD_ARGS} openmpi
+	 docker compose build ${DOCKER_BUILD_ARGS} openmpi
 
 mpich: tf-base
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
@@ -43,7 +43,7 @@ mpich: tf-base
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 TF_PACKAGE=${TF_PACKAGE} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
-	 docker compose --file=./docker-compose.${BASE_IMAGE_NAME}.yml build ${DOCKER_BUILD_ARGS} mpich
+	 docker compose build ${DOCKER_BUILD_ARGS} mpich
 
 openmpi-horovod-dev: openmpi
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
@@ -52,7 +52,7 @@ openmpi-horovod-dev: openmpi
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 TF_PACKAGE=${TF_PACKAGE} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
-	 docker compose --file=./docker-compose.${BASE_IMAGE_NAME}.yml build ${DOCKER_BUILD_ARGS} openmpi-horovod-dev
+	 docker compose build ${DOCKER_BUILD_ARGS} openmpi-horovod-dev
 
 mpich-horovod-dev: mpich
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
@@ -61,7 +61,7 @@ mpich-horovod-dev: mpich
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 TF_PACKAGE=${TF_PACKAGE} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
-	 docker compose --file=./docker-compose.${BASE_IMAGE_NAME}.yml build ${DOCKER_BUILD_ARGS} mpich-horovod-dev
+	 docker compose build ${DOCKER_BUILD_ARGS} mpich-horovod-dev
 
 openmpi-horovod: openmpi
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
@@ -70,7 +70,7 @@ openmpi-horovod: openmpi
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 TF_PACKAGE=${TF_PACKAGE} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
-	 docker compose --file=./docker-compose.${BASE_IMAGE_NAME}.yml build ${DOCKER_BUILD_ARGS} openmpi-horovod
+	 docker compose build ${DOCKER_BUILD_ARGS} openmpi-horovod
 
 mpich-horovod: mpich
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
@@ -79,7 +79,7 @@ mpich-horovod: mpich
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 TF_PACKAGE=${TF_PACKAGE} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
-	 docker compose --file=./docker-compose.${BASE_IMAGE_NAME}.yml build ${DOCKER_BUILD_ARGS} mpich-horovod
+	 docker compose build ${DOCKER_BUILD_ARGS} mpich-horovod
 
 all: jupyter openmpi-horovod mpich-horovod
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
@@ -88,4 +88,4 @@ all: jupyter openmpi-horovod mpich-horovod
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 TF_PACKAGE=${TF_PACKAGE} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
-	 docker compose --file=./docker-compose.${BASE_IMAGE_NAME}.yml build ${DOCKER_BUILD_ARGS}
+	 docker compose build ${DOCKER_BUILD_ARGS}

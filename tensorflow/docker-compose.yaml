@@ -1,0 +1,109 @@
+version: '3'
+services:
+  base:
+    image: ${FINAL_IMAGE_NAME:-tf-base}:${TF_PACKAGE_VERSION:-2.9.1}
+    build:
+      context: ./base
+      args:
+        BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
+        BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-20.04}
+        TF_PACKAGE: ${TF_PACKAGE:-intel-tensorflow}
+        TF_PACKAGE_VERSION: ${TF_PACKAGE_VERSION:-2.9.1}
+      dockerfile: Dockerfile.${BASE_IMAGE_NAME:-ubuntu}
+    healthcheck: 
+      test: curl --fail -I http://localhost:8080/status || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: >
+      sh -c "python -c 'import tensorflow as tf; print(\"TensorFlow Version:\", tf.__version__)'"
+
+  jupyter:
+    image: ${FINAL_IMAGE_NAME:-tf-base}:${TF_PACKAGE_VERSION:-2.9.1}-jupyter
+    build:
+      context: ./jupyter
+      args:
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}
+        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}
+    healthcheck: 
+      test: curl --fail -I http://localhost:8080/status || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - ${PORT:-8888}:8888
+    working_dir: /tf-base
+    volumes:
+      - ${PWD}:/tf-base
+
+  openmpi:
+    image: ${FINAL_IMAGE_NAME:-tf-base}:${TF_PACKAGE_VERSION:-2.9.1}-openmpi
+    build:
+      context: ./horovod
+      dockerfile: Dockerfile.openmpi
+      args:
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}
+        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}
+    healthcheck: 
+      test: curl --fail -I http://localhost:8080/status || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: >
+      sh -c "python -c 'import tensorflow as tf; print(\"TensorFlow Version:\", tf.__version__)' &&
+             mpirun --version"
+
+  mpich:
+    image: ${FINAL_IMAGE_NAME:-tf-base}:${TF_PACKAGE_VERSION:-2.9.1}-mpich
+    build:
+      context: ./horovod
+      dockerfile: Dockerfile.mpich
+      args:
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}
+        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}
+    healthcheck: 
+      test: curl --fail -I http://localhost:8080/status || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: >
+      sh -c "python -c 'import tensorflow as tf; print(\"TensorFlow Version:\", tf.__version__)' &&
+             mpirun --version"
+
+  openmpi-horovod:
+    image: ${FINAL_IMAGE_NAME:-tf-base}:${TF_PACKAGE_VERSION:-2.9.1}-openmpi-horovod
+    build:
+      context: ./horovod
+      args:
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}
+        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-openmpi
+        HOROVOD_VERSION: v0.24.3
+        PYTHON: python3.8
+    healthcheck: 
+      test: curl --fail -I http://localhost:8080/status || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: >
+      sh -c "python -c 'import tensorflow as tf; print(\"TensorFlow Version:\", tf.__version__); import horovod.tensorflow as hvd' &&
+             mpirun --version &&
+             horovodrun --check-build"
+
+  mpich-horovod:
+    image: ${FINAL_IMAGE_NAME:-tf-base}:${TF_PACKAGE_VERSION:-2.9.1}-mpich-horovod
+    build:
+      context: ./horovod
+      args:
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}
+        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-mpich
+        HOROVOD_VERSION: v0.24.3
+        PYTHON: python3.8
+    healthcheck: 
+      test: curl --fail -I http://localhost:8080/status || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command: >
+      sh -c "python -c 'import tensorflow as tf; print(\"TensorFlow Version:\", tf.__version__); import horovod.tensorflow as hvd' &&
+             mpirun --version &&
+             horovodrun --check-build"

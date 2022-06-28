@@ -44,8 +44,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
 
 RUN python -m pip install git+https://github.com/horovod/horovod.git@${HOROVOD_VERSION}
 
-FROM base as prod
-
-ARG PYTHON=python3.8
-
-COPY --from=dev /usr/local/lib/${PYTHON}/dist-packages /usr/local/lib/${PYTHON}/dist-packages
+# FROM base as prod
+#
+# ARG PYTHON=python3.8
+#
+# COPY --from=dev /usr/local/lib/${PYTHON}/dist-packages /usr/local/lib/${PYTHON}/dist-packages

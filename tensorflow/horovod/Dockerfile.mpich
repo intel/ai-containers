@@ -35,10 +35,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Create a wrapper for OpenMPI to allow running as root by default
+# Create a wrapper for MPICH to allow running as root by default
 RUN mv /usr/bin/mpirun /usr/bin/mpirun.real && \
     echo '#!/bin/bash' > /usr/bin/mpirun && \
-    echo 'mpirun.real --allow-run-as-root "$@"' >> /usr/bin/mpirun && \
+    echo 'mpirun.real "$@"' >> /usr/bin/mpirun && \
     chmod a+x /usr/bin/mpirun
 
 # Install OpenSSH for MPI to communicate between containers
