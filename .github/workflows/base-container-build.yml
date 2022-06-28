@@ -60,11 +60,11 @@ jobs:
     steps: 
     - name: Check for valid base
       if: |
-        ${{ github.event.inputs.os }} == "debian" && ${{ github.event.inputs.os_version }} == "20.04" ||
-        ${{ github.event.inputs.os }} == "debian" && ${{ github.event.inputs.os_version }} == "22.04" ||
-        ${{ github.event.inputs.os }} == "ubuntu" && ${{ github.event.inputs.os_version }} == "10" ||
-        ${{ github.event.inputs.os }} == "ubuntu" && ${{ github.event.inputs.os_version }} == "11" ||
-      run: exit 1
+        (github.event.inputs.os == 'debian' && github.event.inputs.os_version == '20.04') ||
+        (github.event.inputs.os == 'debian' && github.event.inputs.os_version == '22.04') ||
+        (github.event.inputs.os == 'ubuntu' && github.event.inputs.os_version == '10') ||
+        (github.event.inputs.os == 'ubuntu' && github.event.inputs.os_version == '11')
+      run: echo "Invalid combination of Base OS and OS Version used, please try again" && exit 1
     - uses: actions/checkout@v3
     - name: Add and Update Packages
       run: export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get install -y curl docker-compose cmake
