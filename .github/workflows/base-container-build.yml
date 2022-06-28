@@ -1,0 +1,88 @@
+name: Base Framework Containers Build
+on: 
+  workflow_dispatch:
+    inputs:
+      make_target:
+        default: all
+        required: true
+        type: choice
+        options:
+        - jupyter
+        - openmpi
+        - mpich
+        - openmpi-horovod
+        - mpich-horovod
+      os:
+        required: true
+        default: ubuntu
+        type: choice
+        options:
+        - ubuntu
+        - debian
+      os_version: 
+        default: "20.04"
+        required: true
+        type: choice
+        options: 
+        - "20.04"
+        - "22.04"
+        - "10"
+        - "11"
+      tf_package:
+        default: intel-tensorflow
+        required: true
+        type: choice
+        options: 
+        - intel-tensorflow
+        - intel-tensorflow-avx512
+        - tensorflow
+      tf_package_version:
+        default: "2.9.1"
+        required: true
+        type: choice
+        options: 
+        - "2.7.0"
+        - "2.8.0"
+        - "2.9.1"
+jobs:
+  base-framework-build:
+    timeout-minutes: 30
+    container:
+      image: ubuntu:20.04
+      env:
+        http_proxy: ${{ secrets.HTTP_PROXY }}
+        https_proxy: ${{ secrets.HTTPS_PROXY }}
+        no_proxy: ${{ secrets.NO_PROXY }}
+      credentials:
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+    runs-on: [ aia-devops ]
+    steps: 
+    - name: Check for valid base
+      if: |
+        ${{ github.event.inputs.os }} == "debian" && ${{ github.event.inputs.os_version }} == "20.04" ||
+        ${{ github.event.inputs.os }} == "debian" && ${{ github.event.inputs.os_version }} == "22.04" ||
+        ${{ github.event.inputs.os }} == "ubuntu" && ${{ github.event.inputs.os_version }} == "10" ||
+        ${{ github.event.inputs.os }} == "ubuntu" && ${{ github.event.inputs.os_version }} == "11" ||
+      run: exit 1
+    - uses: actions/checkout@v3
+    - name: Add and Update Packages
+      run: export DEBIAN_FRONTEND=noninteractive && apt-get update && apt-get install -y curl docker-compose cmake
+    - name: Install compose CLI
+      run: |
+        export DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker} &&
+        mkdir -p $DOCKER_CONFIG/cli-plugins &&
+        curl -SL https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose &&
+        chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+    - name: Compose Pipeline
+      run: make ${{ github.event.inputs.make_target }} BASE_IMAGE_NAME=${{ github.event.inputs.os }} FINAL_IMAGE_NAME=${{ github.event.inputs.make_target }} BASE_IMAGE_TAG=${{ github.event.inputs.os_version }} TF_PACKAGE=${{ github.event.inputs.tf_package }} TF_PACKAGE_VERSION=${{ github.event.inputs.tf_package_version }}
+      working-directory: ./tensorflow
+    - uses: docker/login-action@v2
+      with:
+        registry: https://amr-registry.caas.intel.com
+        username: ${{ secrets.CAAS_USER }}
+        password: ${{ secrets.CAAS_TOKEN }}
+    - name: Upload Container to CAAS
+      run: |
+        docker tag ${{ github.event.inputs.make_target }}:${{ github.event.inputs.tf_package_version }}-${{ github.event.inputs.make_target }} amr-registry.caas.intel.com/aiops/${{ github.event.inputs.tf_package }}:${{ github.event.inputs.tf_package_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }} &&
+        docker push amr-registry.caas.intel.com/aiops/${{ github.event.inputs.tf_package }}:${{ github.event.inputs.tf_package_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }}
