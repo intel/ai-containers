@@ -1,0 +1,18 @@
+name: Pipeline Containers Build and Test
+on: 
+  workflow_dispatch:
+    inputs:
+      my_input:
+        required: false
+        type: string
+jobs:
+  hello-world:
+    container:
+      image: ubuntu:20.04
+      credentials:
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+    runs-on: [ aia-devops ]
+    steps: 
+      - name: Hello World
+        run: echo "TODO: Hello World"
