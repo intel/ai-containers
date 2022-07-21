@@ -1,0 +1,31 @@
+FROM ubuntu:20.04 as compose-devel
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
+    build-essential \
+    ca-certificates \
+    cmake \
+    curl \
+    docker.io \
+    docker-compose \
+    git \
+    make \
+    python3 \
+    python3-distutils \
+    python3-pip \
+    wget 
+
+ENV DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+RUN mkdir -p $DOCKER_CONFIG/cli-plugins && \
+    curl -SL https://github.com/docker/compose/releases/download/v2.6.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose && \
+    chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
+RUN ln -sf $(which python3) /usr/local/bin/python && \
+    ln -sf $(which python3) /usr/local/bin/python3 && \
+    ln -sf $(which python3) /usr/bin/python
+
+RUN python -m pip --no-cache-dir install --upgrade \
+    pip \
+    setuptools
+   
