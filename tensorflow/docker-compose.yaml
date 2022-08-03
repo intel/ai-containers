@@ -107,3 +107,16 @@ services:
       sh -c "python -c 'import tensorflow as tf; print(\"TensorFlow Version:\", tf.__version__); import horovod.tensorflow as hvd' &&
              mpirun --version &&
              horovodrun --check-build"
+
+  openmpi-horovod-inc:
+    image: ${FINAL_IMAGE_NAME:-tf-base}:${TF_PACKAGE_VERSION:-2.9.1}-openmpi-horovod-inc
+    build:
+      context: ./inc
+      args:
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}
+        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-openmpi-horovod
+    healthcheck: 
+      test: curl --fail -I http://localhost:8080/status || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5

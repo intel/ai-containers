@@ -81,7 +81,16 @@ mpich-horovod: mpich
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
 	 docker compose build ${DOCKER_BUILD_ARGS} mpich-horovod
 
-all: jupyter openmpi-horovod mpich-horovod
+openmpi-horovod-inc: openmpi-horovod
+	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
+	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
+	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
+	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
+	 TF_PACKAGE=${TF_PACKAGE} \
+	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 docker compose build ${DOCKER_BUILD_ARGS} openmpi-horovod-inc
+
+all: jupyter openmpi-horovod mpich-horovod openmpi-horovod-inc
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
 	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \

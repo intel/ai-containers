@@ -12,6 +12,7 @@ on:
         - mpich
         - openmpi-horovod
         - mpich-horovod
+        - openmpi-horovod-inc
       os:
         required: true
         default: ubuntu
