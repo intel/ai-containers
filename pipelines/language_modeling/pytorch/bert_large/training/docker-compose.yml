@@ -1,0 +1,46 @@
+services:
+  hugging-face-dlsa-public:
+    build:
+      args: 
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+      dockerfile: Dockerfile.hugging-face-dlsa-public
+    command: /workspace/dlsa/profiling-transformers/run_dist.sh -np 1 -ppn 1 /workspace/dlsa/profiling-transformers/run_pt_trainer.sh
+    environment: 
+      - DATASET=${DATASET}
+      - MODEL=${MODEL}
+      - OUTPUT_DIR=${OUTPUT_DIR}/fine_tuned
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+    image: ${FINAL_IMAGE_NAME}:training-public-intel-optimized-pytorch-latest
+    privileged: true
+    volumes: 
+      - ${OUTPUT_DIR}:${OUTPUT_DIR}
+      - ./dlsa:/workspace/dlsa
+    working_dir: /workspace/dlsa/profiling-transformers
+  hugging-face-dlsa-weekly:
+    build:
+      args: 
+        WHL_WW: ${WHL_WW}
+        WHL_YR: ${WHL_YR}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+      dockerfile: Dockerfile.hugging-face-dlsa-${RELEASE}
+    command: /workspace/dlsa/profiling-transformers/run_dist.sh -np 1 -ppn 1 conda run -n dlsa /workspace/dlsa/profiling-transformers/run_pt_trainer.sh
+    environment: 
+      - DATASET=${DATASET}
+      - MODEL=${MODEL}
+      - OUTPUT_DIR=${OUTPUT_DIR}/fine_tuned
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+    image: ${FINAL_IMAGE_NAME}:training-weekly-ww${WHL_WW}-${WHL_YR}-ubuntu-20.04
+    privileged: true
+    volumes: 
+      - ${OUTPUT_DIR}:${OUTPUT_DIR}
+      - ./dlsa:/workspace/dlsa
+    working_dir: /workspace/dlsa/profiling-transformers
+ 
