@@ -1,1 +1,2 @@
-pipelines/language_modeling/pytorch/bert_large/training/dlsa # Remove this to change submodule
+# pipelines/path/to/submodule
+pipelines/language_modeling/pytorch/bert_large/training/dlsa
