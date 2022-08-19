@@ -13,7 +13,6 @@ The workload aims to implement end-to-end video streamer pipeline involving medi
 ├── Makefile
 ├── README.md
 └── docker-compose.yml
-
 ```
 [*Makefile*](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/sramakr1/vdms-streamer/pipelines/video_analytics/tensorflow/ssd_resnet34/inference/Makefile)
 
