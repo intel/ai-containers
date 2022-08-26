@@ -14,6 +14,16 @@ A full installation of [docker engine](https://docs.docker.com/engine/install/) 
 
 The Docker Compose CLI can be [installed](https://docs.docker.com/compose/install/compose-plugin/#installing-compose-on-linux-systems) both manually and via package manager.
 
+```
+$ DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
+$ mkdir -p $DOCKER_CONFIG/cli-plugins
+$ curl -SL https://github.com/docker/compose/releases/download/v2.7.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+$ chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
+
+$ docker compose version
+Docker Compose version v2.7.0
+```
+
 ## Development Container
 Rather than installing the dependencies above, a development container with the relevant dependencies for execution of MLOps validation is available for use.
 ### Pull from CAAS
