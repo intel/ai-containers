@@ -61,6 +61,8 @@ End2End AI Workflow utilizing <TECHNOLOGY>. More information [here](<E2E_REPO>)
 ## Quick Start
 * Pull and configure the dependent repo submodule `git submodule update --init --recursive`.
 
+* Install [Pipeline Repository Dependencies](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/develop/pipelines/README.md)
+
 * Other variables:
 
 | Variable Name | Default | Notes |

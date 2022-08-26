@@ -1,2 +1,3 @@
 pipelines/video_analytics/tensorflow/ssd_resnet34/inference/vdms-streamer # Remove this to change submodule
 pipelines/language_modeling/pytorch/bert_large/training/dlsa # Remove this to change submodule
+pipelines/recommendation/pytorch/recsys/training/analytics-with-python # Remove this to change submodule

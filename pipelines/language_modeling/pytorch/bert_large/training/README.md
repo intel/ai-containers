@@ -89,6 +89,8 @@ End2End AI Workflow utilizing Hugging Face. More information [here](https://caut
 ## Quick Start
 * Pull and configure the dependent repo submodule `git submodule update --init --recursive`.
 
+* Install [Pipeline Repository Dependencies](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/develop/pipelines/README.md)
+
 * Other variables:
 
 | Variable Name | Default | Notes |

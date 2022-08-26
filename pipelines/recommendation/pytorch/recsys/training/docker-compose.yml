@@ -1,0 +1,32 @@
+services:
+  recsys-challenge:
+    build:
+      args: 
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+      dockerfile: analytics-with-python/Dockerfile
+    command: /mnt/code/run-all.sh
+    container_name: hadoop-master
+    environment: 
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+    hostname: hadoop-master
+    image: ${FINAL_IMAGE_NAME}:training-python-3.7-buster
+    ports: 
+      - 8088:8088
+      - 8888:8888
+      - 8080:8080
+      - 9870:9870
+      - 9864:9864
+      - 4040:4040
+      - 18081:18081
+    privileged: true
+    volumes: 
+      - ${OUTPUT_DIR}:${OUTPUT_DIR}
+      - /${DATASET_DIR}:/mnt/data
+      - ./tmp:/mnt
+      - ./analytics-with-python/config:/mnt/config
+      - ./analytics-with-python:/mnt/code
+    working_dir: /mnt/code

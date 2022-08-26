@@ -105,6 +105,8 @@ End-to-end AI workflow utilizing the VDMS-Streamer. More Information [here](http
 
 * Pull and configure the dependent repo submodule ```git submodule update --init --recursive ```.
 
+* Install [Pipeline Repository Dependencies](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/develop/pipelines/README.md)
+
 * Download [`mall.avi`](http://10.112.229.21/vdms/mall.avi). The default assumes the video is located in the same location as the cloned [VDMS-Streamer Repo](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/tree/8296ae20bff344bfb5c8c55ee484d9d385eceed2/dataset) folder.
 
 * Other Variables:
