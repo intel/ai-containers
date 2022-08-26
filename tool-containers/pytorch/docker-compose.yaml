@@ -88,3 +88,16 @@ services:
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)' && 
              mpirun --version && 
              horovodrun --check-build"
+
+  openmpi-inc:
+    image: ${FINAL_IMAGE_NAME:-ipex-base}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi-inc
+    build:
+      context: ./inc
+      args:
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
+        BASE_IMAGE_TAG: ${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi
+    healthcheck: 
+      test: curl --fail -I http://localhost:8080/status || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5

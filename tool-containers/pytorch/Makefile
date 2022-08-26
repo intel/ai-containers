@@ -48,7 +48,16 @@ mpich-horovod: mpich
 	 IPEX_PACKAGE_VERSION=${IPEX_PACKAGE_VERSION} \
 	 docker compose build ${DOCKER_BUILD_ARGS} mpich-horovod
 
-all: openmpi-horovod mpich-horovod
+openmpi-inc: openmpi
+	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
+	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
+	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
+	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
+	 IPEX_PACKAGE=${IPEX_PACKAGE} \
+	 IPEX_PACKAGE_VERSION=${IPEX_PACKAGE_VERSION} \
+	 docker compose build ${DOCKER_BUILD_ARGS} openmpi-inc
+
+all: openmpi-horovod mpich-horovod openmpi-inc
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
 	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \

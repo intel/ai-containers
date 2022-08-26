@@ -61,9 +61,9 @@ services:
 ### Build with docker compose
 
 ```
-$ docker compose build ipex-base openmpi
+$ docker compose build base openmpi
 
-ipex-base openmpi
+base openmpi
 [+] Building 0.3s (13/13) FINISHED                                                                                                                                                                                                                                                         
  => [internal] load build definition from Dockerfile.ubuntu                                                                                                                                                                                                                           0.0s
  => => transferring dockerfile: 39B                                                                                                                                                                                                                                                   0.0s

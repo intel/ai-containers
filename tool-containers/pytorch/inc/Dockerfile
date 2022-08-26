@@ -1,34 +1,35 @@
-# Copyright 2019 The TensorFlow Authors. All Rights Reserved.
+# Copyright (c) 2022 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
+#   http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# ============================================================================
-#
-# THIS IS A GENERATED DOCKERFILE.
-#
-# This file was assembled from multiple pieces, whose use is documented
-# throughout. Please refer to the TensorFlow dockerfiles documentation
-# for more information.
 
-ARG BASE_IMAGE_NAME=tf-base
+ARG BASE_IMAGE_NAME=ipex-base
 ARG BASE_IMAGE_TAG=latest
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} as inc
 
+ENV LANG C.UTF-8
 ARG PYTHON=python3.8
 
 RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
+    ${PYTHON}-dev \
+    gcc \
     libgl1-mesa-glx \
     libglib2.0-0
+
+RUN ln -sf $(which ${PYTHON}) /usr/local/bin/python && \
+    ln -sf $(which ${PYTHON}) /usr/local/bin/python3 && \
+    ln -sf $(which ${PYTHON}) /usr/bin/python && \
+    ln -sf $(which ${PYTHON}) /usr/bin/python3
 
 ARG INC_VER=1.12
 
