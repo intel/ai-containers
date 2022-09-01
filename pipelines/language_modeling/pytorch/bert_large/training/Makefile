@@ -1,21 +1,17 @@
 DATASET ?= sst2
+DATASET_DIR ?= /data
 FINAL_IMAGE_NAME ?= hugging-face-dlsa
-MODEL ?= bert-large-cased
+MODEL ?= bert-large-uncased
 OUTPUT_DIR ?= /output
-RELEASE ?= weekly
-# Weekly Envs
-WHL_WW ?= $$(date +%V)
-WHL_YR ?= $$(date +%Y)
 
 hugging-face-dlsa:
+	mkdir ./dlsa/profiling-transformers/datasets && cp -r ${DATASET_DIR} ./dlsa/profiling-transformers/datasets
 	@DATASET=${DATASET} \
 	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 MODEL=${MODEL} \
 	 OUTPUT_DIR=${OUTPUT_DIR} \
-	 RELEASE=${RELEASE} \
-	 WHL_WW=${WHL_WW} \
-	 WHL_YR=${WHL_YR} \
- 	 docker compose up hugging-face-dlsa-${RELEASE} --build
+ 	 docker compose up hugging-face-dlsa --build
 
 clean: 
+	rm -rf ./dlsa/profiling-transformers/datasets
 	docker compose down

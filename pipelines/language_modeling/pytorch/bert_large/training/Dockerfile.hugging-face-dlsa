@@ -23,7 +23,7 @@ RUN pip install --upgrade pip && \
                 cffi \
                 cmake \
                 dataclasses \
-                datasets==1.18.3 \
+                datasets==2.3.2 \
                 intel-openmp \
                 mkl \
                 mkl-include \
@@ -34,5 +34,5 @@ RUN pip install --upgrade pip && \
                 requests \
                 setuptools \
                 six \
-                transformers==4.16.2 \
+                transformers==4.20.1 \
                 typing_extensions
