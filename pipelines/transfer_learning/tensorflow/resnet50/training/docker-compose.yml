@@ -1,0 +1,24 @@
+services:
+  vision-transfer-learning:
+    build:
+      args: 
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+      dockerfile: Dockerfile.vision-transfer-learning
+    command: conda run --no-capture-output -n transfer_learning ./${SCRIPT}.sh
+    environment: 
+      - DATASET_DIR=/workspace/data
+      - OUTPUT_DIR=${OUTPUT_DIR}/${SCRIPT}
+      - PLATFORM=${PLATFORM}
+      - PRECISION=${PRECISION}
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+    image: ${FINAL_IMAGE_NAME}:training-ubuntu-20.04
+    privileged: true
+    volumes: 
+      - /${DATASET_DIR}:/workspace/data
+      - ${OUTPUT_DIR}:${OUTPUT_DIR}
+      - ./transfer-learning-training:/workspace/transfer-learning
+    working_dir: /workspace/transfer-learning

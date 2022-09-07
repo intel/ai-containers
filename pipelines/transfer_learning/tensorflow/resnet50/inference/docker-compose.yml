@@ -1,0 +1,25 @@
+services:
+  vision-transfer-learning:
+    build:
+      args: 
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+      dockerfile: Dockerfile.vision-transfer-learning
+    command: conda run --no-capture-output -n transfer_learning ./${SCRIPT}.sh --inference -cp "/workspace/checkpoint"
+    environment: 
+      - DATASET_DIR=/workspace/data
+      - OUTPUT_DIR=${OUTPUT_DIR}/${SCRIPT}
+      - PLATFORM=${PLATFORM}
+      - PRECISION=${PRECISION}
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - no_proxy=${no_proxy}
+    image: ${FINAL_IMAGE_NAME}:inference-ubuntu-20.04
+    privileged: true
+    volumes: 
+      - /${CHECKPOINT_DIR}:/workspace/checkpoint
+      - /${DATASET_DIR}:/workspace/data
+      - ${OUTPUT_DIR}:${OUTPUT_DIR}
+      - ./transfer-learning-inference:/workspace/transfer-learning
+    working_dir: /workspace/transfer-learning
