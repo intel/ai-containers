@@ -1,3 +1,6 @@
+networks: 
+  hadoop:
+    external: true
 services:
   recsys-challenge:
     build:
@@ -6,14 +9,20 @@ services:
         https_proxy: ${https_proxy}
         no_proxy: ${no_proxy}
       dockerfile: analytics-with-python/Dockerfile
-    command: /mnt/code/run-all.sh
+    command: 
+    - |
+      service ssh start
+      /mnt/code/run-all.sh
     container_name: hadoop-master
     environment: 
       - http_proxy=${http_proxy}
       - https_proxy=${https_proxy}
       - no_proxy=${no_proxy}
+    entrypoint: ["/bin/bash", "-c"]
     hostname: hadoop-master
     image: ${FINAL_IMAGE_NAME}:training-python-3.7-buster
+    networks: 
+      - hadoop
     ports: 
       - 8088:8088
       - 8888:8888
@@ -22,6 +31,7 @@ services:
       - 9864:9864
       - 4040:4040
       - 18081:18081
+      - 12345:12345
     privileged: true
     volumes: 
       - ${OUTPUT_DIR}:${OUTPUT_DIR}
