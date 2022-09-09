@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
 ARG INC_VER=1.12
 
 ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/third-party-programs.txt /licenses/
-ADD https://raw.githubusercontent.com/intel/neural-compressor/v1.13/docker/third-party-programs-docker.txt /licenses/
+ADD https://raw.githubusercontent.com/intel/neural-compressor/v1.13/docker/third-party-programs-tensorflow.txt /licenses/
 ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/LICENSE /licenses/
 
 RUN python -m pip install --no-cache-dir neural-compressor${INC_VER:+==${INC_VER}}
