@@ -8,7 +8,7 @@ services:
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-20.04}
         IPEX_PACKAGE_VERSION: ${IPEX_PACKAGE_VERSION:-1.12.100}
-      dockerfile: Dockerfile.${BASE_IMAGE_NAME:-ubuntu}
+      dockerfile: Dockerfile.${BASE_IMAGE_NAME:-ubuntu.idp}
     healthcheck: 
       test: curl --fail -I http://localhost:8080/status || exit 1
       interval: 10s

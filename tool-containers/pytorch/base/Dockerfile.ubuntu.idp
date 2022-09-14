@@ -34,7 +34,7 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VER}
 ENV PATH /root/conda/envs/idp/bin/libfabric:/root/conda/envs/idp/bin:/root/conda/condabin:~/conda/bin/:${PATH}
 ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64:/root/conda/envs/idp/lib:${LD_LIBRARY_PATH}
 
-ENV BASH_ENV=/root/.bash_profile
+ENV BASH_ENV /root/.bash_profile
 
 ARG IPEX_VERSION=1.12.100
 ARG PYTORCH_VERSION=1.12.0+cpu
@@ -52,7 +52,6 @@ RUN source activate idp && \
     intel_extension_for_pytorch==${IPEX_VERSION} -f ${IPEX_URL}
 
 RUN echo "source ~/conda/etc/profile.d/conda.sh" >> /root/.bash_profile && \
-    echo "conda activate idp" >> /root/.bash_profile && \
-    echo "source activate idp" >> /root/.bash_profile
+    echo "conda activate idp" >> /root/.bash_profile
 
 RUN apt-get clean
