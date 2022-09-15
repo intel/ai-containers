@@ -3,6 +3,7 @@ FINAL_IMAGE_NAME ?= ipex-base
 BASE_IMAGE_NAME ?= ubuntu
 BASE_IMAGE_TAG ?= 20.04
 IPEX_PACKAGE_VERSION ?= 1.12.100 
+PACKAGE_OPTION ?= idp
 
 # Docker build and run Proxy values
 DOCKER_BUILD_ARGS ?= --build-arg ftp_proxy=${ftp_proxy} --build-arg FTP_PROXY=${FTP_PROXY} --build-arg http_proxy=${http_proxy} --build-arg HTTP_PROXY=${HTTP_PROXY} --build-arg https_proxy=${https_proxy} --build-arg HTTPS_PROXY=${HTTPS_PROXY} --build-arg no_proxy=${no_proxy} --build-arg NO_PROXY=${NO_PROXY} --build-arg socks_proxy=${socks_proxy} --build-arg SOCKS_PROXY=${SOCKS_PROXY}
@@ -14,6 +15,7 @@ ipex-base:
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 IPEX_PACKAGE_VERSION=${IPEX_PACKAGE_VERSION} \
+	 PACKAGE_OPTION=${PACKAGE_OPTION} \
 	 docker compose build ${DOCKER_BUILD_ARGS} base
 
 openmpi: ipex-base
@@ -22,6 +24,7 @@ openmpi: ipex-base
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 IPEX_PACKAGE_VERSION=${IPEX_PACKAGE_VERSION} \
+	 PACKAGE_OPTION=${PACKAGE_OPTION} \
 	 docker compose build ${DOCKER_BUILD_ARGS} openmpi
 
 mpich: ipex-base
@@ -30,6 +33,7 @@ mpich: ipex-base
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 IPEX_PACKAGE_VERSION=${IPEX_PACKAGE_VERSION} \
+	 PACKAGE_OPTION=${PACKAGE_OPTION} \
 	 docker compose build ${DOCKER_BUILD_ARGS} mpich
 
 openmpi-horovod: openmpi
@@ -38,6 +42,7 @@ openmpi-horovod: openmpi
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 IPEX_PACKAGE_VERSION=${IPEX_PACKAGE_VERSION} \
+	 PACKAGE_OPTION=${PACKAGE_OPTION} \
 	 docker compose build ${DOCKER_BUILD_ARGS} openmpi-horovod
 
 mpich-horovod: mpich
@@ -46,6 +51,7 @@ mpich-horovod: mpich
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 IPEX_PACKAGE_VERSION=${IPEX_PACKAGE_VERSION} \
+	 PACKAGE_OPTION=${PACKAGE_OPTION} \
 	 docker compose build ${DOCKER_BUILD_ARGS} mpich-horovod
 
 openmpi-inc: openmpi
@@ -55,6 +61,7 @@ openmpi-inc: openmpi
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 IPEX_PACKAGE=${IPEX_PACKAGE} \
 	 IPEX_PACKAGE_VERSION=${IPEX_PACKAGE_VERSION} \
+	 PACKAGE_OPTION=${PACKAGE_OPTION} \
 	 docker compose build ${DOCKER_BUILD_ARGS} openmpi-inc
 
 all: openmpi-horovod mpich-horovod openmpi-inc
@@ -63,4 +70,5 @@ all: openmpi-horovod mpich-horovod openmpi-inc
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 IPEX_PACKAGE_VERSION=${IPEX_PACKAGE_VERSION} \
+	 PACKAGE_OPTION=${PACKAGE_OPTION} \
 	 docker compose build ${DOCKER_BUILD_ARGS}
