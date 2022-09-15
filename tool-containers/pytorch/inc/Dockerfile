@@ -19,7 +19,7 @@ ARG PACKAGE_OPTION=idp
 FROM ${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${BASE_IMAGE_TAG} as inc
 
 ENV LANG C.UTF-8
-ARG PYTHON=python3.8
+ARG PYTHON=python3.9
 
 RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
     ${PYTHON}-dev \
@@ -35,7 +35,6 @@ RUN ln -sf $(which ${PYTHON}) /usr/local/bin/python && \
 ARG INC_VER=1.12
 
 ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/third-party-programs.txt /licenses/
-#ADD https://raw.githubusercontent.com/intel/neural-compressor/v1.13/docker/third-party-programs-pytorch.txt /licenses/
 ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/LICENSE /licenses/
 
 RUN python -m pip install --no-cache-dir neural-compressor${INC_VER:+==${INC_VER}}

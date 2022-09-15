@@ -28,7 +28,7 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VER}
     export PATH=~/conda/bin/:${PATH} && \
     conda update -y conda && \
     conda config --add channels intel && \
-    conda create -yn idp intelpython3_core python=3.8 && \
+    conda create -yn idp intelpython3_full python=3.8 && \
     conda clean -y --all
 
 ENV PATH /root/conda/envs/idp/bin/libfabric:/root/conda/envs/idp/bin:/root/conda/condabin:~/conda/bin/:${PATH}
