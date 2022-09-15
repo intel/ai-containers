@@ -10,7 +10,7 @@ DOCKER_BUILD_ARGS ?= --build-arg ftp_proxy=${ftp_proxy} --build-arg FTP_PROXY=${
 DOCKER_RUN_ENVS ?= --env ftp_proxy=${ftp_proxy} --env FTP_PROXY=${FTP_PROXY} --env http_proxy=${http_proxy} --env HTTP_PROXY=${HTTP_PROXY} --env https_proxy=${https_proxy} --env HTTPS_PROXY=${HTTPS_PROXY} --env no_proxy=${no_proxy} --env NO_PROXY=${NO_PROXY} --env socks_proxy=${socks_proxy} --env SOCKS_PROXY=${SOCKS_PROXY}
 
 ipex-base:
-	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \ 
+	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
 	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \

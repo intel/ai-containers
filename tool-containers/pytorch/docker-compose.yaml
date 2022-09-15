@@ -1,7 +1,7 @@
 version: '3'
 services:
   base:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}
     build:
       context: ./base
       args:
@@ -19,7 +19,7 @@ services:
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)'"
 
   openmpi:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi
     build:
       context: ./horovod
       dockerfile: Dockerfile.openmpi
@@ -37,7 +37,7 @@ services:
              mpirun --version"
 
   mpich:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-mpich
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-mpich
     build:
       context: ./horovod
       dockerfile: Dockerfile.mpich
@@ -55,7 +55,7 @@ services:
              mpirun --version"
 
   openmpi-horovod:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi-horovod
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi-horovod
     build:
       context: ./horovod
       args:
@@ -77,7 +77,7 @@ services:
              horovodrun --check-build"
 
   mpich-horovod:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-mpich-horovod
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-mpich-horovod
     build:
       context: ./horovod
       args:
@@ -97,7 +97,7 @@ services:
              horovodrun --check-build"
 
   openmpi-inc:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi-inc
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi-inc
     build:
       context: ./inc
       args:
