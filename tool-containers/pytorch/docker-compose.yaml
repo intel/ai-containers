@@ -1,15 +1,16 @@
 version: '3'
 services:
   base:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}:${IPEX_PACKAGE_VERSION:-1.12.100}
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}
     build:
       context: ./base
       args:
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-20.04}
         IPEX_PACKAGE_VERSION: ${IPEX_PACKAGE_VERSION:-1.12.100}
-      dockerfile: Dockerfile.${BASE_IMAGE_NAME:-ubuntu}
-    healthcheck: 
+        PACKAGE_OPTION: ${PACKAGE_OPTION}
+      dockerfile: Dockerfile.${BASE_IMAGE_NAME:-ubuntu}.${PACKAGE_OPTION}
+    healthcheck:
       test: curl --fail -I http://localhost:8080/status || exit 1
       interval: 10s
       timeout: 5s
@@ -18,14 +19,16 @@ services:
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)'"
 
   openmpi:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi
     build:
       context: ./horovod
       dockerfile: Dockerfile.openmpi
       args:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
         BASE_IMAGE_TAG: ${IPEX_PACKAGE_VERSION:-1.12.100}
-    healthcheck: 
+        BASE_OS_NAME: ${BASE_OS_NAME:-debian}
+        PACKAGE_OPTION: ${PACKAGE_OPTION}
+    healthcheck:
       test: curl --fail -I http://localhost:8080/status || exit 1
       interval: 10s
       timeout: 5s
@@ -35,14 +38,16 @@ services:
              mpirun --version"
 
   mpich:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}:${IPEX_PACKAGE_VERSION:-1.12.100}-mpich
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME:-debian}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-mpich
     build:
       context: ./horovod
       dockerfile: Dockerfile.mpich
       args:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
         BASE_IMAGE_TAG: ${IPEX_PACKAGE_VERSION:-1.12.100}
-    healthcheck: 
+        BASE_OS_NAME: ${BASE_OS_NAME:-debian}
+        PACKAGE_OPTION: ${PACKAGE_OPTION}
+    healthcheck:
       test: curl --fail -I http://localhost:8080/status || exit 1
       interval: 10s
       timeout: 5s
@@ -52,15 +57,17 @@ services:
              mpirun --version"
 
   openmpi-horovod:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi-horovod
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi-horovod
     build:
       context: ./horovod
       args:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
         BASE_IMAGE_TAG: ${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi
+        BASE_OS_NAME: ${BASE_OS_NAME:-debian}
         HOROVOD_VERSION: v0.24.3
+        PACKAGE_OPTION: ${PACKAGE_OPTION}
         PYTHON: python3.8
-    healthcheck: 
+    healthcheck:
       test: curl --fail -I http://localhost:8080/status || exit 1
       interval: 10s
       timeout: 5s
@@ -71,15 +78,17 @@ services:
              horovodrun --check-build"
 
   mpich-horovod:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}:${IPEX_PACKAGE_VERSION:-1.12.100}-mpich-horovod
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-mpich-horovod
     build:
       context: ./horovod
       args:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
         BASE_IMAGE_TAG: ${IPEX_PACKAGE_VERSION:-1.12.100}-mpich
+        BASE_OS_NAME: ${BASE_OS_NAME:-debian}
         HOROVOD_VERSION: v0.24.3
+        PACKAGE_OPTION: ${PACKAGE_OPTION}
         PYTHON: python3.8
-    healthcheck: 
+    healthcheck:
       test: curl --fail -I http://localhost:8080/status || exit 1
       interval: 10s
       timeout: 5s
@@ -90,13 +99,15 @@ services:
              horovodrun --check-build"
 
   openmpi-inc:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi-inc
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi-inc
     build:
       context: ./inc
       args:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
         BASE_IMAGE_TAG: ${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi
-    healthcheck: 
+        BASE_OS_NAME: ${BASE_OS_NAME:-debian}
+        PACKAGE_OPTION: ${PACKAGE_OPTION}
+    healthcheck:
       test: curl --fail -I http://localhost:8080/status || exit 1
       interval: 10s
       timeout: 5s
