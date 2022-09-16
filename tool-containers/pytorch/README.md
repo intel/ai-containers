@@ -23,15 +23,16 @@
 version: '3'
 services:
   base:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}:${IPEX_PACKAGE_VERSION:-1.12.100}
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}
     build:
       context: ./base
       args:
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-20.04}
         IPEX_PACKAGE_VERSION: ${IPEX_PACKAGE_VERSION:-1.12.100}
-      dockerfile: Dockerfile.${BASE_IMAGE_NAME:-ubuntu}
-    healthcheck: 
+        PACKAGE_OPTION: ${PACKAGE_OPTION}
+      dockerfile: Dockerfile.${BASE_IMAGE_NAME:-ubuntu}.${PACKAGE_OPTION}
+    healthcheck:
       test: curl --fail -I http://localhost:8080/status || exit 1
       interval: 10s
       timeout: 5s
@@ -40,14 +41,16 @@ services:
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)'"
 
   openmpi:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi
     build:
       context: ./horovod
       dockerfile: Dockerfile.openmpi
       args:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
         BASE_IMAGE_TAG: ${IPEX_PACKAGE_VERSION:-1.12.100}
-    healthcheck: 
+        BASE_OS_NAME: ${BASE_OS_NAME:-debian}
+        PACKAGE_OPTION: ${PACKAGE_OPTION}
+    healthcheck:
       test: curl --fail -I http://localhost:8080/status || exit 1
       interval: 10s
       timeout: 5s
