@@ -6,16 +6,21 @@
 ├── Makefile
 ├── README.md
 ├── base
-│   ├── Dockerfile.ubuntu
-│   └── config
-│       └── ubuntu.env
+│   ├── Dockerfile.debian.idp
+│   ├── Dockerfile.debian.pip
+│   ├── Dockerfile.ubuntu.idp
+│   ├── Dockerfile.ubuntu.pip
+│   └── config
+│       └── ubuntu.env
 ├── docker-compose.yaml
-└── horovod
-    ├── Dockerfile
-    ├── Dockerfile.mpich
-    └── Dockerfile.openmpi
+├── horovod
+│   ├── Dockerfile
+│   ├── Dockerfile.mpich
+│   └── Dockerfile.openmpi
+└── inc
+    └── Dockerfile
 
-3 directories, 8 files
+4 directories, 12 files
 ```
 
 [_docker-compose.yaml_](docker-compose.yaml)
