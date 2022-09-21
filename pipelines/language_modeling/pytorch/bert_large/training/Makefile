@@ -11,6 +11,7 @@ hugging-face-dlsa:
 	 MODEL=${MODEL} \
 	 OUTPUT_DIR=${OUTPUT_DIR} \
  	 docker compose up hugging-face-dlsa --build
+	rm -rf ./dlsa/profiling-transformers/datasets
 
 clean: 
 	rm -rf ./dlsa/profiling-transformers/datasets

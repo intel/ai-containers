@@ -3,7 +3,7 @@
 This document contains instructions on how to run hugging face DLSA e2e pipelines with make and docker compose.
 ## Project Structure 
 ```
-├── dlsa @ dlsa_multinode_ipex_v1.2
+├── dlsa @ v1.0.0
 ├── docker-compose.yml
 ├── Dockerfile.hugging-face-dlsa
 ├── Makefile
@@ -24,6 +24,7 @@ hugging-face-dlsa:
 	 MODEL=${MODEL} \
 	 OUTPUT_DIR=${OUTPUT_DIR} \
  	 docker compose up hugging-face-dlsa --build
+	rm -rf ./dlsa/profiling-transformers/datasets
 
 clean: 
 	rm -rf ./dlsa/profiling-transformers/datasets
@@ -39,7 +40,7 @@ services:
         https_proxy: ${https_proxy}
         no_proxy: ${no_proxy}
       dockerfile: Dockerfile.hugging-face-dlsa
-    command: /workspace/dlsa/profiling-transformers/run_dist.sh -np 1 -ppn 1 /workspace/dlsa/profiling-transformers/run_ipex_native.sh
+    command: fine-tuning/run_dist.sh -np 1 -ppn 1 fine-tuning/run_ipex_native.sh
     environment: 
       - DATASET=${DATASET}
       - MODEL_NAME_OR_PATH=${MODEL}
@@ -63,6 +64,15 @@ End2End AI Workflow utilizing Hugging Face for Document-Level Sentiment Analysis
 
 * Install [Pipeline Repository Dependencies](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/develop/pipelines/README.md)
 
+* Acquire dataset files
+```
+# download and extract SST-2 dataset
+wget https://dl.fbaipublicfiles.com/glue/data/SST-2.zip && unzip SST-2.zip && mv SST-2 sst
+# download and extract IMDB dataset
+wget http://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz && tar -zxf aclImdb_v1.tar.gz
+```
+
+
 * Other variables:
 
 | Variable Name | Default | Notes |
@@ -75,7 +85,7 @@ End2End AI Workflow utilizing Hugging Face for Document-Level Sentiment Analysis
 ## Build and Run
 Build and Run with defaults:
 ```
-$ DATASET_DIR=/localdisk/aia_mlops_dataset/t2-hugging-face-dlsa/sst make hugging-face-dlsa
+$ make hugging-face-dlsa
 ```
 ## Build and Run Example
 ```
