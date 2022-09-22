@@ -12,11 +12,6 @@ RUN sed -i.bak '/^mirrorlist=/s/mirrorlist=/#mirrorlist=/g' /etc/yum.repos.d/Cen
 # See http://bugs.python.org/issue19846
 ENV LANG C.UTF-8
 ARG PY_VER="38"
-ARG WHL_WW
-ARG WHL_YR
-ARG TF_VERSION=2.10.0.202226-cp38-cp38
-ARG TF_ESTIMATOR_VERSION=2.10.0.dev2022062208
-ARG KERAS_VERSION=2.10.0.dev2022062207
 ARG MINICONDA_VER="py38_4.12.0-Linux-x86_64"
 
 RUN yum update -y && yum install -y \
@@ -57,11 +52,7 @@ ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64:/root/conda/envs/vdms-t
 ENV BASH_ENV=/root/.bash_profile
 
 RUN source activate vdms-test && \
-    wget -v http://algo-buildstore.intel.com/builds/TF-DO/releases/spr-internal-releases/ww${WHL_WW}-${WHL_YR}/tf_nightly-${TF_VERSION}-linux_x86_64.whl -P /tmp/pip3 && \
-    pip install \
-    "tf-estimator-nightly==${TF_ESTIMATOR_VERSION}" \
-    "keras-nightly==${KERAS_VERSION}" \
-    /tmp/pip3/tf_nightly-${TF_VERSION}-linux_x86_64.whl && \
+    pip install tensorflow-cpu && \
     conda install -y -c conda-forge gst-libav==1.18.4 gst-plugins-good=1.18.4 gst-plugins-bad=1.18.4 gst-plugins-ugly=1.18.4 gst-python=1.18.4 pygobject=3.40.1 && \
     conda clean --all 
 

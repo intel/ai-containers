@@ -5,12 +5,12 @@
 [submodule "pipelines/recommendation/pytorch/recsys/training/analytics-with-python"]
 	path = pipelines/recommendation/pytorch/recsys/training/analytics-with-python
 	url = https://github.com/intel-sandbox/applications.ai.appliedml.workflow.analyticswithpython
-[submodule "pipelines/video_analytics/tensorflow/ssd_resnet34/inference/vdms-streamer"]
-	path = pipelines/video_analytics/tensorflow/ssd_resnet34/inference/vdms-streamer
-	url = https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer.git
 [submodule "pipelines/transfer_learning/tensorflow/resnet50/inference/transfer-learning-inference"]
 	path = pipelines/transfer_learning/tensorflow/resnet50/inference/transfer-learning-inference
 	url = https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.e2e-vision-transfer-learning
 [submodule "pipelines/transfer_learning/tensorflow/resnet50/training/transfer-learning-training"]
 	path = pipelines/transfer_learning/tensorflow/resnet50/training/transfer-learning-training
 	url = https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.e2e-vision-transfer-learning
+[submodule "pipelines/video_analytics/tensorflow/ssd_resnet34/inference/video-streamer"]
+	path = pipelines/video_analytics/tensorflow/ssd_resnet34/inference/video-streamer
+	url = https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer.git
