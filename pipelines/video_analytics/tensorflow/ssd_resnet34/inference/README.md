@@ -81,7 +81,6 @@ services:
       - /${OUTPUT_DIR}:${OUTPUT_DIR}
       - /${VIDEO_PATH}:/workspace/video-streamer/${VIDEO}
     working_dir: /workspace/video-streamer
-
 ```
 
 # **Video Streamer** 
@@ -94,12 +93,20 @@ End-to-end AI workflow utilizing the Video-Streamer. More Information [here](htt
 
 * Install [Pipeline Repository Dependencies](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/develop/pipelines/README.md)
 
-* Download [`mall.avi`](http://10.112.229.21/vdms/mall.avi). The default assumes the video is located in the current folder.
-
-* Download pretrained ssd-resnet34 FP32 and INT8 models. The default assumes the models are located in `models` directory in the current folder.
+* Add IP address `10.112.29.21` to `no_proxy` settings:
 ```
-  wget https://storage.googleapis.com/intel-optimized-tensorflow/models/v1_8/ssd_resnet34_fp32_1200x1200_pretrained_model.pb
-  wget https://storage.googleapis.com/intel-optimized-tensorflow/models/v1_8/ssd_resnet34_int8_1200x1200_pretrained_model.pb
+  export no_proxy+=',10.11.229.21'
+```
+
+* Download [`mall.avi`](http://10.112.229.21/vdms/mall.avi). The default assumes the video is located in the current directory.
+```
+  wget http://10.112.229.21/vdms/mall.avi
+```
+* Download pretrained ssd-resnet34 FP32 and INT8 models. The default assumes the models are located in `models` directory in the current directory.
+```
+  mkdir models
+  wget https://storage.googleapis.com/intel-optimized-tensorflow/models/v1_8/ssd_resnet34_fp32_1200x1200_pretrained_model.pb -P models
+  wget https://storage.googleapis.com/intel-optimized-tensorflow/models/v1_8/ssd_resnet34_int8_1200x1200_pretrained_model.pb -P models
 ```
 * Other Variables:
 
