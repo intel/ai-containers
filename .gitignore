@@ -3,3 +3,4 @@ pipelines/language_modeling/pytorch/bert_large/training/dlsa # Remove this to ch
 pipelines/recommendation/pytorch/recsys/training/analytics-with-python # Remove this to change submodule
 pipelines/transfer_learning/tensorflow/resnet50/inference/transfer-learning-inference # Remove this to change submodule
 pipelines/transfer_learning/tensorflow/resnet50/training/transfer-learning-training # Remove this to change submodule
+pipelines/fab_analytics/classical-ml/uber/inference/wafer-insights # Remove this to change submodule

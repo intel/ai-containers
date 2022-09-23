@@ -1,0 +1,34 @@
+ARG BASE_IMAGE_NAME="ubuntu"
+ARG BASE_IMAGE_TAG="20.04"
+# Inherit <___>
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install --no-install-recommends --fix-missing -y \
+    ca-certificates \
+    git \
+    wget 
+# Default Workspace
+RUN mkdir -p /workspace
+
+SHELL ["/bin/bash", "-c"]
+ARG CONDA_INSTALL_PATH=/opt/conda
+ARG MINICONDA_VERSION="latest"
+# Miniconda Installation
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -O miniconda.sh && \
+    bash miniconda.sh -b -p ${CONDA_INSTALL_PATH} && \
+    $CONDA_INSTALL_PATH/bin/conda clean -ya && \
+    rm miniconda.sh && \
+    ln -s ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+    echo ". ${CONDA_INSTALL_PATH}/etc/profile.d/conda.sh" >> ~/.bashrc && \
+    echo "conda activate WI" >> ~/.bashrc
+
+ARG PYTHON_VERSION="3.9"
+ENV PATH="${CONDA_INSTALL_PATH}/bin:${PATH}"
+# Create Conda Environment + Install reqs via conda
+RUN conda create -yn WI python=${PYTHON_VERSION} && \
+    source activate WI && \
+    conda install -y scikit-learn pandas pyarrow && \
+    pip install dash colorlover && \
+    conda clean -ya
