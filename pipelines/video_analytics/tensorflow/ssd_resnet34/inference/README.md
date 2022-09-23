@@ -1,57 +1,48 @@
-# **Tensorflow SSD-ResNet34 INFERENCE - VDMS-Streamer**
+# **Tensorflow SSD-ResNet34 INFERENCE - Video Streamer**
 
 ## **Description**
 
-This Pipeline provides the containerized implementation of the [VDMS-Streamer](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/tree/8296ae20bff344bfb5c8c55ee484d9d385eceed2) project.
+This Pipeline provides the containerized implementation of the [Video Streamer](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/tree/e509223de903b4899af175e37910ba1044819985) project.
 
 The workload aims to implement end-to-end video streamer pipeline involving media and analytics segments using GStreamer and TensorFlow. The pipeline handles video decode and processing followed by  object detection and classification using the ssd-mobilenet-resnet-34 model using TensorFlow for single and multiple instances in FP32, BF16 and INT8 precisions. The metadata generated is uploaded to VDMS.
 
 ## **Project Structure**
 ```
-├── vdms-streamer @ v0.1.0
+├── video-streamer @ v0.2.0
 ├── Dockerfile.video-streamer
 ├── Makefile
 ├── README.md
 └── docker-compose.yml
 ```
-[*Makefile*](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/sramakr1/vdms-streamer/pipelines/video_analytics/tensorflow/ssd_resnet34/inference/Makefile)
+[*Makefile*](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/develop/pipelines/video_analytics/tensorflow/ssd_resnet34/inference/Makefile)
 
 ```
 FINAL_IMAGE_NAME ?= vdms-video-streamer
-KERAS_VERSION ?= 2.10.0.dev2022062207
 OUTPUT_DIR ?= /output
-TF_ESTIMATOR_VERSION ?= 2.10.0.dev2022062208
-TF_VERSION ?= 2.10.0.202226-cp38-cp38
 VIDEO_PATH ?= $$(pwd)/mall.avi
+MODEL_DIR ?= $$(pwd)/models
 VIDEO = $(shell basename ${VIDEO_PATH})
-WHL_WW ?= 26
-WHL_YR ?= 2022
 
 vdms:
-	WHL_WW=${WHL_WW} \
-	WHL_YR=${WHL_YR} \
 	numactl --physcpubind=51-55 --membind=1 docker compose up -d vdms
 
 video-streamer: vdms
+	mkdir -p ./video-streamer/models && cp -r ${MODEL_DIR}/* ./video-streamer/models
 	FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
-	KERAS_VERSION=${KERAS_VERSION} \
 	OUTPUT_DIR=${OUTPUT_DIR} \
-	TF_ESTIMATOR_VERSION=${TF_ESTIMATOR_VERSION} \
-	TF_VERSION=${TF_VERSION} \
 	VIDEO=${VIDEO} \
 	VIDEO_PATH=${VIDEO_PATH} \
-	WHL_WW=${WHL_WW} \
-	WHL_YR=${WHL_YR} \
 	docker compose up video-streamer --build
 
 clean:
 	docker compose down 
 ```
 
-[*docker-compose.yml*](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/sramakr1/vdms-streamer/pipelines/video_analytics/tensorflow/ssd_resnet34/inference/docker-compose.yml)
+[*docker-compose.yml*](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/develop/pipelines/video_analytics/tensorflow/ssd_resnet34/inference/docker-compose.yml)
 
 ```
 services:
+ services:
   vdms:
     image: vuiseng9/intellabs-vdms:demo-191220
     network_mode: "host"
@@ -61,11 +52,6 @@ services:
   video-streamer:
     build:
       args:
-        KERAS_VERSION: ${KERAS_VERSION}
-        TF_ESTIMATOR_VERSION: ${TF_ESTIMATOR_VERSION}
-        TF_VERSION: ${TF_VERSION}
-        WHL_WW: ${WHL_WW}
-        WHL_YR: ${WHL_YR}
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
         no_proxy: ${no_proxy}
@@ -75,7 +61,7 @@ services:
       - vdms
     environment:
       - OUTPUT_DIR=${OUTPUT_DIR}
-      - VIDEO_FILE=/workspace/vdms-streamer/${VIDEO}
+      - VIDEO_FILE=/workspace/video-streamer/${VIDEO}
       - VIDEO_PATH=${VIDEO_PATH}
       - http_proxy=${http_proxy}
       - https_proxy=${https_proxy}
@@ -85,20 +71,20 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    image: ${FINAL_IMAGE_NAME}:inference-ww${WHL_WW}-${WHL_YR}-centos-8
+    image: ${FINAL_IMAGE_NAME}:inference-centos-8
     network_mode: "host"
     ports:
       - "55555:55555"
     privileged: true
     volumes:
-      - ./vdms-streamer:/workspace/vdms-streamer
+      - ./video-streamer:/workspace/video-streamer
       - /${OUTPUT_DIR}:${OUTPUT_DIR}
-      - /${VIDEO_PATH}:/workspace/vdms-streamer/${VIDEO}
-    working_dir: /workspace/vdms-streamer
+      - /${VIDEO_PATH}:/workspace/video-streamer/${VIDEO}
+    working_dir: /workspace/video-streamer
 ```
 
-# **VDMS-Streamer** 
-End-to-end AI workflow utilizing the VDMS-Streamer. More Information [here](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/tree/8296ae20bff344bfb5c8c55ee484d9d385eceed2). The pipeline runs the ```benchmark.sh``` script of the [VDMS-Streamer](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/blob/8296ae20bff344bfb5c8c55ee484d9d385eceed2/benchmark.sh) project.
+# **Video Streamer** 
+End-to-end AI workflow utilizing the Video-Streamer. More Information [here](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/tree/e509223de903b4899af175e37910ba1044819985). The pipeline runs the ```benchmark.sh``` script of the [Video-Streamer](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/blob/8296ae20bff344bfb5c8c55ee484d9d385eceed2/benchmark.sh) project.
 
 ## **Quick Start**
 * Make sure that the enviroment setup pre-requisites are satisfied per the document [here](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/develop/pipelines/README.md)
@@ -107,20 +93,29 @@ End-to-end AI workflow utilizing the VDMS-Streamer. More Information [here](http
 
 * Install [Pipeline Repository Dependencies](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/develop/pipelines/README.md)
 
-* Download [`mall.avi`](http://10.112.229.21/vdms/mall.avi). The default assumes the video is located in the same location as the cloned [VDMS-Streamer Repo](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/tree/8296ae20bff344bfb5c8c55ee484d9d385eceed2/dataset) folder.
+* Add IP address `10.112.29.21` to `no_proxy` settings:
+```
+  export no_proxy+=',10.11.229.21'
+```
 
+* Download [`mall.avi`](http://10.112.229.21/vdms/mall.avi). The default assumes the video is located in the current directory.
+```
+  wget http://10.112.229.21/vdms/mall.avi
+```
+* Download pretrained ssd-resnet34 FP32 and INT8 models. The default assumes the models are located in `models` directory in the current directory.
+```
+  mkdir models
+  wget https://storage.googleapis.com/intel-optimized-tensorflow/models/v1_8/ssd_resnet34_fp32_1200x1200_pretrained_model.pb -P models
+  wget https://storage.googleapis.com/intel-optimized-tensorflow/models/v1_8/ssd_resnet34_int8_1200x1200_pretrained_model.pb -P models
+```
 * Other Variables:
 
 Variable Name    | Default             | Notes                                   |
 :----------------:|:------------------: | :--------------------------------------:|
 FINAL_IMAGE_NAME    | vdms-video-streamer | Final Docker Image Name                 |
-KERAS_VERSION       | 2.10.0.dev2022062207| Keras Version                           |
 OUTPUT_DIR          | `/output`           | Output Directory                        |
-TF_ESTIMATOR_VERSION| 2.10.0.dev2022062208| TF Estimator Version                    |
-TF_VERSION          | 2.10.0.202226-cp38-cp38 | TF `.whl` version                      |
+MODEL_DIR           | `$$(pwd)/models`    | Models Directory   |
 VIDEO_PATH          | `$$(pwd)/mall.avi`    | Path of the Video File  |
-WHL_WW              |  `26`               |  Work week of TensorFlow `.whl` package |
-WHL_YR              | `2022`              | Work year  of Tensorflow `.whl` package |
 
 ## **Build and Run**
 Build and run with defaults:
@@ -159,23 +154,30 @@ Build and run with defaults:
 #9 [5/9] RUN ln -sf $(which python3) /usr/local/bin/python &&     ln -sf $(which python3) /usr/local/bin/python3 &&     ln -sf $(which python3) /usr/bin/python
 #9 CACHED
 
-#10 [6/9] COPY /* /tmp/pip3/
-#10 DONE 5.8s
-
-#11 [7/9] RUN source activate vdms-test &&     pip install     "tf-estimator-nightly==2.10.0.dev2022042008"     "keras-nightly==2.10.0.dev2022042007"     /tmp/pip3/tf_nightly-2.10.0.202218-cp38-cp38-linux_x86_64.whl &&     conda install -y -c conda-forge gst-libav==1.18.4 gst-plugins-good=1.18.4 gst-plugins-bad=1.18.4 gst-plugins-ugly=1.18.4 gst-python=1.18.4 pygobject=3.40.1 &&     conda clean --all
-#11 0.792 Processing /tmp/pip3/tf_nightly-2.10.0.202218-cp38-cp38-linux_x86_64.whl
-#11 1.121 Collecting tf-estimator-nightly==2.10.0.dev2022042008
-#11 1.161   Downloading tf_estimator_nightly-2.10.0.dev2022042008-py2.py3-none-any.whl (438 kB)
-#11 1.176      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 438.9/438.9 kB 36.5 MB/s eta 0:00:00
-#11 1.278 Collecting keras-nightly==2.10.0.dev2022042007
-#11 1.285   Downloading keras_nightly-2.10.0.dev2022042007-py2.py3-none-any.whl (1.6 MB)
-#11 1.318      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.6/1.6 MB 51.7 MB/s eta 0:00:00
-#11 1.365 Collecting libclang>=13.0.0
-#11 1.370   Downloading libclang-14.0.1-py2.py3-none-manylinux1_x86_64.whl (14.5 MB)
-#11 1.537      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 14.5/14.5 MB 78.7 MB/s eta 0:00:00
-#11 1.612 Collecting tensorflow-io-gcs-filesystem>=0.23.1
-#11 1.626   Downloading tensorflow_io_gcs_filesystem-0.26.0-cp38-cp38-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (2.4 MB)
-#11 1.651      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.4/2.4 MB 100.9 MB/s eta 0:00:00
+#9 [6/9] RUN source activate vdms-test &&     pip install tensorflow-cpu &&     conda install -y -c conda-forge gst-libav==1.18.4 gst-plugins-good=1.18.4 gst-plugins-bad=1.18.4 gst-plugins-ugly=1.18.4 gst-python=1.18.4 pygobject=3.40.1 &&     conda clean --all
+#9 0.993 Collecting tensorflow-cpu
+#9 1.087   Downloading tensorflow_cpu-2.10.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (214.4 MB)
+#9 3.630      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 214.4/214.4 MB 10.7 MB/s eta 0:00:00
+#9 4.771 Collecting grpcio<2.0,>=1.24.3
+#9 4.787   Downloading grpcio-1.48.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.6 MB)
+#9 4.844      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.6/4.6 MB 86.2 MB/s eta 0:00:00
+#9 4.857 Requirement already satisfied: numpy>=1.20 in /root/conda/envs/vdms-test/lib/python3.8/site-packages (from tensorflow-cpu) (1.23.3)
+#9 4.877 Collecting absl-py>=1.0.0
+#9 4.886   Downloading absl_py-1.2.0-py3-none-any.whl (123 kB)
+#9 4.891      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 123.4/123.4 kB 41.0 MB/s eta 0:00:00
+#9 4.923 Collecting keras<2.11,>=2.10.0
+#9 4.936   Downloading keras-2.10.0-py2.py3-none-any.whl (1.7 MB)
+#9 4.956      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 94.3 MB/s eta 0:00:00
+#9 4.983 Collecting keras-preprocessing>=1.1.1
+#9 4.992   Downloading Keras_Preprocessing-1.1.2-py2.py3-none-any.whl (42 kB)
+#9 4.996      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 42.6/42.6 kB 14.2 MB/s eta 0:00:00
+#9 5.030 Collecting tensorboard<2.11,>=2.10
+#9 5.038   Downloading tensorboard-2.10.0-py3-none-any.whl (5.9 MB)
+#9 5.127      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.9/5.9 MB 68.6 MB/s eta 0:00:00
+#9 5.165 Collecting opt-einsum>=2.3.2
+#9 5.185   Downloading opt_einsum-3.3.0-py3-none-any.whl (65 kB)
+#9 5.191      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 65.5/65.5 kB 12.7 MB/s eta 0:00:00
+#9 5.193 Requirement already satisfied: setuptools in /root/conda/envs/vdms-test/lib/python3.8/site-packages (from tensorflow-cpu) (65.3.0)
 ```
 ...
 
