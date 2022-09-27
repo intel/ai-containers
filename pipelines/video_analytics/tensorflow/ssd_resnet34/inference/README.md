@@ -19,7 +19,7 @@ The workload aims to implement end-to-end video streamer pipeline involving medi
 ```
 FINAL_IMAGE_NAME ?= vdms-video-streamer
 OUTPUT_DIR ?= /output
-VIDEO_PATH ?= $$(pwd)/mall.avi
+VIDEO_PATH ?= $$(pwd)/classroom.mp4
 MODEL_DIR ?= $$(pwd)/models
 VIDEO = $(shell basename ${VIDEO_PATH})
 
@@ -93,14 +93,9 @@ End-to-end AI workflow utilizing the Video-Streamer. More Information [here](htt
 
 * Install [Pipeline Repository Dependencies](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/develop/pipelines/README.md)
 
-* Add IP address `10.112.29.21` to `no_proxy` settings:
+* Download the [video file](https://github.com/intel-iot-devkit/sample-videos/raw/master/classroom.mp4) The default assumes the video is located in the current directory.
 ```
-  export no_proxy+=',10.11.229.21'
-```
-
-* Download [`mall.avi`](http://10.112.229.21/vdms/mall.avi). The default assumes the video is located in the current directory.
-```
-  wget http://10.112.229.21/vdms/mall.avi
+  wget https://github.com/intel-iot-devkit/sample-videos/raw/master/classroom.mp4
 ```
 * Download pretrained ssd-resnet34 FP32 and INT8 models. The default assumes the models are located in `models` directory in the current directory.
 ```
@@ -115,7 +110,7 @@ Variable Name    | Default             | Notes                                  
 FINAL_IMAGE_NAME    | vdms-video-streamer | Final Docker Image Name                 |
 OUTPUT_DIR          | `/output`           | Output Directory                        |
 MODEL_DIR           | `$$(pwd)/models`    | Models Directory   |
-VIDEO_PATH          | `$$(pwd)/mall.avi`    | Path of the Video File  |
+VIDEO_PATH          | `$$(pwd)/classroom.mp4`    | Path of the Video File  |
 
 ## **Build and Run**
 Build and run with defaults:
