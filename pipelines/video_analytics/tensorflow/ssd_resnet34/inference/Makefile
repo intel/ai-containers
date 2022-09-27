@@ -1,6 +1,6 @@
 FINAL_IMAGE_NAME ?= vdms-video-streamer
 OUTPUT_DIR ?= /output
-VIDEO_PATH ?= $$(pwd)/mall.avi
+VIDEO_PATH ?= $$(pwd)/classroom.mp4
 MODEL_DIR ?= $$(pwd)/models
 VIDEO = $(shell basename ${VIDEO_PATH})
 
