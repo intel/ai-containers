@@ -2,7 +2,7 @@
 
 ## **Description**
 
-This Pipeline provides the containerized implementation of the [Video Streamer](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/tree/e509223de903b4899af175e37910ba1044819985) project.
+This Pipeline provides the containerized implementation of the [Video Streamer](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/tree/b14d84a55c98a998a7d6b29361af84b16f1e1e3e) project.
 
 The workload aims to implement end-to-end video streamer pipeline involving media and analytics segments using GStreamer and TensorFlow. The pipeline handles video decode and processing followed by  object detection and classification using the ssd-mobilenet-resnet-34 model using TensorFlow for single and multiple instances in FP32, BF16 and INT8 precisions. The metadata generated is uploaded to VDMS.
 
@@ -84,7 +84,7 @@ services:
 ```
 
 # **Video Streamer** 
-End-to-end AI workflow utilizing the Video-Streamer. More Information [here](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/tree/e509223de903b4899af175e37910ba1044819985). The pipeline runs the ```benchmark.sh``` script of the [Video-Streamer](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/blob/8296ae20bff344bfb5c8c55ee484d9d385eceed2/benchmark.sh) project.
+End-to-end AI workflow utilizing the Video-Streamer. More Information [here](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/tree/b14d84a55c98a998a7d6b29361af84b16f1e1e3e). The pipeline runs the ```benchmark.sh``` script of the [Video-Streamer](https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer/tree/b14d84a55c98a998a7d6b29361af84b16f1e1e3e/benchmark.sh) project.
 
 ## **Quick Start**
 * Make sure that the enviroment setup pre-requisites are satisfied per the document [here](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/develop/pipelines/README.md)
@@ -93,7 +93,7 @@ End-to-end AI workflow utilizing the Video-Streamer. More Information [here](htt
 
 * Install [Pipeline Repository Dependencies](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/develop/pipelines/README.md)
 
-* Download the [video file](https://github.com/intel-iot-devkit/sample-videos/raw/master/classroom.mp4) The default assumes the video is located in the current directory.
+* Download the [video file](https://github.com/intel-iot-devkit/sample-videos/raw/master/classroom.mp4).The default assumes the video is located in the current directory.
 ```
   wget https://github.com/intel-iot-devkit/sample-videos/raw/master/classroom.mp4
 ```
@@ -196,7 +196,7 @@ cpu-video-streamer-1  | (gst-plugin-scanner:109): GStreamer-WARNING **: 17:44:22
 cpu-video-streamer-1  | 
 cpu-video-streamer-1  | (gst-plugin-scanner:109): GStreamer-WARNING **: 17:44:22.437: Failed to load plugin '/root/conda/envs/vdms-test/lib/gstreamer-1.0/libgstximagesrc.so': libXdamage.so.1: cannot open shared object file: No such file or directory
 cpu-video-streamer-1  | + set +x
-cpu-video-streamer-1  | + numactl --physcpubind=0-3 --localalloc gst-launch-1.0 filesrc location=dataset/intel_approved.mp4 '!' decodebin '!' videoconvert '!' video/x-raw,format=RGB '!' videoconvert '!' queue '!' gst_detection_tf conf=config/settings.yaml '!' fakesink
+cpu-video-streamer-1  | + numactl --physcpubind=0-3 --localalloc gst-launch-1.0 filesrc location=/workspace/video-streamer/classroom.mp4 '!' decodebin '!' videoconvert '!' video/x-raw,format=RGB '!' videoconvert '!' queue '!' gst_detection_tf conf=config/settings.yaml '!' fakesink
 cpu-video-streamer-1  | 
 cpu-video-streamer-1  | (gst-launch-1.0:174): GStreamer-CRITICAL **: 17:44:24.178: The created element should be floating, this is probably caused by faulty bindings
 cpu-video-streamer-1  | INFO:gst_detection_tf:Loading model: models/ssd_resnet34_fp32_1200x1200_pretrained_model.pb
