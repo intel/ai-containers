@@ -36,6 +36,7 @@ video-streamer: vdms
 
 clean:
 	docker compose down 
+	rm -rf ./video-streamer/models ${VIDEO}
 ```
 
 [*docker-compose.yml*](https://github.com/intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/blob/develop/pipelines/video_analytics/tensorflow/ssd_resnet34/inference/docker-compose.yml)

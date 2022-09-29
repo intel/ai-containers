@@ -17,3 +17,4 @@ video-streamer: vdms
 
 clean:
 	docker compose down 
+	rm -rf ./video-streamer/models ${VIDEO}
