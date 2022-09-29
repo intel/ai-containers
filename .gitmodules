@@ -1,7 +1,6 @@
 [submodule "pipelines/language_modeling/pytorch/bert_large/training/dlsa"]
 	path = pipelines/language_modeling/pytorch/bert_large/training/dlsa
 	url = https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.dlsa
-	branch = dlsa_multinode_ddp
 [submodule "pipelines/recommendation/pytorch/recsys/training/analytics-with-python"]
 	path = pipelines/recommendation/pytorch/recsys/training/analytics-with-python
 	url = https://github.com/intel-sandbox/applications.ai.appliedml.workflow.analyticswithpython
@@ -14,7 +13,6 @@
 [submodule "pipelines/video_analytics/tensorflow/ssd_resnet34/inference/video-streamer"]
 	path = pipelines/video_analytics/tensorflow/ssd_resnet34/inference/video-streamer
 	url = https://github.com/intel-innersource/frameworks.ai.end2end-ai-pipelines.video-streamer.git
-[submodule "pipelines/fab_analytics/classical-ml/uber/inference/wafer-insights"]
-	path = pipelines/fab_analytics/classical-ml/uber/inference/wafer-insights
-	url = https://github.com/intel-sandbox/applications.ai.appliedml.workflow.waferinsights.git
-	branch = WorkflowI6
+[submodule "pipelines/fab_analytics/classical-ml/synthetic/inference/wafer-insights"]
+	path = pipelines/fab_analytics/classical-ml/synthetic/inference/wafer-insights
+	url = https://github.com/intel-sandbox/applications.ai.appliedml.workflow.waferinsights

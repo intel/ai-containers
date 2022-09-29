@@ -1,4 +1,4 @@
-# Classical ML PyUber INFERENCE - Wafer Insights
+# Classical ML Synthetic INFERENCE - Wafer Insights
 ## Description
 This document contains instructions on how to run Wafer Insights pipelines with make and docker compose.
 ## Project Structure 
@@ -53,7 +53,7 @@ services:
 ```
 
 # Wafer Insights
-End2End AI Workflow utilizing a Flask dashboard to allow users to predict FMAX/IDV tokens based on FAB data sources. More information [here](https://github.com/intel-sandbox/applications.ai.appliedml.workflow.waferinsights/tree/WorkflowI6)
+End2End AI Workflow utilizing a Flask dashboard to allow users to predict FMAX/IDV tokens based on synthetically generated FAB data sources. More information [here](https://github.com/intel-sandbox/applications.ai.appliedml.workflow.waferinsights/tree/WorkflowI6)
 
 ## Quick Start
 * Pull and configure the dependent repo submodule `git submodule update --init --recursive`.
