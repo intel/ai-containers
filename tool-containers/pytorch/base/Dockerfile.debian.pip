@@ -61,3 +61,5 @@ RUN python -m pip install --no-cache-dir \
     torch==${PYTORCH_VERSION} torchvision==${TORCHVISION_VERSION} torchaudio==${TORCHAUDIO_VERSION} -f ${TORCH_CPU_URL} && \
     python -m pip install --no-cache-dir \
     intel_extension_for_pytorch==${IPEX_VERSION} -f ${IPEX_URL}
+
+COPY licensing .

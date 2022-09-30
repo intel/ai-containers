@@ -75,3 +75,5 @@ RUN echo "source ~/conda/etc/profile.d/conda.sh" >> /root/.bash_profile && \
     echo "conda activate idp" >> /root/.bash_profile
 
 RUN apt-get clean
+
+COPY licensing .

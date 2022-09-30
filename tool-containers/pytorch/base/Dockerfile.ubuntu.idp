@@ -28,8 +28,8 @@
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
 
-ARG BASE_IMAGE_NAME=debian
-ARG BASE_IMAGE_TAG=11
+ARG BASE_IMAGE_NAME=ubuntu
+ARG BASE_IMAGE_TAG=20.04
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} as base
 SHELL ["/bin/bash", "-c"]
@@ -75,3 +75,5 @@ RUN echo "source ~/conda/etc/profile.d/conda.sh" >> /root/.bash_profile && \
     echo "conda activate idp" >> /root/.bash_profile
 
 RUN apt-get clean
+
+COPY licensing .

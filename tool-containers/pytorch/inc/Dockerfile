@@ -26,7 +26,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
     ${PYTHON}-dev \
     gcc \
     libgl1-mesa-glx \
-    libglib2.0-0
+    libglib2.0-0 \
+    virtualenv
 
 RUN ln -sf $(which ${PYTHON}) /usr/local/bin/python && \
     ln -sf $(which ${PYTHON}) /usr/local/bin/python3 && \
@@ -35,7 +36,9 @@ RUN ln -sf $(which ${PYTHON}) /usr/local/bin/python && \
 
 ARG INC_VER=1.12
 
-ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/third-party-programs.txt /licenses/
-ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/LICENSE /licenses/
+ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/third-party-programs.txt /licensing/
+ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/LICENSE /licensing/
 
 RUN python -m pip install --no-cache-dir neural-compressor${INC_VER:+==${INC_VER}}
+
+RUN virtualenv --system-site-packages inc && echo "source /inc/bin/activate" > ~/.bashrc

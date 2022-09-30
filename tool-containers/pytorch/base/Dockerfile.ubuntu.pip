@@ -28,8 +28,8 @@
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
 
-ARG BASE_IMAGE_NAME=debian
-ARG BASE_IMAGE_TAG=11
+ARG BASE_IMAGE_NAME=ubuntu
+ARG BASE_IMAGE_TAG=20.04
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} as base
 
@@ -61,3 +61,5 @@ RUN python -m pip install --no-cache-dir \
     torch==${PYTORCH_VERSION} torchvision==${TORCHVISION_VERSION} torchaudio==${TORCHAUDIO_VERSION} -f ${TORCH_CPU_URL} && \
     python -m pip install --no-cache-dir \
     intel_extension_for_pytorch==${IPEX_VERSION} -f ${IPEX_URL}
+
+COPY licensing .
