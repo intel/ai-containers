@@ -1,0 +1,65 @@
+# Copyright 2019 The TensorFlow Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ============================================================================
+#
+#
+# This file was assembled from multiple pieces, whose use is documented
+# throughout. Please refer to the TensorFlow dockerfiles documentation
+# for more information.
+
+ARG BASE_IMAGE_NAME=debian
+ARG BASE_IMAGE_TAG=11
+
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} as base
+
+# Intel Optimizations specific Envs
+ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
+    KMP_BLOCKTIME=1 \
+    KMP_SETTINGS=1
+
+SHELL ["/bin/bash", "-c"]
+
+RUN apt-get update -y && \
+    apt-get install -y \
+    wget
+
+ARG MINICONDA_VER="py39_4.12.0-Linux-x86_64"
+
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VER}.sh -O miniconda.sh && \        
+    chmod +x miniconda.sh && \
+    ./miniconda.sh -b -p ~/conda && \
+    rm ./miniconda.sh && \
+    ln -s ~/conda ~/miniconda3 && \
+    export PATH=~/conda/bin/:${PATH} && \
+    conda update -y conda && \
+    conda config --add channels intel && \
+    conda create -yn idp intelpython3_full python=3.9 && \
+    conda clean -y --all
+
+ENV PATH /root/conda/condabin:~/conda/bin/:${PATH}
+ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64:/root/conda/envs/idp/lib:${LD_LIBRARY_PATH}
+
+ENV BASH_ENV /root/.bash_profile
+
+ENV TF_ENABLE_ONEDNN_OPTS=1
+ARG TF_PACKAGE=intel-tensorflow
+ARG TF_PACKAGE_VERSION=2.9.1
+
+RUN source activate idp && \
+    python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}}
+
+RUN echo "source ~/conda/etc/profile.d/conda.sh" >> /root/.bash_profile && \
+    echo "conda activate idp" >> /root/.bash_profile
+
+RUN apt-get clean

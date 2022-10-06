@@ -5,8 +5,10 @@
 ├── Makefile
 ├── README.md
 ├── base
-│   ├── Dockerfile.debian
-│   ├── Dockerfile.ubuntu
+│   ├── Dockerfile.debian.pip
+│   ├── Dockerfile.ubuntu.pip
+│   ├── Dockerfile.debian.idp
+│   ├── Dockerfile.ubuntu.idp
 │   └── config
 │       ├── base.env
 │       ├── debian.env
@@ -27,7 +29,7 @@
 version: '3'
 services:
   base:
-    image: ${FINAL_IMAGE_NAME:-tf-base}:${TF_PACKAGE_VERSION:-2.9.1}
+    image: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION:-2.9.1}
     build:
       context: ./base
       args:
@@ -35,6 +37,7 @@ services:
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-20.04}
         TF_PACKAGE: ${TF_PACKAGE:-intel-tensorflow}
         TF_PACKAGE_VERSION: ${TF_PACKAGE_VERSION:-2.9.1}
+        PACKAGE_OPTION: ${PACKAGE_OPTION}
       dockerfile: Dockerfile.${BASE_IMAGE_NAME:-ubuntu}
     healthcheck:
       test: curl --fail -I http://localhost:8080/status || exit 1
@@ -45,7 +48,7 @@ services:
       sh -c "python -c 'import tensorflow as tf; print(\"TensorFlow Version:\", tf.__version__)'"
 
   jupyter:
-    image: ${FINAL_IMAGE_NAME:-tf-base}:${TF_PACKAGE_VERSION:-2.9.1}-jupyter
+    image: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION:-2.9.1}-jupyter
     build:
       context: ./jupyter
       args:
@@ -69,38 +72,35 @@ services:
 ```
 $ docker compose build base jupyter
 
-[+] Building 3.1s (22/22) FINISHED
- => [tf-base:2.9.1 internal] load build definition from Dockerfile.ubuntu                                                                                                                                            0.0s
- => => transferring dockerfile: 39B                                                                                                                                                                                  0.0s
- => [tf-base:2.9.1-jupyter internal] load build definition from Dockerfile                                                                                                                                           0.0s
- => => transferring dockerfile: 32B                                                                                                                                                                                  0.0s
- => [tf-base:2.9.1 internal] load .dockerignore                                                                                                                                                                      0.0s
- => => transferring context: 2B                                                                                                                                                                                      0.0s
- => [tf-base:2.9.1-jupyter internal] load .dockerignore                                                                                                                                                              0.0s
- => => transferring context: 2B                                                                                                                                                                                      0.0s
- => [tf-base:2.9.1 internal] load metadata for docker.io/library/ubuntu:20.04                                                                                                                                        2.8s
- => [tf-base:2.9.1-jupyter internal] load metadata for docker.io/library/tf-base:2.9.1                                                                                                                               0.0s
- => [tf-base:2.9.1-jupyter 1/8] FROM docker.io/library/tf-base:2.9.1                                                                                                                                                 0.0s
- => CACHED [tf-base:2.9.1-jupyter 2/8] RUN python -m pip install --no-cache-dir jupyter matplotlib                                                                                                                   0.0s
- => CACHED [tf-base:2.9.1-jupyter 3/8] RUN python -m pip install --no-cache-dir jupyter_http_over_ws ipykernel nbformat                                                                                              0.0s
- => CACHED [tf-base:2.9.1-jupyter 4/8] RUN jupyter serverextension enable --py jupyter_http_over_ws                                                                                                                  0.0s
- => CACHED [tf-base:2.9.1-jupyter 5/8] RUN mkdir -p /tf-base/ && chmod -R a+rwx /tf-base/                                                                                                                            0.0s
- => CACHED [tf-base:2.9.1-jupyter 6/8] RUN mkdir /.local && chmod a+rwx /.local                                                                                                                                      0.0s
- => CACHED [tf-base:2.9.1-jupyter 7/8] WORKDIR /tf-base                                                                                                                                                              0.0s
- => CACHED [tf-base:2.9.1-jupyter 8/8] RUN python -m ipykernel.kernelspec                                                                                                                                            0.0s
- => [tf-base:2.9.1] exporting to image                                                                                                                                                                               0.0s
- => => exporting layers                                                                                                                                                                                              0.0s
- => => writing image sha256:2128abe4122cf2a9561be52974c3beeb479e7c50ec090308f8b13836ad95ed9f                                                                                                                         0.0s
- => => naming to docker.io/library/tf-base:2.9.1-jupyter                                                                                                                                                             0.0s
- => => writing image sha256:12d95a4fe6f00f2f6a2fe5598e624cbc0bced8ae4ae59aa1c72bf7e287416c4b                                                                                                                         0.0s
- => => naming to docker.io/library/tf-base:2.9.1                                                                                                                                                                     0.0s
- => [auth] library/ubuntu:pull token for registry-1.docker.io                                                                                                                                                        0.0s
- => [tf-base:2.9.1 1/6] FROM docker.io/library/ubuntu:20.04@sha256:fd92c36d3cb9b1d027c4d2a72c6bf0125da82425fc2ca37c414d4f010180dc19                                                                                  0.0s
- => CACHED [tf-base:2.9.1 2/6] RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing     ca-certificates     curl     python3     python3-distutils                                         0.0s
- => CACHED [tf-base:2.9.1 3/6] RUN curl -fSsL https://bootstrap.pypa.io/get-pip.py | python3                                                                                                                         0.0s
- => CACHED [tf-base:2.9.1 4/6] RUN ln -sf $(which python3) /usr/local/bin/python &&     ln -sf $(which python3) /usr/local/bin/python3 &&     ln -sf $(which python3) /usr/bin/python                                0.0s
- => CACHED [tf-base:2.9.1 5/6] RUN python -m pip --no-cache-dir install --upgrade     pip     setuptools                                                                                                             0.0s
- => CACHED [tf-base:2.9.1 6/6] RUN python -m pip install --no-cache-dir intel-tensorflow==2.9.1
+#1 [tf-base-ubuntu-idp:2.9.1-jupyter internal] load build definition from Dockerfile
+#1 transferring dockerfile: 32B done
+#1 DONE 0.0s
+
+#2 [tf-base-ubuntu-idp:2.9.1 internal] load build definition from Dockerfile.ubuntu.idp
+#2 transferring dockerfile: 43B done
+#2 DONE 0.0s
+
+#3 [tf-base-ubuntu-idp:2.9.1 internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [tf-base-ubuntu-idp:2.9.1-jupyter internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [tf-base-ubuntu-idp:2.9.1-jupyter internal] load metadata for docker.io/library/tf-base-ubuntu-idp:2.9.1
+#5 DONE 0.0s
+
+#6 [tf-base-ubuntu-idp:2.9.1 internal] load metadata for docker.io/library/ubuntu:20.04
+#6 DONE 0.0s
+
+#7 [tf-base-ubuntu-idp:2.9.1 1/6] FROM docker.io/library/ubuntu:20.04
+#7 CACHED
+
+#8 [tf-base-ubuntu-idp:2.9.1-jupyter 1/8] FROM docker.io/library/tf-base-ubuntu-idp:2.9.1
+#8 CACHED
+
+...
 ```
 
 ### Deploy with docker compose
