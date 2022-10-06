@@ -14,7 +14,7 @@
 
 ARG BASE_IMAGE_NAME=ipex-base
 ARG BASE_IMAGE_TAG=latest
-ARG PACKAGE_OPTION=idp
+ARG PACKAGE_OPTION=pip
 ARG BASE_OS_NAME=debian
 
 FROM ${BASE_IMAGE_NAME}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${BASE_IMAGE_TAG} as inc
@@ -26,8 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
     ${PYTHON}-dev \
     gcc \
     libgl1-mesa-glx \
-    libglib2.0-0 \
-    virtualenv
+    libglib2.0-0 
 
 RUN ln -sf $(which ${PYTHON}) /usr/local/bin/python && \
     ln -sf $(which ${PYTHON}) /usr/local/bin/python3 && \
@@ -39,6 +38,5 @@ ARG INC_VER=1.12
 ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/third-party-programs.txt /licensing/
 ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/LICENSE /licensing/
 
+ENV SIGOPT_PROJECT=.
 RUN python -m pip install --no-cache-dir neural-compressor${INC_VER:+==${INC_VER}}
-
-RUN virtualenv --system-site-packages inc && echo "source /inc/bin/activate" > ~/.bashrc

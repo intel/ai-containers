@@ -62,4 +62,4 @@ RUN python -m pip install --no-cache-dir \
     python -m pip install --no-cache-dir \
     intel_extension_for_pytorch==${IPEX_VERSION} -f ${IPEX_URL}
 
-COPY licensing .
+ADD licensing /licensing

@@ -66,7 +66,7 @@ services:
         BASE_OS_NAME: ${BASE_OS_NAME:-debian}
         HOROVOD_VERSION: v0.24.3
         PACKAGE_OPTION: ${PACKAGE_OPTION}
-        PYTHON: python3.8
+        PYTHON: python3.9
     healthcheck:
       test: curl --fail -I http://localhost:8080/status || exit 1
       interval: 10s
@@ -87,7 +87,7 @@ services:
         BASE_OS_NAME: ${BASE_OS_NAME:-debian}
         HOROVOD_VERSION: v0.24.3
         PACKAGE_OPTION: ${PACKAGE_OPTION}
-        PYTHON: python3.8
+        PYTHON: python3.9
     healthcheck:
       test: curl --fail -I http://localhost:8080/status || exit 1
       interval: 10s
@@ -102,6 +102,7 @@ services:
     image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi-inc
     build:
       context: ./inc
+      dockerfile: Dockerfile.${BASE_OS_NAME:-ubuntu}.${PACKAGE_OPTION:-pip}
       args:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
         BASE_IMAGE_TAG: ${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi
