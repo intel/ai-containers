@@ -1,4 +1,4 @@
-name: Base Framework Containers Build
+name: Tensorflow Base Ingredient Containers Build
 on: 
   workflow_dispatch:
     inputs:
@@ -29,6 +29,13 @@ on:
         - "22.04"
         - "10"
         - "11"
+      package_option: 
+        default: "pip"
+        required: true
+        type: choice
+        options: 
+        - "pip"
+        - "idp"
       tf_package:
         default: intel-tensorflow
         required: true
@@ -38,13 +45,13 @@ on:
         - intel-tensorflow-avx512
         - tensorflow
       tf_package_version:
-        default: "2.9.1"
+        default: "2.10.0"
         required: true
         type: choice
         options: 
-        - "2.7.0"
         - "2.8.0"
         - "2.9.1"
+        - "2.10.0"
 jobs:
   base-framework-build:
     container: # TODO: Update image URL once secret passing functionality is available in GHA
@@ -67,7 +74,7 @@ jobs:
       run: echo "Invalid combination of Base OS and OS Version used, please try again" && exit 1
     - uses: actions/checkout@v3
     - name: Compose Pipeline
-      run: make ${{ github.event.inputs.make_target }} BASE_IMAGE_NAME=${{ github.event.inputs.os }} FINAL_IMAGE_NAME=${{ github.event.inputs.make_target }} BASE_IMAGE_TAG=${{ github.event.inputs.os_version }} TF_PACKAGE=${{ github.event.inputs.tf_package }} TF_PACKAGE_VERSION=${{ github.event.inputs.tf_package_version }}
+      run: make ${{ github.event.inputs.make_target }} BASE_IMAGE_NAME=${{ github.event.inputs.os }} FINAL_IMAGE_NAME=${{ github.event.inputs.make_target }} BASE_IMAGE_TAG=${{ github.event.inputs.os_version }} PACKAGE_OPTION=${{ github.event.inputs.package_option }} TF_PACKAGE=${{ github.event.inputs.tf_package }} TF_PACKAGE_VERSION=${{ github.event.inputs.tf_package_version }}
       working-directory: ./tool-containers/tensorflow
     - uses: docker/login-action@v2
       with:
@@ -76,6 +83,6 @@ jobs:
         password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Upload Container to Registry
       run: |
-        docker tag ${{ github.event.inputs.make_target }}:${{ github.event.inputs.tf_package_version }}-${{ github.event.inputs.make_target }} amr-registry.caas.intel.com/aiops/${{ github.event.inputs.tf_package }}:${{ github.event.inputs.tf_package_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }} &&
-        docker push amr-registry.caas.intel.com/aiops/${{ github.event.inputs.tf_package }}:${{ github.event.inputs.tf_package_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }}
+        docker tag ${{ github.event.inputs.make_target }}-${{ github.event.inputs.os }}-${{ github.event.inputs.package_option }}:${{ github.event.inputs.tf_package_version }}-${{ github.event.inputs.make_target }} amr-registry.caas.intel.com/aiops/${{ github.event.inputs.tf_package }}:${{ github.event.inputs.package_option }}-${{ github.event.inputs.tf_package_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }} &&
+        docker push amr-registry.caas.intel.com/aiops/${{ github.event.inputs.tf_package }}:${{ github.event.inputs.package_option }}-${{ github.event.inputs.tf_package_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }}
         
