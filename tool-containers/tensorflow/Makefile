@@ -3,7 +3,7 @@ FINAL_IMAGE_NAME ?= tf-base
 BASE_IMAGE_NAME ?= ubuntu
 BASE_IMAGE_TAG ?= 20.04
 TF_PACKAGE ?= intel-tensorflow
-TF_PACKAGE_VERSION ?= 2.9.1 
+TF_PACKAGE_VERSION ?= 2.10.0
 PACKAGE_OPTION ?= pip
 
 # Docker build and run Proxy values

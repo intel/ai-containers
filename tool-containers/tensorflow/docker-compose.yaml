@@ -78,7 +78,7 @@ services:
       args:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-openmpi
-        HOROVOD_VERSION: v0.24.3
+        HOROVOD_VERSION: 1b3452f
         PYTHON: python3.8
     healthcheck: 
       test: curl --fail -I http://localhost:8080/status || exit 1
@@ -97,7 +97,7 @@ services:
       args:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-mpich
-        HOROVOD_VERSION: v0.24.3
+        HOROVOD_VERSION: 1b3452f
         PYTHON: python3.8
     healthcheck: 
       test: curl --fail -I http://localhost:8080/status || exit 1
