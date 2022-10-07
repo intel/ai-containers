@@ -4,6 +4,7 @@ This document contains instructions on how to run <Pipeline1, Pipeline2, ... and
 ## Project Structure 
 ```
 ├── <E2E_REPO> @ <BRANCH>
+├── DEVCATALOG.md
 ├── docker-compose.yml
 ├── Dockerfile.<PIPELINE_NAME>
 ├── Makefile
