@@ -1,111 +1,113 @@
-DOCKER_BUILDKIT ?= 1
-FINAL_IMAGE_NAME ?= tf-base
 BASE_IMAGE_NAME ?= ubuntu
 BASE_IMAGE_TAG ?= 20.04
+DOCKER_BUILDKIT ?= 1
+HOROVOD_VERSION ?= 1b3452f
+INC_VERSION ?= 1.13
+MINICONDA_VERSION ?= "py38_4.12.0-Linux-x86_64"
+PACKAGE_OPTION ?= pip
+PYTHON_VERSION ?= python3.8
 TF_PACKAGE ?= intel-tensorflow
 TF_PACKAGE_VERSION ?= 2.10.0
-PACKAGE_OPTION ?= pip
 
-# Docker build and run Proxy values
-DOCKER_BUILD_ARGS ?= --build-arg ftp_proxy=${ftp_proxy} --build-arg FTP_PROXY=${FTP_PROXY} --build-arg http_proxy=${http_proxy} --build-arg HTTP_PROXY=${HTTP_PROXY} --build-arg https_proxy=${https_proxy} --build-arg HTTPS_PROXY=${HTTPS_PROXY} --build-arg no_proxy=${no_proxy} --build-arg NO_PROXY=${NO_PROXY} --build-arg socks_proxy=${socks_proxy} --build-arg SOCKS_PROXY=${SOCKS_PROXY}
-DOCKER_RUN_ENVS ?= --env ftp_proxy=${ftp_proxy} --env FTP_PROXY=${FTP_PROXY} --env http_proxy=${http_proxy} --env HTTP_PROXY=${HTTP_PROXY} --env https_proxy=${https_proxy} --env HTTPS_PROXY=${HTTPS_PROXY} --env no_proxy=${no_proxy} --env NO_PROXY=${NO_PROXY} --env socks_proxy=${socks_proxy} --env SOCKS_PROXY=${SOCKS_PROXY}
+FINAL_IMAGE_NAME ?= ${TF_PACKAGE}
 
 tf-base:
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
-	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
-	 TF_PACKAGE=${TF_PACKAGE} \
-	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
+	 MINICONDA_VERSION=${MINICONDA_VERSION} \
 	 PACKAGE_OPTION=${PACKAGE_OPTION} \
-	 docker compose build ${DOCKER_BUILD_ARGS} base
+	 PYTHON_VERSION=${PYTHON_VERSION} \
+	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 TF_PACKAGE=${TF_PACKAGE} \
+	 docker compose up --build tf-base
 
 jupyter: tf-base
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
-	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
-	 TF_PACKAGE=${TF_PACKAGE} \
-	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 PACKAGE_OPTION=${PACKAGE_OPTION} \
-	 docker compose build ${DOCKER_BUILD_ARGS} jupyter
+	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 docker compose up --build jupyter
 
 openmpi: tf-base
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
-	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
-	 TF_PACKAGE=${TF_PACKAGE} \
-	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 PACKAGE_OPTION=${PACKAGE_OPTION} \
-	 docker compose build ${DOCKER_BUILD_ARGS} openmpi
+	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 docker compose up --build openmpi
 
 mpich: tf-base
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
-	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
-	 TF_PACKAGE=${TF_PACKAGE} \
-	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
-	 PACKAGE_OPTION=${PACKAGE_OPTION} \
-	 docker compose build ${DOCKER_BUILD_ARGS} mpich
-
-openmpi-horovod-dev: openmpi
-	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
 	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
-	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
-	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
-	 TF_PACKAGE=${TF_PACKAGE} \
-	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 HOROVOD_VERSION=${HOROVOD_VERSION} \
 	 PACKAGE_OPTION=${PACKAGE_OPTION} \
-	 docker compose build ${DOCKER_BUILD_ARGS} openmpi-horovod-dev
-
-mpich-horovod-dev: mpich
-	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
-	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
-	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
-	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
-	 TF_PACKAGE=${TF_PACKAGE} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
-	 PACKAGE_OPTION=${PACKAGE_OPTION} \
-	 docker compose build ${DOCKER_BUILD_ARGS} mpich-horovod-dev
+	 docker compose up --build mpich
 
 openmpi-horovod: openmpi
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
-	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
-	 TF_PACKAGE=${TF_PACKAGE} \
-	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
+	 HOROVOD_VERSION=${HOROVOD_VERSION} \
 	 PACKAGE_OPTION=${PACKAGE_OPTION} \
-	 docker compose build ${DOCKER_BUILD_ARGS} openmpi-horovod
+	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 docker compose up --build openmpi-horovod
 
 mpich-horovod: mpich
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
-	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
-	 TF_PACKAGE=${TF_PACKAGE} \
-	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
+	 HOROVOD_VERSION=${HOROVOD_VERSION} \
 	 PACKAGE_OPTION=${PACKAGE_OPTION} \
-	 docker compose build ${DOCKER_BUILD_ARGS} mpich-horovod
+	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 docker compose up --build mpich-horovod
+
+mpich-horovod-inc: mpich-horovod
+	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
+	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
+	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
+	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
+	 INC_VERSION=${INC_VERSION} \
+	 PACKAGE_OPTION=${PACKAGE_OPTION} \
+	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 docker compose up --build mpich-horovod-inc
 
 openmpi-horovod-inc: openmpi-horovod
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
-	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
-	 TF_PACKAGE=${TF_PACKAGE} \
-	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
+	 INC_VERSION=${INC_VERSION} \
 	 PACKAGE_OPTION=${PACKAGE_OPTION} \
-	 docker compose build ${DOCKER_BUILD_ARGS} openmpi-horovod-inc
+	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 docker compose up --build openmpi-horovod-inc
 
-all: jupyter openmpi-horovod mpich-horovod openmpi-horovod-inc
+mpich-horovod-inc-onnx: mpich-horovod-inc
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
-	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
-	 TF_PACKAGE=${TF_PACKAGE} \
-	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
 	 PACKAGE_OPTION=${PACKAGE_OPTION} \
-	 docker compose build ${DOCKER_BUILD_ARGS}
+	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 docker compose up --build mpich-horovod-inc-onnx
+
+openmpi-horovod-inc-onnx: openmpi-horovod-inc
+	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
+	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
+	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
+	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
+	 HOROVOD_VERSION=${HOROVOD_VERSION} \
+	 PACKAGE_OPTION=${PACKAGE_OPTION} \
+	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 docker compose up --build openmpi-horovod-inc-onnx
+
+all: jupyter mpich-horovod-inc-onnx openmpi-horovod-inc-onnx

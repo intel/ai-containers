@@ -24,8 +24,6 @@ ARG BASE_IMAGE_TAG=latest
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} as inc
 
-ARG PYTHON=python3.8
-
 RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
     libgl1-mesa-glx \
     libglib2.0-0

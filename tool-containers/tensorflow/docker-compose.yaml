@@ -1,21 +1,21 @@
 version: '3'
 services:
-  base:
-    image: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION:-2.9.1}
+  tf-base:
+    image: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION:-2.9.1}-tf-base
     build:
       context: ./base
       args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-20.04}
-        TF_PACKAGE: ${TF_PACKAGE:-intel-tensorflow}
-        TF_PACKAGE_VERSION: ${TF_PACKAGE_VERSION:-2.9.1}
+        MINICONDA_VERSION: ${MINICONDA_VERSION}
         PACKAGE_OPTION: ${PACKAGE_OPTION}
+        PYTHON_VERSION: ${PYTHON_VERSION}
+        TF_PACKAGE_VERSION: ${TF_PACKAGE_VERSION:-2.9.1}
+        TF_PACKAGE: ${TF_PACKAGE:-intel-tensorflow}
       dockerfile: Dockerfile.${BASE_IMAGE_NAME:-ubuntu}.${PACKAGE_OPTION}
-    healthcheck: 
-      test: curl --fail -I http://localhost:8080/status || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
     command: >
       sh -c "python -c 'import tensorflow as tf; print(\"TensorFlow Version:\", tf.__version__)'"
 
@@ -24,18 +24,13 @@ services:
     build:
       context: ./jupyter
       args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
-        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}
-    healthcheck: 
-      test: curl --fail -I http://localhost:8080/status || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    ports:
-      - ${PORT:-8888}:8888
-    working_dir: /tf-base
-    volumes:
-      - ${PWD}:/tf-base
+        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-tf-base
+    command: >
+      sh -c "jupyter --version"
 
   openmpi:
     image: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION:-2.9.1}-openmpi
@@ -43,16 +38,13 @@ services:
       context: ./horovod
       dockerfile: Dockerfile.openmpi
       args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
-        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}
-    healthcheck: 
-      test: curl --fail -I http://localhost:8080/status || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
+        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-tf-base
     command: >
-      sh -c "python -c 'import tensorflow as tf; print(\"TensorFlow Version:\", tf.__version__)' &&
-             mpirun --version"
+      sh -c "mpirun --version"
 
   mpich:
     image: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION:-2.9.1}-mpich
@@ -60,64 +52,90 @@ services:
       context: ./horovod
       dockerfile: Dockerfile.mpich
       args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
-        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}
-    healthcheck: 
-      test: curl --fail -I http://localhost:8080/status || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
+        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-tf-base
     command: >
-      sh -c "python -c 'import tensorflow as tf; print(\"TensorFlow Version:\", tf.__version__)' &&
-             mpirun --version"
+      sh -c "mpirun --version"
 
   openmpi-horovod:
     image: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION:-2.9.1}-openmpi-horovod
     build:
       context: ./horovod
       args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-openmpi
-        HOROVOD_VERSION: 1b3452f
-        PYTHON: python3.8
-    healthcheck: 
-      test: curl --fail -I http://localhost:8080/status || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
+        HOROVOD_VERSION: ${HOROVOD_VERSION}
     command: >
-      sh -c "python -c 'import tensorflow as tf; print(\"TensorFlow Version:\", tf.__version__); import horovod.tensorflow as hvd' &&
-             mpirun --version &&
-             horovodrun --check-build"
+      sh -c "horovodrun --check-build"
 
   mpich-horovod:
     image: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION:-2.9.1}-mpich-horovod
     build:
       context: ./horovod
       args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-mpich
-        HOROVOD_VERSION: 1b3452f
-        PYTHON: python3.8
-    healthcheck: 
-      test: curl --fail -I http://localhost:8080/status || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
+        HOROVOD_VERSION: ${HOROVOD_VERSION}
     command: >
-      sh -c "python -c 'import tensorflow as tf; print(\"TensorFlow Version:\", tf.__version__); import horovod.tensorflow as hvd' &&
-             mpirun --version &&
-             horovodrun --check-build"
-
+      sh -c "horovodrun --check-build"
+  mpich-horovod-inc:
+    image: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION:-2.9.1}-mpich-horovod-inc
+    build:
+      context: ./inc
+      args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
+        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-mpich-horovod
+        INC_VERSION: ${INC_VERSION}
+    command: >
+      sh -c "python -c 'import neural_compressor; print(\"Neural Compressor Version:\", neural_compressor.__version__)'"
+  mpich-horovod-inc-onnx:
+    image: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION:-2.9.1}-mpich-horovod-inc-onnx
+    build:
+      context: ./inc
+      dockerfile: Dockerfile.onnx
+      args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
+        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-mpich-horovod-inc
+    command: >
+      sh -c "python -c 'import tf2onnx; print(\"TensorFlow2ONNX Version:\", tf2onnx.__version__)'"
   openmpi-horovod-inc:
     image: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION:-2.9.1}-openmpi-horovod-inc
     build:
       context: ./inc
       args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-openmpi-horovod
-    healthcheck: 
-      test: curl --fail -I http://localhost:8080/status || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
+        INC_VERSION: ${INC_VERSION}
+    command: >
+      sh -c "python -c 'import neural_compressor; print(\"Neural Compressor Version:\", neural_compressor.__version__)'"
+  openmpi-horovod-inc-onnx:
+    image: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION:-2.9.1}-openmpi-horovod-inc-onnx
+    build:
+      context: ./inc
+      dockerfile: Dockerfile.onnx
+      args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
+        BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION:-2.9.1}-openmpi-horovod-inc
+    command: >
+      sh -c "python -c 'import tf2onnx; print(\"TensorFlow2ONNX Version:\", tf2onnx.__version__)'"

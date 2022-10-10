@@ -3,16 +3,20 @@ on:
   workflow_dispatch:
     inputs:
       make_target:
-        default: all
+        default: tf-base
         required: true
         type: choice
         options:
+        - tf-base
         - jupyter
         - openmpi
         - mpich
         - openmpi-horovod
         - mpich-horovod
         - openmpi-horovod-inc
+        - mpich-horovod-inc
+        - openmpi-horovod-inc-onnx
+        - mpich-horovod-inc-onnx
       os:
         required: true
         default: ubuntu
@@ -52,6 +56,9 @@ on:
         - "2.8.0"
         - "2.9.1"
         - "2.10.0"
+      other_version: 
+        required: false
+        type: string
 jobs:
   base-framework-build:
     container: # TODO: Update image URL once secret passing functionality is available in GHA
@@ -73,8 +80,8 @@ jobs:
         (github.event.inputs.os == 'ubuntu' && github.event.inputs.os_version == '11')
       run: echo "Invalid combination of Base OS and OS Version used, please try again" && exit 1
     - uses: actions/checkout@v3
-    - name: Compose Pipeline
-      run: make ${{ github.event.inputs.make_target }} BASE_IMAGE_NAME=${{ github.event.inputs.os }} FINAL_IMAGE_NAME=${{ github.event.inputs.make_target }} BASE_IMAGE_TAG=${{ github.event.inputs.os_version }} PACKAGE_OPTION=${{ github.event.inputs.package_option }} TF_PACKAGE=${{ github.event.inputs.tf_package }} TF_PACKAGE_VERSION=${{ github.event.inputs.tf_package_version }}
+    - name: Build and Test Container
+      run: make ${{ github.event.inputs.make_target }} BASE_IMAGE_NAME=${{ github.event.inputs.os }} FINAL_IMAGE_NAME=${{ github.event.inputs.make_target }} BASE_IMAGE_TAG=${{ github.event.inputs.os_version }} PACKAGE_OPTION=${{ github.event.inputs.package_option }} TF_PACKAGE=${{ github.event.inputs.tf_package }} TF_PACKAGE_VERSION=${{ github.event.inputs.tf_package_version }} ${{ github.event.inputs.other_version }}
       working-directory: ./tool-containers/tensorflow
     - uses: docker/login-action@v2
       with:
