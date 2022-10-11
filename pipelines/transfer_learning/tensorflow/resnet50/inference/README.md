@@ -4,6 +4,7 @@ This document contains instructions on how to run Vision Transfer Learning e2e p
 ## Project Structure 
 ```
 ├── transfer-learning-inference @ v1.0.0
+├── DEVCATALOG.md
 ├── docker-compose.yml
 ├── Dockerfile.vision-transfer-learning
 ├── Makefile
