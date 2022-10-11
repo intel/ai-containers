@@ -4,6 +4,7 @@ This document contains instructions on how to run hugging face DLSA e2e pipeline
 ## Project Structure 
 ```
 ├── dlsa @ v1.0.0
+├── DEVCATALOG.md
 ├── docker-compose.yml
 ├── Dockerfile.hugging-face-dlsa
 ├── Makefile
