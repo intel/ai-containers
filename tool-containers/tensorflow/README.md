@@ -8,7 +8,7 @@
 │   ├── Dockerfile.debian.pip
 │   ├── Dockerfile.ubuntu.pip
 │   ├── Dockerfile.debian.idp
-│   ├── Dockerfile.ubuntu.idp
+│   └── Dockerfile.ubuntu.idp
 ├── docker-compose.yaml
 ├── horovod
 │   ├── Dockerfile

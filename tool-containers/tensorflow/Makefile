@@ -12,6 +12,9 @@ TF_PACKAGE_VERSION ?= 2.10.0
 FINAL_IMAGE_NAME ?= ${TF_PACKAGE}
 
 tf-base:
+	mkdir -p base/licensing && \
+	wget -O - https://github.com/Intel-tensorflow/tensorflow/archive/v${TF_PACKAGE_VERSION}.tar.gz | \
+	tar -xz -C base/licensing --strip=2 "tensorflow-${TF_PACKAGE_VERSION}/third_party_programs_license/"
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \

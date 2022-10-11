@@ -36,4 +36,6 @@ EXPOSE 8888
 
 RUN python -m ipykernel.kernelspec
 
+ADD third_party_programs.txt /licensing/jupyter_third_party_programs.txt
+
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=${WORKDIR} --ip 0.0.0.0 --no-browser --allow-root"]

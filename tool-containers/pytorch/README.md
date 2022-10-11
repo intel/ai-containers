@@ -9,9 +9,7 @@
 │   ├── Dockerfile.debian.idp
 │   ├── Dockerfile.debian.pip
 │   ├── Dockerfile.ubuntu.idp
-│   ├── Dockerfile.ubuntu.pip
-│   └── config
-│       └── ubuntu.env
+│   └── Dockerfile.ubuntu.pip
 ├── docker-compose.yaml
 ├── horovod
 │   ├── Dockerfile

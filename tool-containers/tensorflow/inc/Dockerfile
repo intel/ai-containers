@@ -30,8 +30,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
 
 ARG INC_VER=1.12
 
-ADD https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-tensorflow.txt /licenses/
-ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/LICENSE /licenses/
+ADD https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-tensorflow.txt /licensing
+ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/LICENSE /licensing
 
 ENV SIGOPT_PROJECT=.
 

@@ -63,3 +63,6 @@ RUN echo "source ~/conda/etc/profile.d/conda.sh" >> /root/.bash_profile && \
     echo "conda activate idp" >> /root/.bash_profile
 
 RUN apt-get clean
+
+ADD licensing /licensing
+ADD https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE /licensing/TF_LICENSE

@@ -21,7 +21,6 @@ ipex-base:
 	 IPEX_PACKAGE_VERSION=${IPEX_PACKAGE_VERSION} \
 	 PACKAGE_OPTION=${PACKAGE_OPTION} \
 	 docker compose build ${DOCKER_BUILD_ARGS} base
-	rm -rf $(pwd)/base/licensing
 
 openmpi: ipex-base
 	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
