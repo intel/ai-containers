@@ -19,28 +19,10 @@ ARG BASE_OS_NAME=debian
 
 FROM ${BASE_IMAGE_NAME}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${BASE_IMAGE_TAG} as base
 
-FROM base as dev
-
 ARG DEBIAN_FRONTEND="noninteractive"
 
-# Install Horovod
-ARG HOROVOD_WITHOUT_MXNET=0
-ARG HOROVOD_WITHOUT_TENSORFLOW=0
-ARG HOROVOD_WITH_PYTORCH=1
-ARG HOROVOD_VERSION=v0.24.3
+ARG ONECCL_VERSION=1.12.0
 
-RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
-    build-essential \
-    cmake \
-    g++ \
-    gcc \
-    git \
-    python3-dev
+ADD https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt /licensing/oneccl_third_party_programs.txt
 
-RUN python -m pip install git+https://github.com/horovod/horovod.git@${HOROVOD_VERSION}
-
-# FROM base as prod
-#
-# ARG PYTHON=python3.8
-#
-# COPY --from=dev /usr/local/lib/${PYTHON}/dist-packages /usr/local/lib/${PYTHON}/dist-packages
+RUN python -m pip install --no-cache-dir oneccl_bind_pt==${ONECCL_VERSION} -f https://developer.intel.com/ipex-whl-stable

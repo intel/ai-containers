@@ -21,19 +21,17 @@ FROM ${BASE_IMAGE_NAME}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${BASE_IMAGE_TAG} as i
 
 ENV LANG C.UTF-8
 #python3.9 does not detect torch
-ARG PYTHON=python3.8
+ARG PYTHON_VERSION=python3.8
 
 RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
-    ${PYTHON}-dev \
+    ${PYTHON_VERSION}-dev \
     gcc \
     libgl1-mesa-glx \
     libglib2.0-0 \
     virtualenv
 
-RUN ln -sf $(which ${PYTHON}) /usr/local/bin/python && \
-    ln -sf $(which ${PYTHON}) /usr/local/bin/python3 && \
-    ln -sf $(which ${PYTHON}) /usr/bin/python && \
-    ln -sf $(which ${PYTHON}) /usr/bin/python3
+RUN ln -sf $(which ${PYTHON_VERSION}) /usr/local/bin/python && \
+    ln -sf $(which ${PYTHON_VERSION}) /usr/local/bin/python3
 
 ARG INC_VER=1.12
 

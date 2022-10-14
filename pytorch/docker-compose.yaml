@@ -1,115 +1,102 @@
 version: '3'
 services:
-  base:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}
+  ipex-base:
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-ipex-base
     build:
       context: ./base
       args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-20.04}
-        IPEX_PACKAGE_VERSION: ${IPEX_PACKAGE_VERSION:-1.12.100}
+        IPEX_VERSION: ${IPEX_VERSION:-1.12.1}
+        MINICONDA_VERSION: ${MINICONDA_VERSION}
         PACKAGE_OPTION: ${PACKAGE_OPTION}
+        PYTHON_VERSION: ${PYTHON_VERSION}
+        PYTORCH_VERSION: ${PYTORCH_VERSION}
+        TORCHAUDIO_VERSION: ${TORCHAUDIO_VERSION}
+        TORCHVISION_VERSION: ${TORCHVISION_VERSION}
       dockerfile: Dockerfile.${BASE_IMAGE_NAME:-ubuntu}.${PACKAGE_OPTION}
-    healthcheck:
-      test: curl --fail -I http://localhost:8080/status || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
     command: >
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)'"
 
   openmpi:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-openmpi
     build:
-      context: ./horovod
+      context: ./oneccl
       dockerfile: Dockerfile.openmpi
       args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
-        BASE_IMAGE_TAG: ${IPEX_PACKAGE_VERSION:-1.12.100}
+        BASE_IMAGE_TAG: ${IPEX_VERSION:-1.12.1}-ipex-base
         BASE_OS_NAME: ${BASE_OS_NAME:-debian}
         PACKAGE_OPTION: ${PACKAGE_OPTION}
-    healthcheck:
-      test: curl --fail -I http://localhost:8080/status || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
     command: >
-      sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)' && 
-             mpirun --version"
+      sh -c "mpirun --version"
 
   mpich:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME:-debian}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-mpich
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME:-debian}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-mpich
     build:
-      context: ./horovod
+      context: ./oneccl
       dockerfile: Dockerfile.mpich
       args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
-        BASE_IMAGE_TAG: ${IPEX_PACKAGE_VERSION:-1.12.100}
+        BASE_IMAGE_TAG: ${IPEX_VERSION:-1.12.1}-ipex-base
         BASE_OS_NAME: ${BASE_OS_NAME:-debian}
         PACKAGE_OPTION: ${PACKAGE_OPTION}
-    healthcheck:
-      test: curl --fail -I http://localhost:8080/status || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
     command: >
-      sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)' && 
-             mpirun --version"
+      sh -c "mpirun --version"
 
-  openmpi-horovod:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi-horovod
+  openmpi-oneccl:
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-openmpi-oneccl
     build:
-      context: ./horovod
+      context: ./oneccl
       args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
-        BASE_IMAGE_TAG: ${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi
+        BASE_IMAGE_TAG: ${IPEX_VERSION:-1.12.1}-openmpi
         BASE_OS_NAME: ${BASE_OS_NAME:-debian}
-        HOROVOD_VERSION: v0.24.3
+        ONECCL_VERSION: ${ONECCL_VERSION}
         PACKAGE_OPTION: ${PACKAGE_OPTION}
-        PYTHON: python3.9
-    healthcheck:
-      test: curl --fail -I http://localhost:8080/status || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
     command: >
-      sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)' && 
-             mpirun --version && 
-             horovodrun --check-build"
+      sh -c "python -c 'import oneccl_bindings_for_pytorch as oneccl; print(\"OneCCL:\", oneccl.__version__)'"
 
-  mpich-horovod:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-mpich-horovod
+  mpich-oneccl:
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-mpich-oneccl
     build:
-      context: ./horovod
+      context: ./oneccl
       args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
-        BASE_IMAGE_TAG: ${IPEX_PACKAGE_VERSION:-1.12.100}-mpich
+        BASE_IMAGE_TAG: ${IPEX_VERSION:-1.12.1}-mpich
         BASE_OS_NAME: ${BASE_OS_NAME:-debian}
-        HOROVOD_VERSION: v0.24.3
+        ONECCL_VERSION: ${ONECCL_VERSION}
         PACKAGE_OPTION: ${PACKAGE_OPTION}
-        PYTHON: python3.9
-    healthcheck:
-      test: curl --fail -I http://localhost:8080/status || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
     command: >
-      sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)' && 
-             mpirun --version && 
-             horovodrun --check-build"
+      sh -c "python -c 'import oneccl_bindings_for_pytorch as oneccl; print(\"OneCCL:\", oneccl.__version__)'"
 
-  openmpi-inc:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi-inc
+  openmpi-oneccl-inc:
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-openmpi-oneccl-inc
     build:
       context: ./inc
       dockerfile: Dockerfile.${BASE_OS_NAME:-ubuntu}.${PACKAGE_OPTION:-pip}
       args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
-        BASE_IMAGE_TAG: ${IPEX_PACKAGE_VERSION:-1.12.100}-openmpi
+        BASE_IMAGE_TAG: ${IPEX_VERSION:-1.12.1}-openmpi-oneccl
         BASE_OS_NAME: ${BASE_OS_NAME:-debian}
+        INC_VERSION: ${INC_VERSION}
         PACKAGE_OPTION: ${PACKAGE_OPTION}
-    healthcheck:
-      test: curl --fail -I http://localhost:8080/status || exit 1
-      interval: 10s
-      timeout: 5s
-      retries: 5
+        PYTHON_VERSION: ${PYTHON_VERSION}
+    command: >
+      sh -c "python -c 'import neural_compressor; print(\"Neural Compressor Version:\", neural_compressor.__version__)'"
