@@ -1,0 +1,94 @@
+name: PyTorch Base Ingredient Containers Build
+on: 
+  workflow_dispatch:
+    inputs:
+      make_target:
+        default: ipex-base
+        required: true
+        type: choice
+        options:
+        - ipex-base
+        - openmpi
+        - mpich
+        - openmpi-oneccl
+        - mpich-oneccl
+        - openmpi-oneccl-inc
+      os:
+        required: true
+        default: ubuntu
+        type: choice
+        options:
+        - ubuntu
+        - debian
+      os_version: 
+        default: "20.04"
+        required: true
+        type: choice
+        options: 
+        - "20.04"
+        - "22.04"
+        - "10"
+        - "11"
+      oneccl_version:
+        default: "1.12.0"
+        required: true
+        type: choice
+        options:
+        - "1.12.0"
+        - "1.12.100"
+      package_option: 
+        default: "pip"
+        required: true
+        type: choice
+        options: 
+        - "pip"
+        - "idp"
+      ipex_package_version:
+        default: "1.12.0"
+        required: true
+        type: choice
+        options:
+        - "1.12.0"
+        - "1.12.100"
+      other_version: 
+        required: false
+        type: string
+jobs:
+  base-framework-build:
+    container: # TODO: Update image URL once secret passing functionality is available in GHA
+      image: amr-registry.caas.intel.com/aiops/compose-dev
+      env:
+        http_proxy: ${{ secrets.HTTP_PROXY }}
+        https_proxy: ${{ secrets.HTTPS_PROXY }}
+        no_proxy: ${{ secrets.NO_PROXY }}
+      credentials:
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_TOKEN }}
+    runs-on: [ aia-devops ]
+    steps: 
+    - name: Check for valid base
+      if: |
+        (github.event.inputs.os == 'debian' && github.event.inputs.os_version == '20.04') ||
+        (github.event.inputs.os == 'debian' && github.event.inputs.os_version == '22.04') ||
+        (github.event.inputs.os == 'ubuntu' && github.event.inputs.os_version == '10') ||
+        (github.event.inputs.os == 'ubuntu' && github.event.inputs.os_version == '11')
+      run: echo "Invalid combination of Base OS and OS Version used, please try again" && exit 1
+    - uses: actions/checkout@v3
+    - name: Check for version compatibility
+      if: |
+        (github.event.inputs.ipex_package_version != github.event.inputs.oneccl_version)
+      run: echo "OneCCL and IPEX versions should be same, please try again with same version" && exit 1
+    - uses: actions/checkout@v3
+    - name: Build and Test Container
+      run: make ${{ github.event.inputs.make_target }} BASE_IMAGE_NAME=${{ github.event.inputs.os }} FINAL_IMAGE_NAME=${{ github.event.inputs.make_target }} BASE_IMAGE_TAG=${{ github.event.inputs.os_version }} PACKAGE_OPTION=${{ github.event.inputs.package_option }} ONECCL_VERSION=${{ github.event.inputs.oneccl_version }} IPEX_VERSION=${{ github.event.inputs.ipex_package_version }} ${{ github.event.inputs.other_version }}
+      working-directory: ./pytorch
+    - uses: docker/login-action@v2
+      with:
+        registry: https://amr-registry.caas.intel.com
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_TOKEN }}
+    - name: Upload Container to Registry
+      run: |
+        docker tag ${{ github.event.inputs.make_target }}-${{ github.event.inputs.os }}-${{ github.event.inputs.package_option }}:${{ github.event.inputs.ipex_package_version }}-${{ github.event.inputs.make_target }} amr-registry.caas.intel.com/aiops/intel-pytorch:${{ github.event.inputs.package_option }}-${{ github.event.inputs.ipex_package_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }} &&
+        docker push amr-registry.caas.intel.com/aiops/intel-pytorch:${{ github.event.inputs.package_option }}-${{ github.event.inputs.ipex_package_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }}
+        
