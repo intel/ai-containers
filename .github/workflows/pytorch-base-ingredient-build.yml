@@ -8,11 +8,8 @@ on:
         type: choice
         options:
         - ipex-base
-        - openmpi
-        - mpich
-        - openmpi-oneccl
-        - mpich-oneccl
-        - openmpi-oneccl-inc
+        - oneccl
+        - oneccl-inc
       os:
         required: true
         default: ubuntu
@@ -29,13 +26,6 @@ on:
         - "22.04"
         - "10"
         - "11"
-      oneccl_version:
-        default: "1.12.0"
-        required: true
-        type: choice
-        options:
-        - "1.12.0"
-        - "1.12.100"
       package_option: 
         default: "pip"
         required: true
@@ -44,12 +34,13 @@ on:
         - "pip"
         - "idp"
       ipex_package_version:
-        default: "1.12.0"
+        default: "1.12.100"
         required: true
         type: choice
         options:
         - "1.12.0"
         - "1.12.100"
+        - "1.13"
       other_version: 
         required: false
         type: string
@@ -74,13 +65,8 @@ jobs:
         (github.event.inputs.os == 'ubuntu' && github.event.inputs.os_version == '11')
       run: echo "Invalid combination of Base OS and OS Version used, please try again" && exit 1
     - uses: actions/checkout@v3
-    - name: Check for version compatibility
-      if: |
-        (github.event.inputs.ipex_package_version != github.event.inputs.oneccl_version)
-      run: echo "OneCCL and IPEX versions should be same, please try again with same version" && exit 1
-    - uses: actions/checkout@v3
     - name: Build and Test Container
-      run: make ${{ github.event.inputs.make_target }} BASE_IMAGE_NAME=${{ github.event.inputs.os }} FINAL_IMAGE_NAME=${{ github.event.inputs.make_target }} BASE_IMAGE_TAG=${{ github.event.inputs.os_version }} PACKAGE_OPTION=${{ github.event.inputs.package_option }} ONECCL_VERSION=${{ github.event.inputs.oneccl_version }} IPEX_VERSION=${{ github.event.inputs.ipex_package_version }} ${{ github.event.inputs.other_version }}
+      run: make ${{ github.event.inputs.make_target }} BASE_IMAGE_NAME=${{ github.event.inputs.os }} FINAL_IMAGE_NAME=${{ github.event.inputs.make_target }} BASE_IMAGE_TAG=${{ github.event.inputs.os_version }} PACKAGE_OPTION=${{ github.event.inputs.package_option }} ONECCL_VERSION=${{ github.event.inputs.ipex_package_version }} IPEX_VERSION=${{ github.event.inputs.ipex_package_version }} ${{ github.event.inputs.other_version }}
       working-directory: ./pytorch
     - uses: docker/login-action@v2
       with:

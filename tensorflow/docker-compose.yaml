@@ -2,6 +2,7 @@ version: '3'
 services:
   tf-base:
     image: ${FINAL_IMAGE_NAME:-tf-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION:-2.9.1}-tf-base
+    pull_policy: always
     build:
       context: ./base
       args:

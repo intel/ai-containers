@@ -2,6 +2,7 @@ version: '3'
 services:
   ipex-base:
     image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-ipex-base
+    pull_policy: always
     build:
       context: ./base
       args:
@@ -21,70 +22,23 @@ services:
     command: >
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)'"
 
-  openmpi:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-openmpi
+  oneccl:
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-oneccl
     build:
       context: ./oneccl
-      dockerfile: Dockerfile.openmpi
       args:
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
-        no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
         BASE_IMAGE_TAG: ${IPEX_VERSION:-1.12.1}-ipex-base
-        BASE_OS_NAME: ${BASE_OS_NAME:-debian}
-        PACKAGE_OPTION: ${PACKAGE_OPTION}
-    command: >
-      sh -c "mpirun --version"
-
-  mpich:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME:-debian}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-mpich
-    build:
-      context: ./oneccl
-      dockerfile: Dockerfile.mpich
-      args:
-        http_proxy: ${http_proxy}
-        https_proxy: ${https_proxy}
-        no_proxy: ${no_proxy}
-        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
-        BASE_IMAGE_TAG: ${IPEX_VERSION:-1.12.1}-ipex-base
-        BASE_OS_NAME: ${BASE_OS_NAME:-debian}
-        PACKAGE_OPTION: ${PACKAGE_OPTION}
-    command: >
-      sh -c "mpirun --version"
-
-  openmpi-oneccl:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-openmpi-oneccl
-    build:
-      context: ./oneccl
-      args:
-        http_proxy: ${http_proxy}
-        https_proxy: ${https_proxy}
-        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
-        BASE_IMAGE_TAG: ${IPEX_VERSION:-1.12.1}-openmpi
         BASE_OS_NAME: ${BASE_OS_NAME:-debian}
         ONECCL_VERSION: ${ONECCL_VERSION}
         PACKAGE_OPTION: ${PACKAGE_OPTION}
     command: >
       sh -c "python -c 'import oneccl_bindings_for_pytorch as oneccl; print(\"OneCCL:\", oneccl.__version__)'"
 
-  mpich-oneccl:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-mpich-oneccl
-    build:
-      context: ./oneccl
-      args:
-        http_proxy: ${http_proxy}
-        https_proxy: ${https_proxy}
-        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
-        BASE_IMAGE_TAG: ${IPEX_VERSION:-1.12.1}-mpich
-        BASE_OS_NAME: ${BASE_OS_NAME:-debian}
-        ONECCL_VERSION: ${ONECCL_VERSION}
-        PACKAGE_OPTION: ${PACKAGE_OPTION}
-    command: >
-      sh -c "python -c 'import oneccl_bindings_for_pytorch as oneccl; print(\"OneCCL:\", oneccl.__version__)'"
-
-  openmpi-oneccl-inc:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-openmpi-oneccl-inc
+  oneccl-inc:
+    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-oneccl-inc
     build:
       context: ./inc
       dockerfile: Dockerfile.${BASE_OS_NAME:-ubuntu}.${PACKAGE_OPTION:-pip}
@@ -93,7 +47,7 @@ services:
         https_proxy: ${https_proxy}
         no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
-        BASE_IMAGE_TAG: ${IPEX_VERSION:-1.12.1}-openmpi-oneccl
+        BASE_IMAGE_TAG: ${IPEX_VERSION:-1.12.1}-oneccl
         BASE_OS_NAME: ${BASE_OS_NAME:-debian}
         INC_VERSION: ${INC_VERSION}
         PACKAGE_OPTION: ${PACKAGE_OPTION}
