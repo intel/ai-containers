@@ -25,4 +25,4 @@ ARG ONECCL_VERSION=1.12.0
 
 ADD https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt /licensing/oneccl_third_party_programs.txt
 
-RUN python -m pip install --no-cache-dir oneccl_bind_pt==${ONECCL_VERSION} -f https://developer.intel.com/ipex-whl-stable
+RUN python -m pip install --no-cache-dir oneccl_bind_pt==${ONECCL_VERSION} -f https://developer.intel.com/ipex-whl-stable-cpu
