@@ -9,14 +9,9 @@ on:
         options:
         - tf-base
         - jupyter
-        - openmpi
-        - mpich
-        - openmpi-horovod
-        - mpich-horovod
-        - openmpi-horovod-inc
-        - mpich-horovod-inc
         - openmpi-horovod-inc-onnx
         - mpich-horovod-inc-onnx
+        - serving-mkl
       os:
         required: true
         default: ubuntu
@@ -53,7 +48,7 @@ on:
         required: true
         type: choice
         options: 
-        - "2.8.0"
+        - "2.11.0"
         - "2.9.1"
         - "2.10.0"
       other_version: 
@@ -80,6 +75,9 @@ jobs:
         (github.event.inputs.os == 'ubuntu' && github.event.inputs.os_version == '11')
       run: echo "Invalid combination of Base OS and OS Version used, please try again" && exit 1
     - uses: actions/checkout@v3
+      with:
+        submodules: true
+        set-safe-directory: true
     - name: Build and Test Container
       run: make ${{ github.event.inputs.make_target }} BASE_IMAGE_NAME=${{ github.event.inputs.os }} FINAL_IMAGE_NAME=${{ github.event.inputs.make_target }} BASE_IMAGE_TAG=${{ github.event.inputs.os_version }} PACKAGE_OPTION=${{ github.event.inputs.package_option }} TF_PACKAGE=${{ github.event.inputs.tf_package }} TF_PACKAGE_VERSION=${{ github.event.inputs.tf_package_version }} ${{ github.event.inputs.other_version }}
       working-directory: ./tensorflow

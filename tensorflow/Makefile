@@ -1,5 +1,6 @@
 BASE_IMAGE_NAME ?= ubuntu
 BASE_IMAGE_TAG ?= 20.04
+BAZEL_VERSION ?= 5.3.2
 DOCKER_BUILDKIT ?= 1
 HOROVOD_VERSION ?= 1b3452f
 INC_VERSION ?= 1.13
@@ -8,6 +9,8 @@ PACKAGE_OPTION ?= pip
 PYTHON_VERSION ?= python3.8
 TF_PACKAGE ?= intel-tensorflow
 TF_PACKAGE_VERSION ?= 2.10.0
+TF_SERVING_BAZEL_OPTIONS ?= '--local_ram_resources=HOST_RAM*0.8 --local_cpu_resources=HOST_CPUS-4'
+TF_SERVING_BUILD_OPTIONS ?= '--config=mkl --config=release --define=build_with_openmp=false --copt=-march=native'
 
 FINAL_IMAGE_NAME ?= ${TF_PACKAGE}
 
@@ -113,4 +116,25 @@ openmpi-horovod-inc-onnx: openmpi-horovod-inc
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
 	 docker compose up --build openmpi-horovod-inc-onnx
 
-all: jupyter mpich-horovod-inc-onnx openmpi-horovod-inc-onnx
+tf-serving:
+	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
+	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
+	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
+	 BAZEL_VERSION=${BAZEL_VERSION} \
+	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
+	 PACKAGE_OPTION=${PACKAGE_OPTION} \
+	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	 TF_SERVING_BAZEL_OPTIONS=${TF_SERVING_BAZEL_OPTIONS} \
+	 TF_SERVING_BUILD_OPTIONS=${TF_SERVING_BUILD_OPTIONS} \
+	docker compose build tf-serving
+
+serving-mkl: tf-serving
+	@DOCKER_BUILDKIT=${DOCKER_BUILDKIT} \
+	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
+	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
+	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
+	 PACKAGE_OPTION=${PACKAGE_OPTION} \
+	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
+	docker compose build serving-mkl
+
+all: jupyter mpich-horovod-inc-onnx openmpi-horovod-inc-onnx serving-mkl
