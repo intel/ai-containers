@@ -1,6 +1,6 @@
 BASE_IMAGE_NAME ?= ubuntu
 BASE_IMAGE_TAG ?= 20.04
-BAZEL_VERSION ?= 5.3.2
+BAZEL_VERSION ?= 5.4.0
 DOCKER_BUILDKIT ?= 1
 HOROVOD_VERSION ?= 1b3452f
 INC_VERSION ?= 1.13
@@ -8,7 +8,7 @@ MINICONDA_VERSION ?= "py38_4.12.0-Linux-x86_64"
 PACKAGE_OPTION ?= pip
 PYTHON_VERSION ?= python3.8
 TF_PACKAGE ?= intel-tensorflow
-TF_PACKAGE_VERSION ?= 2.10.0
+TF_PACKAGE_VERSION ?= 2.11.0
 TF_SERVING_BAZEL_OPTIONS ?= '--local_ram_resources=HOST_RAM*0.8 --local_cpu_resources=HOST_CPUS-4'
 TF_SERVING_BUILD_OPTIONS ?= '--config=mkl --config=release --define=build_with_openmp=false --copt=-march=native'
 
