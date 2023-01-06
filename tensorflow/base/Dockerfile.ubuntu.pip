@@ -32,6 +32,9 @@ ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
 ENV LANG C.UTF-8
 ARG PYTHON_VERSION=python3.8
 
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+
 RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
     ca-certificates \
     curl \
