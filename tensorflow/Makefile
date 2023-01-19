@@ -11,7 +11,6 @@ TF_PACKAGE ?= intel-tensorflow
 TF_PACKAGE_VERSION ?= 2.11.0
 TF_SERVING_BAZEL_OPTIONS ?= '--local_ram_resources=HOST_RAM*0.8 --local_cpu_resources=HOST_CPUS-4'
 TF_SERVING_BUILD_OPTIONS ?= '--config=mkl --config=release --define=build_with_openmp=false --copt=-march=native'
-
 FINAL_IMAGE_NAME ?= ${TF_PACKAGE}
 
 tf-base:

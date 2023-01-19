@@ -33,12 +33,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
 RUN ln -sf $(which ${PYTHON_VERSION}) /usr/local/bin/python && \
     ln -sf $(which ${PYTHON_VERSION}) /usr/local/bin/python3
 
-ARG INC_VER=1.12
+ARG INC_VERSION=1.12
 
 ADD https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt /licensing
-ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/LICENSE /licensing
+ADD https://raw.githubusercontent.com/intel/neural-compressor/v1.12/LICENSE /licensing
 
 ENV SIGOPT_PROJECT=.
 RUN python -m pip install --no-cache-dir neural-compressor${INC_VER:+==${INC_VER}} 
+RUN python -m pip install --no-cache-dir numpy==1.23.1 
 
 RUN virtualenv --system-site-packages inc && echo "source /inc/bin/activate" > ~/.bashrc

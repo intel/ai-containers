@@ -22,7 +22,8 @@ FROM ${BASE_IMAGE_NAME}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${BASE_IMAGE_TAG} as b
 ARG DEBIAN_FRONTEND="noninteractive"
 
 ARG ONECCL_VERSION=1.12.0
+ARG ONECCL_URL=https://developer.intel.com/ipex-whl-stable-cpu
 
 ADD https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt /licensing/oneccl_third_party_programs.txt
 
-RUN python -m pip install --no-cache-dir oneccl_bind_pt==${ONECCL_VERSION} -f https://developer.intel.com/ipex-whl-stable-cpu
+RUN python -m pip install --no-cache-dir oneccl_bind_pt==${ONECCL_VERSION} -f ${ONECCL_URL}
