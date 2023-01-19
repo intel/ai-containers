@@ -36,3 +36,4 @@ ADD https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/LICENS
 ENV SIGOPT_PROJECT=.
 
 RUN python -m pip install --no-cache-dir neural-compressor${INC_VER:+==${INC_VER}}
+RUN python -m pip install --no-cache-dir numpy==1.23.1 

@@ -18,7 +18,7 @@ services:
         TF_PACKAGE: ${TF_PACKAGE}
       dockerfile: Dockerfile.${BASE_IMAGE_NAME}.${PACKAGE_OPTION}
     command: >
-      sh -c "python -c 'import tensorflow as tf; print(\"TensorFlow Version:\", tf.__version__)'"
+      sh -c "python -c 'import tensorflow as tf; print(\"Tensorflow Version:\", tf.__version__)'"
 
   jupyter:
     image: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION}-jupyter
