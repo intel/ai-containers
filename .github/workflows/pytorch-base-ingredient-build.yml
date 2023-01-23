@@ -75,6 +75,6 @@ jobs:
         password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Upload Container to Registry
       run: |
-        docker tag ${{ github.event.inputs.make_target }}-${{ github.event.inputs.os }}-${{ github.event.inputs.package_option }}:${{ github.event.inputs.ipex_package_version }}-${{ github.event.inputs.make_target }} amr-registry.caas.intel.com/aiops/intel-pytorch:${{ github.event.inputs.package_option }}-${{ github.event.inputs.ipex_package_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }} &&
-        docker push amr-registry.caas.intel.com/aiops/intel-pytorch:${{ github.event.inputs.package_option }}-${{ github.event.inputs.ipex_package_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }}
+        docker tag ${{ github.event.inputs.make_target }}-${{ github.event.inputs.os }}-${{ github.event.inputs.package_option }}:${{ github.event.inputs.ipex_package_version }}-${{ github.event.inputs.make_target }} amr-registry.caas.intel.com/aiops/mlops-ci:intel-pytorch-${{ github.event.inputs.package_option }}-${{ github.event.inputs.ipex_package_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }} &&
+        docker push amr-registry.caas.intel.com/aiops/mlops-ci:intel-pytorch-${{ github.event.inputs.package_option }}-${{ github.event.inputs.ipex_package_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }}
         
