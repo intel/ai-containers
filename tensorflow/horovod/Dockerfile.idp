@@ -32,7 +32,6 @@ ARG DEBIAN_FRONTEND="noninteractive"
 ARG HOROVOD_WITHOUT_PYTORCH=1
 ARG HOROVOD_WITHOUT_MXNET=1
 ARG HOROVOD_WITH_TENSORFLOW=1
-ARG HOROVOD_VERSION=1b3452f
 
 RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
     build-essential \
@@ -42,7 +41,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
     git \
     python3-dev
 
-RUN python -m pip install git+https://github.com/horovod/horovod.git@${HOROVOD_VERSION}
+RUN conda activate idp && \
+    python -m pip install horovod
 
 # FROM base as prod
 #

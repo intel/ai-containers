@@ -1,12 +1,11 @@
 BASE_IMAGE_NAME ?= ubuntu
-BASE_IMAGE_TAG ?= 20.04
+BASE_IMAGE_TAG ?= 22.04
 BAZEL_VERSION ?= 5.4.0
 DOCKER_BUILDKIT ?= 1
-HOROVOD_VERSION ?= 1b3452f
 INC_VERSION ?= 1.13
-MINICONDA_VERSION ?= "py38_4.12.0-Linux-x86_64"
+MINICONDA_VERSION ?= "py39_4.12.0-Linux-x86_64"
 PACKAGE_OPTION ?= pip
-PYTHON_VERSION ?= python3.8
+PYTHON_VERSION ?= python3
 TF_PACKAGE ?= intel-tensorflow
 TF_PACKAGE_VERSION ?= 2.11.0
 TF_SERVING_BAZEL_OPTIONS ?= '--local_ram_resources=HOST_RAM*0.8 --local_cpu_resources=HOST_CPUS-4'
@@ -51,7 +50,6 @@ mpich: tf-base
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
-	 HOROVOD_VERSION=${HOROVOD_VERSION} \
 	 PACKAGE_OPTION=${PACKAGE_OPTION} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
 	 docker compose up --build mpich
@@ -61,7 +59,6 @@ openmpi-horovod: openmpi
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
-	 HOROVOD_VERSION=${HOROVOD_VERSION} \
 	 PACKAGE_OPTION=${PACKAGE_OPTION} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
 	 docker compose up --build openmpi-horovod
@@ -71,7 +68,6 @@ mpich-horovod: mpich
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
-	 HOROVOD_VERSION=${HOROVOD_VERSION} \
 	 PACKAGE_OPTION=${PACKAGE_OPTION} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
 	 docker compose up --build mpich-horovod
@@ -110,7 +106,6 @@ openmpi-horovod-inc-onnx: openmpi-horovod-inc
 	 BASE_IMAGE_NAME=${BASE_IMAGE_NAME} \
 	 BASE_IMAGE_TAG=${BASE_IMAGE_TAG} \
 	 FINAL_IMAGE_NAME=${FINAL_IMAGE_NAME} \
-	 HOROVOD_VERSION=${HOROVOD_VERSION} \
 	 PACKAGE_OPTION=${PACKAGE_OPTION} \
 	 TF_PACKAGE_VERSION=${TF_PACKAGE_VERSION} \
 	 docker compose up --build openmpi-horovod-inc-onnx
@@ -137,3 +132,7 @@ serving-mkl: tf-serving
 	docker compose build serving-mkl
 
 all: jupyter mpich-horovod-inc-onnx openmpi-horovod-inc-onnx serving-mkl
+
+clean:
+	rm -rf base/licensing
+	docker compose down

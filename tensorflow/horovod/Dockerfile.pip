@@ -20,20 +20,31 @@
 # for more information.
 
 ARG BASE_IMAGE_NAME=tf-base
-ARG BASE_IMAGE_TAG=latest
+ARG BASE_IMAGE_TAG=mpi
 
-FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} as inc
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} as base
+
+FROM base as dev
+
+ARG DEBIAN_FRONTEND="noninteractive"
+
+# Install Horovod
+ARG HOROVOD_WITHOUT_PYTORCH=1
+ARG HOROVOD_WITHOUT_MXNET=1
+ARG HOROVOD_WITH_TENSORFLOW=1
 
 RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
-    libgl1-mesa-glx \
-    libglib2.0-0
+    build-essential \
+    cmake \
+    g++ \
+    gcc \
+    git \
+    python3-dev
 
-ARG INC_VER=1.12
+RUN python -m pip install horovod
 
-RUN curl https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-tensorflow.txt -o /licensing/third-party-programs-tensorflow.txt
-RUN curl https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/LICENSE -o /licensing/INC_LICENSE
-
-ENV SIGOPT_PROJECT=.
-
-RUN python -m pip install --no-cache-dir neural-compressor${INC_VER:+==${INC_VER}}
-RUN python -m pip install --no-cache-dir numpy==1.23.1 
+# FROM base as prod
+#
+# ARG PYTHON=python3.8
+#
+# COPY --from=dev /usr/local/lib/${PYTHON}/dist-packages /usr/local/lib/${PYTHON}/dist-packages

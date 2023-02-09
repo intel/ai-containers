@@ -16,9 +16,9 @@ services:
         PYTHON_VERSION: ${PYTHON_VERSION}
         TF_PACKAGE_VERSION: ${TF_PACKAGE_VERSION}
         TF_PACKAGE: ${TF_PACKAGE}
-      dockerfile: Dockerfile.${BASE_IMAGE_NAME}.${PACKAGE_OPTION}
+      dockerfile: Dockerfile.${PACKAGE_OPTION}
     command: >
-      sh -c "python -c 'import tensorflow as tf; print(\"Tensorflow Version:\", tf.__version__)'"
+      bash -c "python -c 'import tensorflow as tf; print(\"Tensorflow Version:\", tf.__version__)'"
 
   jupyter:
     image: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION}-jupyter
@@ -31,7 +31,7 @@ services:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-tf-base
     command: >
-      sh -c "jupyter --version"
+      bash -c "jupyter --version"
 
   openmpi:
     image: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION}-openmpi
@@ -45,7 +45,7 @@ services:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-tf-base
     command: >
-      sh -c "mpirun --version"
+      bash -c "mpirun --version"
 
   mpich:
     image: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION}-mpich
@@ -59,35 +59,35 @@ services:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-tf-base
     command: >
-      sh -c "mpirun --version"
+      bash -c "mpirun --version"
 
   openmpi-horovod:
     image: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION}-openmpi-horovod
     build:
       context: ./horovod
+      dockerfile: Dockerfile.${PACKAGE_OPTION}
       args:
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
         no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-openmpi
-        HOROVOD_VERSION: ${HOROVOD_VERSION}
     command: >
-      sh -c "horovodrun --check-build"
+      bash -c "horovodrun --check-build"
 
   mpich-horovod:
     image: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION}-mpich-horovod
     build:
       context: ./horovod
+      dockerfile: Dockerfile.${PACKAGE_OPTION}
       args:
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
         no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-mpich
-        HOROVOD_VERSION: ${HOROVOD_VERSION}
     command: >
-      sh -c "horovodrun --check-build"
+      bash -c "horovodrun --check-build"
   mpich-horovod-inc:
     image: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION}-mpich-horovod-inc
     build:
@@ -100,7 +100,7 @@ services:
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-mpich-horovod
         INC_VERSION: ${INC_VERSION}
     command: >
-      sh -c "python -c 'import neural_compressor; print(\"Neural Compressor Version:\", neural_compressor.__version__)'"
+      bash -c "python -c 'import neural_compressor; print(\"Neural Compressor Version:\", neural_compressor.__version__)'"
   mpich-horovod-inc-onnx:
     image: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION}-mpich-horovod-inc-onnx
     build:
@@ -113,7 +113,7 @@ services:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-mpich-horovod-inc
     command: >
-      sh -c "python -c 'import tf2onnx; print(\"TensorFlow2ONNX Version:\", tf2onnx.__version__)'"
+      bash -c "python -c 'import tf2onnx; print(\"TensorFlow2ONNX Version:\", tf2onnx.__version__)'"
   openmpi-horovod-inc:
     image: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION}-openmpi-horovod-inc
     build:
@@ -126,7 +126,7 @@ services:
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-openmpi-horovod
         INC_VERSION: ${INC_VERSION}
     command: >
-      sh -c "python -c 'import neural_compressor; print(\"Neural Compressor Version:\", neural_compressor.__version__)'"
+      bash -c "python -c 'import neural_compressor; print(\"Neural Compressor Version:\", neural_compressor.__version__)'"
   openmpi-horovod-inc-onnx:
     image: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${TF_PACKAGE_VERSION}-openmpi-horovod-inc-onnx
     build:
@@ -139,7 +139,7 @@ services:
         BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}
         BASE_IMAGE_TAG: ${TF_PACKAGE_VERSION}-openmpi-horovod-inc
     command: >
-      sh -c "python -c 'import tf2onnx; print(\"TensorFlow2ONNX Version:\", tf2onnx.__version__)'"
+      bash -c "python -c 'import tf2onnx; print(\"TensorFlow2ONNX Version:\", tf2onnx.__version__)'"
   tf-serving:
     image: tensorflow/serving:latest-devel-mkl
     build: 

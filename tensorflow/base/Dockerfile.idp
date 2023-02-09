@@ -18,8 +18,8 @@
 # throughout. Please refer to the TensorFlow dockerfiles documentation
 # for more information.
 
-ARG BASE_IMAGE_NAME=debian
-ARG BASE_IMAGE_TAG=11
+ARG BASE_IMAGE_NAME=ubuntu
+ARG BASE_IMAGE_TAG=20.04
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} as base
 
@@ -32,9 +32,11 @@ SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update -y && \
     apt-get install -y \
+    curl \
     wget
 
-ARG MINICONDA_VERSION="py39_4.12.0-Linux-x86_64"
+ARG MINICONDA_VERSION="latest-Linux-x86_64"
+ARG PYTHON_VERSION="python3"
 
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
     chmod +x miniconda.sh && \
@@ -44,7 +46,8 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh 
     export PATH=~/conda/bin/:${PATH} && \
     conda update -y conda && \
     conda config --add channels intel && \
-    conda create -yn idp intelpython3_full python=3.9 && \
+    conda create -yn idp intelpython3_full python=${PYTHON_VERSION} && \
+    conda init --all && \
     conda clean -y --all
 
 ENV PATH /root/conda/condabin:~/conda/bin/:${PATH}
@@ -65,4 +68,4 @@ RUN echo "source ~/conda/etc/profile.d/conda.sh" >> /root/.bash_profile && \
 RUN apt-get clean
 
 ADD licensing /licensing
-ADD https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE /licensing/TF_LICENSE
+RUN curl https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE -o /licensing/TF_LICENSE

@@ -30,7 +30,7 @@ ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
 
 # See http://bugs.python.org/issue19846
 ENV LANG C.UTF-8
-ARG PYTHON_VERSION=python3.8
+ARG PYTHON_VERSION=python3
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
@@ -64,4 +64,4 @@ ARG TF_PACKAGE_VERSION=
 RUN python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}}
 
 ADD licensing /licensing
-ADD https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE /licensing/TF_LICENSE
+RUN curl https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE -o /licensing/TF_LICENSE
