@@ -1,0 +1,21 @@
+version: '3'
+services:
+  ml-base:
+    image: ${FINAL_IMAGE_NAME}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:ml-base
+    pull_policy: always
+    build:
+      context: ./base
+      args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+        BASE_IMAGE_NAME: ${BASE_IMAGE_NAME}
+        BASE_IMAGE_TAG: ${BASE_IMAGE_TAG}
+        MINICONDA_VERSION: ${MINICONDA_VERSION}
+        PACKAGE_OPTION: ${PACKAGE_OPTION}
+        PYTHON_VERSION: ${PYTHON_VERSION}
+        SCIKIT_VERSION: ${SCIKIT_VERSION}
+        XGBOOST_VERSION: ${XGBOOST_VERSION}
+      dockerfile: Dockerfile.${PACKAGE_OPTION}
+    command: >
+      bash -c "python -c 'import sklearn; print(\"Scikit version:\", sklearn.__version__); import xgboost as xgb; print(\"XGBoost version:\", xgb.__version__)'"

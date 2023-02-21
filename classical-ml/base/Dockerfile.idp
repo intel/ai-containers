@@ -1,0 +1,78 @@
+# Copyright 2019 The TensorFlow Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ============================================================================
+#
+#
+# This file was assembled from multiple pieces, whose use is documented
+# throughout. Please refer to the TensorFlow dockerfiles documentation
+# for more information.
+
+ARG BASE_IMAGE_NAME=ubuntu
+ARG BASE_IMAGE_TAG=22.04
+
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} as base
+
+SHELL ["/bin/bash", "-c"]
+
+RUN apt-get update -y && \
+    apt-get install -y --fix-missing --no-install-recommends \
+    ca-certificates \
+    curl \
+    wget
+
+ARG MINICONDA_VERSION="latest-Linux-x86_64"
+ARG PYTHON_VERSION="python3"
+
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
+    chmod +x miniconda.sh && \
+    ./miniconda.sh -b -p ~/conda && \
+    rm ./miniconda.sh && \
+    ln -s ~/conda ~/miniconda3 && \
+    export PATH=~/conda/bin/:${PATH} && \
+    conda update -y conda && \
+    conda config --add channels intel && \
+    conda create -yn idp intelpython3_full python=${PYTHON_VERSION} && \
+    conda init --all && \
+    conda clean -y --all
+
+ENV PATH /root/conda/condabin:~/conda/bin/:${PATH}
+ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64:/root/conda/envs/idp/lib:${LD_LIBRARY_PATH}
+
+ENV BASH_ENV /root/.bash_profile
+
+ARG SCIKIT_VERSION="2023.0.1"
+ARG XGBOOST_VERSION="1.7.4"
+
+RUN source activate idp && \
+    conda config --add channels intel && \
+    conda install  -y -q -c intel \
+    daal4py \
+    scikit-learn-intelex${SCIKIT_VERSION:+==${SCIKIT_VERSION}} && \
+    python -m pip install --no-cache-dir  threadpoolctl \
+    xgboost${XGBOOST_VERSION:+==${XGBOOST_VERSION}} && \
+    conda clean -y --all
+
+RUN echo "source ~/conda/etc/profile.d/conda.sh" >> /root/.bash_profile && \
+    echo "conda activate idp" >> /root/.bash_profile
+
+RUN apt-get clean
+
+ENV PYTHONSTARTUP=${HOME}/.patch_sklearn.py
+
+RUN echo -e \
+'from sklearnex import patch_sklearn; from sklearnex import unpatch_sklearn\n\
+patch_sklearn(); print("To disable Intel(R) Extension for Scikit-learn*, you can run: unpatch_sklearn()")' >> ${PYTHONSTARTUP}
+
+ADD licensing /licensing
+RUN curl https://raw.githubusercontent.com/intel/scikit-learn-intelex/${SCIKIT_VERSION}/LICENSE -o /licensing/TF_LICENSE
