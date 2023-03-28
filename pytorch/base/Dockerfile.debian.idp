@@ -35,12 +35,14 @@ FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} as base
 SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update -y && \
-    apt-get install -y \
+    apt-cache search libxml2 && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    libxml2-dev \
     wget
 
 ARG MINICONDA_VERSION="py39_4.12.0-Linux-x86_64"
 
-RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
+RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
     chmod +x miniconda.sh && \
     ./miniconda.sh -b -p ~/conda && \
     rm ./miniconda.sh && \

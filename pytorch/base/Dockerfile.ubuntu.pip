@@ -38,7 +38,9 @@ ENV LANG C.UTF-8
 ARG PYTHON=python3
 
 RUN apt-get update -y && \
+    apt-cache search libxml2 && \
     apt-get install -y --no-install-recommends --fix-missing \
+    libxml2-dev \
     ${PYTHON} \
     ${PYTHON}-pip
 
