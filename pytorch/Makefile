@@ -3,15 +3,15 @@ FINAL_IMAGE_NAME ?= intel-pytorch
 BASE_IMAGE_NAME ?= ubuntu
 BASE_OS_NAME ?= ${BASE_IMAGE_NAME}
 BASE_IMAGE_TAG ?= 20.04
-INC_VERSION ?= 1.13
-IPEX_VERSION ?= 1.13.0
+INC_VERSION ?= 1.14.2
+IPEX_VERSION ?= 1.13.100
 IPEX_URL ?= https://intel-optimized-pytorch.s3.cn-north-1.amazonaws.com.cn/ipex_stable/cpu/intel_extension_for_pytorch-1.13.0%2Bcpu-cp310-cp310-linux_x86_64.whl
 MINICONDA_VERSION ?= "py39_4.12.0-Linux-x86_64"
 PACKAGE_OPTION ?= pip
 PYTHON_VERSION ?= python3
-PYTORCH_VERSION ?= 1.13.0+cpu
-TORCHAUDIO_VERSION ?= 0.13.0
-TORCHVISION_VERSION ?= 0.14.0+cpu
+PYTORCH_VERSION ?= 1.13.1+cpu
+TORCHAUDIO_VERSION ?= 0.13.1+cpu
+TORCHVISION_VERSION ?= 0.14.1+cpu
 
 ONECCL_VERSION ?= ${IPEX_VERSION}
 
