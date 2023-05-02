@@ -44,7 +44,7 @@ on:
         options:
         - "1.7.4"
       other_version:
-        require: false
+        required: false
         type: string
 jobs:
   base-framework-build:
@@ -80,6 +80,6 @@ jobs:
         password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Upload Container to Registry
       run: |
-        docker tag docker tag ${{ github.event.inputs.make_target }}-${{ github.event.inputs.os }}-${{ github.event.inputs.package_option }}:${{ github.event.inputs.make_target }} amr-registry.caas.intel.com/aiops/mlops-ci:scikit-${{ github.event.inputs.scikit_version }}-xgboost-${{ github.event.inputs.xgboost_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }}
+        docker tag ${{ github.event.inputs.make_target }}-${{ github.event.inputs.os }}-${{ github.event.inputs.package_option }}:${{ github.event.inputs.make_target }} amr-registry.caas.intel.com/aiops/mlops-ci:scikit-${{ github.event.inputs.scikit_version }}-xgboost-${{ github.event.inputs.xgboost_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }}
         docker push amr-registry.caas.intel.com/aiops/mlops-ci:scikit-${{ github.event.inputs.scikit_version }}-xgboost-${{ github.event.inputs.xgboost_version }}-${{ github.event.inputs.os }}-${{ github.event.inputs.os_version }}-${{ github.event.inputs.make_target }}
         
