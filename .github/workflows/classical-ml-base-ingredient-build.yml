@@ -1,4 +1,4 @@
-name: PyTorch Base Ingredient Containers Build
+name: Classical ML Base Ingredient Containers Build
 on: 
   workflow_dispatch:
     inputs:
@@ -9,8 +9,12 @@ on:
         options: 
         - "pip"
         - "idp"
-      ipex_package_version:
-        default: "2.0.0"
+      sklearn_package_version:
+        default: "2023.1.1"
+        required: false
+        type: string
+      xgboost_package_version:
+        default: "1.7.5"
         required: false
         type: string
       other_version: 
@@ -18,8 +22,12 @@ on:
         type: string
   workflow_call:
     inputs:
-      ipex_package_version:
-        default: "2.0.0"
+      sklearn_package_version:
+        default: "2023.1.1"
+        required: false
+        type: string
+      xgboost_package_version:
+        default: "1.7.5"
         required: false
         type: string
       other_version: 
@@ -56,18 +64,20 @@ jobs:
         password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Remove Containers
       run: docker compose down
-      working-directory: pytorch
+      working-directory: classical-ml
     - name: Build Framework Ingredient Containers
       run: |
-        IPEX_VERSION=${{ github.event.input.ipex_package_version }} \
         PACKAGE_OPTION=${{ matrix.package_option }} \
         REGISTRY=${{ vars.REGISTRY }} \
+        SCIKIT_VERSION=${{ github.event.input.sklearn_package_version }} \
+        XGBOOST_VERSION=${{ github.event.input.xgboost_package_version }} \
         ${{ github.event.input.other_version }} docker compose up --build --force-recreate
-      working-directory: pytorch
+      working-directory: classical-ml
     - name: Push Framework Ingredient Containers
       run: |
-        IPEX_VERSION=${{ github.event.input.ipex_package_version }} \
         PACKAGE_OPTION=${{ matrix.package_option }} \
         REGISTRY=${{ vars.REGISTRY }} \
+        SCIKIT_VERSION=${{ github.event.input.sklearn_package_version }} \
+        XGBOOST_VERSION=${{ github.event.input.xgboost_package_version }} \
         ${{ github.event.input.other_version }} docker compose push
-      working-directory: pytorch
+      working-directory: classical-ml

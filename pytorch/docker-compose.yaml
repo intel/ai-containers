@@ -1,57 +1,35 @@
 version: '3'
 services:
   ipex-base:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_IMAGE_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-ipex-base
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-1.12.1}-base
     pull_policy: always
     build:
-      context: ./base
       args:
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
-        no_proxy: ${no_proxy}
+        no_proxy: ""
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
-        BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-20.04}
-        IPEX_VERSION: ${IPEX_VERSION:-1.12.1}
-        IPEX_URL: ${IPEX_URL}
-        MINICONDA_VERSION: ${MINICONDA_VERSION}
-        PACKAGE_OPTION: ${PACKAGE_OPTION}
-        PYTHON_VERSION: ${PYTHON_VERSION}
-        PYTORCH_VERSION: ${PYTORCH_VERSION}
-        TORCHAUDIO_VERSION: ${TORCHAUDIO_VERSION}
-        TORCHVISION_VERSION: ${TORCHVISION_VERSION}
-      dockerfile: Dockerfile.${BASE_IMAGE_NAME:-ubuntu}.${PACKAGE_OPTION}
+        BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-22.04}
+        IPEX_VERSION: ${IPEX_VERSION:-2.0.0}
+        MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
+        PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+        PYTORCH_VERSION: ${PYTORCH_VERSION:-2.0.0+cpu}
+        TORCHAUDIO_VERSION: ${TORCHAUDIO_VERSION:-2.0.1+cpu}
+        TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.15.1+cpu}
+      # context: pytorch
+      target: ipex-base-${PACKAGE_OPTION:-pip}
     command: >
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)'"
 
-  oneccl:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-oneccl
+  inc:
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-1.12.1}-oneccl-inc-${INC_VERSION:-2.1.1}
     build:
-      context: ./oneccl
       args:
-        http_proxy: ${http_proxy}
-        https_proxy: ${https_proxy}
-        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
-        BASE_IMAGE_TAG: ${IPEX_VERSION:-1.12.1}-ipex-base
-        BASE_OS_NAME: ${BASE_OS_NAME:-debian}
-        ONECCL_VERSION: ${ONECCL_VERSION}
-        PACKAGE_OPTION: ${PACKAGE_OPTION}
+        INC_VERSION: ${INC_VERSION:-2.1.1}
+        ONECCL_VERSION: ${IPEX_VERSION:-2.0.0+cpu}
+      target: inc-${PACKAGE_OPTION:-pip}
     command: >
-      sh -c "python -c 'import oneccl_bindings_for_pytorch as oneccl; print(\"OneCCL:\", oneccl.__version__)'"
-
-  oneccl-inc:
-    image: ${FINAL_IMAGE_NAME:-ipex-base}-${BASE_OS_NAME}-${PACKAGE_OPTION}:${IPEX_VERSION:-1.12.1}-oneccl-inc
-    build:
-      context: ./inc
-      dockerfile: Dockerfile.${BASE_OS_NAME:-ubuntu}.${PACKAGE_OPTION:-pip}
-      args:
-        http_proxy: ${http_proxy}
-        https_proxy: ${https_proxy}
-        no_proxy: ${no_proxy}
-        BASE_IMAGE_NAME: ${FINAL_IMAGE_NAME:-ipex-base}
-        BASE_IMAGE_TAG: ${IPEX_VERSION:-1.12.1}-oneccl
-        BASE_OS_NAME: ${BASE_OS_NAME:-debian}
-        INC_VERSION: ${INC_VERSION}
-        PACKAGE_OPTION: ${PACKAGE_OPTION}
-        PYTHON_VERSION: ${PYTHON_VERSION}
-    command: >
-      sh -c "python -c 'import neural_compressor; print(\"Neural Compressor Version:\", neural_compressor.__version__)'"
+      sh -c "python -c 'import neural_compressor;import oneccl_bindings_for_pytorch as oneccl; print(\"Neural Compressor Version:\", neural_compressor.__version__, \"\\nOneCCL:\", oneccl.__version__)'"
+    extends:
+      service: ipex-base

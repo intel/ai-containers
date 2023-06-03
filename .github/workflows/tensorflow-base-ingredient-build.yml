@@ -1,16 +1,9 @@
-name: PyTorch Base Ingredient Containers Build
+name: Tensorflow Base Ingredient Containers Build
 on: 
   workflow_dispatch:
     inputs:
-      package_option: 
-        default: "pip"
-        required: true
-        type: choice
-        options: 
-        - "pip"
-        - "idp"
-      ipex_package_version:
-        default: "2.0.0"
+      tf_package_version:
+        default: "2.12.0"
         required: false
         type: string
       other_version: 
@@ -18,14 +11,13 @@ on:
         type: string
   workflow_call:
     inputs:
-      ipex_package_version:
-        default: "2.0.0"
+      tf_package_version:
+        default: "2.12.0"
         required: false
         type: string
       other_version: 
         required: false
         type: string
-
 jobs:
   base-framework-build:
     container:
@@ -39,12 +31,17 @@ jobs:
         password: ${{ secrets.REGISTRY_TOKEN }}
     strategy:
       matrix:
+        tf_package: ["intel-tensorflow", "intel-tensorflow-avx512"]
+        mpi_package: [ "mpich", "openmpi" ]
         package_option: [ "pip", "idp" ]
         experimental: [ true ]
       fail-fast: false
     runs-on: [ aia-devops ]
     steps: 
     - uses: actions/checkout@v3
+      with:
+        submodules: true
+        set-safe-directory: true
     - uses: docker/login-action@v2
       with:
         username: ${{ secrets.HUB_USER }}
@@ -56,18 +53,23 @@ jobs:
         password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Remove Containers
       run: docker compose down
-      working-directory: pytorch
+      working-directory: tensorflow
     - name: Build Framework Ingredient Containers
       run: |
-        IPEX_VERSION=${{ github.event.input.ipex_package_version }} \
+        MPI=${{ matrix.mpi_package }} \
         PACKAGE_OPTION=${{ matrix.package_option }} \
         REGISTRY=${{ vars.REGISTRY }} \
+        TF_PACKAGE_VERSION=${{ github.event.input.tf_package_version }} \
+        TF_PACKAGE=${{ matrix.tf_package }} \
         ${{ github.event.input.other_version }} docker compose up --build --force-recreate
-      working-directory: pytorch
+      working-directory: tensorflow
     - name: Push Framework Ingredient Containers
       run: |
-        IPEX_VERSION=${{ github.event.input.ipex_package_version }} \
+        MPI=${{ matrix.mpi_package }} \
         PACKAGE_OPTION=${{ matrix.package_option }} \
         REGISTRY=${{ vars.REGISTRY }} \
+        TF_PACKAGE_VERSION=${{ github.event.input.tf_package_version }} \
+        TF_PACKAGE=${{ matrix.tf_package }} \
         ${{ github.event.input.other_version }} docker compose push
-      working-directory: pytorch
+      working-directory: tensorflow
+

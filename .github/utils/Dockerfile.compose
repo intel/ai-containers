@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 as compose-devel
+FROM ubuntu:22.04 as compose-devel
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -28,4 +28,3 @@ RUN ln -sf $(which python3) /usr/local/bin/python && \
 RUN python -m pip --no-cache-dir install --upgrade \
     pip \
     setuptools
-   

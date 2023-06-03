@@ -1,6 +1,0 @@
-ARG BASE_IMAGE_NAME=tf-base
-ARG BASE_IMAGE_TAG=latest
-
-FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} as onnx
-
-RUN python3 -m pip install --no-cache-dir tf2onnx

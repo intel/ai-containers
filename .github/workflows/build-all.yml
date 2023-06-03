@@ -1,0 +1,14 @@
+name: Build Ingredient Containers
+on:
+  workflow_dispatch:
+
+jobs:
+  build-tensorflow:
+    uses: ./.github/workflows/tensorflow-base-ingredient-build.yml
+    secrets: inherit
+  build-pytorch:
+    uses: ./.github/workflows/pytorch-base-ingredient-build.yml
+    secrets: inherit
+  build-classical-ml:
+    uses: ./.github/workflows/classical-ml-base-ingredient-build.yml
+    secrets: inherit

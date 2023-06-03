@@ -1,0 +1,31 @@
+version: '3'
+services:
+  tf-serving:
+    image: tensorflow/serving:latest-devel-mkl
+    build: 
+      context: ./serving/tensorflow_serving/tools/docker
+      dockerfile: Dockerfile.devel-mkl
+      args: 
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ${no_proxy}
+        BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
+        BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-22.04}
+        BAZEL_VERSION: ${BAZEL_VERSION:-5.4.0}
+        TF_PACKAGE: ${TF_PACKAGE:-intel-tensorflow}
+        TF_SERVING_VERSION: ${TF_PACKAGE_VERSION:-2.12.0}
+        TF_SERVING_BAZEL_OPTIONS: ${TF_SERVING_BAZEL_OPTIONS:-'--local_ram_resources=HOST_RAM*0.8 --local_cpu_resources=HOST_CPUS-4'}
+        TF_SERVING_BUILD_OPTIONS: ${TF_SERVING_BUILD_OPTIONS:-'--config=mkl --config=release --define=build_with_openmp=false --copt=-march=native'}
+        TF_SERVING_VERSION_GIT_BRANCH: ${TF_SERVING_VERSION}
+
+  serving-mkl:
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.12.0}-serving-mkl
+    build: 
+      context: ./serving/tensorflow_serving/tools/docker
+      dockerfile: Dockerfile.mkl
+      args:
+        BASE_IMAGE_NAME: ${TF_PACKAGE:-intel-tensorflow}-${BASE_IMAGE_NAME:-ubuntu}-${PACKAGE_OPTION:-pip}
+        BASE_IMAGE_TAG: serving
+        TF_SERVING_BUILD: ${BASE_IMAGE_NAME:-ubuntu}:${BASE_IMAGE_TAG:-22.04}
+        TF_SERVING_VERSION_GIT_COMMIT: ${TF_SERVING_VERSION}
+    extends: tf-serving
