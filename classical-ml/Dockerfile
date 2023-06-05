@@ -37,10 +37,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
     curl \
     wget
 
-COPY base/figlet.txt /fig.txt
-
-RUN echo "cat /fig.txt" >> ~/.bashrc
-
 ARG SCIKIT_VERSION
 ARG XGBOOST_VERSION
 
@@ -103,8 +99,9 @@ RUN ln -sf /root/conda/envs/idp/bin/python /usr/local/bin/python && \
 
 RUN conda install -n idp -y -c intel \
     daal4py \
-    scikit-learn-intelex${SCIKIT_VERSION:+==${SCIKIT_VERSION}} && \
-    python -m pip install --no-cache-dir \
+    scikit-learn-intelex${SCIKIT_VERSION:+==${SCIKIT_VERSION}}
+
+RUN python -m pip install --no-cache-dir \
     # https://github.com/intel/scikit-learn-intelex/blob/master/requirements-test.txt
     numpy==1.23.0 \ 
     threadpoolctl \
@@ -113,4 +110,3 @@ RUN conda install -n idp -y -c intel \
 
 ENV PYTHONSTARTUP=${HOME}/.patch_sklearn.py
 COPY base/.patch_sklearn.py ${HOME}/.patch_sklearn.py
-RUN python -m sklearnex.glob patch_sklearn

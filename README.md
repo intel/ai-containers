@@ -1,4 +1,4 @@
-# Intel AI Machine Learning Operations
+# Intel® AI Containers
 
 This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. used to scale out AI containers with versions of TensorFlow and PyTorch that have been optimized for Intel platforms. Scaling is done with python, Docker, kubernetes, kubeflow, cnvrg.io, Helm, and other container orchestration frameworks for use in the cloud and on-premise.
 
@@ -13,28 +13,17 @@ This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. use
 ├── classical-ml
 │   ├── Dockerfile
 │   ├── README.md
-│   ├── base
-│   │   └── figlet.txt
 │   └── docker-compose.yaml
 ├── pytorch
 │   ├── Dockerfile
 │   ├── README.md
-│   ├── base
-│   │   └── figlet.txt
 │   ├── docker-compose.yaml
-│   └── inc
-│       └── figlet.txt
 └── tensorflow
     ├── Dockerfile
     ├── README.md
-    ├── base
-    │   └── figlet.txt
     ├── docker-compose-serving.yaml
     ├── docker-compose.yaml
-    ├── inc
-    │   └── figlet.txt
     ├── jupyter
-    │   ├── figlet.txt
     │   └── third_party_programs.txt
     └── serving
 ```

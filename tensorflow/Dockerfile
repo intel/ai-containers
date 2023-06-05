@@ -42,8 +42,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
     curl \
     wget
 
-COPY base/figlet.txt /fig.txt
-
 RUN echo "cat /fig.txt" >> ~/.bashrc
 
 ARG TF_PACKAGE
@@ -124,10 +122,6 @@ WORKDIR /tf-base
 EXPOSE 8888
 
 RUN python -m ipykernel.kernelspec
-
-ADD jupyter/third_party_programs.txt /licensing/jupyter_third_party_programs.txt
-
-COPY jupyter/figlet.txt /fig.txt
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=${WORKDIR} --ip 0.0.0.0 --no-browser --allow-root"]
 
@@ -218,5 +212,3 @@ RUN python -m pip install --no-cache-dir neural-compressor${INC_VER:+==${INC_VER
 
 RUN curl https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-tensorflow.txt -o /licensing/third-party-programs-tensorflow.txt && \
     curl https://raw.githubusercontent.com/intel/neural-compressor/v${INC_VER}/LICENSE -o /licensing/INC_LICENSE
-
-COPY inc/figlet.txt /fig.txt

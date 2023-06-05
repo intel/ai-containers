@@ -46,10 +46,6 @@ RUN apt-get update -y && \
     wget
     # libxml2-dev
 
-COPY base/figlet.txt /fig.txt
-
-RUN echo "cat /fig.txt" >> ~/.bashrc
-
 ARG IPEX_VERSION
 
 RUN mkdir -p /licensing && \
@@ -144,8 +140,6 @@ RUN python -m pip install --no-cache-dir oneccl_bind_pt${ONECCL_VERSION:+==${ONE
 RUN curl https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -o /licensing/oneccl_third_party_programs.txt && \
     curl https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -o /licensing/third-party-programs-pytorch.txt && \
     curl https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -o /licensing/LICENSE
-
-COPY inc/figlet.txt /fig.txt
 
 FROM inc AS inc-pip
 
