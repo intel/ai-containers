@@ -1,0 +1,17 @@
+metadata:
+  name: ipex-distributed
+  namespace: kubeflow
+
+imageName: intel/intel-optimized-pytorch
+imageTag: 2.0.0-pip-multinode
+masterResources:
+  cpu: 32
+  memory: 16Gi
+workerResources:
+  cpu: 32
+  memory: 16Gi
+workers: 4
+
+pvcName: ipex
+pvcScn: nil
+pvcResources: 2Gi

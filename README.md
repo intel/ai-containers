@@ -2,32 +2,6 @@
 
 This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. used to scale out AI containers with versions of TensorFlow and PyTorch that have been optimized for Intel platforms. Scaling is done with python, Docker, kubernetes, kubeflow, cnvrg.io, Helm, and other container orchestration frameworks for use in the cloud and on-premise.
 
-## Project Structure
-
-```text
-├── CODE_OF_CONDUCT.md
-├── CONTRIBUTING.md
-├── LICENSE
-├── README.md
-├── SECURITY.md
-├── classical-ml
-│   ├── Dockerfile
-│   ├── README.md
-│   └── docker-compose.yaml
-├── pytorch
-│   ├── Dockerfile
-│   ├── README.md
-│   ├── docker-compose.yaml
-└── tensorflow
-    ├── Dockerfile
-    ├── README.md
-    ├── docker-compose-serving.yaml
-    ├── docker-compose.yaml
-    ├── jupyter
-    │   └── third_party_programs.txt
-    └── serving
-```
-
 ## Project Setup
 
 Define your project's registry each time you use the project:

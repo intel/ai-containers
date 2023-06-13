@@ -1,0 +1,63 @@
+apiVersion: kubeflow.org/v1
+kind: MPIJob
+metadata:
+  name: {{ .Values.metadata.name }}
+  namespace: {{ .Values.metadata.namespace }}
+spec:
+  slotsPerWorker: {{ .Values.slotsPerWorker }}
+  runPolicy:
+    cleanPodPolicy: None
+  mpiReplicaSpecs:
+    Launcher:
+      replicas: 1
+      template:
+        spec:
+          hostIPC: true
+          containers:
+          - image: "{{ .Values.imageName }}:{{ .Values.imageTag }}"
+            name: mpi
+            command:
+            - horovodrun
+            args:
+            - --verbose
+            - -np
+            - {{ .Values.workers }}
+            - --hostfile
+            - /etc/mpi/hostfile
+            - python
+            - myscript.py
+            resources:
+              limits:
+                cpu: {{ .Values.resources.cpu }}
+                memory: {{ .Values.resources.memory }}
+            volumeMounts:
+            - name: dataset-dir
+              mountPath: /tmp/data
+          volumes:
+          - name: dshm
+            emptyDir:
+              medium: Memory
+          - name: dataset-dir
+            persistentVolumeClaim:
+              claimName: {{ .Values.pvcName }}
+    Worker:
+      replicas: {{ .Values.workers }}
+      template:
+        spec:
+          containers:
+          - image: "{{ .Values.imageName }}:{{ .Values.imageTag }}" 
+            name: mpi
+            resources:
+              limits:
+                cpu: {{ .Values.workerResources.cpu }}
+                memory: {{ .Values.workerResources.memory }}
+            volumeMounts:
+            - name: dataset-dir
+              mountPath: /tmp/data
+          volumes:
+          - name: dshm
+            emptyDir:
+              medium: Memory
+          - name: dataset-dir
+            persistentVolumeClaim:
+              claimName: {{ .Values.pvcName }}

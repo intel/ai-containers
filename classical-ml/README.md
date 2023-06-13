@@ -1,11 +1,5 @@
 # Classical ML Ingredients
 
-```mermaid
-%%{init: {'theme': 'dark'}}%%
-flowchart TB
-  mlbase[ml-base]
-```
-
 ## Classical ML
 
 ### Base

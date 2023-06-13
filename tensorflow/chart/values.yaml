@@ -1,0 +1,20 @@
+metadata:
+  name: itex-distributed
+  namespace: kubeflow
+
+imageName: intel/intel-optimized-tensorflow
+imageTag: 2.12.0-pip-openmpi-multinode
+
+slotsPerWorker: 1
+workers: 4
+
+pvcName: itex
+pvcScn: nil
+pvcResources: 2Gi
+
+resources:
+  cpu: 2
+  memory: 4Gi
+workerResources:
+  cpu: 4
+  memory: 8Gi

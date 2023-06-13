@@ -1,0 +1,60 @@
+apiVersion: "kubeflow.org/v1"
+kind: PyTorchJob
+metadata:
+  name: {{ .Values.metadata.name }}
+  namespace: {{ .Values.metadata.namespace }}
+spec:
+  pytorchReplicaSpecs:
+    Master:
+      replicas: 1
+      template:
+        spec:
+          containers:
+            - name: pytorch
+              image: "{{ .Values.imageName }}:{{ .Values.imageTag }}"
+              imagePullPolicy: Always
+              command:
+                - torchrun
+                - myscript.py
+              resources:
+                limits:
+                  cpu: {{ .Values.masterResources.cpu }}
+                  memory: {{ .Values.masterResources.memory }}
+              volumeMounts:
+              - name: dataset-dir
+                mountPath: /tmp/output
+          volumes:
+          - name: dshm
+            emptyDir:
+              medium: Memory
+          - name: dataset-dir
+            persistentVolumeClaim:
+              claimName: {{ .Values.pvcName }}
+    Worker:
+      replicas: {{ .Values.workers }}
+      template:
+        spec:
+          containers:
+            - name: pytorch
+              image: "{{ .Values.imageName }}:{{ .Values.imageTag }}"
+              imagePullPolicy: Always
+              envFrom:
+              - configMapRef:
+                  name: intel-proxy-config
+              command:
+                - torchrun
+                - myscript.py
+              resources:
+                limits:
+                  cpu: {{ .Values.workerResources.cpu }}
+                  memory: {{ .Values.workerResources.memory }}
+              volumeMounts:
+              - name: dataset-dir
+                mountPath: /tmp/output
+          volumes:
+          - name: dshm
+            emptyDir:
+              medium: Memory
+          - name: dataset-dir
+            persistentVolumeClaim:
+              claimName: {{ .Values.pvcName }}
