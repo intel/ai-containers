@@ -104,6 +104,43 @@ ${INC_VERSION:-2.1.0} -> ${INC_VERSION:-2.1.1}
 
 And then build and test using GitHub Actions.
 
+## Notebooks and Model Serving
+
+### Jupyter
+
+Add a Jupyter Notebook.
+
+Start the Jupyter Server and copy the url (something like `http://127.0.0.1:$PORT/?token=***`) into your browser, the port is 8888 by default.
+
+```bash
+export PORT=<myport>
+cd <framework>
+docker compose build jupyter
+docker compose run -d --rm jupyter jupyter notebook --notebook-dir=/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root
+```
+
+### MLFlow
+
+Add a MLFLow Example:
+
+- [TensorFlow](https://github.com/mlflow/mlflow/blob/master/examples/tensorflow/train.py)
+- [PyTorch](https://github.com/mlflow/mlflow/blob/master/examples/pytorch/MNIST/mnist_autolog_example.py)
+- [SKLearn](https://github.com/mlflow/mlflow/blob/master/examples/docker/train.py)
+
+Start the MLFlow server as a detached container and then re-use the container by executing a command in it.
+
+```bash
+export PORT=<myport>
+cd <framework>
+docker compose build mlflow
+docker compose run -d --rm mlflow mlflow server -p $PORT -h 0.0.0.0
+docker compose exec mlflow python /mlflow/myscript.py
+```
+
+>**Note:** If you need to install more python packages to run any of the examples add a requirements.txt file to your working directory and append `pip install -r /mlflow/requirements.txt` into the `docker compose exec` command.
+
+Access the results at `https://localhost:<port>`, the default port is 5000.
+
 ## Troubleshooting
 
 * See the [Docker Troubleshooting Article](https://docs.docker.com/engine/install/troubleshoot/).
@@ -111,6 +148,7 @@ And then build and test using GitHub Actions.
 * When facing socket error check the group membership of the user and ensure they are part of the `docker` group.
 * After changing any docker files or configs, restart the docker service `sudo systemctl restart docker`.
 * Enable [Docker Desktop for WSL 2](https://docs.docker.com/desktop/windows/wsl/).
+* If you are trying to access a container UI from the browser, make sure you have [port forwarded](https://code.visualstudio.com/docs/remote/ssh#_forwarding-a-port-creating-ssh-tunnel) and reconnect.
 * If your environment requires a proxy to access the internet, export your development system's proxy settings to the docker environment:
 
 ```bash

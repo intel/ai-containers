@@ -22,11 +22,32 @@ services:
 
   jupyter:
     build:
+      args:
+        PORT: ${PORT:-8888}
       target: jupyter
-    extends: tf-base
     command: >
       bash -c "python -m jupyter --version"
+    environment:
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+    extends: tf-base
     image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.12.0}-jupyter
+    network_mode: host
+    volumes:
+      - /$PWD:/jupyter
+
+  mlflow:
+    build:
+      args:
+        PORT: ${PORT:-5000}
+      target: mlflow
+    command: "python -m mlflow --version"
+    environment:
+      MLFLOW_TRACKING_URI: 'https://localhost:${PORT:-5000}'
+    extends: jupyter
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.12.0}-mlflow
+    volumes:
+      - /$PWD:/mlflow
 
   inc:
     build:
@@ -35,7 +56,7 @@ services:
         INC_VERSION: ${INC_VERSION:-2.1.1}
         MPI: ${MPI:-openmpi}
       target: inc
-    extends: tf-base
     command: >
       bash -c "mpirun --version && python -c 'import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)'"
+    extends: tf-base
     image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.12.0}-${MPI:-openmpi}-horovod-${HOROVOD_VERSION:-0.28.0}-inc-${INC_VERSION:-2.1.1}

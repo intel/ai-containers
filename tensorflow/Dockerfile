@@ -40,6 +40,7 @@ ENV TZ=Etc/UTC
 RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
     ca-certificates \
     curl \
+    git \
     wget
 
 RUN echo "cat /fig.txt" >> ~/.bashrc
@@ -116,14 +117,25 @@ FROM tf-base-${PACKAGE_OPTION} AS jupyter
 RUN python -m pip install --no-cache-dir jupyter matplotlib jupyter_http_over_ws ipykernel nbformat
 RUN python -m jupyter serverextension enable --py jupyter_http_over_ws
 
-RUN mkdir -p /tf-base/ && chmod -R a+rwx /tf-base/
+RUN mkdir -p /jupyter/ && chmod -R a+rwx /jupyter/
 RUN mkdir /.local && chmod a+rwx /.local
-WORKDIR /tf-base
-EXPOSE 8888
+WORKDIR /jupyter
+
+ARG PORT=8888
+EXPOSE $PORT
 
 RUN python -m ipykernel.kernelspec
 
-CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=${WORKDIR} --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
+
+FROM tf-base-${PACKAGE_OPTION} AS mlflow
+
+RUN python -m pip install --no-cache-dir mlflow
+
+ARG PORT=5000
+EXPOSE $PORT
+
+CMD ["mlflow", "server", "-h", "0.0.0.0", "-p", $PORT]
 
 FROM tf-base-${PACKAGE_OPTION} AS openmpi
 

@@ -18,6 +18,18 @@
 
 Built from Base
 
+| Environment Variable Name | Default Value | Description |
+| --- | --- | --- |
+| PORT | `8888` | Server UI Port |
+
+### MLFlow
+
+Built from Base
+
+| Environment Variable Name | Default Value | Description |
+| --- | --- | --- |
+| PORT | `5000` | Server UI Port |
+
 ### MultiNode
 
 Built from Base

@@ -1,8 +1,6 @@
 version: '3'
 services:
   ipex-base:
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.0}-base
-    pull_policy: always
     build:
       args:
         http_proxy: ${http_proxy}
@@ -21,9 +19,37 @@ services:
       target: ipex-base-${PACKAGE_OPTION:-pip}
     command: >
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)'"
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.0}-base
+    pull_policy: always
+
+  jupyter:
+    build:
+      target: jupyter
+    command: >
+      bash -c "python -m jupyter --version"
+    environment:
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+    extends: ipex-base
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.0}-jupyter
+    network_mode: host
+
+  mlflow:
+    build:
+      args:
+        PORT: ${PORT:-5000}
+      target: mlflow
+    command: "python -m mlflow --version"
+    environment:
+      MLFLOW_TRACKING_URI: 'https://localhost:${PORT:-5000}'
+    extends: jupyter
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.0}-mlflow
+    ports:
+      - ${PORT-5000}:${PORT:-5000}
+    volumes:
+      - /$PWD:/mlflow
 
   inc:
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.0}-oneccl-inc-${INC_VERSION:-2.1.1}
     build:
       args:
         INC_VERSION: ${INC_VERSION:-2.1.1}
@@ -31,5 +57,5 @@ services:
       target: inc-${PACKAGE_OPTION:-pip}
     command: >
       sh -c "python -c 'import neural_compressor;import oneccl_bindings_for_pytorch as oneccl; print(\"Neural Compressor Version:\", neural_compressor.__version__, \"\\nOneCCL:\", oneccl.__version__)'"
-    extends:
-      service: ipex-base
+    extends: ipex-base
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.0}-oneccl-inc-${INC_VERSION:-2.1.1}

@@ -119,6 +119,31 @@ RUN ln -sf /root/conda/envs/idp/bin/python /usr/local/bin/python && \
     ln -sf /root/conda/envs/idp/bin/python /usr/local/bin/python3 && \
     ln -sf /root/conda/envs/idp/bin/python /usr/bin/python
 
+FROM ipex-base-${PACKAGE_OPTION} AS jupyter
+
+RUN python -m pip install --no-cache-dir jupyter matplotlib jupyter_http_over_ws ipykernel nbformat
+RUN python -m jupyter serverextension enable --py jupyter_http_over_ws
+
+RUN mkdir -p /jupyter/ && chmod -R a+rwx /jupyter/
+RUN mkdir /.local && chmod a+rwx /.local
+WORKDIR /jupyter
+
+ARG PORT=8888
+EXPOSE $PORT
+
+RUN python -m ipykernel.kernelspec
+
+CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
+
+FROM ipex-base-${PACKAGE_OPTION} AS mlflow
+
+RUN python -m pip install --no-cache-dir mlflow
+
+ARG PORT=5000
+EXPOSE $PORT
+
+CMD ["mlflow", "server", "-h", "0.0.0.0", "-p", $PORT]
+
 FROM ipex-base-${PACKAGE_OPTION} AS inc
 
 RUN apt-get install -y --no-install-recommends --fix-missing \

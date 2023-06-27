@@ -16,6 +16,22 @@
 | TORCHAUDIO_VERSION | `2.0.1+cpu` | TorchAudio Version |
 | TORCHVISION_VERSION | `0.15.1+cpu` | TorchVision Version |
 
+### Jupyter
+
+Built from Base
+
+| Environment Variable Name | Default Value | Description |
+| --- | --- | --- |
+| PORT | `8888` | Server UI Port |
+
+### MLFlow
+
+Built from Base
+
+| Environment Variable Name | Default Value | Description |
+| --- | --- | --- |
+| PORT | `5000` | Server UI Port |
+
 ### MultiNode
 
 Built from Base

@@ -13,3 +13,19 @@
 | PYTHON_VERSION | `3.10` | Python Version |
 | SCIKIT_VERSION | 2023.1.1` | Intel SKLearn Version |
 | XGBOOST_VERSION | 1.7.5` | XGBoost Version |
+
+### Jupyter
+
+Built from Base
+
+| Environment Variable Name | Default Value | Description |
+| --- | --- | --- |
+| PORT | `8888` | Server UI Port |
+
+### MLFlow
+
+Built from Base
+
+| Environment Variable Name | Default Value | Description |
+| --- | --- | --- |
+| PORT | `5000` | Server UI Port |
