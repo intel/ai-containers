@@ -15,7 +15,7 @@ services:
         PYTORCH_VERSION: ${PYTORCH_VERSION:-2.0.0+cpu}
         TORCHAUDIO_VERSION: ${TORCHAUDIO_VERSION:-2.0.1+cpu}
         TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.15.1+cpu}
-      # context: pytorch
+      context: .
       target: ipex-base-${PACKAGE_OPTION:-pip}
     command: >
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)'"

@@ -147,7 +147,7 @@ CMD ["mlflow", "server", "-h", "0.0.0.0", "-p", $PORT]
 FROM ipex-base-${PACKAGE_OPTION} AS inc
 
 RUN apt-get install -y --no-install-recommends --fix-missing \
-    ${PYTHON_VERSION}-dev \
+    python3-dev \
     gcc \
     libgl1-mesa-glx \
     libglib2.0-0
