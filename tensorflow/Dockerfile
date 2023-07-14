@@ -48,12 +48,6 @@ RUN echo "cat /fig.txt" >> ~/.bashrc
 ARG TF_PACKAGE
 ARG TF_PACKAGE_VERSION
 
-# Add Intel TF Licensing
-RUN	mkdir /licensing && \
-    wget -O - https://github.com/Intel-tensorflow/tensorflow/archive/v${TF_PACKAGE_VERSION}.tar.gz | \
-	tar -xz -C /licensing --strip=2 "tensorflow-${TF_PACKAGE_VERSION}/third_party_programs_license/" && \
-    curl https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE -o /licensing/TF_LICENSE
-
 FROM base AS tf-base-pip
 
 RUN apt-get install -y --no-install-recommends --fix-missing \
@@ -74,24 +68,13 @@ RUN python -m pip --no-cache-dir install --upgrade \
 
 RUN python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}}
 
-FROM base AS tf-base-idp
+# Add Intel TF Licensing
+RUN	mkdir /licensing && \
+    wget -O - https://github.com/Intel-tensorflow/tensorflow/archive/v${TF_PACKAGE_VERSION}.tar.gz | \
+	tar -xz -C /licensing --strip=2 "tensorflow-${TF_PACKAGE_VERSION}/third_party_programs_license/" && \
+    curl https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE -o /licensing/TF_LICENSE
 
-ARG MINICONDA_VERSION
-
-RUN apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
-    chmod +x miniconda.sh && \
-    ./miniconda.sh -b -p ~/conda && \
-    rm ./miniconda.sh && \
-    ln -s ~/conda ~/miniconda3 && \
-    export PATH=~/conda/bin/:${PATH} && \
-    conda update -y conda && \
-    conda config --add channels intel && \
-    conda create -yn idp intelpython3_core python=${PYTHON_VERSION} && \
-    conda init --all && \
-    conda clean -y --all
+FROM idp-core AS tf-base-idp
 
 # Avoid horovod and mpi from failing with incorrect gcc libraries
 RUN rm -rf /root/conda/envs/idp/lib/libstdc++.so.6 && ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 /root/conda/envs/idp/lib/libstdc++.so.6
@@ -111,6 +94,12 @@ RUN echo "conda activate idp" >> ~/.bashrc
 RUN ln -sf /root/conda/envs/idp/bin/python /usr/local/bin/python && \
     ln -sf /root/conda/envs/idp/bin/python /usr/local/bin/python3 && \
     ln -sf /root/conda/envs/idp/bin/python /usr/bin/python
+
+# Add Intel TF Licensing
+RUN	mkdir /licensing && \
+    wget -O - https://github.com/Intel-tensorflow/tensorflow/archive/v${TF_PACKAGE_VERSION}.tar.gz | \
+	tar -xz -C /licensing --strip=2 "tensorflow-${TF_PACKAGE_VERSION}/third_party_programs_license/" && \
+    curl https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE -o /licensing/TF_LICENSE
 
 FROM tf-base-${PACKAGE_OPTION} AS jupyter
 

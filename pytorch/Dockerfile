@@ -48,10 +48,6 @@ RUN apt-get update -y && \
 
 ARG IPEX_VERSION
 
-RUN mkdir -p /licensing && \
-	wget -O - https://github.com/intel/intel-extension-for-pytorch/archive/v${IPEX_VERSION}+cpu.tar.gz | \
-	tar -xz -C /licensing --strip=2 "intel-extension-for-pytorch-${IPEX_VERSION}-cpu/third-party-programs/"
-
 FROM base AS ipex-base-pip
 
 RUN apt-get install -y --no-install-recommends --fix-missing \
@@ -78,24 +74,11 @@ RUN python -m pip install --no-cache-dir \
     intel_extension_for_pytorch==${IPEX_VERSION}+cpu \
     -f https://developer.intel.com/ipex-whl-stable-cpu
 
-FROM base AS ipex-base-idp
+RUN mkdir -p /licensing && \
+	wget -O - https://github.com/intel/intel-extension-for-pytorch/archive/v${IPEX_VERSION}+cpu.tar.gz | \
+	tar -xz -C /licensing --strip=2 "intel-extension-for-pytorch-${IPEX_VERSION}-cpu/third-party-programs/"
 
-ARG MINICONDA_VERSION
-
-RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
-    chmod +x miniconda.sh && \
-    ./miniconda.sh -b -p ~/conda && \
-    rm ./miniconda.sh && \
-    ln -s ~/conda ~/miniconda3 && \
-    export PATH=~/conda/bin/:${PATH} && \
-    conda update -y conda && \
-    conda config --add channels intel && \
-    conda create -yn idp intelpython3_core python=${PYTHON_VERSION} && \
-    conda init --all && \
-    conda clean -y --all
-
-ENV PATH /root/conda/envs/idp/bin:/root/conda/condabin:~/conda/bin/:${PATH}
-ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64:/root/conda/envs/idp/lib:${LD_LIBRARY_PATH}
+FROM idp-core AS ipex-base-idp
 
 ARG IPEX_VERSION
 ARG PYTORCH_VERSION
@@ -118,6 +101,10 @@ RUN echo "conda activate idp" >> ~/.bashrc
 RUN ln -sf /root/conda/envs/idp/bin/python /usr/local/bin/python && \
     ln -sf /root/conda/envs/idp/bin/python /usr/local/bin/python3 && \
     ln -sf /root/conda/envs/idp/bin/python /usr/bin/python
+
+RUN mkdir -p /licensing && \
+	wget -O - https://github.com/intel/intel-extension-for-pytorch/archive/v${IPEX_VERSION}+cpu.tar.gz | \
+	tar -xz -C /licensing --strip=2 "intel-extension-for-pytorch-${IPEX_VERSION}-cpu/third-party-programs/"
 
 FROM ipex-base-${PACKAGE_OPTION} AS jupyter
 

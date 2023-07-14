@@ -12,3 +12,6 @@ jobs:
   build-classical-ml:
     uses: ./.github/workflows/classical-ml-base-ingredient-build.yml
     secrets: inherit
+  build-idp:
+    uses: ./.github/workflows/idp-ingredient-build.yml
+    secrets: inherit

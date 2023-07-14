@@ -1,19 +1,66 @@
-name: Dockerfile Builder
+name: IDP Ingredient Containers Build
 on: 
   workflow_dispatch:
+    inputs:
+      python_version:
+        default: "3.10"
+        required: false
+        type: string
+      other_version: 
+        required: false
+        type: string
+  workflow_call:
+    inputs:
+      python_version:
+        default: "3.10"
+        required: false
+        type: string
+      other_version: 
+        required: false
+        type: string
 
 jobs:
-    Explore-GitHub-Actions:
-      runs-on: [ aia-devops ]
-      steps:
-        - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-        - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-        - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-        - name: Check out repository code
-          uses: actions/checkout@v3
-        - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-        - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-        - name: List files in the repository
-          run: |
-            ls ${{ github.workspace }}
-        - run: echo "🍏 This job's status is ${{ job.status }}."
+  base-idp-build:
+    container:
+      image: ${{ vars.REGISTRY }}/aiops/compose-dev
+      env:
+        http_proxy: ${{ secrets.HTTP_PROXY }}
+        https_proxy: ${{ secrets.HTTPS_PROXY }}
+        no_proxy: ${{ secrets.NO_PROXY }}
+      credentials:
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_TOKEN }}
+    strategy:
+      matrix:
+        idp_version: [ "core", "full" ]
+        experimental: [ true ]
+      fail-fast: false
+    runs-on: [ aia-devops ]
+    steps: 
+    - uses: actions/checkout@v3
+    - uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.HUB_USER }}
+        password: ${{ secrets.HUB_TOKEN }}
+    - uses: docker/login-action@v2
+      with:
+        registry: ${{ vars.REGISTRY }}
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_TOKEN }}
+    - name: Remove Containers
+      run: docker compose down
+      working-directory: idp
+    - name: Build IDP Containers
+      run: |
+        REGISTRY=${{ vars.REGISTRY }} \
+        PYTHON_VERSION=${{ github.event.input.python_version }} \
+        IDP_VERSION=${{ matrix.idp_version }} \
+        ${{ github.event.input.other_version }} docker compose up --build --force-recreate
+      working-directory: idp
+    - name: Push Framework Ingredient Containers
+      run: |
+        REGISTRY=${{ vars.REGISTRY }} \
+        PYTHON_VERSION=${{ github.event.input.python_version }} \
+        IDP_VERSION=${{ matrix.idp_version }} \
+        ${{ github.event.input.other_version }} docker compose push
+      working-directory: idp

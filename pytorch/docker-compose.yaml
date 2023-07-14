@@ -1,6 +1,8 @@
 version: '3'
 services:
-  ipex-base:
+  idp:
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-${IDP_VERSION:-core}-py${PYTHON_VERSION:-3.10}-base
+    pull_policy: always
     build:
       args:
         http_proxy: ${http_proxy}
@@ -8,15 +10,26 @@ services:
         no_proxy: ""
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-22.04}
-        IPEX_VERSION: ${IPEX_VERSION:-2.0.0}
+        IDP_VERSION: core
         MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
-        PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+      target: idp
+      context: ../idp
+      dockerfile: ../idp/Dockerfile
+  ipex-base:
+    build:
+      args:
+        IPEX_VERSION: ${IPEX_VERSION:-2.0.0}
+        PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
         PYTORCH_VERSION: ${PYTORCH_VERSION:-2.0.0+cpu}
         TORCHAUDIO_VERSION: ${TORCHAUDIO_VERSION:-2.0.1+cpu}
         TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.15.1+cpu}
       context: .
+      dockerfile: Dockerfile
       target: ipex-base-${PACKAGE_OPTION:-pip}
+    extends: idp
+    depends_on:
+      - idp
     command: >
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)'"
     image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.0}-base

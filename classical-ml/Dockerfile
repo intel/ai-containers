@@ -70,24 +70,7 @@ RUN python -m pip install --no-cache-dir \
 
 COPY base/.patch_sklearn.py ${HOME}/.patch_sklearn.py
 
-FROM base AS ml-base-idp
-
-ARG MINICONDA_VERSION="latest-Linux-x86_64"
-
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
-    chmod +x miniconda.sh && \
-    ./miniconda.sh -b -p ~/conda && \
-    rm ./miniconda.sh && \
-    ln -s ~/conda ~/miniconda3 && \
-    export PATH=~/conda/bin/:${PATH} && \
-    conda update -y conda && \
-    conda config --add channels intel && \
-    conda create -yn idp intelpython3_core python=${PYTHON_VERSION} && \
-    conda init --all && \
-    conda clean -y --all
-
-ENV PATH /root/conda/condabin:~/conda/bin/:${PATH}
-ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64:/root/conda/envs/idp/lib:${LD_LIBRARY_PATH}
+FROM idp-core AS ml-base-idp
 
 ENV BASH_ENV /root/.bash_profile
 
