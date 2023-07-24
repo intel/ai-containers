@@ -114,7 +114,7 @@ helm install ---namespace ${NAMESPACE} \
      ./chart
 ```
 
-To see an existing configuration utilizing this method, check out [Intel® Transfer Learning Tool](https://github.com/IntelAI/transfer-learning/docker/README.md#kubernetes)'s implementation.
+To see an existing configuration utilizing this method, check out [Intel® Transfer Learning Tool](https://github.com/IntelAI/transfer-learning/blob/main/docker/README.md#kubernetes)'s implementation.
 
 ##### Troubleshooting
 

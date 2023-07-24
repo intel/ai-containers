@@ -105,7 +105,7 @@ helm install ---namespace ${NAMESPACE} \
      ./chart
 ```
 
-To see an existing configuration utilizing this method, check out [Intel® Extension for Transformers](https://github.com/intel/intel-extension-for-transformers/README.md#kubernetes)' implementation.
+To see an existing configuration utilizing this method, check out [Intel® Extension for Transformers](https://github.com/intel/intel-extension-for-transformers/blob/main/docker/README.md#kubernetes)' implementation.
 
 ##### Troubleshooting
 
