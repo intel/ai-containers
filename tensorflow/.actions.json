@@ -1,0 +1,6 @@
+{
+    "TF_PACKAGE": ["intel-tensorflow", "intel-tensorflow-avx512"],
+    "MPI": ["mpich", "openmpi"],
+    "PACKAGE_OPTION": ["pip", "idp"],
+    "experimental": [true]
+}

@@ -1,0 +1,4 @@
+{
+    "IDP_VERSION": ["full", "core"],
+    "experimental": [true]
+}

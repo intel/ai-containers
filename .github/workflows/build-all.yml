@@ -4,14 +4,20 @@ on:
 
 jobs:
   build-tensorflow:
-    uses: ./.github/workflows/tensorflow-base-ingredient-build.yml
-    secrets: inherit
+    uses: ./.github/workflows/compose-module.yml
+    with:
+      dir: 'tensorflow'
   build-pytorch:
-    uses: ./.github/workflows/pytorch-base-ingredient-build.yml
+    uses: ./.github/workflows/compose-module.yml
+    with:
+      dir: 'pytorch'
     secrets: inherit
   build-classical-ml:
-    uses: ./.github/workflows/classical-ml-base-ingredient-build.yml
+    uses: ./.github/workflows/compose-module.yml
+    with:
+      dir: 'classical-ml'
     secrets: inherit
   build-idp:
-    uses: ./.github/workflows/idp-ingredient-build.yml
-    secrets: inherit
+    uses: ./.github/workflows/compose-module.yml
+    with:
+      dir: 'idp'
