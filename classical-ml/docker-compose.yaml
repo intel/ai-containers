@@ -1,8 +1,6 @@
 version: '3'
 services:
-  idp:
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-${IDP_VERSION:-core}-py${PYTHON_VERSION:-3.10}-base
-    pull_policy: always
+  python:
     build:
       args:
         http_proxy: ${http_proxy}
@@ -13,9 +11,10 @@ services:
         IDP_VERSION: core
         MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
-      target: idp
-      context: ../idp
-      dockerfile: ../idp/Dockerfile
+      context: ../python
+      dockerfile: ../python/Dockerfile
+      target: ${PACKAGE_OPTION:-pip}
+    pull_policy: always
   ml-base:
     build:
       args:
@@ -26,9 +25,9 @@ services:
       context: .
       dockerfile: Dockerfile
       target: ml-base-${PACKAGE_OPTION:-pip}
-    extends: idp
+    extends: python
     depends_on:
-      - idp
+      - python
     command: >
       bash -c "python -c 'import sklearnex, sklearn; import xgboost as xgb; print(\"Scikit version:\", sklearn.__version__, \"\\nXGBoost version:\", xgb.__version__)'"
     image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2023.1.1}-xgboost-${XGBOOST_VERSION:-1.7.5}-base

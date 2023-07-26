@@ -69,5 +69,5 @@ jobs:
         IPEX_VERSION=${{ github.event.input.ipex_package_version }} \
         PACKAGE_OPTION=${{ matrix.package_option }} \
         REGISTRY=${{ vars.REGISTRY }} \
-        ${{ github.event.input.other_version }} docker compose push
+        ${{ github.event.input.other_version }} docker compose push --ignore-push-failures
       working-directory: pytorch

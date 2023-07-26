@@ -1,7 +1,6 @@
 version: '3'
 services:
-  idp:
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-${IDP_VERSION:-core}-py${PYTHON_VERSION:-3.10}-base
+  python:
     build:
       args:
         http_proxy: ${http_proxy}
@@ -12,25 +11,26 @@ services:
         IDP_VERSION: core
         MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
-      target: idp
-      context: ../idp
-      dockerfile: ../idp/Dockerfile
+      context: ../python
+      dockerfile: ../python/Dockerfile
+      target: ${PACKAGE_OPTION:-pip}
+    pull_policy: always
   tf-base:
     build:
       args:
         no_proxy: ${no_proxy}
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
-        TF_PACKAGE_VERSION: ${TF_PACKAGE_VERSION:-2.12.0}
+        TF_PACKAGE_VERSION: ${TF_PACKAGE_VERSION:-2.13.0}
         TF_PACKAGE: ${TF_PACKAGE:-intel-tensorflow}
       target: tf-base-${PACKAGE_OPTION:-pip}
       context: .
       dockerfile: Dockerfile
-    extends: idp
+    extends: python
     depends_on:
-      - idp
+      - python
     command: >
-      bash -c "env && python -c 'import tensorflow as tf; print(\"Tensorflow Version:\", tf.__version__)'"
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.12.0}-base
+      python -c 'import tensorflow as tf; print("Tensorflow Version:", tf.__version__)'
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.13.0}-base
     pull_policy: always
 
   jupyter:
@@ -44,7 +44,7 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     extends: tf-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.12.0}-jupyter
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.13.0}-jupyter
     network_mode: host
     volumes:
       - /$PWD:/jupyter
@@ -54,22 +54,22 @@ services:
       args:
         PORT: ${PORT:-5000}
       target: mlflow
-    command: "python -m mlflow --version"
+    command: bash -c "python -m mlflow --version"
     environment:
       MLFLOW_TRACKING_URI: 'https://localhost:${PORT:-5000}'
     extends: jupyter
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.12.0}-mlflow
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.13.0}-mlflow
     volumes:
       - /$PWD:/mlflow
 
-  inc:
+  multinode:
     build:
       args:
         HOROVOD_VERSION: ${HOROVOD_VERSION:-0.28.0}
-        INC_VERSION: ${INC_VERSION:-2.1.1}
+        INC_VERSION: ${INC_VERSION:-2.2}
         MPI: ${MPI:-openmpi}
-      target: inc
+      target: multinode-${PACKAGE_OPTION:-pip}
     command: >
-      bash -c "mpirun --version && python -c 'import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)'"
+      bash -c "horovodrun --check-build && mpirun --version && python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow;import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)'"
     extends: tf-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.12.0}-${MPI:-openmpi}-horovod-${HOROVOD_VERSION:-0.28.0}-inc-${INC_VERSION:-2.1.1}
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.13.0}-${MPI:-openmpi}-horovod-${HOROVOD_VERSION:-0.28.0}-inc-${INC_VERSION:-2.2}

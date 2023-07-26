@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       tf_package_version:
-        default: "2.12.0"
+        default: "2.13.0"
         required: false
         type: string
       other_version: 
@@ -12,7 +12,7 @@ on:
   workflow_call:
     inputs:
       tf_package_version:
-        default: "2.12.0"
+        default: "2.13.0"
         required: false
         type: string
       other_version: 
@@ -70,6 +70,6 @@ jobs:
         REGISTRY=${{ vars.REGISTRY }} \
         TF_PACKAGE_VERSION=${{ github.event.input.tf_package_version }} \
         TF_PACKAGE=${{ matrix.tf_package }} \
-        ${{ github.event.input.other_version }} docker compose push
+        ${{ github.event.input.other_version }} docker compose push --ignore-push-failures
       working-directory: tensorflow
 

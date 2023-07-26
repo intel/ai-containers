@@ -32,15 +32,15 @@ ARG BASE_IMAGE_TAG=22.04
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} AS base
 
 # See http://bugs.python.org/issue19846
+ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG C.UTF-8
 
 SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update -y && \
-    apt-cache search libxml2 && \
     apt-get install -y --no-install-recommends --fix-missing \
     ca-certificates \
-    curl \
+    curl/jammy-updates \
     wget
 
 FROM base AS idp
@@ -59,13 +59,40 @@ RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-$
     conda config --add channels intel && \
     conda create -yn idp intelpython3_${IDP_VERSION} python=${PYTHON_VERSION} && \
     conda init --all && \
-    apt-get clean && conda clean -y --all
+    apt-get clean && conda clean -y --all && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV PATH /root/conda/envs/idp/bin:/root/conda/condabin:~/conda/bin/:${PATH}
 ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64:/root/conda/envs/idp/lib:${LD_LIBRARY_PATH}
 
 RUN echo "conda activate idp" >> ~/.bashrc
 
+RUN conda run -n idp python -m pip install --no-cache-dir numpy==1.22.4
+
 RUN ln -sf /root/conda/envs/idp/bin/python /usr/local/bin/python && \
     ln -sf /root/conda/envs/idp/bin/python /usr/local/bin/python3 && \
     ln -sf /root/conda/envs/idp/bin/python /usr/bin/python
+
+FROM base AS pip
+
+ARG PYTHON_VERSION
+
+RUN apt-get install -y --no-install-recommends --fix-missing \
+    python${PYTHON_VERSION} \
+    python3-pip \
+    python${PYTHON_VERSION}-distutils && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN rm -rf /usr/lib/python${PYTHON_VERSION}/EXTERNALLY-MANAGED
+
+# Some TF tools expect a "python" binary
+RUN ln -sf $(which python${PYTHON_VERSION}) /usr/local/bin/python && \
+    ln -sf $(which python${PYTHON_VERSION}) /usr/local/bin/python3 && \
+    ln -sf $(which python${PYTHON_VERSION}) /usr/bin/python
+
+RUN python -m pip --no-cache-dir install --upgrade \
+    pip \
+    numpy \
+    setuptools \
+    psutil

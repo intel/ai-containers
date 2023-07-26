@@ -49,18 +49,18 @@ jobs:
         password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Remove Containers
       run: docker compose down
-      working-directory: idp
+      working-directory: python
     - name: Build IDP Containers
       run: |
         REGISTRY=${{ vars.REGISTRY }} \
         PYTHON_VERSION=${{ github.event.input.python_version }} \
         IDP_VERSION=${{ matrix.idp_version }} \
-        ${{ github.event.input.other_version }} docker compose up --build --force-recreate
-      working-directory: idp
+        ${{ github.event.input.other_version }} docker compose up idp-base --build --force-recreate
+      working-directory: python
     - name: Push Framework Ingredient Containers
       run: |
         REGISTRY=${{ vars.REGISTRY }} \
         PYTHON_VERSION=${{ github.event.input.python_version }} \
         IDP_VERSION=${{ matrix.idp_version }} \
-        ${{ github.event.input.other_version }} docker compose push
-      working-directory: idp
+        ${{ github.event.input.other_version }} docker compose push idp-base --ignore-push-failures
+      working-directory: python

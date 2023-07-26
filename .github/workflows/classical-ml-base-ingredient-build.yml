@@ -79,5 +79,5 @@ jobs:
         REGISTRY=${{ vars.REGISTRY }} \
         SCIKIT_VERSION=${{ github.event.input.sklearn_package_version }} \
         XGBOOST_VERSION=${{ github.event.input.xgboost_package_version }} \
-        ${{ github.event.input.other_version }} docker compose push
+        ${{ github.event.input.other_version }} docker compose push --ignore-push-failures
       working-directory: classical-ml

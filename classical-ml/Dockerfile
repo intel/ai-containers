@@ -18,49 +18,12 @@
 # throughout. Please refer to the TensorFlow dockerfiles documentation
 # for more information.
 
-ARG BASE_IMAGE_NAME=ubuntu
-ARG BASE_IMAGE_TAG=22.04
 ARG PACKAGE_OPTION=pip
-FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} AS base
 
-# See http://bugs.python.org/issue19846
-ENV LANG C.UTF-8
-ARG PYTHON_VERSION
-
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Etc/UTC
-
-SHELL ["/bin/bash", "-c"]
-
-RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
-    ca-certificates \
-    curl \
-    wget
+FROM classical-ml-python AS ml-base-pip
 
 ARG SCIKIT_VERSION
 ARG XGBOOST_VERSION
-
-RUN mkdir -p /licensing && \
-	wget -O - https://github.com/intel/scikit-learn-intelex/archive/refs/tags/${SCIKIT_VERSION}.tar.gz | \
-	tar -xz -C /licensing --strip=2 "scikit-learn-intelex-${SCIKIT_VERSION}/doc/third-party-programs-sklearnex.txt" \
-	"scikit-learn-intelex-${SCIKIT_VERSION}/doc/daal4py/third-party-programs.txt"
-
-RUN curl https://raw.githubusercontent.com/intel/scikit-learn-intelex/${SCIKIT_VERSION}/LICENSE -o /licensing/SCIKIT_LICENSE
-
-FROM base AS ml-base-pip
-
-RUN apt-get install -y --no-install-recommends --fix-missing \
-    python${PYTHON_VERSION} \
-    python${PYTHON_VERSION}-distutils \
-    python3-pip
-
-RUN ln -sf $(which python${PYTHON_VERSION}) /usr/local/bin/python && \
-    ln -sf $(which python${PYTHON_VERSION}) /usr/local/bin/python3 && \
-    ln -sf $(which python${PYTHON_VERSION}) /usr/bin/python
-
-RUN python -m pip --no-cache-dir install --upgrade \
-    pip \
-    setuptools
 
 RUN python -m pip install --no-cache-dir \
     daal4py \
@@ -70,15 +33,19 @@ RUN python -m pip install --no-cache-dir \
 
 COPY base/.patch_sklearn.py ${HOME}/.patch_sklearn.py
 
-FROM idp-core AS ml-base-idp
+RUN mkdir -p /licensing && \
+	wget -O - https://github.com/intel/scikit-learn-intelex/archive/refs/tags/${SCIKIT_VERSION}.tar.gz | \
+	tar -xz -C /licensing --strip=2 "scikit-learn-intelex-${SCIKIT_VERSION}/doc/third-party-programs-sklearnex.txt" \
+	"scikit-learn-intelex-${SCIKIT_VERSION}/doc/daal4py/third-party-programs.txt"
+
+RUN curl --insecure https://raw.githubusercontent.com/intel/scikit-learn-intelex/${SCIKIT_VERSION}/LICENSE -o /licensing/SCIKIT_LICENSE
+
+FROM classical-ml-python AS ml-base-idp
+
+ARG SCIKIT_VERSION
+ARG XGBOOST_VERSION
 
 ENV BASH_ENV /root/.bash_profile
-
-RUN echo "conda activate idp" >> ~/.bashrc
-
-RUN ln -sf /root/conda/envs/idp/bin/python /usr/local/bin/python && \
-    ln -sf /root/conda/envs/idp/bin/python /usr/local/bin/python3 && \
-    ln -sf /root/conda/envs/idp/bin/python /usr/bin/python
 
 RUN conda install -n idp -y -c intel \
     daal4py \
@@ -94,10 +61,16 @@ RUN python -m pip install --no-cache-dir \
 ENV PYTHONSTARTUP=${HOME}/.patch_sklearn.py
 COPY base/.patch_sklearn.py ${HOME}/.patch_sklearn.py
 
+RUN mkdir -p /licensing && \
+	wget -O - https://github.com/intel/scikit-learn-intelex/archive/refs/tags/${SCIKIT_VERSION}.tar.gz | \
+	tar -xz -C /licensing --strip=2 "scikit-learn-intelex-${SCIKIT_VERSION}/doc/third-party-programs-sklearnex.txt" \
+	"scikit-learn-intelex-${SCIKIT_VERSION}/doc/daal4py/third-party-programs.txt"
+
+RUN curl --insecure https://raw.githubusercontent.com/intel/scikit-learn-intelex/${SCIKIT_VERSION}/LICENSE -o /licensing/SCIKIT_LICENSE
+
 FROM ml-base-${PACKAGE_OPTION} AS jupyter
 
-RUN python -m pip install --no-cache-dir jupyter matplotlib jupyter_http_over_ws ipykernel nbformat
-RUN python -m jupyter serverextension enable --py jupyter_http_over_ws
+RUN python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy
 
 RUN mkdir -p /jupyter/ && chmod -R a+rwx /jupyter/
 RUN mkdir /.local && chmod a+rwx /.local
@@ -105,8 +78,6 @@ WORKDIR /jupyter
 
 ARG PORT=8888
 EXPOSE $PORT
-
-RUN python -m ipykernel.kernelspec
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
 
