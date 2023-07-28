@@ -1,0 +1,47 @@
+#
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2023 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+#
+
+version: '3'
+services:
+  classical-ml:
+      build:
+        args:
+          http_proxy: ${http_proxy}
+          https_proxy: ${https_proxy}
+          no_proxy: ""
+          MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
+          PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+          SCIKIT_VERSION: ${SCIKIT_VERSION:-2023.1.1}
+          XGBOOST_VERSION: ${XGBOOST_VERSION:-1.7.3}
+          MODIN_VERSION: ${MODIN_VERSION:-0.22.2}
+          BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
+          BASE_TAG: ${BASE_TAG:-22.04}
+          IDP_VERSION: ${IDP_VERSION:-2023.2}
+        context: classical-ml/
+        target: jupyter
+      command: >
+        bash -c "conda run -n classical-ml python -c 'import sklearn; import xgboost; print(\"SciKit:\", sklearn.__version__, \" XGBoost:\",xgboost.__version__)' && \
+        conda run -n classical-ml python -c 'import modin.pandas as pd, modin.config as cfg; cfg.Engine.put(\"Ray\"); df = pd.DataFrame([1]);print(df+1)'"
+      image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-2023.2-py${PYTHON_VERSION:-3.10}
+      environment:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+      shm_size: 8GB
+      pull_policy: always
