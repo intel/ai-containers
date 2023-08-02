@@ -63,7 +63,10 @@ RUN conda create -yn classical-ml intelpython3_core==${IDP_VERSION} python=${PYT
     threadpoolctl
 
 RUN conda install -n classical-ml -y -c intel xgboost${XGBOOST_VERSION:+==${XGBOOST_VERSION}}
-RUN conda run -n classical-ml python -m pip install --ignore-installed modin[ray]==${MODIN_VERSION} dataset-librarian
+RUN conda run -n classical-ml python -m pip install --ignore-installed \
+        modin[ray]==${MODIN_VERSION} \
+        dataset-librarian \
+        cloud-data-connector
 
 ENV LD_LIBRARY_PATH /workspace/libssl/lib/:${LD_LIBRARY_PATH}
 ENV BASH_ENV /root/.bash_profile
