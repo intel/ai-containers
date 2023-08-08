@@ -60,13 +60,18 @@ RUN conda create -yn classical-ml intelpython3_core==${IDP_VERSION} python=${PYT
     matplotlib \
     daal4py \
     scikit-learn-intelex${SCIKIT_VERSION:+==${SCIKIT_VERSION}} \
-    threadpoolctl
+    threadpoolctl && \
+    conda clean -y --all
 
-RUN conda install -n classical-ml -y -c intel xgboost${XGBOOST_VERSION:+==${XGBOOST_VERSION}}
-RUN conda run -n classical-ml python -m pip install --ignore-installed \
+RUN conda install -n classical-ml -y -c intel xgboost${XGBOOST_VERSION:+==${XGBOOST_VERSION}} &&\
+    conda clean -y --all
+RUN conda run -n classical-ml python -m pip install --ignore-installed --no-cache-dir \
         modin[ray]==${MODIN_VERSION} \
         dataset-librarian \
-        cloud-data-connector
+        cloud-data-connector && \
+    conda run -n classical-ml python -m pip install --no-cache-dir \
+        scipy==1.11.1 \
+        certifi=='2023.07.22'
 
 ENV LD_LIBRARY_PATH /workspace/libssl/lib/:${LD_LIBRARY_PATH}
 ENV BASH_ENV /root/.bash_profile

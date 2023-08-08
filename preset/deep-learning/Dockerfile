@@ -113,8 +113,10 @@ RUN \
         torchvision==${TORCHVISION_VERSION} -f ${TORCHVISION_WHL_URL} && \
     conda run -n torch python -m pip install --no-cache-dir --ignore-installed \
         cloud-data-connector \
-        scipy==1.10.1 \
         dataset-librarian && \
+    conda run -n torch python -m pip install --no-cache-dir \
+        scipy==1.11.1 \
+        certifi=='2023.07.22' && \
     conda clean -y --all
 
 RUN echo "unset OCL_ICD_VENDORS" >> ~/conda/envs/torch/etc/conda/activate.d/activate-opencl-rt.sh
@@ -128,12 +130,14 @@ RUN conda create -yn tensorflow intelpython3_core python=${PYTHON_VERSION} && \
     conda install -yn tensorflow ipython ipykernel kernda -c conda-forge && \
     conda run -n tensorflow python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}} \
         intel-extension-for-tensorflow[xpu]==${ITEX_VERSION} \
-        scipy==1.10.1 \
         requests==2.31.0 \
         cryptography==41.0.2 && \
     conda run -n tensorflow python -m pip install --no-cache-dir --ignore-installed \
         cloud-data-connector \
         dataset-librarian && \
+    conda run -n tensorflow python -m pip install --no-cache-dir \
+        scipy==1.11.1 \
+        certifi=='2023.07.22' && \
     conda clean -y --all
 
 RUN echo "unset OCL_ICD_VENDORS" >> ~/conda/envs/tensorflow/etc/conda/activate.d/activate-opencl-rt.sh

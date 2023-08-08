@@ -50,6 +50,8 @@ RUN conda create -yn data-analytics intelpython3_core=${IDP_VERSION} python=${PY
         modin[ray] \
         dataset-librarian \
         cloud-data-connector && \
+    conda run -n data-analytics python -m pip install --no-cache-dir \
+        scipy==1.11.1 && \
     conda clean -y --all
 
 ENV BASH_ENV /root/.bash_profile
