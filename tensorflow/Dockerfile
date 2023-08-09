@@ -32,6 +32,7 @@ ARG TF_PACKAGE
 ARG TF_PACKAGE_VERSION
 
 RUN python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}} \
+    tensorflow_hub \
     scipy==1.11.1 \
     requests==2.31.0 \
     cryptography==41.0.2
@@ -57,6 +58,7 @@ ARG TF_PACKAGE
 ARG TF_PACKAGE_VERSION
 
 RUN python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}} \
+    tensorflow_hub \
     scipy==1.11.1 \
     requests==2.31.0 \
     cryptography==41.0.2

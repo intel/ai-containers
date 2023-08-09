@@ -4,22 +4,22 @@ on:
 
 jobs:
   build-tensorflow:
-    uses: ./.github/workflows/compose-module.yml
+    uses: ./.github/workflows/build-workflow.yml
     with:
       dir: 'tensorflow'
     secrets: inherit
   build-pytorch:
-    uses: ./.github/workflows/compose-module.yml
+    uses: ./.github/workflows/build-workflow.yml
     with:
       dir: 'pytorch'
     secrets: inherit
   build-classical-ml:
-    uses: ./.github/workflows/compose-module.yml
+    uses: ./.github/workflows/build-workflow.yml
     with:
       dir: 'classical-ml'
     secrets: inherit
   build-idp:
-    uses: ./.github/workflows/compose-module.yml
+    uses: ./.github/workflows/build-workflow.yml
     with:
       dir: 'python'
     secrets: inherit

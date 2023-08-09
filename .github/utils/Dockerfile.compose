@@ -8,15 +8,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
     cmake \
     curl \
     docker.io \
-    docker-compose \
     git \
     jq \
     make \
     python3 \
     python3-distutils \
     python3-pip \
+    python3-venv \
     wget 
 
+ARG COMPOSE_VERSION=2.19.0
 ENV DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
 RUN mkdir -p $DOCKER_CONFIG/cli-plugins && \
     curl --insecure -SL https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose && \
@@ -29,3 +30,18 @@ RUN ln -sf $(which python3) /usr/local/bin/python && \
 RUN python -m pip --no-cache-dir install --upgrade \
     pip \
     setuptools
+
+FROM compose-devel AS node
+
+SHELL ["bin/bash", "-c"]
+
+ARG NODE_VERSION=16.20.1
+
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+RUN echo -e 'export NVM_DIR="$HOME/.nvm"\n[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm\n[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"' >> "$HOME/.bashrc"
+
+RUN chmod +x /root/.nvm/nvm.sh && \
+    /root/.nvm/nvm.sh install $NODE_VERSION && \
+    /root/.nvm/nvm.sh use $NODE_VERSION
+
+ENV PATH="/root/.nvm/versions/node/v$NODE_VERSION/bin:/bin:$PATH"

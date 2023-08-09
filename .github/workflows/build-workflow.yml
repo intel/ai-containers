@@ -1,4 +1,4 @@
-name: Build Module
+name: Container Build Workflow
 on: 
   workflow_call:
     inputs:
@@ -28,6 +28,9 @@ jobs:
       - name: Set Matrix
         id: matrix
         run: echo "matrix=$(jq -c . < ./${{ inputs.dir }}/.actions.json)" >> $GITHUB_OUTPUT
+      - name: Print Inputs
+        if: ${{ inputs.env_overrides }}
+        run: echo "Overrides - ${{ inputs.env_overrides }}" >> $GITHUB_STEP_SUMMARY
   build-containers:
     needs: [setup-build-matrix]
     container:
@@ -55,8 +58,6 @@ jobs:
         registry: ${{ vars.REGISTRY }}
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
-    - name: Print Inputs
-      run: echo -e "${{ inputs.dir }}\n${{ inputs.env_overrides }}" >> $GITHUB_STEP_SUMMARY
     - name: Remove Containers
       run: docker compose down
       working-directory: ${{ inputs.dir }}
@@ -69,4 +70,9 @@ jobs:
       run: |
         REGISTRY=${{ vars.REGISTRY }} \
         ${{ inputs.env_overrides }} docker compose push --ignore-push-failures
+      working-directory: ${{ inputs.dir }}
+    - name: Print Containers
+      run: |
+        REGISTRY=${{ vars.REGISTRY }} \
+        ${{ inputs.env_overrides }} docker compose images --format json | jq '.[] | "\(.Repository):\(.Tag)"' >> $GITHUB_STEP_SUMMARY
       working-directory: ${{ inputs.dir }}

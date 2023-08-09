@@ -1,0 +1,39 @@
+name: Container Test Workflow
+on: 
+  workflow_call:
+    inputs:
+      parent_dir: 
+        required: true
+        type: string
+      dir: 
+        required: true
+        type: string
+      runner_label:
+        required: true
+        type: string
+
+jobs:
+  test-containers:
+    runs-on: [ self-hosted, Linux, "${{ inputs.runner_label }}"]
+    steps: 
+    - uses: actions/checkout@v3
+    - uses: docker/login-action@v2
+      with:
+        registry: ${{ vars.REGISTRY }}
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_TOKEN }}
+    - name: Test Containers
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        python -m pip install -r ${{ github.workspace }}/.github/utils/requirements.txt
+        python ${{ github.workspace }}/.github/utils/test_runner.py --tests-yaml ${{ inputs.parent_dir }}/${{ inputs.dir }}/tests.yaml
+      env:
+        PYTHONPATH: ${{ github.workspace }}
+        REGISTRY: ${{ vars.REGISTRY }}
+        GITHUB_RUN_NUMBER: ${{ github.run_number }}
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: ${{ inputs.dir }} outputs
+        path: ${{ github.workspace }}/${{ inputs.dir }}

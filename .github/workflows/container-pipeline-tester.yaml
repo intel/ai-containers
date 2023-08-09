@@ -1,0 +1,56 @@
+name: Container Pipeline Tester
+on:
+  workflow_dispatch:
+    inputs:
+      dir: 
+        required: true
+        type: string
+      env_overrides: 
+        required: false
+        type: string
+      runner_label:
+        default: test-runner
+        required: false
+        type: string
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-workflow.yml
+    with:
+      dir: ${{ github.event.inputs.dir }}
+      env_overrides: ${{ github.event.inputs.env_overrides }}
+    secrets: inherit
+  setup-test:
+    needs: [ build ]
+    runs-on: [ aia-devops ]
+    container:
+      image: ${{ vars.REGISTRY }}/aiops/compose-dev
+      env:
+        http_proxy: ${{ secrets.HTTP_PROXY }}
+        https_proxy: ${{ secrets.HTTPS_PROXY }}
+        no_proxy: ${{ secrets.NO_PROXY }}
+      credentials:
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_TOKEN }}
+    outputs:
+      recipes: ${{ steps.recipes.outputs.RECIPES }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get Recipes
+        id: recipes
+        run: echo "RECIPES=$(find ${{ github.event.inputs.dir }} -type f -name 'tests.yaml' -exec dirname {} \; | awk -F/ '{print $NF}' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+  test:
+    needs: [ setup-test ]
+    if: ${{ needs.setup-test.outputs.recipes != '[]' }}
+    strategy:
+      matrix:
+        recipe: ${{ fromJson(needs.setup-test.outputs.recipes) }}
+        experimental: [true]
+      fail-fast: false
+    uses: ./.github/workflows/test-workflow.yml
+    with:
+      parent_dir: ${{ github.event.inputs.dir }}
+      dir: ${{ matrix.recipe }}
+      runner_label: ${{ github.event.inputs.runner_label }}
+    secrets: inherit
+
