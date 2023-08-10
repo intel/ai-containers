@@ -89,8 +89,6 @@ $ python -m pip install -r .github/utils/requirements.txt
 $ python .github/utils/test_runner.py --tests-yaml /path/to/tests.yml
 ```
 
->TODO: Add multi-image support in test_runner.py
-
 ### docker-compose.yaml
 
 For each service in your composefile, define a recipe to publish. Pipeline recipes with validation requirements should have a tests.yaml file for each service, and the given recipe's folder contains both the Dockerfile and the tests.yaml file required to validate.
