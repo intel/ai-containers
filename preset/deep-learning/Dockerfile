@@ -229,5 +229,6 @@ RUN conda run -n torch python -m pip install --no-cache-dir \
 RUN conda run -n tensorflow python -m pip install --no-cache-dir \
         neural-compressor${INC_VERSION:+==${INC_VERSION}} \
         numpy==1.23.5 \
-        tf2onnx && \
+        tf2onnx \
+        onnxruntime && \
     conda clean -y --all

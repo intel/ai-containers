@@ -18,6 +18,7 @@ RUN apt-get update -y && \
     curl \
     diffutils \
     gcc \
+    git \
     gzip \
     make \
     patch \
