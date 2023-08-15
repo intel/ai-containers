@@ -21,7 +21,8 @@
 ARG PACKAGE_OPTION=pip
 ARG MPI=openmpi
 
-FROM tensorflow-python AS tf-base-pip
+ARG COMPOSE_PROJECT_NAME
+FROM ${COMPOSE_PROJECT_NAME}-python AS tf-base-pip
 
 # Intel Optimizations specific Envs
 ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
@@ -33,9 +34,8 @@ ARG TF_PACKAGE_VERSION
 
 RUN python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}} \
     tensorflow_hub \
-    scipy==1.11.1 \
-    requests==2.31.0 \
-    cryptography==41.0.2
+    Pillow \
+    cryptography==41.0.3
 
 # Add Intel TF Licensing
 RUN	mkdir /licensing && \
@@ -43,7 +43,7 @@ RUN	mkdir /licensing && \
 	tar -xz -C /licensing --strip=2 "tensorflow-${TF_PACKAGE_VERSION}/third_party_programs_license/" && \
     curl --insecure https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE -o /licensing/TF_LICENSE
 
-FROM tensorflow-python AS tf-base-idp
+FROM ${COMPOSE_PROJECT_NAME}-python AS tf-base-idp
 
 # Intel Optimizations specific Envs
 ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
@@ -59,9 +59,10 @@ ARG TF_PACKAGE_VERSION
 
 RUN python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}} \
     tensorflow_hub \
-    scipy==1.11.1 \
-    requests==2.31.0 \
-    cryptography==41.0.2
+    Pillow \
+    certifi==2023.7.22 \
+    cryptography==41.0.3 \
+    scipy==1.11.1
 
 # Add Intel TF Licensing
 RUN	mkdir /licensing && \

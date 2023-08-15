@@ -28,7 +28,8 @@
 
 ARG PACKAGE_OPTION=pip
 
-FROM pytorch-python AS ipex-base-pip
+ARG COMPOSE_PROJECT_NAME
+FROM ${COMPOSE_PROJECT_NAME}-python AS ipex-base-pip
 
 ARG IPEX_VERSION
 ARG PYTORCH_VERSION
@@ -43,7 +44,7 @@ RUN python -m pip install --no-cache-dir \
     intel_extension_for_pytorch==${IPEX_VERSION}+cpu \
     -f https://developer.intel.com/ipex-whl-stable-cpu
 
-FROM pytorch-python AS ipex-base-idp
+FROM ${COMPOSE_PROJECT_NAME}-python AS ipex-base-idp
 
 ARG IPEX_VERSION
 ARG PYTORCH_VERSION

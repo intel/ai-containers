@@ -18,6 +18,7 @@ services:
   ipex-base:
     build:
       args:
+        COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME:-pytorch}
         IPEX_VERSION: ${IPEX_VERSION:-2.0.0}
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
         PYTORCH_VERSION: ${PYTORCH_VERSION:-2.0.0+cpu}

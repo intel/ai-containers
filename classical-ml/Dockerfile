@@ -20,7 +20,8 @@
 
 ARG PACKAGE_OPTION=pip
 
-FROM classical-ml-python AS ml-base-pip
+ARG COMPOSE_PROJECT_NAME
+FROM ${COMPOSE_PROJECT_NAME}-python AS ml-base-pip
 
 ARG SCIKIT_VERSION
 ARG XGBOOST_VERSION
@@ -40,7 +41,7 @@ RUN mkdir -p /licensing && \
 
 RUN curl --insecure https://raw.githubusercontent.com/intel/scikit-learn-intelex/${SCIKIT_VERSION}/LICENSE -o /licensing/SCIKIT_LICENSE
 
-FROM classical-ml-python AS ml-base-idp
+FROM ${COMPOSE_PROJECT_NAME}-python AS ml-base-idp
 
 ARG SCIKIT_VERSION
 ARG XGBOOST_VERSION

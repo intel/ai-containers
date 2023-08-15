@@ -19,6 +19,7 @@ services:
     build:
       args:
         no_proxy: ${no_proxy}
+        COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME:-tensorflow}
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
         TF_PACKAGE_VERSION: ${TF_PACKAGE_VERSION:-2.13.0}
         TF_PACKAGE: ${TF_PACKAGE:-intel-tensorflow}
