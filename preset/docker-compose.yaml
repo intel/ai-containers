@@ -34,8 +34,9 @@ services:
           BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
           BASE_TAG: ${BASE_TAG:-22.04}
           IDP_VERSION: ${IDP_VERSION:-2023.2}
+          USERNAME: ${USERNAME:-dev}
         context: classical-ml/
-        target: jupyter
+        target: classical-ml-jupyter
       command: >
         bash -c "conda run -n classical-ml python -c 'import sklearn; import xgboost; print(\"SciKit:\", sklearn.__version__, \" XGBoost:\",xgboost.__version__)' && \
         conda run -n classical-ml python -c 'import modin.pandas as pd, modin.config as cfg; cfg.Engine.put(\"Ray\"); df = pd.DataFrame([1]);print(df+1)'"
@@ -50,6 +51,7 @@ services:
   data-analytics:
       build:
         context: data-analytics/
+        target: data-analytics-jupyter
       extends: classical-ml
       command: >
         bash -c "conda run -n data-analytics python -c 'import modin.pandas as pd, modin.config as cfg; cfg.Engine.put(\"Ray\"); df = pd.DataFrame([1]);print(df+1)'"

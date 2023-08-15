@@ -73,7 +73,15 @@ RUN wget -qO - https://repositories.intel.com/graphics/intel-graphics.key | \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-FROM dgpu-base as deep-learning-base
+FROM dgpu-base as deep-learning-python
+
+#Setting up non-root directories
+ARG USERNAME
+RUN useradd --uid 1000 -d /home/${USERNAME} -s /bin/bash -m ${USERNAME}
+USER $USERNAME
+WORKDIR /home/${USERNAME}
+
+ENV CONDA_ROOT=/home/${USERNAME}/conda
 
 #Miniconda Python Installation
 ARG MINICONDA_VERSION
@@ -82,17 +90,17 @@ ARG IDP_VERSION
 
 RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
     chmod +x miniconda.sh && \
-    ./miniconda.sh -b -p ~/conda && \
+    ./miniconda.sh -b -p ${CONDA_ROOT} && \
     rm ./miniconda.sh && \
-    ln -s ~/conda ~/miniconda3 && \
-    export PATH=~/conda/bin/:${PATH} && \
+    ln -s ${CONDA_ROOT} ${CONDA_ROOT}/../miniconda3 && \
+    export PATH=${CONDA_ROOT}/bin/:${PATH} && \
     conda update -y conda && \
     conda config --add channels intel && \
     conda init --all && \
     python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy && \
     conda clean -y --all
 
-ENV PATH /root/conda/condabin:~/conda/bin/:${PATH}
+ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib:/opt/intel/oneapi/lib/intel64:${LD_LIBRARY_PATH}
 
 #PyTorch Installation
@@ -119,7 +127,7 @@ RUN \
         certifi=='2023.07.22' && \
     conda clean -y --all
 
-RUN echo "unset OCL_ICD_VENDORS" >> ~/conda/envs/torch/etc/conda/activate.d/activate-opencl-rt.sh
+RUN echo "unset OCL_ICD_VENDORS" >> ${CONDA_ROOT}/envs/torch/etc/conda/activate.d/activate-opencl-rt.sh
 
 #Tensorflow Installtion
 ARG TF_PACKAGE
@@ -140,31 +148,32 @@ RUN conda create -yn tensorflow intelpython3_core python=${PYTHON_VERSION} && \
         certifi=='2023.07.22' && \
     conda clean -y --all
 
-RUN echo "unset OCL_ICD_VENDORS" >> ~/conda/envs/tensorflow/etc/conda/activate.d/activate-opencl-rt.sh
+RUN echo "unset OCL_ICD_VENDORS" >> ${CONDA_ROOT}/envs/tensorflow/etc/conda/activate.d/activate-opencl-rt.sh
 
-FROM deep-learning-base as deep-learning-jupyter
+FROM deep-learning-python as deep-learning-jupyter
 
 ARG KERNEL_NAME_PT="Intel PyTorch"
 ARG KERNEL_NAME_TF="Intel TensorFlow"
 ENV PORT=8888
 EXPOSE $PORT
 
+RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
+    mkdir ~/.local && chmod a+rwx ~/.local
+
 RUN \
-    ~/conda/envs/torch/bin/python -m ipykernel install --name torch --display-name "${KERNEL_NAME_PT}" && \
-    ~/conda/envs/torch/bin/kernda -o -y /usr/local/share/jupyter/kernels/$(echo torch | sed -e 's/\(.*\)/\L\1/')/kernel.json && \
-    ~/conda/envs/tensorflow/bin/python -m ipykernel install --name tensorflow --display-name "${KERNEL_NAME_TF}" && \
-    ~/conda/envs/tensorflow/bin/kernda -o -y /usr/local/share/jupyter/kernels/$(echo tensorflow | sed -e 's/\(.*\)/\L\1/')/kernel.json
+    ${CONDA_ROOT}/envs/torch/bin/python -m ipykernel install --user --name torch --display-name "${KERNEL_NAME_PT}" && \
+    ${CONDA_ROOT}/envs/torch/bin/kernda -o -y ~/.local/share/jupyter/kernels/$(echo torch | sed -e 's/\(.*\)/\L\1/')/kernel.json && \
+    ${CONDA_ROOT}/envs/tensorflow/bin/python -m ipykernel install --user --name tensorflow --display-name "${KERNEL_NAME_TF}" && \
+    ${CONDA_ROOT}/envs/tensorflow/bin/kernda -o -y ~/.local/share/jupyter/kernels/$(echo tensorflow | sed -e 's/\(.*\)/\L\1/')/kernel.json && \
+    python -m ipykernel.kernelspec --user
 
-RUN mkdir -p /jupyter/ && chmod -R a+rwx /jupyter/ && \
-    mkdir /.local && chmod a+rwx /.local
+WORKDIR /home/${USERNAME}/jupyter
 
-WORKDIR /jupyter
-
-RUN python -m ipykernel.kernelspec
-
-CMD ["bash", "-c", "jupyter notebook --notebook-dir=/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "jupyter notebook --notebook-dir=~/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
 
 FROM deep-learning-jupyter as distributed-deep-learning
+
+USER root
 
 #oneccl installation
 ARG CCL_VER="N/A"
@@ -175,10 +184,44 @@ RUN if [ ${CCL_VER} != "N/A" ]; then \
         rm -rf /var/lib/apt/lists/*; \
     fi
 
-ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib/intel64/libfabric:${LD_LIBRARY_PATH}
-#Needed by OneCCl operations
+#OneCCl specific flags
 ENV CCL_ROOT="/opt/intel/oneapi/lib/intel64" 
 ENV CCL_ZE_IPC_EXCHANGE=sockets
+ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib/intel64/libfabric:${LD_LIBRARY_PATH}
+
+#Install OpenMPI
+RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
+    libopenmpi-dev \
+    openmpi-bin \
+    openmpi-common
+
+ENV OMPI_ALLOW_RUN_AS_ROOT=1
+ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
+ENV OMPI_MCA_tl_tcp_if_exclude="lo,docker0"
+
+#Install OpenSSH
+RUN apt-get install -y --only-upgrade --no-install-recommends --fix-missing \
+    openssh-client \
+    openssh-server && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN rm -rf /usr/bin/apt*
+
+RUN mkdir -p /var/run/sshd
+
+#https://github.com/openucx/ucx/issues/4742#issuecomment-584059909
+ENV UCX_TLS=ud,sm,self
+
+ARG USERNAME
+USER $USERNAME
+COPY --chown=${USERNAME} sshd_config /home/${USERNAME}/.ssh/sshd_config
+
+RUN chmod a+rwx -R /home/${USERNAME}/.ssh && \
+    ssh-keygen -q -N "" -t dsa -f ~/.ssh/ssh_host_dsa_key && \
+    ssh-keygen -q -N "" -t rsa -b 4096 -f ~/.ssh/ssh_host_rsa_key && \
+    ssh-keygen -q -N "" -t ecdsa -f ~/.ssh/ssh_host_ecdsa_key && \
+    ssh-keygen -q -N "" -t ed25519 -f ~/.ssh/ssh_host_ed25519_key
+
 ARG ONECCL_BIND_PT_WHL_URL="N/A"
 ARG ONECCL_BIND_PT_VERSION="N/A"
 
@@ -188,29 +231,13 @@ RUN conda run -n torch python -m pip install --no-cache-dir \
         intel-extension-for-deepspeed && \
     conda run -n torch python -m pip install --no-cache-dir deepspeed
 
-#Install OpenMPI
-RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
-    libopenmpi-dev \
-    openmpi-bin \
-    openmpi-common \
-    openssh-client \
-    openssh-server && \
-    rm -rf /var/lib/apt/lists/*
-
-ENV OMPI_ALLOW_RUN_AS_ROOT=1
-ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
-
-ENV OMPI_MCA_tl_tcp_if_exclude="lo,docker0"
-
-# Install OpenSSH for MPI to communicate between containers
-RUN mkdir -p /var/run/sshd
-
 # Install Horovod
 ARG HOROVOD_VERSION
 ARG HOROVOD_WITH_TENSORFLOW=1
 ARG HOROVOD_WITHOUT_MXNET=1
 ARG HOROVOD_WITHOUT_GLOO=1
 ARG HOROVOD_WITH_MPI=1
+
 
 RUN conda run -n tensorflow python -m pip install --no-cache-dir intel-optimization-for-horovod${HOROVOD_VERSION+==${HOROVOD_VERSION}} && \
     conda clean -y --all
@@ -232,3 +259,9 @@ RUN conda run -n tensorflow python -m pip install --no-cache-dir \
         tf2onnx \
         onnxruntime && \
     conda clean -y --all
+
+USER root
+RUN rm -rf /usr/bin/apt*
+
+ARG USERNAME
+USER $USERNAME
