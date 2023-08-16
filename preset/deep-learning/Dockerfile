@@ -214,13 +214,6 @@ ENV UCX_TLS=ud,sm,self
 
 ARG USERNAME
 USER $USERNAME
-COPY --chown=${USERNAME} sshd_config /home/${USERNAME}/.ssh/sshd_config
-
-RUN chmod a+rwx -R /home/${USERNAME}/.ssh && \
-    ssh-keygen -q -N "" -t dsa -f ~/.ssh/ssh_host_dsa_key && \
-    ssh-keygen -q -N "" -t rsa -b 4096 -f ~/.ssh/ssh_host_rsa_key && \
-    ssh-keygen -q -N "" -t ecdsa -f ~/.ssh/ssh_host_ecdsa_key && \
-    ssh-keygen -q -N "" -t ed25519 -f ~/.ssh/ssh_host_ed25519_key
 
 ARG ONECCL_BIND_PT_WHL_URL="N/A"
 ARG ONECCL_BIND_PT_VERSION="N/A"

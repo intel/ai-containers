@@ -88,6 +88,9 @@ RUN conda run -n classical-ml python -m pip install --ignore-installed --no-cach
 ENV PYTHONSTARTUP=~/.patch_sklearn.py
 COPY base/.patch_sklearn.py ~/.patch_sklearn.py
 
+ENV PYTHONSTARTUP=/home/${USERNAME}/.patch_sklearn.py
+COPY base/.patch_sklearn.py /home/${USERNAME}/.patch_sklearn.py
+
 FROM classical-ml-python as classical-ml-jupyter
 
 ENV PORT=8888
