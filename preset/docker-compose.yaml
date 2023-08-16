@@ -1,0 +1,112 @@
+#
+# -*- coding: utf-8 -*-
+#
+# Copyright (c) 2023 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+#
+
+version: '3'
+services:
+  classical-ml:
+      build:
+        args:
+          http_proxy: ${http_proxy}
+          https_proxy: ${https_proxy}
+          no_proxy: ""
+          MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
+          PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+          SCIKIT_VERSION: ${SCIKIT_VERSION:-2023.1.1}
+          XGBOOST_VERSION: ${XGBOOST_VERSION:-1.7.3}
+          MODIN_VERSION: ${MODIN_VERSION:-0.22.2}
+          BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
+          BASE_TAG: ${BASE_TAG:-22.04}
+          IDP_VERSION: ${IDP_VERSION:-2023.2}
+          USERNAME: ${USERNAME:-dev}
+        context: classical-ml/
+        target: classical-ml-jupyter
+      command: >
+        bash -c "conda run -n classical-ml python -c 'import sklearn; import xgboost; print(\"SciKit:\", sklearn.__version__, \" XGBoost:\",xgboost.__version__)' && \
+        conda run -n classical-ml python -c 'import modin.pandas as pd, modin.config as cfg; cfg.Engine.put(\"Ray\"); df = pd.DataFrame([1]);print(df+1)'"
+      image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-2023.2-py${PYTHON_VERSION:-3.10}
+      environment:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+      network_mode: host
+      shm_size: 8GB
+      pull_policy: always
+
+  data-analytics:
+      build:
+        context: data-analytics/
+        target: data-analytics-jupyter
+      extends: classical-ml
+      command: >
+        bash -c "conda run -n data-analytics python -c 'import modin.pandas as pd, modin.config as cfg; cfg.Engine.put(\"Ray\"); df = pd.DataFrame([1]);print(df+1)'"
+      image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-${IDP_VERSION:-2023.2}-py${PYTHON_VERSION:-3.10}
+
+  inc:
+      extends: classical-ml
+      build:
+        args:
+          DPCPP_VER: 2023.2.1-16
+          DEVICE: ${DEVICE:-flex}
+          ICD_VER: 23.17.26241.33-647~22.04
+          INC_VERSION: ${INC_VERSION:-2.2.1}
+          IPEX_VERSION: 2.0.110+xpu
+          IPEX_WHL_URL: https://developer.intel.com/ipex-whl-stable-xpu
+          ITEX_VERSION: ${ITEX_VERSION:-2.13.0}
+          LEVEL_ZERO_GPU_VER: 1.3.26241.33-647~22.04
+          LEVEL_ZERO_VER: 1.11.0-647~22.04
+          LEVEL_ZERO_DEV_VER: 1.11.0-647~22.04
+          MKL_VER: 2023.2.0-49495
+          TORCH_VERSION: 2.0.1a0+cxx11.abi
+          TORCH_WHL_URL: https://developer.intel.com/ipex-whl-stable-xpu
+          TORCHVISION_VERSION: 0.15.2a0+cxx11.abi
+          TORCHVISION_WHL_URL: https://developer.intel.com/ipex-whl-stable-xpu
+          TF_PACKAGE_VERSION: ${TF_PACKAGE_VERSION:-2.13}
+          TF_PACKAGE: ${TF_PACKAGE:-tensorflow}
+        context: deep-learning
+        target: inc-base
+      volumes:
+        - /dev/dri/by-path:/dev/dri/by-path
+      devices:
+        - /dev/dri:/dev/dri
+      ipc: host
+      command: >
+        bash -c "conda run -n torch python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());print(ipex.xpu.has_onemkl())' && \
+        conda run -n torch python -c 'import neural_compressor;print(\"Neural Compressor Version:\", neural_compressor.__version__)' && \
+        conda run -n tensorflow python -c 'from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())' && \
+        conda run -n tensorflow python -c 'import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)'"
+      image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${IDP_VERSION:-2023.2}-py${PYTHON_VERSION:-3.10}
+      pull_policy: always
+
+  deep-learning:
+      extends: inc
+      build:
+        args:
+          HOROVOD_VERSION: ${HOROVOD_VERSION:-0.28.1}
+          CCL_VER: 2021.10.0-49084
+          ONECCL_BIND_PT_VERSION: 2.0.100+gpu
+          ONECCL_BIND_PT_WHL_URL: https://developer.intel.com/ipex-whl-stable-xpu
+        target: distributed-deep-learning
+      command: >
+        bash -c "conda run -n torch python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());print(ipex.xpu.has_onemkl())' && \
+        conda run -n torch bash -c 'mpirun --version' && \
+        conda run -n torch python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\nOneCCL:\", oneccl.__version__)' && \
+        conda run -n tensorflow python -c 'from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())' && \
+        conda run -n tensorflow bash -c 'horovodrun --check-build && mpirun --version' && \
+        conda run -n tensorflow python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow'"
+      image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${IDP_VERSION:-2023.2}-py${PYTHON_VERSION:-3.10}
