@@ -1,0 +1,7 @@
+data-analytics:
+    image_name: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-2023.2-py${PYTHON_VERSION:-3.10}
+    tests:
+    - test_name: modin
+      cmd: preset/data-analytics/tests/modin/test_modin.sh
+    - test_name: dataset-librarian
+      cmd: conda run -n data-analytics bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download'
