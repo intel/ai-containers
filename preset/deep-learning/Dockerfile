@@ -167,6 +167,7 @@ RUN conda create -yn tensorflow intelpython3_core python=${PYTHON_VERSION} && \
     conda install -yn tensorflow ipython ipykernel kernda -c conda-forge && \
     conda run -n tensorflow python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}} \
         intel-extension-for-tensorflow[xpu]==${ITEX_VERSION} \
+        tensorflow_hub \
         requests==2.31.0 \
         cryptography==41.0.2 && \
     conda run -n tensorflow python -m pip install --no-cache-dir --ignore-installed \
@@ -229,9 +230,11 @@ ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 ENV OMPI_MCA_tl_tcp_if_exclude="lo,docker0"
 
 #Install OpenSSH
-RUN apt-get install -y --only-upgrade --no-install-recommends --fix-missing \
+RUN apt-get install -y --no-install-recommends --fix-missing \
     openssh-client \
     openssh-server && \
+    rm  /etc/ssh/ssh_host_*_key \
+        /etc/ssh/ssh_host_*_key.pub && \
     rm -rf /var/lib/apt/lists/*
 
 RUN rm -rf /usr/bin/apt*
@@ -251,7 +254,7 @@ RUN conda run -n torch python -m pip install --no-cache-dir \
         oneccl_bind_pt==${ONECCL_BIND_PT_VERSION} -f ${ONECCL_BIND_PT_WHL_URL} \
         py-cpuinfo \
         intel-extension-for-deepspeed && \
-    conda run -n torch python -m pip install --no-cache-dir deepspeed
+    conda run -n torch python -m pip install --no-cache-dir deepspeed==0.10.0
 
 # Install Horovod
 ARG HOROVOD_VERSION
