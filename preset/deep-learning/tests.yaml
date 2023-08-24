@@ -1,4 +1,9 @@
-classical-ml:
+inference-optimization:
+    image_name: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py${PYTHON_VERSION:-3.10}
+    tests:
+    - test_name: inc-tensorflow
+      cmd: bash -i preset/deep-learning/tests/inc/tensorflow/run.sh cpu
+deep-learning:
     image_name: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py${PYTHON_VERSION:-3.10}
     tests:
     - test_name: ipex
