@@ -1,6 +1,8 @@
 inference-optimization:
     image_name: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py${PYTHON_VERSION:-3.10}
     tests:
+    - test_name: onnx
+      cmd: bash -i preset/deep-learning/tests/onnx/run.sh
     - test_name: ipex
       cmd: conda run -n torch python -W ignore preset/deep-learning/tests/ipex/test_ipex.py --device cpu --ipex
     - test_name: itex
