@@ -1,5 +1,5 @@
 classical-ml:
-    image_name: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-2023.2-py${PYTHON_VERSION:-3.10}
+    image_name: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py${PYTHON_VERSION:-3.10}
     tests:
     - test_name: ipex
       cmd: conda run -n torch python -W ignore preset/deep-learning/tests/ipex/test_ipex.py --device cpu --ipex
@@ -7,3 +7,7 @@ classical-ml:
       cmd: conda run -n tensorflow python -W ignore preset/deep-learning/tests/itex/test_itex.py
     - test_name: horovod
       cmd: bash -i preset/deep-learning/tests/horovod/run.sh
+    - test_name: tensorflow-dataset-librarian
+      cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download'
+    - test_name: torch-dataset-librarian
+      cmd: conda run -n torch bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download'
