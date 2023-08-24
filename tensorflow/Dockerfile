@@ -51,7 +51,6 @@ ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
     KMP_SETTINGS=1
 
 ENV PATH /usr/bin:/root/conda/envs/idp/bin:/root/conda/condabin:~/conda/bin/:${PATH}
-ENV LD_LIBRARY_PATH /root/conda/envs/idp/lib:/lib64/:/usr/lib64/:/usr/local/lib64:${LD_LIBRARY_PATH}
 
 ENV TF_ENABLE_ONEDNN_OPTS=1
 ARG TF_PACKAGE
@@ -109,9 +108,13 @@ RUN python -m pip install --no-cache-dir impi-rt
 
 FROM ${MPI} AS horovod
 
-RUN apt-get install -y --only-upgrade --no-install-recommends --fix-missing \
+ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64
+
+RUN apt-get install -y --no-install-recommends --fix-missing \
     openssh-client \
-    openssh-server
+    openssh-server && \
+    rm  /etc/ssh/ssh_host_*_key \
+        /etc/ssh/ssh_host_*_key.pub
 
 ENV OMPI_ALLOW_RUN_AS_ROOT=1
 ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
