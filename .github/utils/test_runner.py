@@ -64,6 +64,7 @@ def main(tests_yaml):
             docker_cmd += " --env http_proxy={}".format(os.environ["http_proxy"])
             docker_cmd += " --env https_proxy={}".format(os.environ["http_proxy"])
             docker_cmd += " --env no_proxy={}".format(os.environ["no_proxy"])
+            docker_cmd += " --shm-size 8G"
             docker_cmd += " -v $PWD:/test -w /test"
             if test.get("env_vars"):            
                 env_vars = test["env_vars"]  # its list not dict
