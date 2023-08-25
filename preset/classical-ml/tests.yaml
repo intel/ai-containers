@@ -8,5 +8,5 @@ classical-ml:
     - test_name: modin
       cmd: preset/classical-ml/tests/modin/test_modin.sh
     - test_name: dataset-librarian
-      cmd: conda run -n classical-ml bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download'
+      cmd: conda run -n classical-ml bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
 

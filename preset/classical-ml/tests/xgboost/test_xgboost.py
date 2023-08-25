@@ -20,10 +20,10 @@ param = {
 }
 
 # X is a scipy csr matrix, XGBoost supports many other input types,
-X, y = load_svmlight_file(os.path.join("/data", "agaricus.txt.train"))
+X, y = load_svmlight_file(os.path.join("/home/dev/data", "agaricus.txt.train"))
 dtrain = xgb.DMatrix(X, y)
 # validation set
-X_test, y_test = load_svmlight_file(os.path.join("/data", "agaricus.txt.test"))
+X_test, y_test = load_svmlight_file(os.path.join("/home/dev/data", "agaricus.txt.test"))
 dtest = xgb.DMatrix(X_test, y_test)
 
 # specify validations set to watch performance
@@ -42,19 +42,19 @@ print(
         / float(len(preds))
     )
 )
-bst.save_model("/output/model-0.json")
+bst.save_model("/home/dev/output/model-0.json")
 # dump model
-bst.dump_model("/output/dump.raw.txt")
+bst.dump_model("/home/dev/output/dump.raw.txt")
 # dump model with feature map
-bst.dump_model("/output/dump.nice.txt", "/data/featmap.txt")
+bst.dump_model("/home/dev/output/dump.nice.txt", "/home/dev/data/featmap.txt")
 
 # save dmatrix into binary buffer
-dtest.save_binary("/output/dtest.dmatrix")
+dtest.save_binary("/home/dev/output/dtest.dmatrix")
 # save model
-bst.save_model("/output/model-1.json")
+bst.save_model("/home/dev/output/model-1.json")
 # load model and data in
-bst2 = xgb.Booster(model_file="/output/model-1.json")
-dtest2 = xgb.DMatrix("/output/dtest.dmatrix")
+bst2 = xgb.Booster(model_file="/home/dev/output/model-1.json")
+dtest2 = xgb.DMatrix("/home/dev/output/dtest.dmatrix")
 preds2 = bst2.predict(dtest2)
 # assert they are the same
 assert np.sum(np.abs(preds2 - preds)) == 0
