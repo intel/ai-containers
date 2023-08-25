@@ -1,5 +1,5 @@
 #! /bin/bash
-source activate classical-ml
+source activate data-analytics
 
 set -xe
 mkdir -p ~/data
