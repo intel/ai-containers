@@ -8,9 +8,9 @@ inference-optimization:
     - test_name: itex
       cmd: conda run -n tensorflow python -W ignore preset/deep-learning/tests/itex/test_itex.py
     - test_name: tensorflow-dataset-librarian
-      cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download'
+      cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
     - test_name: torch-dataset-librarian
-      cmd: conda run -n torch bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download'
+      cmd: conda run -n torch bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
     - test_name: inc-torch
       cmd: bash -i preset/deep-learning/tests/inc/torch/run.sh cpu
     - test_name: inc-tensorflow
@@ -25,6 +25,6 @@ deep-learning:
     - test_name: horovod
       cmd: bash -i preset/deep-learning/tests/horovod/run.sh
     - test_name: tensorflow-dataset-librarian
-      cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download'
+      cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
     - test_name: torch-dataset-librarian
-      cmd: conda run -n torch bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download'
+      cmd: conda run -n torch bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
