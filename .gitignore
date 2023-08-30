@@ -1,4 +1,7 @@
+.env
+.vscode
 .pytest*
 .secrets
 **__pycache__**
-logs
+logs/
+output/

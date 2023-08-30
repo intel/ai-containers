@@ -1,0 +1,17 @@
+test1:
+  img: ${REGISTRY}/aiops/compose-dev:latest
+  cmd: bash -c "head -n 1 /workspace/requirements.txt"
+# device: /dev/dri
+# ipc: host
+  env:
+    REGISTRY: ${REGISTRY}
+    DEBUG: "true"
+  volumes:
+    - src: /tf_dataset
+      dst: /tmp
+    - src: $PWD
+      dst: /workspace
+test2:
+  cmd: echo -n $TEST && python -c 'print(" World", end="")'
+  env:
+    TEST: Hello

@@ -1,30 +1,61 @@
-inference-optimization:
-    image_name: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py${PYTHON_VERSION:-3.10}
-    tests:
-    - test_name: onnx
-      cmd: bash -i preset/deep-learning/tests/onnx/run.sh
-    - test_name: ipex
-      cmd: conda run -n torch python -W ignore preset/deep-learning/tests/ipex/test_ipex.py --device cpu --ipex
-    - test_name: itex
-      cmd: conda run -n tensorflow python -W ignore preset/deep-learning/tests/itex/test_itex.py
-    - test_name: tensorflow-dataset-librarian
-      cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-    - test_name: torch-dataset-librarian
-      cmd: conda run -n torch bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-    - test_name: inc-torch
-      cmd: bash -i preset/deep-learning/tests/inc/torch/run.sh cpu
-    - test_name: inc-tensorflow
-      cmd: bash -i preset/deep-learning/tests/inc/tensorflow/run.sh cpu
-deep-learning:
-    image_name: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py${PYTHON_VERSION:-3.10}
-    tests:
-    - test_name: ipex
-      cmd: conda run -n torch python -W ignore preset/deep-learning/tests/ipex/test_ipex.py --device cpu --ipex
-    - test_name: itex
-      cmd: conda run -n tensorflow python -W ignore preset/deep-learning/tests/itex/test_itex.py
-    - test_name: horovod
-      cmd: bash -i preset/deep-learning/tests/horovod/run.sh
-    - test_name: tensorflow-dataset-librarian
-      cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-    - test_name: torch-dataset-librarian
-      cmd: conda run -n torch bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+deep-learning-horovod:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: bash -i /tests/horovod/run.sh
+    shm_size: 2G
+    volumes:
+      - src: $PWD/preset/deep-learning/tests
+        dst: /tests
+deep-learning-ipex:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: conda run -n torch python -W ignore /tests/ipex/test_ipex.py --device cpu --ipex
+    volumes:
+      - src: $PWD/preset/deep-learning/tests
+        dst: /tests
+deep-learning-itex:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: conda run -n tensorflow python -W ignore /tests/itex/test_itex.py
+    volumes:
+      - src: $PWD/preset/deep-learning/tests
+        dst: /tests
+deep-learning-tensorflow-dataset-librarian:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+deep-learning-torch-dataset-librarian:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: conda run -n torch bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+inference-optimization-onnx:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: bash -i /tests/onnx/run.sh
+    volumes:
+      - src: $PWD/preset/deep-learning/tests
+        dst: /tests
+inference-optimization-ipex:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: conda run -n torch python -W ignore /tests/ipex/test_ipex.py --device cpu --ipex
+    volumes:
+      - src: $PWD/preset/deep-learning/tests
+        dst: /tests
+inference-optimization-itex:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: conda run -n tensorflow python -W ignore /tests/itex/test_itex.py
+    volumes:
+      - src: $PWD/preset/deep-learning/tests
+        dst: /tests
+inference-optimization-tensorflow-dataset-librarian:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+inference-optimization-torch-dataset-librarian:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: conda run -n torch bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+inference-optimization-inc-torch:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: bash -i /tests/inc/torch/run.sh cpu
+    volumes:
+      - src: $PWD/preset/deep-learning/tests
+        dst: /tests
+inference-optimization-inc-tensorflow:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: bash -i /tests/inc/tensorflow/run.sh cpu
+    volumes:
+      - src: $PWD/preset/deep-learning/tests
+        dst: /tests

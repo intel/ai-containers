@@ -9,4 +9,5 @@ wget https://raw.githubusercontent.com/dmlc/xgboost/master/demo/data/agaricus.tx
 wget https://raw.githubusercontent.com/dmlc/xgboost/master/demo/data/agaricus.txt.test -q -O ~/data/agaricus.txt.test
 wget https://raw.githubusercontent.com/dmlc/xgboost/master/demo/data/featmap.txt -q -O ~/data/featmap.txt
 
-python ${WORKSPACE:-preset/classical-ml/tests/xgboost}/test_xgboost.py
+SCRIPT_DIR="$(dirname $0)"
+python ${SCRIPT_DIR}/test_xgboost.py

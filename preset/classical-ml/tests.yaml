@@ -1,12 +1,25 @@
-classical-ml:
-    image_name: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-2023.2-py${PYTHON_VERSION:-3.10}
-    tests:
-    - test_name: scikit
-      cmd: preset/classical-ml/tests/scikit/test_scikit.sh
-    - test_name: xgboost
-      cmd: preset/classical-ml/tests/xgboost/test_xgboost.sh
-    - test_name: modin
-      cmd: preset/classical-ml/tests/modin/test_modin.sh
-    - test_name: dataset-librarian
-      cmd: conda run -n classical-ml bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-
+modin:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: /tests/modin/test_modin.sh
+    shm_size: 10.24G
+    volumes:
+      - src: $PWD/preset/classical-ml/tests
+        dst: /tests
+scikit:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: /tests/scikit/test_scikit.sh
+    volumes:
+      - src: $PWD/preset/classical-ml/tests
+        dst: /tests
+xgboost:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: /tests/xgboost/test_xgboost.sh
+    volumes:
+      - src: $PWD/preset/classical-ml/tests
+        dst: /tests
+dataset-librarian:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-2023.2-py${PYTHON_VERSION:-3.10}
+    cmd: conda run -n classical-ml bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+    volumes:
+      - src: $PWD/preset/classical-ml/tests
+        dst: /tests

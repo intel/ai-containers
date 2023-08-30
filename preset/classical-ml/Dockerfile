@@ -88,12 +88,6 @@ ARG SCIKIT_VERSION
 ARG XGBOOST_VERSION
 ARG MODIN_VERSION
 
-RUN mkdir -p ~/licensing && \
-	wget -O - https://github.com/intel/scikit-learn-intelex/archive/refs/tags/${SCIKIT_VERSION}.tar.gz | \
-	tar -xz -C ~/licensing --strip=2 "scikit-learn-intelex-${SCIKIT_VERSION}/doc/third-party-programs-sklearnex.txt" \
-	"scikit-learn-intelex-${SCIKIT_VERSION}/doc/daal4py/third-party-programs.txt" && \
-    curl https://raw.githubusercontent.com/intel/scikit-learn-intelex/${SCIKIT_VERSION}/LICENSE -o ~/licensing/SCIKIT_LICENSE
-
 RUN conda create -yn classical-ml intelpython3_core==${IDP_VERSION} python=${PYTHON_VERSION} && \
     conda install -yn classical-ml ipython ipykernel kernda -c conda-forge && \
     conda install -n classical-ml -y -c intel \

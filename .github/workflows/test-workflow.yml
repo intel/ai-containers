@@ -26,14 +26,17 @@ jobs:
       run: |
         python -m venv venv
         source venv/bin/activate
-        python -m pip install -r ${{ github.workspace }}/.github/utils/requirements.txt
-        python ${{ github.workspace }}/.github/utils/test_runner.py --tests-yaml ${{ inputs.parent_dir }}/${{ inputs.dir }}/tests.yaml
+        python -m pip install -r ${{ github.workspace }}/test-runner/requirements.txt
+        python ${{ github.workspace }}/test-runner/test_runner.py -f ${{ inputs.parent_dir }}/${{ inputs.dir }}/tests.yaml -l ${{ github.workspace }}/${{ inputs.parent_dir }}/${{ inputs.dir }}/logs
       env:
         PYTHONPATH: ${{ github.workspace }}
         REGISTRY: ${{ vars.REGISTRY }}
         GITHUB_RUN_NUMBER: ${{ github.run_number }}
+    - name: Print Log Summary
+      if: always()
+      run: echo -e "\`\`\`\n$(cat ${{ inputs.parent_dir }}/${{ inputs.dir }}/logs/test-runner.log)\n\`\`\`" >> $GITHUB_STEP_SUMMARY
     - uses: actions/upload-artifact@v3
       if: always()
       with:
         name: ${{ inputs.dir }} outputs
-        path: ${{ github.workspace }}/${{ inputs.dir }}
+        path: ${{ github.workspace }}/${{ inputs.parent_dir }}/${{ inputs.dir }}/logs

@@ -2,6 +2,8 @@
 source activate classical-ml
 
 set -xe
-python ${WORKSPACE:-preset/classical-ml/tests/scikit}/kmeans.py
+SCRIPT_DIR="$(dirname $0)"
 
-python ${WORKSPACE:-preset/classical-ml/tests/scikit}/kmeans.py true
+python ${SCRIPT_DIR}/kmeans.py
+
+python ${SCRIPT_DIR}/kmeans.py true

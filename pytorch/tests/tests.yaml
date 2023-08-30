@@ -1,10 +1,12 @@
 pytorch-pip-base:
-    image_name: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.0}-base
-    tests:
-    - test_name: ipex-resnet50
-      cmd: python pytorch/tests/ipex-resnet50.py
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.0}-base
+    cmd: python /test/ipex-resnet50.py
+    volumes:
+      - src: $PWD/pytorch/tests
+        dst: /test
 pytorch-idp-base:
-    image_name: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.0}-base
-    tests:
-    - test_name: ipex-resnet50
-      cmd: python pytorch/tests/ipex-resnet50.py
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.0}-base
+    cmd: python /test/ipex-resnet50.py
+    volumes:
+      - src: $PWD/pytorch/tests
+        dst: /test

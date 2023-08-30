@@ -3,4 +3,5 @@ source activate data-analytics
 
 set -xe
 mkdir -p ~/data
-python ${WORKSPACE:-preset/classical-ml/tests/modin}/modin_quickstart.py
+SCRIPT_DIR="$(dirname $0)"
+python ${SCRIPT_DIR}/modin_quickstart.py
