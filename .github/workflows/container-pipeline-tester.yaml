@@ -35,7 +35,7 @@ jobs:
     outputs:
       recipes: ${{ steps.recipes.outputs.RECIPES }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Get Recipes
         id: recipes
         run: echo "RECIPES=$(find ${{ github.event.inputs.dir }} -type f -name 'tests.yaml' -exec dirname {} \; | awk -F/ '{print $NF}' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT

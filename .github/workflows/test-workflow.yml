@@ -16,7 +16,7 @@ jobs:
   test-containers:
     runs-on: [ self-hosted, Linux, "${{ inputs.runner_label }}"]
     steps: 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: docker/login-action@v2
       with:
         registry: ${{ vars.REGISTRY }}
