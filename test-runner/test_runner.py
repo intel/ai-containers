@@ -58,7 +58,7 @@ class Test:
                 hostname=self.hostname if hasattr(self, "hostname") else None,
                 ipc=self.ipc if hasattr(self, "ipc") else None,
                 privileged=self.privileged if hasattr(self, "privileged") else True,
-                pull=self.pull if hasattr(self, "pull") else "Always",
+                pull=self.pull if hasattr(self, "pull") else "missing",
                 remove=self.rm if hasattr(self, "rm") else True,
                 user=self.user if hasattr(self, "user") else None,
                 shm_size=self.shm_size if hasattr(self, "shm_size") else None,
