@@ -49,11 +49,11 @@ jobs:
     runs-on: [ aia-devops ]
     steps: 
     - uses: actions/checkout@v4
-    - uses: docker/login-action@v2 # To prevent rate limiting
+    - uses: docker/login-action@v3 # To prevent rate limiting
       with:
         username: ${{ secrets.HUB_USER }}
         password: ${{ secrets.HUB_TOKEN }}
-    - uses: docker/login-action@v2
+    - uses: docker/login-action@v3
       with:
         registry: ${{ vars.REGISTRY }}
         username: ${{ secrets.REGISTRY_USER }}
