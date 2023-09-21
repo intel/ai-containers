@@ -49,8 +49,7 @@ jobs:
       fail-fast: false
     uses: ./.github/workflows/test-workflow.yml
     with:
-      parent_dir: ${{ github.event.inputs.dir }}
-      dir: ${{ matrix.recipe }}
+      dir: ${{ github.event.inputs.dir }}/${{ matrix.recipe }}
       runner_label: ${{ github.event.inputs.runner_label }}
     secrets: inherit
 

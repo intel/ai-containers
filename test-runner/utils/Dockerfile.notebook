@@ -1,0 +1,5 @@
+ARG BASE_IMAGE_NAME=${BASE_IMAGE_NAME}
+ARG BASE_IMAGE_TAG=${BASE_IMAGE_TAG}
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} AS base
+
+RUN python -m pip install papermill --no-cache-dir

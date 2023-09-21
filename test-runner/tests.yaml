@@ -3,6 +3,7 @@ test1:
   cmd: bash -c "head -n 1 /workspace/requirements.txt"
 # device: /dev/dri
 # ipc: host
+  notebook: 'true'
   env:
     REGISTRY: ${REGISTRY}
     DEBUG: "true"

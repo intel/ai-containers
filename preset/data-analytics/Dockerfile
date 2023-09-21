@@ -106,6 +106,7 @@ RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
     mkdir ~/.local && chmod a+rwx ~/.local
 
 WORKDIR /home/${USERNAME}/jupyter
+COPY --chown=${USERNAME} notebooks /home/${USERNAME}/jupyter
 
 RUN conda run -n data-analytics python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy && \
     ${CONDA_ROOT}/envs/data-analytics/bin/python -m ipykernel install --user --name data-analytics --display-name "Data Analytics" && \

@@ -64,6 +64,7 @@ RUN apt-get update -y && \
     gpg-agent \
     gzip \
     make \
+    numactl \
     patch \
     rsync \
     unzip \
@@ -147,13 +148,19 @@ RUN \
     conda run -n torch python -m pip install --no-cache-dir -f ${TORCH_WHL_URL} \
         torch==${TORCH_VERSION} \
         intel_extension_for_pytorch==${IPEX_VERSION} \
-        torchvision==${TORCHVISION_VERSION} -f ${TORCHVISION_WHL_URL} && \
+        torchvision==${TORCHVISION_VERSION} -f ${TORCHVISION_WHL_URL} \
+        onnx && \
     conda run -n torch python -m pip install --no-cache-dir --ignore-installed \
         cloud-data-connector \
         dataset-librarian && \
     conda run -n torch python -m pip install --no-cache-dir \
+        transformers \
+        datasets \
+        evaluate \
         scipy==1.11.1 \
         certifi=='2023.07.22' && \
+    conda run -n torch python -m pip install -U accelerate && \
+    conda run -n torch python -m pip install git+https://github.com/huggingface/optimum-intel.git && \
     conda clean -y --all
 
 RUN echo "unset OCL_ICD_VENDORS" >> ${CONDA_ROOT}/envs/torch/etc/conda/activate.d/activate-opencl-rt.sh
@@ -165,9 +172,11 @@ ARG ITEX_VERSION
 
 RUN conda create -yn tensorflow intelpython3_core python=${PYTHON_VERSION} && \
     conda install -yn tensorflow ipython ipykernel kernda -c conda-forge && \
+    conda install -yn torch matplotlib -c intel && \
     conda run -n tensorflow python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}} \
         intel-extension-for-tensorflow[xpu]==${ITEX_VERSION} \
         tensorflow_hub \
+        py-cpuinfo \
         requests==2.31.0 \
         cryptography==41.0.2 && \
     conda run -n tensorflow python -m pip install --no-cache-dir --ignore-installed \
@@ -267,6 +276,8 @@ ARG HOROVOD_WITH_MPI=1
 RUN conda run -n tensorflow python -m pip install --no-cache-dir intel-optimization-for-horovod${HOROVOD_VERSION+==${HOROVOD_VERSION}} && \
     conda clean -y --all
 
+COPY --chown=${USERNAME} notebooks/deep-learning /home/${USERNAME}/jupyter
+
 FROM deep-learning-jupyter as inc-base
 
 ENV SIGOPT_PROJECT=.
@@ -290,3 +301,5 @@ RUN rm -rf /usr/bin/apt*
 
 ARG USERNAME
 USER $USERNAME
+
+COPY --chown=${USERNAME} notebooks/inference-optimization /home/${USERNAME}/jupyter

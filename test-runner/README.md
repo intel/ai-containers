@@ -40,9 +40,10 @@ Given a test input:
 ```yaml
 test1:
   img: ${REGISTRY}/aiops/compose-dev:latest
-  cmd: head -n 1 /workspace/requirements.txt
+  cmd: bash -c "head -n 1 /workspace/requirements.txt"
 # device: /dev/dri
 # ipc: host
+  notebook: 'true'
   env:
     REGISTRY: ${REGISTRY}
     DEBUG: "true"

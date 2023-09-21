@@ -1,7 +1,8 @@
 .env
-.vscode
 .pytest*
 .secrets
+.vscode
 **__pycache__**
+**.ipynb_checkpoints**
 logs/
 output/

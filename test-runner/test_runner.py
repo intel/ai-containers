@@ -19,6 +19,14 @@ class Test:
         for key, val in arguments.items():
             setattr(self, key, val)
 
+    def get_path(self, name):
+        """Given a filename, find that file from the users current working directory"""
+        for root, dirs, files in os.walk(os.getcwd()):
+            if name in files:
+                return os.path.join(root, name)
+        logging.error("Notebook Dockerfile not found")
+        exit(1)
+
     def container_run(self):
         """Use Python on Whales to run a Docker Container with img and cmd. Extracts volumes and env"""
         # Define each volume as (src, dst) for a list of volumes
@@ -38,15 +46,39 @@ class Test:
             "https_proxy": os.environ.get("https_proxy"),
             "no_proxy": os.environ.get("no_proxy"),
         }
+        img = expandvars(self.img)
         # Always add proxies to the envs list
         env.update(default_env)
-        logging.info("%s Started", self.name)
+        # If Notebook modify image to include papermill
+        if hasattr(self, "notebook"):
+            if self.notebook == 'true':
+                try:
+                    docker.run(img, ["which", "papermill"])
+                except DockerException as papermill_not_found:
+                    logging.debug("Papermill not found: %s", papermill_not_found)
+                    docker.build(
+                        # context path
+                        '.',
+                        # Image Input and Proxy Args
+                        build_args={
+                            "BASE_IMAGE_NAME": img.split(':')[0],
+                            "BASE_IMAGE_TAG": img.split(':')[1],
+                            "http_proxy": os.environ.get("http_proxy"),
+                            "https_proxy": os.environ.get("https_proxy")
+                        },
+                        # Input File
+                        file=self.get_path("Dockerfile.notebook"),
+                        # Output Tag = Input Tag
+                        tags=[img]
+                    )
         try:  # https://gabrieldemarmiesse.github.io/python-on-whales/sub-commands/container/#python_on_whales.components.container.cli_wrapper.ContainerCLI.run
-            log = docker.run(
+            output_generator = docker.run(
                 # Image
-                expandvars(self.img),
+                img,
                 # Command
                 split(expandvars(self.cmd)),
+                # Stream Logs
+                stream=True,
                 # Envs
                 envs=env,
                 # Volumes
@@ -67,7 +99,11 @@ class Test:
         except DockerException as err:
             return err.return_code  # assume the return code is 0 unless otherwise specified
         # Log within the function to retain scope for debugging
-        logging.info(log)
+        log = ""
+        for stream_type, stream_content in output_generator:
+            # All process logs will have the stream_type of stderr despite it being stdout
+            logging.info(stream_content.decode('utf-8').strip())
+            log += stream_content.decode('utf-8').strip()
         return log, 0
 
     def run(self):
@@ -179,7 +215,10 @@ if __name__ == "__main__":
     summary = []
     error = False
     for idx, test in enumerate(tests):
-        # Switch logging context to a new filename
+        # Set Context to test-runner.log
+        set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
+        logging.info("Running Test: %s", test.name)
+        # Switch logging context to test filename
         set_log_filename(logging.getLogger(), test.name, args.logs_path)
         logging.debug("Attrs: %s", dir(test)[26:])
         # If 'img' is present in the test, ensure that the test is a container run, otherwise run on baremetal
