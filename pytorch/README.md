@@ -42,6 +42,32 @@ Built from Base
 | INC_VERSION | `2.1.1` | Neural Compressor Version |
 | ONECCL_VERSION | `2.0.0+cpu` | TorchCCL Version |
 
+### IPEX XPU Base
+
+Built from Base
+
+| Environment Variable Name | Default Value | Description |
+| --- | --- | --- |
+| ICD_VER | `23.17.26241.33-647~22.04` | OpenCL Version |
+| LEVEL_ZERO_GPU_VER | `1.3.26241.33-647~22.04` | Level Zero GPU Version |
+| LEVEL_ZERO_VER | `1.11.0-647~22.04` | Level Zero Version |
+| DPCPP_VER | `2023.2.1-16` | DPCPP Version | 
+| MKL Version | `2023.2.0-49495` | MKL Version |
+| CCL_VER | `2021.10.0-49084` | CCL Version |
+| TORCH_VERSION | `2.0.1a0+cxx11.abi` | Torch Version |
+| TORCHVISION_VERSION | `0.15.2a0+cxx11.abi` | Torchvision Version |
+| IPEX_VERSION | `2.0.110+xpu` | IPEX Version |
+| TORCH_WHL_URL | `https://developer.intel.com/ipex-whl-stable-xpu` | Wheel URL |
+| ONECCL_BIND_PT_VERSION | `2.0.100` | TorchCCL Version | 
+
+### IPEX XPU Jupyter
+
+Built from IPEX XPU Base
+
+| Environment Variable Name | Default Value | Description |
+| --- | --- | --- |
+| PORT | `8888` | Server UI Port |
+
 #### Distributed Training on k8s
 
 Use _N_-Nodes in your Training with PyTorchJobs and Kubeflow's Training Operator with an optimized production container.

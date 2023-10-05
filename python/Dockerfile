@@ -51,10 +51,10 @@ ARG IDP_VERSION=core
 
 RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
     chmod +x miniconda.sh && \
-    ./miniconda.sh -b -p ~/conda && \
+    ./miniconda.sh -b -p /opt/conda && \
     rm ./miniconda.sh && \
-    ln -s ~/conda ~/miniconda3 && \
-    export PATH=~/conda/bin/:${PATH} && \
+    ln -s /opt/conda ~/miniconda3 && \
+    export PATH=/opt/conda/bin/:${PATH} && \
     conda update -y conda && \
     conda config --add channels intel && \
     conda create -yn idp intelpython3_${IDP_VERSION} python=${PYTHON_VERSION} && \
@@ -62,16 +62,16 @@ RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-$
     apt-get clean && conda clean -y --all && \
     rm -rf /var/lib/apt/lists/*
 
-ENV PATH /root/conda/envs/idp/bin:/root/conda/condabin:~/conda/bin/:${PATH}
-ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64:/root/conda/envs/idp/lib:${LD_LIBRARY_PATH}
+ENV PATH /opt/conda/envs/idp/bin:/opt/conda/condabin:/opt/conda/bin/:${PATH}
+ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64:/opt/conda/envs/idp/lib:${LD_LIBRARY_PATH}
 
 RUN echo "conda activate idp" >> ~/.bashrc
 
 RUN conda run -n idp python -m pip install --no-cache-dir numpy==1.22.4
 
-RUN ln -sf /root/conda/envs/idp/bin/python /usr/local/bin/python && \
-    ln -sf /root/conda/envs/idp/bin/python /usr/local/bin/python3 && \
-    ln -sf /root/conda/envs/idp/bin/python /usr/bin/python
+RUN ln -sf /opt/conda/envs/idp/bin/python /usr/local/bin/python && \
+    ln -sf /opt/conda/envs/idp/bin/python /usr/local/bin/python3 && \
+    ln -sf /opt/conda/envs/idp/bin/python /usr/bin/python
 
 FROM base AS pip
 

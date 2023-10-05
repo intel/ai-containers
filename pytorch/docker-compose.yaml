@@ -72,3 +72,34 @@ services:
       sh -c "python -c 'import neural_compressor;import oneccl_bindings_for_pytorch as oneccl; print(\"Neural Compressor Version:\", neural_compressor.__version__, \"\\nOneCCL:\", oneccl.__version__)'"
     extends: ipex-base
     image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.0}-oneccl-inc-${INC_VERSION:-2.1.1}
+  ipex-xpu-base:
+    build:
+      args:
+        ICD_VER: ${ICD_VER:-23.17.26241.33-647~22.04}
+        LEVEL_ZERO_GPU_VER: ${LEVEL_ZERO_GPU_VER:-1.3.26241.33-647~22.04}
+        LEVEL_ZERO_VER: ${LEVEL_ZERO_VER:-1.11.0-647~22.04}
+        LEVEL_ZERO_DEV_VER: ${LEVEL_ZERO_DEV_VER:-1.11.0-647~22.04}
+        DPCPP_VER: ${DPCPP_VER:-2023.2.1-16}
+        MKL_VER: ${MKL_VER:-2023.2.0-49495}
+        CCL_VER: ${CCL_VER:-2021.10.0-49084}
+        TORCH_VERSION: ${TORCH_VERSION:-2.0.1a0+cxx11.abi}
+        TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.15.2a0+cxx11.abi}
+        IPEX_VERSION: ${IPEX_VERSION:-2.0.110+xpu}
+        TORCH_WHL_URL: ${TORCH_WHL_URL:-https://developer.intel.com/ipex-whl-stable-xpu}
+        ONECCL_BIND_PT_VERSION: ${ONECCL_BIND_PT_VERSION:-2.0.100}
+        PACKAGE_OPTION: ${PACKAGE_OPTION}
+      target: ipex-xpu-base
+    command: >
+        sh -c "python -c 'import torch;print(torch.device('xpu'));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());print(torch.__version__); print(ipex.__version__); [print(f'[{i}]: {ipex.xpu.get_device_properties(i)}') for i in range(ipex.xpu.device_count())];'"
+    extends: ipex-base
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.110xpu}-ipex-xpu-base
+
+  ipex-xpu-jupyter:
+    build:
+      args: 
+        PORT: ${PORT:-8888}
+      target: ipex-xpu-jupyter
+    extends: ipex-xpu-base
+    command: >
+      bash -c "python -m jupyter --version"
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.110xpu}-ipex-xpu-jupyter

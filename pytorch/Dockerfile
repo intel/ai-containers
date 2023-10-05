@@ -116,4 +116,92 @@ RUN apt-get install -y --no-install-recommends --fix-missing virtualenv
 
 RUN virtualenv --system-site-packages inc && echo "source /inc/bin/activate" > ~/.bashrc
 
-FROM multinode AS multinode-idp
+FROM multinode AS multinode-idp 
+
+FROM ${COMPOSE_PROJECT_NAME}-python AS ipex-xpu-base
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    apt-utils \
+    build-essential \
+    clinfo \
+    curl \
+    git \
+    gnupg2 \
+    gpg-agent \
+    rsync \
+    unzip \
+    wget && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+ARG ICD_VER
+ARG LEVEL_ZERO_GPU_VER
+ARG LEVEL_ZERO_VER
+ARG LEVEL_ZERO_DEV_VER
+ARG DPCPP_VER
+ARG MKL_VER
+ARG CCL_VER
+ARG TORCH_VERSION
+ARG TORCHVISION_VERSION
+ARG IPEX_VERSION
+ARG ONECCL_BIND_PT_VERSION
+ARG TORCH_WHL_URL
+
+RUN no_proxy=$no_proxy wget -qO - https://repositories.intel.com/graphics/intel-graphics.key | \
+    gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/graphics/ubuntu jammy max" | \
+    tee  /etc/apt/sources.list.d/intel.gpu.jammy.list
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    intel-opencl-icd=${ICD_VER} \
+    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
+    level-zero=${LEVEL_ZERO_VER} \
+    level-zero-dev=${LEVEL_ZERO_DEV_VER} && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+RUN no_proxy=$no_proxy wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+   | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
+   echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
+   | tee /etc/apt/sources.list.d/oneAPI.list
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    intel-oneapi-runtime-dpcpp-cpp=${DPCPP_VER} \
+    intel-oneapi-runtime-mkl=${MKL_VER} \
+    intel-oneapi-runtime-ccl=${CCL_VER};
+
+RUN python -m pip install torch==${TORCH_VERSION} -f ${TORCH_WHL_URL} && \
+    python -m pip install intel_extension_for_pytorch==${IPEX_VERSION} -f ${TORCH_WHL_URL} && \
+    python -m pip install torchvision==${TORCHVISION_VERSION} -f ${TORCH_WHL_URL} && \
+    python -m pip install oneccl_bind_pt==${ONECCL_BIND_PT_VERSION} -f ${TORCH_WHL_URL};
+
+ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib:/opt/intel/oneapi/lib/intel64:$LD_LIBRARY_PATH
+
+RUN adduser --disabled-password --gecos "" user
+
+USER user
+
+FROM ipex-xpu-base AS ipex-xpu-jupyter
+
+USER root
+
+RUN python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy 
+
+USER user
+
+RUN if [ ! -d $(which conda) ]; then \
+    echo "conda activate idp" >> ~/.bashrc; \
+    fi
+
+RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/
+
+WORKDIR /~/jupyter
+COPY --chown=user notebooks/ipex/ipex-xpu.ipynb /~/jupyter/xpu.ipynb
+
+ARG PORT=8888
+EXPOSE $PORT
+
+CMD ["bash", "-c", "python -m jupyter notebook --notebook-dir=/~/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]

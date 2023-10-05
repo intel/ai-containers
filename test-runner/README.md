@@ -12,6 +12,9 @@ test-runner
 │   └── utest.py
 └── tests.yaml
 ```
+## Pre-requisite for Jupyter Notebook testing
+
+Install docker-buildx plugin to use the test runner. Refer to the [link](https://github.com/docker/buildx#manual-download) for installation instructions. This is only a pre-requisite if you want to take advantage of papermill testing for jupyter notebooks.
 
 ## Usage
 
