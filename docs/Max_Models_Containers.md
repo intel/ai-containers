@@ -1,0 +1,14 @@
+# Intel Max (PVC) Models Containers
+These are the deep learning Models optimized to run on Intel's Max Series GPU platform.
+|                                                                          Container                                                                          | Framework|                               Docker Pull Command                              |Compressed Size|
+|-------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|--------------------------------------------------------------------------------|---------------|
+|  [ResNet50 v1.5 Inference](https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/pytorch/resnet50v1_5/inference/gpu/DEVCATALOG_MAX.md) |  PyTorch |```docker pull intel/image-recognition:pytorch-max-gpu-resnet50v1-5-inference```|     2.17GB    |
+|     [ResNet50 v1.5 Training](https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/pytorch/resnet50v1_5/training/gpu/DEVCATALOG.md)    |  PyTorch | ```docker pull intel/image-recognition:pytorch-max-gpu-resnet50v1-5-training```|     2.31GB    |
+|      [BERT Large Inference](https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/pytorch/bert_large/inference/gpu/DEVCATALOG.md)      |  PyTorch | ```docker pull intel/language-modeling:pytorch-max-gpu-bert-large-inference``` |     2.21GB    |
+|       [BERT Large Training](https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/pytorch/bert_large/training/gpu/DEVCATALOG.md)       |  PyTorch |  ```docker pull intel/language-modeling:pytorch-max-gpu-bert-large-training``` |     3.2GB     |
+|[ResNet50 v1.5 Inference](https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/tensorflow/resnet50v1_5/inference/gpu/DEVCATALOG_MAX.md)|TensorFlow|   ```docker pull intel/image-recognition:tf-max-gpu-resnet50v1-5-inference```  |     2.38GB    |
+|   [ResNet50 v1.5 Training](https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/tensorflow/resnet50v1_5/training/gpu/DEVCATALOG.md)   |TensorFlow|   ```docker pull intel/image-recognition:tf-max-gpu-resnet50v1-5-training```   |     2.32GB    |
+|     [BERT Large Inference](https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/tensorflow/bert_large/inference/gpu/DEVCATALOG.md)    |TensorFlow|    ```docker pull intel/language-modeling:tf-max-gpu-bert-large-inference```   |     3.33GB    |
+|      [BERT Large Training](https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/tensorflow/bert_large/training/gpu/DEVCATALOG.md)     |TensorFlow|    ```docker pull intel/language-modeling:tf-max-gpu-bert-large-training```    |     2.32GB    |
+
+[Intel AI Containers](README.md)

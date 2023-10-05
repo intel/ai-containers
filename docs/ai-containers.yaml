@@ -1,0 +1,650 @@
+---
+intel-python:
+  title: Intel® Distribution of Python
+  description: Docker container with Intel® Distribution of Python
+  readme: IDP_Containers.md
+  containers:
+    - pull-cmd: docker pull intel/python:py310-full
+      title: Intel® Distribution of Python - Full
+      framework: "-"
+      os: ubuntu 22.04
+      compressed-size: 1.38GB
+      url: null
+      components-bom:
+        - Intel® Distribution of Python=3.10 (2023.2.0)
+    - pull-cmd: docker pull intel/python:py310-core
+      title: Intel® Distribution of Python - Core
+      framework: "-"
+      os: ubuntu 22.04
+      compressed-size: 867MB
+      url: null
+      components-bom:
+        - Intel® Distribution of Python=3.10 (2023.2.0)
+gpu-base:
+  title: Intel GPU Base Containers
+  description: Intel® Data Center GPU Max Series and Intel® Data Center GPU Flex Series base containers
+  readme: GPU_Base_Containers.md
+  containers:
+  - pull-cmd: docker pull intel-extension-for-pytorch:xpu-flex
+    title: Intel® Extension for PyTorch* Container for Flex Series
+    framework: PyTorch
+    description: null
+    os: ubuntu 22.04
+    compressed-size: 7.04GB
+    publish-date: 08-07-2023
+    url: https://github.com/intel/intel-extension-for-pytorch/blob/v2.0.110%2Bxpu/docker/README.md
+    components-bom:
+      - Intel® Extension for PyTorch=2.0.110+xpu
+      - PyTorch=2.0.1a0+cxx11.abi
+      - TorchVision==0.15.2a0+cxx11.abi
+      - Python=3.10
+  - pull-cmd: docker pull intel-extension-for-pytorch:xpu-max
+    title: Intel® Extension for PyTorch* Container for Max Series
+    framework: PyTorch
+    description: null
+    os: ubuntu 22.04
+    compressed-size: 7.13GB
+    publish-date: 08-07-2023
+    url: https://github.com/intel/intel-extension-for-pytorch/blob/v2.0.110%2Bxpu/docker/README.md
+    components-bom:
+      - Intel® Extension for PyTorch=2.0.110+xpu
+      - PyTorch=2.0.1a0+cxx11.abi
+      - TorchVision==0.15.2a0+cxx11.abi
+      - Python=3.10 
+  - pull-cmd: docker pull intel/intel-extension-for-tensorflow:xpu
+    title: Intel® Extension for TensorFlow
+    framework: TensoFlow
+    description: null
+    os: ubuntu 22.04
+    compressed-size: 2.29GB
+    publish-date: 07-31-2023
+    url: https://github.com/intel/intel-extension-for-tensorflow/blob/v2.13.0.0/docker/README.md
+    components-bom:
+      - Intel® Extension for TensorFlow=2.13.0
+      - TensorFlow=2.13.0
+      - Intel® Optimization for Horovod=0.28.1.0
+      - Python=3.10
+  - pull-cmd: docker pull intel-extension-for-pytorch:xpu-jupyter
+    title: Intel® Extension for PyTorch* Container for Flex & Max Series with Jupyter notebook support
+    framework: PyTorch
+    description: null
+    os: ubuntu 22.04
+    compressed-size: 7.13GB
+    publish-date: 08-07-2023
+    url: https://github.com/intel/intel-extension-for-pytorch/blob/v2.0.110%2Bxpu/docker/README.md
+    components-bom:
+      - Intel® Extension for PyTorch=2.0.110+xpu
+      - PyTorch=2.0.1a0+cxx11.abi
+      - TorchVision=0.15.2a0+cxx11.abi
+      - Python=3.10 
+  - pull-cmd: docker pull intel/intel-extension-for-tensorflow:xpu-jupyter
+    title: Intel® Extension for TensorFlow with Jupyter notebook support
+    framework: TensoFlow
+    description: null
+    os: ubuntu 22.04
+    compressed-size: 1.88GB
+    publish-date: 07-31-2023
+    url: https://github.com/intel/intel-extension-for-tensorflow/blob/v2.13.0.0/docker/README.md
+    components-bom:
+      - Intel® Extension for TensorFlow=2.13.0
+      - TensorFlow=2.13.0
+      - Intel® Optimization for Horovod=0.28.1.0
+      - Python=3.10
+  - pull-cmd: docker pull intel/intel-extension-for-pytorch:xpu-max
+    title: Intel® Optimizations for PyTorch for Max Series GPU
+    framework: PyTorch
+    description: null
+    os: ubuntu 22.04
+    compressed-size: 2.2GB
+    publish-date: 08-07-2023
+    url: https://github.com/intel/intel-extension-for-pytorch/blob/v2.0.110%2Bxpu/docker/README.md
+    components-bom:
+      - Intel® Extension for PyTorch=2.0.110+xpu
+      - PyTorch=2.0.1a0+cxx11.abi
+      - TorchVision=0.15.2a0+cxx11.abi
+      - Python=3.10
+  - pull-cmd: docker pull intel/intel-extension-for-pytorch:xpu-max-2.0.110-xpu
+    title: Intel® Optimizations for PyTorch for Max Series GPU
+    framework: PyTorch
+    description: null
+    os: ubuntu 22.04
+    compressed-size: 2.2GB
+    publish-date: 08-07-2023
+    url: https://github.com/intel/intel-extension-for-pytorch/blob/v2.0.110%2Bxpu/docker/README.md
+    components-bom:
+      - Intel® Extension for PyTorch=2.0.110+xpu
+      - PyTorch=2.0.1a0+cxx11.abi
+      - TorchVision=0.15.2a0+cxx11.abi
+      - Python=3.10
+  - pull-cmd: docker pull intel/intel-extension-for-pytorch:xpu-flex-2.0.110-xpu
+    title: Intel® Optimizations for PyTorch for Flex Series GPU
+    framework: PyTorch
+    description: null
+    os: ubuntu 22.04
+    compressed-size: 7.04GB
+    publish-date: 08-07-2023
+    url: https://github.com/intel/intel-extension-for-pytorch/blob/v2.0.110%2Bxpu/docker/README.md
+    components-bom:
+      - Intel® Extension for PyTorch=2.0.110+xpu
+      - PyTorch=2.0.1a0+cxx11.abi
+      - TorchVision=0.15.2a0+cxx11.abi
+      - Python=3.10  
+cpu-base:
+  title: Intel CPU Base Containers
+  description: Base containers to run on Intel® Xeon® Scalable processors
+  readme: CPU_Base_Containers.md
+  containers:
+    - pull-cmd: docker pull intel/intel-optimized-tensorflow:2.13-pip-base
+      title: Intel® Optimizations for TensorFlow (PIP)
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 412MB
+      publish-date: 8/24/2023
+      url: null
+      components-bom:
+        - Intel® Optimized TensorFlow=2.13.0
+        - Python=3.10
+    - pull-cmd: docker pull intel/intel-optimized-tensorflow:2.13-pip-jupyter
+      title: Intel® Optimizations for TensorFlow with Jupyter  notebook support (PIP)
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 465MB
+      publish-date: 8/24/2023
+      url: null
+      components-bom:
+        - Intel® Optimized TensorFlow=2.13.0
+        - Python=3.10
+    - pull-cmd: docker pull intel/intel-optimized-tensorflow:2.13-pip-openmpi-multinode
+      title: Intel® Optimizations for TensorFlow Multi-node with OpenMPI  (PIP)
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 820MB
+      publish-date: 8/24/2023
+      url: null
+      components-bom:
+        - Intel® Optimized TensorFlow=2.13.0
+        - Python=3.10
+        - OpenMPI=4.1.2
+    - pull-cmd: docker pull intel/intel-optimized-tensorflow:2.13-pip-mlflow
+      title: Intel® Optimizations for TensorFlow MLFlow  (PIP)
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 568MB
+      publish-date: 8/24/2023
+      url: null
+      components-bom:
+        - Intel® Optimized TensorFlow=2.13.0
+        - Python=3.10
+        - MLFlow==2.6.0
+    - pull-cmd: docker pull intel/intel-optimized-tensorflow:2.13-pip-mpich-multinode
+      title: Intel® Optimizations for TensorFlow Multi-node with MPICH
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 886MB
+      publish-date: 8/24/2023
+      url: null
+      components-bom:
+        - Intel® Optimized TensorFlow=2.13.0
+        - Python=3.10
+        - MPICH=4.0.3
+    - pull-cmd: docker pull intel/intel-optimized-tensorflow:2.13-idp-base
+      title: Intel® Optimizations for TensorFlow with Intel Distribution of Python (IDP)
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 1.17GB
+      publish-date: 8/24/2023
+      url: null
+      components-bom:
+        - Intel® Optimized TensorFlow=2.13.0
+        - Intel Distribution of Python=3.10
+    - pull-cmd: docker pull intel/intel-optimized-tensorflow:2.13-idp-openmpi-multinode
+      title: Intel® Optimizations for TensorFlow Multi-node with OpenMPI  (IDP)
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 1.55GB
+      publish-date: 8/24/2023
+      url: null
+      components-bom:
+        - Intel® Optimized TensorFlow=2.13.0
+        - Intel Distribution of Python=3.10
+        - OpenMPI=4.1.2
+    - pull-cmd: docker pull intel/intel-optimized-tensorflow:2.13-idp-mpich-multinode
+      title: Intel® Optimizations for TensorFlow Multi-node with MPICH  (IDP)
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 1.61GB
+      publish-date: 8/24/2023
+      url: null
+      components-bom:
+        - Intel® Optimized TensorFlow=2.13.0
+        - Intel Distribution of Python=3.10
+        - MPICH=4.0.3
+    - pull-cmd: docker pull intel/intel-optimized-tensorflow:2.13-idp-mlflow
+      title: Intel® Optimizations for TensorFlow MLFlow  (IDP)
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 1.29GB
+      publish-date: 8/24/2023
+      url: null
+      components-bom:
+        - Intel® Optimized TensorFlow=2.13.0
+        - Intel Distribution of Python=3.10
+        - MLFlow==2.6.0
+    - pull-cmd: docker pull intel/intel-optimized-tensorflow:2.13-idp-jupyter
+      title: Intel® Optimizations for TensorFlow with Jupyter notebook support  (IDP)
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 1.22GB
+      publish-date: 8/24/2023
+      url: null
+      components-bom:
+        - Intel® Optimized TensorFlow=2.13.0
+        - Intel Distribution of Python=3.10
+    - pull-cmd: docker pull intel/intel-extension-for-tensorflow:cpu
+      title: Intel® Extension for TensorFlow
+      framework: TensorFlow
+      os: Ubuntu 20.04
+      compressed-size: 916MB
+      publish-date: 7/31/2023
+      url: null
+      components-bom:
+        - TensorFlow=2.13.0
+        - Intel®-Extension-For-TensorFlow=2.13.0
+        - Intel® Optimization for Horovod=0.28.1.0
+        - Python=3.9
+    - pull-cmd: docker pull intel/intel-extension-for-tensorflow:1.2.0-cpu
+      title: Intel® Extension for TensorFlow version 1.2.0
+      framework: TensorFlow
+      os: Ubuntu 20.04
+      compressed-size: 871MB
+      publish-date: 7/31/2023
+      url: null
+      components-bom:
+        - TensorFlow=2.12
+        - Intel®-Extension-For-TensorFlow=1.2.0
+        - Intel® Optimization for Horovod=0.28.1.0
+        - Python=3.9
+    - pull-cmd: docker pull intel/intel-extension-for-tensorflow:2.13.0.0-cpu
+      title: Intel® Extension for TensorFlow with TensorFlow 2.13.0
+      framework: TensorFlow
+      os: Ubuntu 20.04
+      compressed-size: 916MB
+      publish-date: 7/31/2023
+      url: null
+      components-bom:
+        - TensorFlow=2.13.0
+        - Intel®-Extension-For-TensorFlow=2.13.0
+        - Intel® Optimization for Horovod=0.28.1.0
+        - Python=3.9
+    - pull-cmd: docker pull intel/intel-extension-for-tensorflow:serving-cpu
+      title: Intel® Extension for TensorFlow with Serving support
+      framework: TensorFlow
+      os: Ubuntu 20.04
+      compressed-size: 463MB
+      publish-date: 7/31/2023
+      url: null
+      components-bom:
+        - TensorFlow=2.13.0
+        - TensorFlow-Serving=2.13
+        - Python=3.9
+    - pull-cmd: docker pull intel/intel-extension-for-tensorflow:2.13.0.0-serving-cpu
+      title: Intel® Extension for TensorFlow with TF 2.13.0 & Serving support
+      framework: TensorFlow
+      os: Ubuntu 20.04
+      compressed-size: 463MB
+      publish-date: 7/31/2023
+      url: null
+      components-bom:
+        - TensorFlow=2.13.0
+        - TensorFlow-Serving=2.13
+        - Python=3.9
+    - pull-cmd: docker pull intel/intel-optimized-pytorch:2.0.0-idp-base
+      title: Intel® Optimizations for PyTorch with Intel Distribution of Python
+      framework: PyTorch
+      os: Ubuntu 22.04
+      compressed-size: 1.05GB
+      publish-date: 6/5/2023
+      url: null
+      components-bom:
+        - Intel®-Optimizations-for-PyTorch=2.0.0+cpu
+        - Intel®-Extension-for-PyTorch=2.0.0+cpu
+        - TorchVision==0.15.1+cpu
+        - Intel Distribution of Python=3.10
+    - pull-cmd: docker pull intel/intel-optimized-pytorch:2.0.0-idp-multinode
+      title: Intel® Optimizations for PyTorch with multi-node support (PIP)
+      framework: PyTorch
+      os: Ubuntu 22.04
+      compressed-size: 1.4GB
+      publish-date: 6/5/2023
+      url: null
+      components-bom:
+        - Intel®-Optimizations-for-PyTorch=2.0.0+cpu
+        - Intel®-Extension-for-PyTorch=2.0.0+cpu
+        - TorchVision==0.15.1+cpu
+        - OneCCL=2.0.0+cpu
+        - Intel Distribution of Python=3.10
+    - pull-cmd: docker pull intel/intel-optimized-pytorch:2.0.0-pip-base
+      title: Intel® Optimizations for PyTorch with Intel Distribution of Python
+      framework: PyTorch
+      os: Ubuntu 22.04
+      compressed-size: 358MB
+      publish-date: 6/5/2023
+      url: null
+      components-bom:
+        - Intel®-Optimizations-for-PyTorch=2.0.0+cpu
+        - Intel®-Extension-for-PyTorch=2.0.0+cpu
+        - TorchVision==0.15.1+cpu
+        - Python=3.10
+    - pull-cmd: docker pull intel/intel-optimized-pytorch:2.0.0-pip-multinode
+      title: Intel® Optimizations for PyTorch with multi-node support (PIP)
+      framework: PyTorch
+      os: Ubuntu 22.04
+      compressed-size: 721MB
+      publish-date: 6/5/2023
+      url: null
+      components-bom:
+        - Intel®-Optimizations-for-PyTorch=2.0.0+cpu
+        - Intel®-Extension-for-PyTorch=2.0.0+cpu
+        - TorchVision==0.15.1+cpu
+        - OneCCL=2.0.0+cpu
+        - Python=3.10
+preset:
+  title: Intel® Web Configurator Preset Containers
+  description: Intel® Web Configurator Preset Containers provides development environment with Intel optimized software for data scientists and developers.
+  readme: Preset_Containers.md
+  containers:
+    - pull-cmd: docker pull intel/data-analytics:2023.2-py3.9
+      title: Data Analytics
+      framework: null
+      os: ubuntu 22.04
+      compressed-size: 1.24GB
+      publish-date: 08-16-2023
+      url: https://github.com/intel/ai-containers/blob/main/preset/README.md
+    - pull-cmd: docker pull intel/data-analytics:2023.2-py3.10
+      title: Data Analytics
+      framework: null
+      os: ubuntu 22.04
+      compressed-size: 1.25GB
+      publish-date: 08-16-2023
+      url: https://github.com/intel/ai-containers/blob/main/preset/README.md
+    - pull-cmd: docker pull intel/classical-ml:2023.2-py3.9
+      title: Classical ML
+      framework: null
+      os: ubuntu 22.04
+      compressed-size: 1.42GB
+      publish-date: 08-16-2023
+      url: https://github.com/intel/ai-containers/blob/main/preset/README.md
+    - pull-cmd: docker pull intel/classical-ml:2023.2-py3.10
+      title: Classical ML
+      framework: null
+      os: ubuntu 22.04
+      compressed-size: 1.7GB
+      publish-date: 08-16-2023
+      url: https://github.com/intel/ai-containers/blob/main/preset/README.md
+    - pull-cmd: docker pull intel/deep-learning:2023.2-py3.9
+      title: Deep Learning
+      framework: TensorFlow & PyTorch
+      os: ubuntu 22.04
+      compressed-size: 4.46GB
+      publish-date: 08-16-2023
+      url: https://github.com/intel/ai-containers/blob/main/preset/README.md
+    - pull-cmd: docker pull intel/deep-learning:2023.2-py3.10
+      title: Deep Learning
+      framework: TensorFlow & PyTorch
+      os: ubuntu 22.04
+      compressed-size: 4.75GB
+      publish-date: 08-16-2023
+      url: https://github.com/intel/ai-containers/blob/main/preset/README.md
+    - pull-cmd: docker pull intel/inference-optimization:2023.2-py3.9
+      title: Inference Optimizations
+      framework: TensorFlow & PyTorch
+      os: ubuntu 22.04
+      compressed-size: 4.52GB
+      publish-date: 08-16-2023
+      url: https://github.com/intel/ai-containers/blob/main/preset/README.md
+    - pull-cmd: docker pull intel/inference-optimization:2023.2-py3.10
+      title: Inference Optimizations
+      framework: TensorFlow & PyTorch
+      os: ubuntu 22.04
+      compressed-size: 4.81GB
+      publish-date: 08-16-2023
+      url: https://github.com/intel/ai-containers/blob/main/preset/README.md
+atsm-models:
+  title: Intel Flex (ATSM) Models Containers
+  description: These are the deep learning Models optimized to run on Intel's Flex Series GPU platform.
+  readme: Flex_Models_Containers.md
+  containers:
+    - pull-cmd: docker pull intel/image-recognition:tf-flex-gpu-resnet50v1-5-inference
+      title: ResNet50 v1.5 Inference
+      framework: TensorFlow
+      os: ubuntu 22.04
+      compressed-size: 2.36 GB
+      publish-date: 09-03-2023
+      url: https://github.com/IntelAI/models/blob/v2.12.1/quickstart/image_recognition/tensorflow/resnet50v1_5/inference/gpu/DEVCATALOG_FLEX.md
+    - pull-cmd: docker pull intel/image-segmentation:tf-flex-gpu-maskrcnn-inference
+      title: MaskRCNN Inference
+      framework: TensorFlow
+      os: ubuntu 22.04
+      compressed-size: 2.72GB
+      publish-date: 09-03-2023
+      url: https://github.com/IntelAI/models/blob/v2.12.1/quickstart/image_segmentation/tensorflow/maskrcnn/inference/gpu/DEVCATALOG.md
+    - pull-cmd: docker pull intel/image-recognition:tf-flex-gpu-efficientnet-inference
+      title: EfficientNet Inference
+      framework: TensorFlow
+      os: ubuntu 22.04
+      compressed-size: 2.32 GB
+      publish-date: 09-01-2023
+      url: https://github.com/IntelAI/models/blob/v2.12.1/quickstart/image_recognition/tensorflow/efficientnet/inference/gpu/DEVCATALOG.md
+    - pull-cmd: docker pull intel/generative-ai:tf-flex-gpu-stable-diffusion-inference
+      title: Stable Diffusion Inference
+      framework: TensorFlow
+      os: ubuntu 22.04
+      compressed-size: 2.53GB
+      publish-date: 09-03-2023
+      url: https://github.com/IntelAI/models/blob/v2.12.1/quickstart/generative-ai/tensorflow/stable_diffusion/inference/gpu/DEVCATALOG.md
+    - pull-cmd: docker pull intel/image-recognition:pytorch-flex-gpu-resnet50v1-5-inference
+      title: ResNet50 v1.5 Inference
+      framework: PyTorch
+      os: ubuntu 22.04
+      compressed-size: 2.17GB
+      publish-date: 09-03-2023
+      url: https://github.com/IntelAI/models/blob/v2.12.1/quickstart/image_recognition/pytorch/resnet50v1_5/inference/gpu/DEVCATALOG_FLEX.md
+    - pull-cmd: docker pull intel/object-detection:pytorch-flex-gpu-yolov5-inference
+      title: YOLOv5 inference
+      framework: PyTorch
+      os: ubuntu 22.04
+      compressed-size: 2.54GB
+      publish-date: 09-01-2023
+      url: https://github.com/IntelAI/models/blob/v2.12.1/quickstart/object_detection/pytorch/yolov5/inference/gpu/DEVCATALOG.md
+    - pull-cmd: docker pull intel/generative-ai:pytorch-flex-gpu-stable-diffusion-inference
+      title: Stable Diffusion inference
+      framework: PyTorch
+      os: ubuntu 22.04
+      compressed-size: 2.29GB
+      publish-date: 09-03-2023
+      url: https://github.com/IntelAI/models/blob/v2.12.1/quickstart/generative-ai/pytorch/stable_diffusion/inference/gpu/DEVCATALOG.md
+    - pull-cmd: docker pull intel/object-detection:pytorch-flex-gpu-ssd-mobilenet-inference
+      title: SSD-MobileNet v1 Inference
+      framework: PyTorch
+      os: ubuntu 22.04
+      compressed-size: 2.47GB
+      publish-date: 09-03-2023
+      url: https://github.com/IntelAI/models/blob/v2.11.1/quickstart/object_detection/pytorch/ssd-mobilenet/inference/gpu/DEVCATALOG.md
+    - pull-cmd: docker pull intel/object-detection:pytorch-flex-gpu-yolov4-inference
+      title: YOLOv4 inference
+      framework: PyTorch
+      os: ubuntu 22.04
+      compressed-size: 2.56GB
+      publish-date: 07-07-2023
+      url: https://github.com/IntelAI/models/blob/v2.11.1/quickstart/object_detection/pytorch/yolov4/inference/gpu/DEVCATALOG.md
+    - pull-cmd: docker pull intel/object-detection:tf-flex-gpu-ssd-mobilenet-inference
+      title: SSD-MobileNet Inference
+      framework: PyTorch
+      os: ubuntu 22.04
+      compressed-size: 2.47GB
+      publish-date: 07-07-2023
+      url: https://github.com/IntelAI/models/blob/v2.11.1/quickstart/object_detection/tensorflow/ssd-mobilenet/inference/gpu/DEVCATALOG.md
+pvc-models:
+  title: Intel Max (PVC) Models Containers
+  description: These are the deep learning Models optimized to run on Intel's Max Series GPU platform.
+  readme: Max_Models_Containers.md
+  containers:
+    - pull-cmd: docker pull intel/image-recognition:pytorch-max-gpu-resnet50v1-5-inference
+      title: ResNet50 v1.5 Inference
+      framework: PyTorch
+      os: ubuntu 22.04
+      compressed-size: 2.17GB
+      publish-date: 05-22-2023
+      url: https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/pytorch/resnet50v1_5/inference/gpu/DEVCATALOG_MAX.md
+    - pull-cmd: docker pull intel/image-recognition:pytorch-max-gpu-resnet50v1-5-training
+      title: ResNet50 v1.5 Training
+      framework: PyTorch
+      os: ubuntu 22.04
+      compressed-size: 2.31GB
+      publish-date: 07-07-2023
+      url: https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/pytorch/resnet50v1_5/training/gpu/DEVCATALOG.md
+    - pull-cmd: docker pull intel/language-modeling:pytorch-max-gpu-bert-large-inference
+      title: BERT Large Inference
+      framework: PyTorch
+      os: ubuntu 22.04
+      compressed-size: 2.21GB
+      publish-date: 07-07-2023
+      url: https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/pytorch/bert_large/inference/gpu/DEVCATALOG.md
+    - pull-cmd: docker pull intel/language-modeling:pytorch-max-gpu-bert-large-training
+      title: BERT Large Training
+      framework: PyTorch
+      os: ubuntu 22.04
+      compressed-size: 3.2GB
+      publish-date: 05-22-2023
+      url: https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/pytorch/bert_large/training/gpu/DEVCATALOG.md
+    - pull-cmd: docker pull intel/image-recognition:tf-max-gpu-resnet50v1-5-inference
+      title: ResNet50 v1.5 Inference
+      framework: TensorFlow 
+      os: ubuntu 22.04
+      compressed-size: 2.38GB
+      publish-date: 05-22-2023
+      url: https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/tensorflow/resnet50v1_5/inference/gpu/DEVCATALOG_MAX.md
+    - pull-cmd: docker pull intel/image-recognition:tf-max-gpu-resnet50v1-5-training
+      title: ResNet50 v1.5 Training
+      framework: TensorFlow
+      os: ubuntu 22.04
+      compressed-size: 2.32GB
+      publish-date: 05-22-2023
+      url: https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/tensorflow/resnet50v1_5/training/gpu/DEVCATALOG.md
+    - pull-cmd: docker pull intel/language-modeling:tf-max-gpu-bert-large-inference
+      title: BERT Large Inference
+      framework: TensorFlow
+      os: ubuntu 22.04
+      compressed-size: 3.33GB
+      publish-date: 05-22-2023
+      url: https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/tensorflow/bert_large/inference/gpu/DEVCATALOG.md
+    - pull-cmd: docker pull intel/language-modeling:tf-max-gpu-bert-large-training
+      title: BERT Large Training
+      framework: TensorFlow
+      os: ubuntu 22.04
+      compressed-size: 2.32GB
+      publish-date: 05-22-2023
+      url: https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/tensorflow/bert_large/training/gpu/DEVCATALOG.md
+cpu-models:
+  title: Intel CPU Models Containers
+  description: These are the deep learning Models optimized to run on Intel® Xeon® Scalable processors
+  readme: CPU_Models_Containers.md
+  containers:
+    - pull-cmd: docker pull intel/image-recognition:tf-spr-resnet50v1-5-training
+      title: ResNet 50v1.5 Training
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 630MB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/tensorflow/resnet50v1_5/training/cpu/README_SPR_DEV_CAT.md
+    - pull-cmd: docker pull intel/image-recognition:tf-spr-resnet50v1-5-inference
+      title: ResNet 50v1.5 Inference
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 717MB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/tensorflow/resnet50v1_5/inference/cpu/README_SPR_DEV_CAT.md
+    - pull-cmd: docker pull intel/language-modeling:tf-spr-bert-large-pretraining
+      title: BERT large Training
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 593MB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/tensorflow/bert_large/training/cpu/README_SPR_DEV_CAT.md
+    - pull-cmd: docker pull intel/language-modeling:tf-spr-bert-large-inference
+      title: BERT large Inference
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 11.1GB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/tensorflow/bert_large/inference/cpu/README_SPR_DEV_CAT.md
+    - pull-cmd: docker pull intel/recommendation:tf-spr-dien-training
+      title: DIEN Training
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 571MB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/recommendation/tensorflow/dien/training/cpu/README_SPR_DEV_CAT.md
+    - pull-cmd: docker pull intel/recommendation:tf-spr-dien-inference
+      title: DIEN Inference
+      framework: TensorFlow
+      os: Ubuntu 22.04
+      compressed-size: 661MB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/recommendation/tensorflow/dien/inference/cpu/README_SPR_DEV_CAT.md
+    - pull-cmd: docker pull intel/image-recognition:pytorch-spr-resnet50-training
+      title: ResNet50 Training
+      framework: PyTorch
+      os: Ubuntu 22.04
+      compressed-size: 4.27GB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/pytorch/resnet50/training/cpu/README_SPR_DEV_CAT.md
+    - pull-cmd: docker pull intel/image-recognition:pytorch-spr-resnet50-inference
+      title: ResNet50 Inference
+      framework: PyTorch
+      os: Ubuntu 22.04
+      compressed-size: 4.27GB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/pytorch/resnet50/inference/cpu/README_SPR_DEV_CAT.md
+    - pull-cmd: docker pull intel/image-recognition:pytorch-spr-resnext-32x16d-inference
+      title: ResNext-32x16d Inference
+      framework: PyTorch
+      os: Ubuntu 22.04
+      compressed-size: 4.27GB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/pytorch/resnext-32x16d/inference/cpu/README_SPR_DEV_CAT.md
+    - pull-cmd: docker pull intel/object-detection:pytorch-spr-maskrcnn-training
+      title: Mask R-CNN Training
+      framework: PyTorch
+      os: Ubuntu 22.04
+      compressed-size: 7.37GB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/object_detection/pytorch/maskrcnn/training/cpu/README_SPR_DEV_CAT.md
+    - pull-cmd: docker pull intel/object-detection:pytorch-spr-maskrcnn-inference
+      title: Mask R-CNN Inference
+      framework: PyTorch
+      os: Ubuntu 22.04
+      compressed-size: 7.37GB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/object_detection/pytorch/maskrcnn/inference/cpu/README_SPR_DEV_CAT.md
+    - pull-cmd: docker pull intel/language-modeling:pytorch-spr-bert-large-training
+      title: BERT large Training
+      framework: PyTorch
+      os: Ubuntu 22.04
+      compressed-size: 3.63GB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/pytorch/bert_large/training/cpu/README_SPR_DEV_CAT.md
+    - pull-cmd: docker pull intel/language-modeling:pytorch-spr-bert-large-inference
+      title: BERT large Inference
+      framework: PyTorch
+      os: Ubuntu 22.04
+      compressed-size: 3.62GB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/pytorch/bert_large/inference/cpu/README_SPR_DEV_CAT.md
+    - pull-cmd: docker pull intel/language-modeling:pytorch-spr-distilbert-inference
+      title: DistilBERT base Inference
+      framework: PyTorch
+      os: Ubuntu 22.04
+      compressed-size: 3.81GB
+      publish-date: null
+      url: https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/pytorch/distilbert_base/inference/cpu/README_SPR_DEV_CAT.md
