@@ -163,3 +163,84 @@ FROM horovod AS multinode-idp
 RUN python -m pip install --no-cache-dir neural-compressor${INC_VER:+==${INC_VER}} \
     cython \
     tf2onnx
+
+FROM ${COMPOSE_PROJECT_NAME}-python AS itex-xpu-base
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    apt-utils \
+    build-essential \
+    clinfo \
+    curl \
+    git \
+    gnupg2 \
+    gpg-agent \
+    rsync \
+    unzip \
+    wget && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+ARG ICD_VER
+ARG LEVEL_ZERO_GPU_VER
+ARG LEVEL_ZERO_VER
+ARG LEVEL_ZERO_DEV_VER
+ARG DPCPP_VER
+ARG MKL_VER
+ARG CCL_VER
+
+RUN wget -qO - https://repositories.intel.com/graphics/intel-graphics.key | \
+    gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/graphics/ubuntu jammy max" | \
+    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    intel-opencl-icd=${ICD_VER} \
+    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
+    level-zero=${LEVEL_ZERO_VER} \
+    level-zero-dev=${LEVEL_ZERO_DEV_VER} && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+RUN wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+   | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
+   echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
+   | tee /etc/apt/sources.list.d/oneAPI.list
+
+ARG DPCPP_VER
+ARG MKL_VER
+ARG CCL_VER
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    intel-oneapi-runtime-dpcpp-cpp=${DPCPP_VER} \
+    intel-oneapi-runtime-mkl=${MKL_VER} \
+    intel-oneapi-runtime-ccl=${CCL_VER} && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+ARG TF_VER="2.13"
+
+RUN python -m pip --no-cache-dir install tensorflow==${TF_VER}
+
+RUN python -m pip --no-cache-dir install --upgrade intel-extension-for-tensorflow[xpu]
+
+ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/THIRD-PARTY-PROGRAMS.txt /licenses/
+ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-program-of-intel-extension-for-tensorflow.txt /licenses/
+ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-programs-of-intel-tensorflow.txt /licenses/
+ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-programs-of-intel-optimization-for-horovod.txt /licenses/
+
+FROM itex-xpu-base AS itex-xpu-jupyter
+
+RUN python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy
+
+RUN mkdir -p /jupyter/ && chmod -R a+rwx /jupyter/
+RUN mkdir /.local && chmod a+rwx /.local
+WORKDIR /jupyter
+COPY notebooks/itex/itex-xpu.ipynb /jupyter/xpu.ipynb
+
+ARG PORT=8888
+EXPOSE $PORT
+
+CMD ["bash", "-c", "jupyter notebook --notebook-dir=/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
