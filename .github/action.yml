@@ -1,0 +1,56 @@
+name: Build Container Group Action
+description: 'https://github.com/intel/ai-containers/blob/main/.github/container_pipeline_format'
+author: tyler.titsworth@intel.com
+inputs:
+  group_dir:
+    description: 'Directory with docker-compose.yaml to build'
+    required: true
+    type: string
+  env_overrides:
+    description: 'Bash Env Variable Overrides in `KEY=VAL && KEY2=VAL2` format'
+    required: false
+    type: string
+  registry:
+    description: 'Container Registry URL'
+    required: true
+    type: string
+runs:
+  using: composite
+  steps:
+    - name: Random Number Generator
+      shell: bash
+      run: echo "random-number=$(shuf -i 0-1000 -n1)" >> $GITHUB_ENV
+    - name: Remove Containers
+      shell: bash
+      run: |
+        REGISTRY=${{ inputs.registry }} \
+        COMPOSE_PROJECT_NAME=${{ env.random-number }} \
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} down --rmi all
+    - name: Build Containers
+      shell: bash
+      run: |
+        REGISTRY=${{ inputs.registry }} \
+        COMPOSE_PROJECT_NAME=${{ env.random-number }} \
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} up --build --force-recreate --always-recreate-deps 
+      working-directory: ${{ inputs.group_dir }}
+    - name: Push Containers
+      shell: bash
+      run: |
+        REGISTRY=${{ inputs.registry }} \
+        COMPOSE_PROJECT_NAME=${{ env.random-number }} \
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} push --ignore-push-failures
+      working-directory: ${{ inputs.group_dir }}
+    - name: Print Containers
+      shell: bash
+      run: |
+        REGISTRY=${{ inputs.registry }} \
+        COMPOSE_PROJECT_NAME=${{ env.random-number }} \
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} images --format json | jq '.[] | "\(.Repository):\(.Tag)"' >> $GITHUB_STEP_SUMMARY
+      working-directory: ${{ inputs.group_dir }}
+    - name: Remove Containers
+      shell: bash
+      run: |
+        REGISTRY=${{ inputs.registry }} \
+        COMPOSE_PROJECT_NAME=${{ env.random-number }} \
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} down --rmi all
+      working-directory: ${{ inputs.group_dir }}

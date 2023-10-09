@@ -12,11 +12,9 @@ test-runner
 │   └── utest.py
 └── tests.yaml
 ```
-## Pre-requisite for Jupyter Notebook testing
-
-Install docker-buildx plugin to use the test runner. Refer to the [link](https://github.com/docker/buildx#manual-download) for installation instructions. This is only a pre-requisite if you want to take advantage of papermill testing for jupyter notebooks.
 
 ## Usage
+The Test Runner CLI is intended to be used manually to verify that your config file works properly, and then automatically later to verify those changes work in a default validation environment.
 
 ```text
 $ python test_runner.py --help
@@ -31,10 +29,81 @@ optional arguments:
                         -l /path/to/logs
 ```
 
+When running tests, the Test Runner chooses `PASS` or `FAIL` based on the exit code of the application that was run with the `cmd` field in your test config. When writing tests, ensure that the application succeeds/fails according to the expected state of the application. The following code snippet describes the logical flow of the Test Runner Application for each test: 
+
+```python
+ERROR = False
+for idx, test in enumerate(tests):
+  # ...
+  try:
+      log, returncode = test.container_run() if hasattr(test, "img") else test.run()
+  except:
+      summary.append([idx + 1, test.name, "FAIL"])
+      ERROR = True
+      continue # skip next line
+  summary.append([idx + 1, test.name, "PASS"])
+# ...
+if ERROR:
+    exit(1)
+```
+
+>Note: The Test Runner Application's PASS/FAIL message and exit code are determined by the executed subprocess raising an exception during runtime. If for whatever reason the execution of the `container_run()` or `run()` functions would yield no log outputs, then the state of the host's environment does not match the pre-requisites for `test_runner.py` to be executed with that configuration.
+
 ### Unit Testing
 
 ```bash
 $ PYTHONPATH=$PWD/tests pytest tests/utest.py -W ignore::UserWarning
+```
+
+## Composite Action
+
+This action clones a version of this repo with test-runner and runs the application on a given directory.
+
+Inputs for the action:
+
+```yaml
+inputs:
+  mlops_repo:
+    description: 'Test Runner org/repo'
+    required: true
+    type: string
+  mlops_ref:
+    description: 'Test Runner Branch/Tag'
+    required: false
+    default: develop
+    type: string
+  registry:
+    description: 'Container Registry URL'
+    required: true
+    type: string
+  test_dir:
+    description: 'Directory with tests.yaml to test'
+    required: true
+    type: string
+  token:
+    required: true
+    type: string
+```
+
+Example Implementation of the action:
+
+```yaml
+test-containers:
+  runs-on: [ self-hosted, Linux, validation ]
+  steps:
+    - uses: actions/checkout@v4
+    - uses: docker/login-action@v3
+      with:
+        registry: ${{ vars.REGISTRY }}
+        username: ${{ secrets.REGISTRY_USER }}
+        password: ${{ secrets.REGISTRY_TOKEN }}
+    - name: Test Container Group
+      uses: intel/ai-containers/test-runner@main
+      with:
+        mlops_repo: intel/ai-containers
+        registry: ${{ vars.REGISTRY }}
+        test_dir: /path/to/test/dir
+        token: ${{ github.token }}
 ```
 
 ## Expected Output

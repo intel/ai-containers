@@ -1,0 +1,61 @@
+name: Test Runner Action
+description: 'https://github.com/intel/ai-containers/blob/main/test-runner/README.md'
+author: tyler.titsworth@intel.com
+inputs:
+  mlops_repo:
+    description: 'Test Runner org/repo'
+    required: true
+    type: string
+  mlops_ref:
+    description: 'Test Runner Branch/Tag'
+    required: false
+    default: develop
+    type: string
+  registry:
+    description: 'Container Registry URL'
+    required: true
+    type: string
+  test_dir:
+    description: 'Directory with tests.yaml to test'
+    required: true
+    type: string
+  token:
+    required: true
+    type: string
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v4
+      with:
+        path: mlops
+        ref: ${{ inputs.mlops_ref }}
+        repository: ${{ inputs.mlops_repo }}
+        token: ${{ inputs.token }}
+    - name: Test
+      shell: bash
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        python -m pip install -r mlops/test-runner/requirements.txt
+        python mlops/test-runner/test_runner.py -f ${{ github.workspace }}/${{ inputs.test_dir }}/tests.yaml -l ${{ github.workspace }}/${{ inputs.test_dir }}/logs -v
+      env:
+        PYTHONPATH: mlops/test-runner
+        REGISTRY: ${{ inputs.registry }}
+        GITHUB_RUN_NUMBER: ${{ github.run_number }}
+    - name: Print Log Summary
+      shell: bash
+      if: always()
+      run: echo -e "\`\`\`\n$(cat ${{ github.workspace }}/${{ inputs.test_dir }}/logs/test-runner.log)\n\`\`\`" >> $GITHUB_STEP_SUMMARY
+    - name: Get Test Name
+      shell: bash
+      if: always()
+      run: echo "test=$(basename ${{ github.workspace }}/${{ inputs.test_dir }})" >> $GITHUB_ENV
+    - uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: ${{ env.test }} outputs
+        path: ${{ github.workspace }}/${{ inputs.test_dir }}/logs
+    - name: Cleanup
+      shell: bash
+      if: always()
+      run: rm -rf venv ${{ github.workspace }}/${{ inputs.test_dir }}/logs

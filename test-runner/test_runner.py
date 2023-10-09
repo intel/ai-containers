@@ -14,13 +14,37 @@ from yaml import full_load, YAMLError
 
 
 class Test:
+    """A class to represent a test, attributes are set dynamically via yaml config during __init__
+    
+    Methods:
+        get_path(name=""):
+            Given a filename, find that file from the users current working directory
+        container_run():
+            Use Python on Whales to run a Docker Container with img and cmd
+        run():
+            Create a process for cmd on Baremetal System
+    """
     def __init__(self, name, arguments):
+        """Initialize Test Object
+
+        Args:
+            name (string): Test name based on the key of the config's dictionary arguments
+            arguments (dict): Given a test from a yaml config file, arguments is a dictionary of
+                              those configs with the same yaml structure
+        """
         self.name = name
         for key, val in arguments.items():
             setattr(self, key, val)
 
     def get_path(self, name):
-        """Given a filename, find that file from the users current working directory"""
+        """Given a filename, find that file from the users current working directory
+
+        Args:
+            name (string): Filename
+
+        Returns:
+            string: Path to filename of input name
+        """
         for root, dirs, files in os.walk(os.getcwd()):
             if name in files:
                 return os.path.join(root, name)
@@ -28,7 +52,12 @@ class Test:
         exit(1)
 
     def container_run(self):
-        """Use Python on Whales to run a Docker Container with img and cmd. Extracts volumes and env"""
+        """Use Python on Whales to run a Docker Container with img and cmd
+
+        Returns:
+            string: Concatenated streamed stdout and stderr output from subprocess
+            int: Exit code
+        """
         # Define each volume as (src, dst) for a list of volumes
         volumes = (
             [(expandvars(vol["src"]), expandvars(vol["dst"])) for vol in self.volumes]
@@ -97,7 +126,7 @@ class Test:
                 workdir=expandvars(self.workdir) if hasattr(self, "workdir") else None,
             )
         except DockerException as err:
-            return err.return_code  # assume the return code is 0 unless otherwise specified
+            return "DockerException", err.return_code  # assume the return code is 0 unless otherwise specified
         # Log within the function to retain scope for debugging
         log = ""
         for stream_type, stream_content in output_generator:
@@ -107,7 +136,12 @@ class Test:
         return log, 0
 
     def run(self):
-        """Create a process for cmd on Baremetal System. Extracts env"""
+        """Create a process for cmd on Baremetal System
+
+        Returns:
+            string: Concatenated streamed stdout and stderr output from subprocess
+            int: Exit code
+        """
         # Define each env as {key: value} for a dict of envs
         env = (
             {key: expandvars(val) for key, val in self.env.items()}
@@ -137,7 +171,11 @@ class Test:
 
 
 def parse_args():
-    """CLI"""
+    """Use argparse to parse command line arguments
+
+    Returns:
+        dict: Parsed command line arguments
+    """
     parser = ArgumentParser()
     parser.add_argument(
         "-f",
@@ -164,7 +202,13 @@ def parse_args():
 
 
 def set_log_filename(logger, name, logs_path):
-    """Change filehandler file name"""
+    """Change filehandler file name in current logger context
+
+    Args:
+        logger (logging.RootLogger): Current logger context
+        name (string): New or Existing logger filename
+        logs_path (string): Path to logs folder
+    """    
     testHandler = logging.FileHandler(f"{logs_path}/{name}.log")
     # Handler[0] is the stream output to stdout/stderr
     # Handler[1] is always the file handler, see the logging declaration handlers parameter
@@ -213,7 +257,7 @@ if __name__ == "__main__":
     tests = [Test(test, tests_json[test]) for test in tests_json]
     logging.info("Setup Completed - Running Tests")
     summary = []
-    error = False
+    ERROR = False
     for idx, test in enumerate(tests):
         # Set Context to test-runner.log
         set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
@@ -227,12 +271,12 @@ if __name__ == "__main__":
             log, returncode = test.container_run() if hasattr(test, "img") else test.run()
         except:
             summary.append([idx + 1, test.name, "FAIL"])
-            error = True
+            ERROR = True
             continue
         summary.append([idx + 1, test.name, "PASS"])
     # Switch logging context back to the initial state
     set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
     # Print Summary Table
     logging.info("\n%s", tabulate(summary, headers=["#", "Test", "Status"], tablefmt="orgtbl"))
-    if error:
-        sysexit(1)
+    if ERROR:
+        exit(1)

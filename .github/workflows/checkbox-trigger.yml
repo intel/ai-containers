@@ -1,0 +1,101 @@
+---
+name: Checkbox Pipeline Validation
+on:
+  pull_request:
+    types: [edited]
+jobs:
+  check-description-checkbox:
+    runs-on: [ k8-runners ]
+    if: contains(github.event.pull_request.body, '- [x] Automated Validation (Do not edit, check to begin Validation)') && contains(github.event.pull_request.body, '/test-group') && !contains(github.event.pull_request.labels.*.name, 'validating')
+    outputs:
+      group_dir: ${{ steps.comment-inputs.outputs.group_dir }}
+      env_overrides: ${{ steps.comment-inputs.outputs.env_overrides }}
+      runner_label: ${{ steps.comment-inputs.outputs.runner_label }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get Inputs
+        id: comment-inputs
+        run: bash .github/utils/val-args.sh "${{ github.event.pull_request.body }}"
+      - name: Remove PASS Label
+        if: contains(github.event.pull_request.labels.*.name, 'PASS')
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            github.rest.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: ["PASS"]
+            })
+      - name: Remove FAIL Label
+        if: contains(github.event.pull_request.labels.*.name, 'FAIL')
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            github.rest.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: ["FAIL"]
+            })
+      - name: Lock
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['validating']
+            })
+  container-pipeline-tester:
+      needs: [ check-description-checkbox ]
+      if: needs.check-description-checkbox.outputs.group_dir && needs.check-description-checkbox.outputs.runner_label
+      uses: ./.github/workflows/container-pipeline-tester.yaml
+      with:
+        group_dir: ${{ needs.check-description-checkbox.outputs.group_dir }}
+        env_overrides: ${{ needs.check-description-checkbox.outputs.env_overrides || '' }}
+        runner_label: ${{ needs.check-description-checkbox.outputs.runner_label }}
+      secrets: inherit
+  status-check:
+    needs: [ check-description-checkbox, container-pipeline-tester ]
+    if: ${{ always() && needs.check-description-checkbox.result != 'skipped' }}
+    runs-on: [ k8-runners ]
+    steps:
+      - name: Unlock
+        if: ${{ needs.check-description-checkbox.result != 'skipped' }}
+        uses: actions/github-script@v6
+        with:
+          result-encoding: string
+          script: |
+            github.rest.issues.removeLabel({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: ["validating"]
+            })
+      - name: Set Fail Label
+        if: ${{ needs.check-description-checkbox.result != 'success' || needs.container-pipeline-tester.result != 'success' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['FAIL']
+            })
+      - name: Set Pass Label
+        if: ${{ needs.check-description-checkbox.result == 'success' && needs.container-pipeline-tester.result == 'success' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.addLabels({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: ['PASS']
+            })
+            

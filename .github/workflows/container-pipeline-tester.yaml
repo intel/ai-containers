@@ -2,27 +2,45 @@ name: Container Pipeline Tester
 on:
   workflow_dispatch:
     inputs:
-      dir: 
+      group_dir:
         required: true
+        description: 'Enter Container Group Directory:'
         type: string
-      env_overrides: 
+      env_overrides:
+        description: 'Enter Bash Env Variable Overrides in `KEY=VAL && KEY2=VAL2` format:'
         required: false
         type: string
       runner_label:
+        description: 'Enter Validation Runner Label:'
         default: test-runner
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      group_dir:
+        required: true
+        type: string
+      env_overrides:
         required: false
         type: string
-
+      runner_label:
+        required: true
+        type: string
 jobs:
-  build:
-    uses: ./.github/workflows/build-workflow.yml
-    with:
-      dir: ${{ github.event.inputs.dir }}
-      env_overrides: ${{ github.event.inputs.env_overrides }}
-    secrets: inherit
-  setup-test:
-    needs: [ build ]
-    runs-on: [ aia-devops ]
+  setup-build-matrix:
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    runs-on: [ k8-runners ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set Matrix
+        id: matrix
+        run: echo "matrix=$(jq -c . < ${{ inputs.group_dir }}/.actions.json)" >> $GITHUB_OUTPUT
+      - name: Print Inputs
+        if: ${{ inputs.env_overrides }}
+        run: echo "Overrides - ${{ inputs.env_overrides }} >> $GITHUB_STEP_SUMMARY
+  build-containers:
+    needs: [ setup-build-matrix ]
     container:
       image: ${{ vars.REGISTRY }}/aiops/compose-dev
       env:
@@ -32,24 +50,54 @@ jobs:
       credentials:
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
+    env: ${{ matrix }}
+    runs-on: [ builder ]
+    strategy:
+      matrix: ${{ fromJson(needs.setup-build-matrix.outputs.matrix) }}
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
+      - name: Build Container Group
+        uses: ./.github
+        with:
+          group_dir: ${{ inputs.group_dir }}
+          env_overrides: ${{ inputs.env_overrides }}
+          registry: ${{ vars.REGISTRY }}
+  setup-test:
+    needs: [ build-containers ]
+    runs-on: [ k8-runners ]
     outputs:
       recipes: ${{ steps.recipes.outputs.RECIPES }}
     steps:
       - uses: actions/checkout@v4
       - name: Get Recipes
         id: recipes
-        run: echo "RECIPES=$(find ${{ github.event.inputs.dir }} -type f -name 'tests.yaml' -exec dirname {} \; | awk -F/ '{print $NF}' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
-  test:
+        run: echo "RECIPES=$(find ${{ inputs.group_dir }} -type f -name 'tests.yaml' -exec dirname {} \; | awk -F/ '{print $NF}' | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+  test-containers:
     needs: [ setup-test ]
     if: ${{ needs.setup-test.outputs.recipes != '[]' }}
+    runs-on: [ self-hosted, Linux, "${{ inputs.runner_label }}"]
     strategy:
       matrix:
         recipe: ${{ fromJson(needs.setup-test.outputs.recipes) }}
         experimental: [true]
       fail-fast: false
-    uses: ./.github/workflows/test-workflow.yml
-    with:
-      dir: ${{ github.event.inputs.dir }}/${{ matrix.recipe }}
-      runner_label: ${{ github.event.inputs.runner_label }}
-    secrets: inherit
-
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
+      - name: Test Container Group
+        uses: ./test-runner
+        with:
+          mlops_repo: ${{ vars.MLOPS_REPO }}
+          registry: ${{ vars.REGISTRY }}
+          test_dir: ${{ inputs.group_dir }}/${{ matrix.recipe }}
+          token: ${{ github.token }}
