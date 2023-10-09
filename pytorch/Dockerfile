@@ -180,7 +180,16 @@ RUN python -m pip install torch==${TORCH_VERSION} -f ${TORCH_WHL_URL} && \
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib:/opt/intel/oneapi/lib/intel64:$LD_LIBRARY_PATH
 
-RUN adduser --disabled-password --gecos "" user
+ARG UNAME=user
+ARG GID=109
+ARG GNAME=render
+ARG VNAME=video
+
+RUN useradd -m -s /bin/bash $UNAME
+
+RUN groupadd -g $GID $GNAME
+
+RUN usermod -a -G $VNAME,$GNAME $UNAME
 
 USER user
 
