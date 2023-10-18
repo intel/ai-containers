@@ -100,6 +100,70 @@ class Test:
                         # Output Tag = Input Tag
                         tags=[img]
                     )
+        if hasattr(self, "serving"):
+            if self.serving == 'true':
+                log = ""
+                try:
+                    serving_container = docker.run(
+                        # Image
+                        img,
+                        # Stream Logs
+                        detach=True,
+                        # Envs
+                        envs=env,
+                        # Volumes
+                        volumes=volumes,
+                        # Networks
+                        networks=['host'],
+                        # Misc
+                        cap_add=[self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"],
+                        devices=[expandvars(self.device) if hasattr(self, "device") else "/dev/dri"],
+                        entrypoint=expandvars(self.entrypoint) if hasattr(self, "entrypoint") else None,
+                        hostname=self.hostname if hasattr(self, "hostname") else None,
+                        ipc=self.ipc if hasattr(self, "ipc") else None,
+                        privileged=self.privileged if hasattr(self, "privileged") else True,
+                        pull=self.pull if hasattr(self, "pull") else "missing",
+                        shm_size=self.shm_size if hasattr(self, "shm_size") else None,
+                    )
+                    client_output = docker.run(
+                        # Image
+                        "python:3.11-slim-bullseye",
+                        # Command
+                        split(expandvars(self.cmd)),
+                        # Stream Logs
+                        stream=True,
+                        # Envs
+                        envs=env,
+                        # Volumes
+                        volumes=volumes,
+                        # Networks
+                        networks=['host'],
+                        # Misc
+                        cap_add=[self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"],
+                        devices=[expandvars(self.device) if hasattr(self, "device") else "/dev/dri"],
+                        entrypoint=expandvars(self.entrypoint) if hasattr(self, "entrypoint") else None,
+                        hostname=self.hostname if hasattr(self, "hostname") else None,
+                        ipc=self.ipc if hasattr(self, "ipc") else None,
+                        privileged=self.privileged if hasattr(self, "privileged") else True,
+                        pull=self.pull if hasattr(self, "pull") else "missing",
+                        remove=self.rm if hasattr(self, "rm") else True,
+                        user=self.user if hasattr(self, "user") else None,
+                        shm_size=self.shm_size if hasattr(self, "shm_size") else None,
+                        workdir=expandvars(self.workdir) if hasattr(self, "workdir") else None,
+                    )
+                except DockerException as err:
+                    return "DockerException", err.return_code  # assume the return code is 0 unless otherwise specified
+                finally:
+                    # Log within the function to retain scope for debugging
+                    for stream_type, stream_content in client_output:
+                        # All process logs will have the stream_type of stderr despite it being stdout
+                        logging.info(stream_content.decode('utf-8').strip())
+                        log += stream_content.decode('utf-8').strip()
+                    logging.debug("--- Server Logs ---")
+                    logging.debug(docker.logs(serving_container))
+                    docker.stop(serving_container, time=None)
+                return log, 0
+
         try:  # https://gabrieldemarmiesse.github.io/python-on-whales/sub-commands/container/#python_on_whales.components.container.cli_wrapper.ContainerCLI.run
             output_generator = docker.run(
                 # Image
@@ -276,6 +340,10 @@ if __name__ == "__main__":
         summary.append([idx + 1, test.name, "PASS"])
     # Switch logging context back to the initial state
     set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
+    # Remove remaining containers
+    remaining_containers = docker.container.list()
+    for container in remaining_containers:
+        docker.stop(container, time=None)
     # Print Summary Table
     logging.info("\n%s", tabulate(summary, headers=["#", "Test", "Status"], tablefmt="orgtbl"))
     if ERROR:

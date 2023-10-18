@@ -15,11 +15,17 @@ def test_input():
 
 def test_container_run(test_input):
     for test in test_input:
-        if hasattr(test, "img"):
+        if hasattr(test, "img") and not hasattr(test, "serving"):
             log, returncode = test.container_run()
             assert returncode == 0
             assert log == "expandvars"
 
+def test_container_run_serving(test_input):
+    for test in test_input:
+        if hasattr(test, "img") and hasattr(test, "serving"):
+            log, returncode = test.container_run()
+            assert returncode == 0
+            assert log == "Python 3.11.6"
 
 def test_run(test_input):
     for test in test_input:

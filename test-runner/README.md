@@ -111,35 +111,43 @@ test-containers:
 Given a test input:
 ```yaml
 test1:
-  img: ${REGISTRY}/aiops/compose-dev:latest
-  cmd: bash -c "head -n 1 /workspace/requirements.txt"
+  img: ${REGISTRY}/aiops/compose-dev:latest # var substitution inline
+  cmd: bash -c "head -n 1 /workspace/requirements.txt" # volume mounted file
 # device: /dev/dri
 # ipc: host
-  notebook: 'true'
+  notebook: 'true' # single quotes
   env:
-    REGISTRY: ${REGISTRY}
-    DEBUG: "true"
+    REGISTRY: ${REGISTRY} # substitute env from host
+    DEBUG: "true" # double quotes
   volumes:
     - src: /tf_dataset
       dst: /tmp
     - src: $PWD
       dst: /workspace
 test2:
-  cmd: echo -n $TEST && python -c 'print(" World", end="")'
+  cmd: echo -n $TEST && python -c 'print(" World", end="")' # var substitution inline
   env:
     TEST: Hello
+test3:
+  img: ${REGISTRY}/aiops/compose-dev:latest # python 3.10
+  cmd: python --version # will return python 3.11
+  serving: 'true'
 ```
 
 ```text
 $ python test_runner.py -f tests.yaml 
-2023-08-25 12:30:53,004 - root - INFO - Setup Completed - Running Tests
-2023-08-25 12:30:53,004 - root - INFO - test1 Started
-2023-08-25 12:30:53,700 - root - INFO - python_on_whales
-2023-08-25 12:30:53,701 - root - INFO - test2 Started
-2023-08-25 12:30:53,731 - root - INFO - Test Output: Hello World
-2023-08-25 12:30:53,734 - root - INFO - 
+2023-10-17 17:13:24,380 - root - INFO - Setup Completed - Running Tests
+2023-10-17 17:13:24,380 - root - INFO - Running Test: test1
+2023-10-17 17:13:25,621 - root - INFO - expandvars
+2023-10-17 17:13:25,870 - root - INFO - Running Test: test2
+2023-10-17 17:13:25,870 - root - INFO - test2 Started
+2023-10-17 17:13:25,886 - root - INFO - Test Output: Hello World
+2023-10-17 17:13:25,886 - root - INFO - Running Test: test3
+2023-10-17 17:13:26,641 - root - INFO - Python 3.11.6
+2023-10-17 17:13:27,142 - root - INFO - 
 |   # | Test   | Status   |
 |-----+--------+----------|
-|   1 | test1  | Pass     |
-|   2 | test2  | Pass     |
+|   1 | test1  | PASS     |
+|   2 | test2  | PASS     |
+|   3 | test3  | PASS     |
 ```
