@@ -18,11 +18,11 @@ jobs:
       run: | 
         python -m venv venv
         source venv/bin/activate
-        pip install pytest
-        pip install -r requirements.txt
+        venv/bin/python -m pip install pytest
+        venv/bin/python -m pip install -r requirements.txt
       working-directory: ${{ github.workspace }}/test-runner
     - name: Unit Test
-      run: pytest tests/utest.py -W ignore::UserWarning
+      run: venv/bin/python -m pytest tests/utest.py -W ignore::UserWarning
       working-directory: ${{ github.workspace }}/test-runner
       env:
         PYTHONPATH: ${{ github.workspace }}/test-runner/tests
