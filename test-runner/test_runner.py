@@ -81,7 +81,7 @@ class Test:
         # If Notebook modify image to include papermill
         if hasattr(self, "notebook"):
             if self.notebook == 'true':
-                try:
+                try: # Try for Docker CLI Failure Conditions
                     docker.run(img, ["which", "papermill"])
                 except DockerException as papermill_not_found:
                     logging.debug("Papermill not found: %s", papermill_not_found)
@@ -103,7 +103,7 @@ class Test:
         if hasattr(self, "serving"):
             if self.serving == 'true':
                 log = ""
-                try:
+                try: # Try for Docker CLI Failure Conditions
                     serving_container = docker.run(
                         # Image
                         img,
@@ -163,7 +163,7 @@ class Test:
                     logging.debug(docker.logs(serving_container))
                     docker.stop(serving_container, time=None)
                 return log, 0
-
+        # Try for Docker CLI Failure Conditions
         try:  # https://gabrieldemarmiesse.github.io/python-on-whales/sub-commands/container/#python_on_whales.components.container.cli_wrapper.ContainerCLI.run
             output_generator = docker.run(
                 # Image
@@ -331,12 +331,17 @@ if __name__ == "__main__":
         logging.debug("Attrs: %s", dir(test)[26:])
         # If 'img' is present in the test, ensure that the test is a container run, otherwise run on baremetal
         # returns the stdout of the test and the returncode
-        try:
+        try: # Try for Runtime Failure Conditions
             log, returncode = test.container_run() if hasattr(test, "img") else test.run()
         except:
             summary.append([idx + 1, test.name, "FAIL"])
             ERROR = True
             continue
+        finally:
+            if returncode != 0:
+                summary.append([idx + 1, test.name, "FAIL"])
+                ERROR = True
+                continue
         summary.append([idx + 1, test.name, "PASS"])
     # Switch logging context back to the initial state
     set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
