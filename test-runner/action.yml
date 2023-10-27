@@ -37,7 +37,7 @@ runs:
         python -m venv venv
         source venv/bin/activate
         python -m pip install -r mlops/test-runner/requirements.txt
-        python mlops/test-runner/test_runner.py -f ${{ github.workspace }}/${{ inputs.test_dir }}/tests.yaml -l ${{ github.workspace }}/${{ inputs.test_dir }}/logs -v
+        python mlops/test-runner/test_runner.py -f ${{ inputs.test_dir }}/tests.yaml -l ${{ inputs.test_dir }}/logs -v
       env:
         PYTHONPATH: mlops/test-runner
         REGISTRY: ${{ inputs.registry }}
@@ -45,17 +45,17 @@ runs:
     - name: Print Log Summary
       shell: bash
       if: always()
-      run: echo -e "\`\`\`\n$(cat ${{ github.workspace }}/${{ inputs.test_dir }}/logs/test-runner.log)\n\`\`\`" >> $GITHUB_STEP_SUMMARY
+      run: echo -e "\`\`\`\n$(cat ${{ inputs.test_dir }}/logs/test-runner.log)\n\`\`\`" >> $GITHUB_STEP_SUMMARY
     - name: Get Test Name
       shell: bash
       if: always()
-      run: echo "test=$(basename ${{ github.workspace }}/${{ inputs.test_dir }})" >> $GITHUB_ENV
+      run: echo "test=$(basename ${{ inputs.test_dir }})" >> $GITHUB_ENV
     - uses: actions/upload-artifact@v3
       if: always()
       with:
         name: ${{ env.test }} outputs
-        path: ${{ github.workspace }}/${{ inputs.test_dir }}/logs
+        path: ${{ inputs.test_dir }}/logs
     - name: Cleanup
       shell: bash
       if: always()
-      run: rm -rf venv ${{ github.workspace }}/${{ inputs.test_dir }}/logs
+      run: rm -rf venv ${{ inputs.test_dir }}/logs
