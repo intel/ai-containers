@@ -180,6 +180,7 @@ class Test:
                 cap_add=[self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"],
                 devices=[expandvars(self.device) if hasattr(self, "device") else "/dev/dri"],
                 entrypoint=expandvars(self.entrypoint) if hasattr(self, "entrypoint") else None,
+                groups_add=[expandvars(self.group-add) if hasattr(self, "group-add") else "109", "44"],
                 hostname=self.hostname if hasattr(self, "hostname") else None,
                 ipc=self.ipc if hasattr(self, "ipc") else None,
                 privileged=self.privileged if hasattr(self, "privileged") else True,
@@ -322,6 +323,7 @@ if __name__ == "__main__":
     logging.info("Setup Completed - Running Tests")
     summary = []
     ERROR = False
+    returncode = 1
     for idx, test in enumerate(tests):
         # Set Context to test-runner.log
         set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
@@ -338,7 +340,7 @@ if __name__ == "__main__":
             ERROR = True
             continue
         finally:
-            if returncode != 0:
+            if returncode != 0 and ERROR == False:
                 summary.append([idx + 1, test.name, "FAIL"])
                 ERROR = True
                 continue
