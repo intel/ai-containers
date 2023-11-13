@@ -13,7 +13,7 @@
 | PACKAGE_OPTION | `pip` | Stock Python (pypi) or Intel Python (conda) (`pip` or `idp`) |
 | PYTHON_VERSION | `3.10` | Python Version |
 | TF_PACKAGE | `intel-tensorflow` | TF Package (`tensorflow`, `intel-tensorflow`, `intel-tensorflow-avx512`) |
-| TF_PACKAGE_VERSION | `2.12.0` | TensorFlow Version |
+| TF_PACKAGE_VERSION | `2.14.0` | TensorFlow Version |
 
 ### Jupyter
 

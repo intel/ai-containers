@@ -34,8 +34,7 @@ ARG TF_PACKAGE_VERSION
 
 RUN python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}} \
     tensorflow_hub \
-    Pillow \
-    cryptography==41.0.3
+    Pillow
 
 # Add Intel TF Licensing
 RUN	mkdir /licensing && \
@@ -189,7 +188,7 @@ ARG DPCPP_VER
 ARG MKL_VER
 ARG CCL_VER
 
-RUN wget -qO - https://repositories.intel.com/graphics/intel-graphics.key | \
+RUN no_proxy="" wget -qO - https://repositories.intel.com/graphics/intel-graphics.key | \
     gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
 RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/graphics/ubuntu jammy max" | \
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
@@ -203,7 +202,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
-RUN wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+RUN no_proxy="" wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
    | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
    echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
    | tee /etc/apt/sources.list.d/oneAPI.list

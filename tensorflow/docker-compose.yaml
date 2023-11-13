@@ -21,7 +21,7 @@ services:
         no_proxy: ${no_proxy}
         COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME:-tensorflow}
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
-        TF_PACKAGE_VERSION: ${TF_PACKAGE_VERSION:-2.13.0}
+        TF_PACKAGE_VERSION: ${TF_PACKAGE_VERSION:-2.14.0}
         TF_PACKAGE: ${TF_PACKAGE:-intel-tensorflow}
       target: tf-base-${PACKAGE_OPTION:-pip}
       context: .
@@ -31,7 +31,7 @@ services:
       - python
     command: >
       python -c 'import tensorflow as tf; print("Tensorflow Version:", tf.__version__)'
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.13.0}-base
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.14.0}-base
     pull_policy: always
 
   jupyter:
@@ -45,7 +45,7 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     extends: tf-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.13.0}-jupyter
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.14.0}-jupyter
     network_mode: host
     volumes:
       - /$PWD:/jupyter
@@ -59,44 +59,44 @@ services:
     environment:
       MLFLOW_TRACKING_URI: 'https://localhost:${PORT:-5000}'
     extends: jupyter
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.13.0}-mlflow
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.14.0}-mlflow
     volumes:
       - /$PWD:/mlflow
 
   multinode:
     build:
       args:
-        HOROVOD_VERSION: ${HOROVOD_VERSION:-0.28.0}
-        INC_VERSION: ${INC_VERSION:-2.2}
+        HOROVOD_VERSION: ${HOROVOD_VERSION:-0.28.1}
+        INC_VERSION: ${INC_VERSION:-2.3.1}
         MPI: ${MPI:-openmpi}
       target: multinode-${PACKAGE_OPTION:-pip}
     command: >
       bash -c "horovodrun --check-build && mpirun --version && python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow;import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)'"
     extends: tf-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.13.0}-${MPI:-openmpi}-horovod-${HOROVOD_VERSION:-0.28.0}-inc-${INC_VERSION:-2.2}
-  itex-xpu-base:
-    build:
-      args:
-        ICD_VER: ${ICD_VER:-23.17.26241.33-647~22.04}
-        LEVEL_ZERO_GPU_VER: ${LEVEL_ZERO_GPU_VER:-1.3.26241.33-647~22.04}
-        LEVEL_ZERO_VER: ${LEVEL_ZERO_VER:-1.11.0-647~22.04}
-        LEVEL_ZERO_DEV_VER: ${LEVEL_ZERO_DEV_VER:-1.11.0-647~22.04}
-        DPCPP_VER: ${DPCPP_VER:-2023.2.1-16}
-        MKL_VER: ${MKL_VER:-2023.2.0-49495}
-        CCL_VER: ${CCL_VER:-2021.10.0-49084}
-        TF_VER: ${TF_VER:-2.13}
-        NO_PROXY: ""
-      target: itex-xpu-base
-    command: >
-      sh -c "python -c 'import tensorflow as tf;print(tf.__version__);from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'"
-    extends: tf-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.13}-itex-xpu-base
-  itex-xpu-jupyter:
-    build:
-      args:
-        PORT: ${PORT:-8888}
-      target: itex-xpu-jupyter
-    extends: itex-xpu-base
-    command: >
-      bash -c "python -m jupyter --version"
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.13}-itex-xpu-jupyter
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.14.0}-${MPI:-openmpi}-horovod-${HOROVOD_VERSION:-0.28.1}-inc-${INC_VERSION:-2.3.1}
+  # itex-xpu-base:
+  #   build:
+  #     args:
+  #       ICD_VER: ${ICD_VER:-23.17.26241.33-647~22.04}
+  #       LEVEL_ZERO_GPU_VER: ${LEVEL_ZERO_GPU_VER:-1.3.26241.33-647~22.04}
+  #       LEVEL_ZERO_VER: ${LEVEL_ZERO_VER:-1.11.0-647~22.04}
+  #       LEVEL_ZERO_DEV_VER: ${LEVEL_ZERO_DEV_VER:-1.11.0-647~22.04}
+  #       DPCPP_VER: ${DPCPP_VER:-2023.2.1-16}
+  #       MKL_VER: ${MKL_VER:-2023.2.0-49495}
+  #       CCL_VER: ${CCL_VER:-2021.10.0-49084}
+  #       TF_VER: ${TF_VER:-2.13}
+  #       no_proxy: ""
+  #     target: itex-xpu-base
+  #   command: >
+  #     sh -c "python -c 'import tensorflow as tf;print(tf.__version__);from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'"
+  #   extends: tf-base
+  #   image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.13}-itex-xpu-base
+  # itex-xpu-jupyter:
+  #   build:
+  #     args:
+  #       PORT: ${PORT:-8888}
+  #     target: itex-xpu-jupyter
+  #   extends: itex-xpu-base
+  #   command: >
+  #     bash -c "python -m jupyter --version"
+  #   image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.13}-itex-xpu-jupyter
