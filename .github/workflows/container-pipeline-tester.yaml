@@ -38,7 +38,7 @@ jobs:
         run: echo "matrix=$(jq -c . < ${{ inputs.group_dir }}/.actions.json)" >> $GITHUB_OUTPUT
       - name: Print Inputs
         if: ${{ inputs.env_overrides }}
-        run: echo "Overrides - ${{ inputs.env_overrides }} >> $GITHUB_STEP_SUMMARY
+        run: echo "Overrides - ${{ inputs.env_overrides }}" >> $GITHUB_STEP_SUMMARY
   build-containers:
     needs: [ setup-build-matrix ]
     container:
