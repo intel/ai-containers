@@ -20,7 +20,7 @@ fi
 # mydir = myvalue
 # etc.
 ##
-regex="([[:alnum:]_-]+)[[:space:]]*[:=][[:space:]]*([[:alnum:]_-]+)"
+regex="([[:alnum:]_-]+)[[:space:]]*[:=][[:space:]]*([[:alnum:]/=_-]+)"
 while [[ $matched_line =~ $regex ]]; do
   # Docs for BASH_REMATCH: https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html#index-BASH_005fREMATCH
   key="${BASH_REMATCH[1]}"
