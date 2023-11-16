@@ -1,6 +1,6 @@
 #!/bin/bash
 
-conda activate tensorflow
+conda activate tensorflow-xpu
 set -xe
 
 mkdir -p ~/input_model #User might not have write permission to write at root of MLOps repo

@@ -70,6 +70,7 @@ ENV CONDA_ROOT=/home/${USERNAME}/conda
 ARG MINICONDA_VERSION
 ARG PYTHON_VERSION
 ARG IDP_VERSION
+ARG INTEL_CHANNEL
 
 RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
     chmod +x miniconda.sh && \
@@ -78,34 +79,44 @@ RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-$
     ln -s ${CONDA_ROOT} ${CONDA_ROOT}/../miniconda3 && \
     export PATH=${CONDA_ROOT}/bin/:${PATH} && \
     conda update -y conda && \
+    conda config --set solver libmamba && \
+    conda config --show solver && \
     conda config --add channels intel && \
     conda init --all && \
-    conda clean -y --all
+    conda clean -y --all 
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 
 ARG SCIKIT_VERSION
 ARG XGBOOST_VERSION
 ARG MODIN_VERSION
+ARG DAAL4PY_VERSION
 
-RUN conda create -yn classical-ml intelpython3_core==${IDP_VERSION} python=${PYTHON_VERSION} && \
+RUN conda create -yn classical-ml && \
+    conda install -yn classical-ml -c ${INTEL_CHANNEL} \
+        matplotlib-base \
+        numba-dpex=0.21.4 \
+        numpy=1.24.3 \
+        ipp=2021.10 \
+        intelpython=${IDP_VERSION} \
+        python=${PYTHON_VERSION} \
+        scikit-learn-intelex==${SCIKIT_VERSION} \
+        matplotlib \
+        daal4py=${DAAL4PY_VERSION} \
+        scipy \
+        xgboost${XGBOOST_VERSION:+==${XGBOOST_VERSION}} \
+        threadpoolctl && \
     conda install -yn classical-ml ipython ipykernel kernda -c conda-forge && \
-    conda install -n classical-ml -y -c intel \
-    matplotlib \
-    daal4py \
-    scikit-learn-intelex${SCIKIT_VERSION:+==${SCIKIT_VERSION}} \
-    threadpoolctl && \
     conda clean -y --all
 
-RUN conda install -n classical-ml -y -c intel xgboost${XGBOOST_VERSION:+==${XGBOOST_VERSION}} &&\
-    conda clean -y --all
-RUN conda run -n classical-ml python -m pip install --ignore-installed --no-cache-dir \
-        modin[ray]==${MODIN_VERSION} \
-        dataset-librarian \
-        cloud-data-connector && \
-    conda run -n classical-ml python -m pip install --no-cache-dir \
-        scipy==1.11.1 \
-        certifi=='2023.07.22'
+RUN conda install -n classical-ml -y -c ${INTEL_CHANNEL} -c conda-forge \
+        modin-ray=${MODIN_VERSION} \
+        python-dotenv \
+        tqdm
+
+RUN conda run -n classical-ml python -m pip install --no-deps --no-cache-dir \
+    dataset-librarian \
+    cloud-data-connector
 
 ENV PYTHONSTARTUP=~/.patch_sklearn.py
 COPY base/.patch_sklearn.py ~/.patch_sklearn.py

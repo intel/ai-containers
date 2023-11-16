@@ -214,7 +214,7 @@ Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) h
         --network=host  \
         -w /tests intel/deep-learning:2023.2-py3.10 \
         conda run --no-capture-output \
-            -n tensorflow horovodrun --verbose \
+            -n tensorflow-xpu horovodrun --verbose \
             -np 2 \
             -H localhost:1,worker:1 \
             python tensorflow2_keras_mnist.py

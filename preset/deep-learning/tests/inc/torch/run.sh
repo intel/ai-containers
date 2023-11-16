@@ -1,6 +1,6 @@
 #!/bin/bash
 
-conda activate torch
+conda activate pytorch-cpu
 set -xe
 
 mkdir -p ~/input_model #User might not have write permission to write at root of MLOps repo

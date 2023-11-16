@@ -1,167 +1,162 @@
 deep-learning-horovod-3.10:
   cmd: bash -i /tests/horovod/run.sh
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.10
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.10
   shm_size: 2G
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 deep-learning-horovod-3.9:
   cmd: bash -i /tests/horovod/run.sh
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.9
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.9
   shm_size: 2G
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 deep-learning-ipex-3.10:
-  cmd: conda run -n torch python -W ignore /tests/ipex/test_ipex.py --device cpu --ipex
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.10
+  cmd: conda run -n pytorch-cpu python -W ignore /tests/ipex/test_ipex.py --device cpu --ipex
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.10
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 deep-learning-ipex-3.9:
-  cmd: conda run -n torch python -W ignore /tests/ipex/test_ipex.py --device cpu --ipex
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.9
+  cmd: conda run -n pytorch-cpu python -W ignore /tests/ipex/test_ipex.py --device cpu --ipex
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.9
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 deep-learning-ipex-notebook-3.10:
-  cmd: papermill --log-output ipex/ResNet50_Inference.ipynb -k torch
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.10
+  cmd: papermill --log-output ipex/ResNet50_Inference.ipynb -k pytorch-cpu
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.10
   notebook: 'true'
 deep-learning-ipex-notebook-3.9:
-  cmd: papermill --log-output ipex/ResNet50_Inference.ipynb -k torch
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.9
+  cmd: papermill --log-output ipex/ResNet50_Inference.ipynb -k pytorch-cpu
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.9
   notebook: 'true'
 deep-learning-ipex-quantization-notebook-3.10:
-  cmd: papermill --log-output ipex-quantization/IntelPytorch_Quantization.ipynb -k torch
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.10
+  cmd: papermill --log-output ipex-quantization/IntelPytorch_Quantization.ipynb -k pytorch-cpu
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.10
   notebook: 'true'
 deep-learning-ipex-quantization-notebook-3.9:
-  cmd: papermill --log-output ipex-quantization/IntelPytorch_Quantization.ipynb -k torch
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.9
+  cmd: papermill --log-output ipex-quantization/IntelPytorch_Quantization.ipynb -k pytorch-cpu
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.9
   notebook: 'true'
 deep-learning-itex-3.10:
-  cmd: conda run -n tensorflow python -W ignore /tests/itex/test_itex.py
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.10
+  cmd: conda run -n tensorflow-xpu python -W ignore /tests/itex/test_itex.py
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.10
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 deep-learning-itex-3.9:
-  cmd: conda run -n tensorflow python -W ignore /tests/itex/test_itex.py
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.9
+  cmd: conda run -n tensorflow-xpu python -W ignore /tests/itex/test_itex.py
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.9
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 deep-learning-tensorflow-dataset-librarian-3.10:
-  cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.10
+  cmd: conda run -n tensorflow-xpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.10
 deep-learning-tensorflow-dataset-librarian-3.9:
-  cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.9
+  cmd: conda run -n tensorflow-xpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.9
 deep-learning-torch-dataset-librarian-3.10:
-  cmd: conda run -n torch bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.10
+  cmd: conda run -n pytorch-cpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.10
 deep-learning-torch-dataset-librarian-3.9:
-  cmd: conda run -n torch bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.9
-deep-learning-torchccl-notebook-3.10:
-  cmd: papermill --log-output torchCCL/oneCCL_Bindings_GettingStarted.ipynb -k torch
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.10
-  notebook: 'true'
-deep-learning-torchccl-notebook-3.9:
-  cmd: papermill --log-output torchCCL/oneCCL_Bindings_GettingStarted.ipynb -k torch
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2023.2-py3.9
-  notebook: 'true'
+  cmd: conda run -n pytorch-cpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.0.0-py3.9
 inference-optimization-inc-ipex-quantization-notebook-3.10:
-  cmd: papermill --log-output inc-ipex-quantization/quantize_with_inc.ipynb result.ipynb -k torch --cwd inc-ipex-quantization
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.10
+  cmd: papermill --log-output inc-ipex-quantization/quantize_with_inc.ipynb result.ipynb -k pytorch-cpu --cwd inc-ipex-quantization
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
   notebook: 'true'
 inference-optimization-inc-ipex-quantization-notebook-3.9:
-  cmd: papermill --log-output inc-ipex-quantization/quantize_with_inc.ipynb -k torch --cwd inc-ipex-quantization
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.9
+  cmd: papermill --log-output inc-ipex-quantization/quantize_with_inc.ipynb -k pytorch-cpu --cwd inc-ipex-quantization
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   notebook: 'true'
 inference-optimization-inc-itex-notebook-3.10:
-  cmd: papermill --log-output inc-itex/inc_sample_tensorflow.ipynb result.ipynb -k tensorflow --cwd inc-itex
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.10
+  cmd: papermill --log-output inc-itex/inc_sample_tensorflow.ipynb result.ipynb -k tensorflow-xpu --cwd inc-itex
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
   notebook: 'true'
 inference-optimization-inc-itex-notebook-3.9:
-  cmd: papermill --log-output inc-itex/inc_sample_tensorflow.ipynb -k tensorflow --cwd inc-itex
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.9
+  cmd: papermill --log-output inc-itex/inc_sample_tensorflow.ipynb -k tensorflow-xpu --cwd inc-itex
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   notebook: 'true'
 inference-optimization-inc-tensorflow-3.10:
   cmd: bash -i /tests/inc/tensorflow/run.sh cpu
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.10
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 inference-optimization-inc-tensorflow-3.9:
   cmd: bash -i /tests/inc/tensorflow/run.sh cpu
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.9
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 inference-optimization-inc-torch-3.10:
   cmd: bash -i /tests/inc/torch/run.sh cpu
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.10
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 inference-optimization-inc-torch-3.9:
   cmd: bash -i /tests/inc/torch/run.sh cpu
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.9
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 inference-optimization-ipex-3.10:
-  cmd: conda run -n torch python -W ignore /tests/ipex/test_ipex.py --device cpu --ipex
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.10
+  cmd: conda run -n pytorch-cpu python -W ignore /tests/ipex/test_ipex.py --device cpu --ipex
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
+  volumes:
+    - dst: /tests
+      src: $PWD/preset/deep-learning/tests
 inference-optimization-ipex-3.9:
-  cmd: conda run -n torch python -W ignore /tests/ipex/test_ipex.py --device cpu --ipex
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.9
+  cmd: conda run -n pytorch-cpu python -W ignore /tests/ipex/test_ipex.py --device cpu --ipex
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 inference-optimization-itex-3.10:
-  cmd: conda run -n tensorflow python -W ignore /tests/itex/test_itex.py
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.10
+  cmd: conda run -n tensorflow-xpu python -W ignore /tests/itex/test_itex.py
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 inference-optimization-itex-3.9:
-  cmd: conda run -n tensorflow python -W ignore /tests/itex/test_itex.py
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.9
+  cmd: conda run -n tensorflow-xpu python -W ignore /tests/itex/test_itex.py
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 inference-optimization-itex-inference-notebook-3.10:
-  cmd: papermill --log-output itex-inference/tutorial_optimize_TensorFlow_pretrained_model.ipynb -k tensorflow --cwd itex-inference
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.10
+  cmd: papermill --log-output itex-inference/tutorial_optimize_TensorFlow_pretrained_model.ipynb -k tensorflow-xpu --cwd itex-inference
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
   notebook: 'true'
 inference-optimization-itex-inference-notebook-3.9:
-  cmd: papermill --log-output itex-inference/tutorial_optimize_TensorFlow_pretrained_model.ipynb -k tensorflow --cwd itex-inference
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.9
+  cmd: papermill --log-output itex-inference/tutorial_optimize_TensorFlow_pretrained_model.ipynb -k tensorflow-xpu --cwd itex-inference
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   notebook: 'true'
 inference-optimization-onnx-3.10:
   cmd: bash -i /tests/onnx/run.sh
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.10
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 inference-optimization-onnx-3.9:
   cmd: bash -i /tests/onnx/run.sh
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.9
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   volumes:
     - dst: /tests
       src: $PWD/preset/deep-learning/tests
 inference-optimization-tensorflow-dataset-librarian-3.10:
-  cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.10
+  cmd: conda run -n tensorflow-xpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
 inference-optimization-tensorflow-dataset-librarian-3.9:
-  cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.9
+  cmd: conda run -n tensorflow-xpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
 inference-optimization-torch-dataset-librarian-3.10:
-  cmd: conda run -n torch bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.10
+  cmd: conda run -n pytorch-cpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
 inference-optimization-torch-dataset-librarian-3.9:
-  cmd: conda run -n torch bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2023.2-py3.9
+  cmd: conda run -n pytorch-cpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9

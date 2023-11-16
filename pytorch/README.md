@@ -249,7 +249,7 @@ Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) h
       --shm-size 8GB \
       -it $IMAGE_NAME bash -c \
       conda run --no-capture-output \
-        -n torch ipexrun cpu --distributed \
+        -n torch-cpu ipexrun cpu --distributed \
         --nproc_per_node=2 --nnodes=2 \
         --hostfile hostfile \
         pytorch_mnist.py --no-cuda --save-model

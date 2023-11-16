@@ -72,6 +72,7 @@ ENV CONDA_ROOT=/home/${USERNAME}/conda
 ARG MINICONDA_VERSION
 ARG PYTHON_VERSION
 ARG IDP_VERSION
+ARG INTEL_CHANNEL
 
 RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
     chmod +x miniconda.sh && \
@@ -80,21 +81,34 @@ RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-$
     ln -s ${CONDA_ROOT} ${CONDA_ROOT}/../miniconda3 && \
     export PATH=${CONDA_ROOT}/bin/:${PATH} && \
     conda update -y conda && \
+    conda config --set solver libmamba && \
+    conda config --show solver && \
     conda config --add channels intel && \
     conda init --all && \
     conda clean -y --all
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 
-RUN conda create -yn data-analytics intelpython3_core=${IDP_VERSION} python=${PYTHON_VERSION} && \
+RUN conda create -yn data-analytics && \
+    conda install -yn data-analytics -c ${INTEL_CHANNEL} \
+        matplotlib-base \
+        numba-dpex=0.21.4 \
+        numpy=1.24.3 \
+        ipp=2021.10 \
+        intelpython=${IDP_VERSION} \
+        python=${PYTHON_VERSION} \
+        scipy && \
     conda install -yn data-analytics ipython ipykernel kernda -c conda-forge && \
-    conda run -n data-analytics python -m pip install --ignore-installed --no-cache-dir \
-        modin[ray] \
-        dataset-librarian \
-        cloud-data-connector && \
-    conda run -n data-analytics python -m pip install --no-cache-dir \
-        scipy==1.11.1 && \
     conda clean -y --all
+
+RUN conda install -n data-analytics -y -c ${INTEL_CHANNEL} -c conda-forge \
+        modin-ray=${MODIN_VERSION} \
+        python-dotenv \
+        tqdm
+
+RUN conda run -n data-analytics python -m pip install --no-deps --no-cache-dir \
+    dataset-librarian \
+    cloud-data-connector
 
 FROM data-analytics-python as data-analytics-jupyter
 
