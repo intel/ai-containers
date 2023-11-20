@@ -18,7 +18,7 @@ jobs:
         run: bash .github/utils/val-args.sh "${{ github.event.pull_request.body }}"
       - name: Remove PASS Label
         if: contains(github.event.pull_request.labels.*.name, 'PASS')
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           result-encoding: string
           script: |
@@ -30,7 +30,7 @@ jobs:
             })
       - name: Remove FAIL Label
         if: contains(github.event.pull_request.labels.*.name, 'FAIL')
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           result-encoding: string
           script: |
@@ -41,7 +41,7 @@ jobs:
               name: ["FAIL"]
             })
       - name: Lock
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             github.rest.issues.addLabels({
@@ -66,7 +66,7 @@ jobs:
     steps:
       - name: Unlock
         if: ${{ needs.check-description-checkbox.result != 'skipped' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           result-encoding: string
           script: |
@@ -78,7 +78,7 @@ jobs:
             })
       - name: Set Fail Label
         if: ${{ needs.check-description-checkbox.result != 'success' || needs.container-pipeline-tester.result != 'success' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             github.rest.issues.addLabels({
@@ -89,7 +89,7 @@ jobs:
             })
       - name: Set Pass Label
         if: ${{ needs.check-description-checkbox.result == 'success' && needs.container-pipeline-tester.result == 'success' }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             github.rest.issues.addLabels({
