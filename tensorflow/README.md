@@ -196,7 +196,7 @@ Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) h
         -v $PWD/ssh_worker:/home/dev/.ssh/ \
         --name=worker \
         --network=host  \
-        -w /tests intel/deep-learning:2023.2-py3.10 \
+        -w /tests intel/deep-learning:2024.0-py3.10 \
         bash -c '/usr/sbin/sshd -p 12345 -f ~/.ssh/sshd_config -E ~/.ssh/error.log && sleep infinity'
     ```
 
@@ -212,7 +212,7 @@ Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) h
         -v $PWD/ssh_launcher:/home/dev/.ssh/ \
         --name=launcher \
         --network=host  \
-        -w /tests intel/deep-learning:2023.2-py3.10 \
+        -w /tests intel/deep-learning:2024.0-py3.10 \
         conda run --no-capture-output \
             -n tensorflow-xpu horovodrun --verbose \
             -np 2 \

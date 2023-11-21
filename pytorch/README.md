@@ -218,7 +218,7 @@ Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) h
     Please, run the following command on all worker nodes in a shell to launch the container with ssh daemon.
 
     ```bash
-    IMAGE_NAME=intel/deep-learning:2023.2-py3.9
+    IMAGE_NAME=intel/deep-learning:2024.0-py3.9
     docker run --rm \
       -v $PWD/workload:/tests \
       -v $PWD/ssh_worker:/home/dev/.ssh/ \
@@ -237,7 +237,7 @@ Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) h
     Run the following command on the launcher nodes in a shell to launch the container with `ipexrun` command.
 
     ```bash
-    IMAGE_NAME=intel/deep-learning:2023.2-py3.9
+    IMAGE_NAME=intel/deep-learning:2024.0-py3.9
     docker run --rm \
       -v $PWD:/tests \
       -v $PWD/client:/home/dev/.ssh/ \
@@ -249,7 +249,7 @@ Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) h
       --shm-size 8GB \
       -it $IMAGE_NAME bash -c \
       conda run --no-capture-output \
-        -n torch-cpu ipexrun cpu --distributed \
+        -n torch-cpu ipexrun --distributed \
         --nproc_per_node=2 --nnodes=2 \
         --hostfile hostfile \
         pytorch_mnist.py --no-cuda --save-model
