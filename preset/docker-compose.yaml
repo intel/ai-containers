@@ -109,7 +109,7 @@ services:
       command: >
         bash -c "conda run -n torch python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());print(ipex.xpu.has_onemkl())' && \
         conda run -n torch bash -c 'mpirun --version' && \
-        conda run -n torch python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\nOneCCL:\", oneccl.__version__)' && \
+        conda run -n torch python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\noneCCL:\", oneccl.__version__)' && \
         conda run -n tensorflow python -c 'from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())' && \
         conda run -n tensorflow bash -c 'horovodrun --check-build && mpirun --version' && \
         conda run -n tensorflow python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow'"

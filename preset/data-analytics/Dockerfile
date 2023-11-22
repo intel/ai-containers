@@ -56,12 +56,9 @@ RUN apt-get update -y && \
     xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
-#Remove apt utilities from container
-RUN rm -rf /usr/bin/apt*
-
 FROM data-analytics-base as data-analytics-python
 
-#Setting up non-root directories
+# Setting up non-root directories
 ARG USERNAME
 RUN useradd --uid 1000 -d /home/${USERNAME} -s /bin/bash -m ${USERNAME}
 USER $USERNAME

@@ -47,8 +47,8 @@ ENV LANG=C.UTF-8
 
 SHELL ["/bin/bash", "-c"]
 
-RUN apt update -y && \
-    apt install -y --no-install-recommends --fix-missing \
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends --fix-missing \
     apt-utils \
     build-essential \
     bzip2 \
@@ -72,8 +72,7 @@ RUN apt update -y && \
     xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
-#GPU Drivers setup
-
+# GPU Drivers setup
 ARG DEVICE
 ARG ICD_VER
 ARG LEVEL_ZERO_GPU_VER
@@ -91,8 +90,8 @@ RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
     echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
         | tee /etc/apt/sources.list.d/oneAPI.list
 
-RUN apt update && \
-    apt install -y --no-install-recommends --fix-missing \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
     intel-opencl-icd=${ICD_VER} \
     intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
     level-zero=${LEVEL_ZERO_VER} \
@@ -101,12 +100,12 @@ RUN apt update && \
     intel-oneapi-runtime-mkl=${MKL_VER} \
     libgl1-mesa-glx \
     libglib2.0-0  && \
-    apt clean && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
     
 FROM dgpu-base as deep-learning-python
 
-#Setting up non-root directories
+# Setting up non-root directories
 ARG USERNAME
 RUN useradd --uid 1000 -d /home/${USERNAME} -s /bin/bash -m ${USERNAME}
 USER $USERNAME
@@ -114,7 +113,7 @@ WORKDIR /home/${USERNAME}
 
 ENV CONDA_ROOT=/home/${USERNAME}/conda
 
-#Miniconda Python Installation
+# Miniconda Python Installation
 ARG MINICONDA_VERSION
 ARG PYTHON_VERSION
 ARG IDP_VERSION
@@ -134,7 +133,7 @@ RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-$
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib:/opt/intel/oneapi/lib/intel64:${LD_LIBRARY_PATH}
 
-#PyTorch Installation
+# PyTorch Installation
 ARG TORCH_CPU_VERSION
 ARG ONECCL_CPU_VERSION
 ARG IPEX_CPU_VERSION
@@ -145,7 +144,8 @@ ARG IPEX_GPU_VERSION
 ARG TORCHVISION_GPU_VERSION
 ARG INTEL_CHANNEL
 ARG NEURAL_COMPRESSOR_VERSION
-# PyTOrch CPU Env
+
+# PyTorch CPU Env
 RUN conda create -yn pytorch-cpu -c ${INTEL_CHANNEL} -c conda-forge \
         matplotlib-base \
         numba-dpex=0.21.4 \
@@ -174,7 +174,7 @@ RUN conda create -yn pytorch-cpu -c ${INTEL_CHANNEL} -c conda-forge \
     conda clean -y --all && \
     echo "unset OCL_ICD_VENDORS" >> ${CONDA_ROOT}/envs/pytorch-cpu/etc/conda/activate.d/activate-opencl-rt.sh
 
-# PyTOrch GPU Env
+# PyTorch GPU Env
 RUN conda create -yn pytorch-gpu -c ${INTEL_CHANNEL} -c conda-forge \
         matplotlib-base \
         numba-dpex=0.21.4 \
@@ -204,7 +204,7 @@ RUN conda create -yn pytorch-gpu -c ${INTEL_CHANNEL} -c conda-forge \
 
 RUN echo "unset OCL_ICD_VENDORS" >> ${CONDA_ROOT}/envs/pytorch-gpu/etc/conda/activate.d/activate-opencl-rt.sh
 
-#Tensorflow Installtion
+# TensorFlow Installtion
 ARG TF_PACKAGE
 ARG TF_VERSION
 ARG ITEX_VERSION
@@ -274,22 +274,22 @@ FROM deep-learning-jupyter as distributed-deep-learning
 
 USER root
 
-#oneccl installation
+# oneCCL installation
 ARG CCL_VER="N/A"
 RUN if [ ${CCL_VER} != "N/A" ]; then \
-        apt update && \
-        apt install -y --no-install-recommends --fix-missing \
+        apt-get update && \
+        apt-get install -y --no-install-recommends --fix-missing \
         intel-oneapi-runtime-ccl=${CCL_VER} && \
         rm -rf /var/lib/apt/lists/*; \
     fi
 
-#OneCCl specific flags
+# oneCCl specific flags
 ENV CCL_ROOT="/opt/intel/oneapi/lib/intel64" 
 ENV CCL_ZE_IPC_EXCHANGE=sockets
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib/intel64/libfabric:${LD_LIBRARY_PATH}
 
-#Install OpenMPI
-RUN apt update -y && apt install -y --no-install-recommends --fix-missing \
+# Install OpenMPI
+RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
     libopenmpi-dev \
     openmpi-bin \
     openmpi-common
@@ -298,8 +298,8 @@ ENV OMPI_ALLOW_RUN_AS_ROOT=1
 ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 ENV OMPI_MCA_tl_tcp_if_exclude="lo,docker0"
 
-#Install OpenSSH
-RUN apt install -y --no-install-recommends --fix-missing \
+# Install OpenSSH
+RUN apt-get install -y --no-install-recommends --fix-missing \
     openssh-client \
     openssh-server && \
     rm  /etc/ssh/ssh_host_*_key \
@@ -310,7 +310,7 @@ RUN rm -rf /usr/bin/apt*
 
 RUN mkdir -p /var/run/sshd
 
-#https://github.com/openucx/ucx/issues/4742#issuecomment-584059909
+# https://github.com/openucx/ucx/issues/4742#issuecomment-584059909
 ENV UCX_TLS=ud,sm,self
 
 ARG USERNAME
@@ -351,7 +351,6 @@ RUN conda run -n tensorflow-xpu python -m pip install --no-deps --no-cache-dir \
     conda clean -y --all
 
 USER root
-RUN rm -rf /usr/bin/apt*
 
 ARG USERNAME
 USER $USERNAME

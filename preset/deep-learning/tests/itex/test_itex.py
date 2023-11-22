@@ -19,7 +19,7 @@
 
 
 import tensorflow as tf
-print("Tensorflow version {}".format(tf.__version__))
+print("TensorFlow version {}".format(tf.__version__))
 
 import tensorflow_hub as hub
 from tensorflow.keras.applications.imagenet_utils import preprocess_input

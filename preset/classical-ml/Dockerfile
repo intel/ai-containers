@@ -53,14 +53,12 @@ RUN apt-get update -y && \
     rsync \
     unzip \
     wget \
-    xz-utils
-
-#Remove apt utilities from container
-RUN rm -rf /usr/bin/apt*
+    xz-utils && \
+    rm -rf /var/lib/apt/lists/*
 
 FROM classical-ml-base as classical-ml-python
 
-#Setting up non-root directories
+# Setting up non-root directories
 ARG USERNAME
 RUN useradd --uid 1000 -d /home/${USERNAME} -s /bin/bash -m ${USERNAME}
 USER $USERNAME
