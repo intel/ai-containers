@@ -96,7 +96,7 @@ After running this command the terminal should display an output similar to disp
 
 ## Run in Multi-Node Distributed Mode
 
-You can follow the instructions provided in [Tensorflow README](../tensorflow/README.md#intel®-tensorflow-distributed-execution-in-containers) and [PyTorch README](../pytorch/README.md#intel®-pytorch-distributed-execution-in-containers) along with the Deep Learning or Inference Optimization presets to run the preset containers in multi-node mode depending on your preferred framework.
+You can follow the instructions provided in [Tensorflow README](./deep-learning/demo/tensorflow-distributed/README.md) and [PyTorch README](./deep-learning/demo/pytorch-distributed/README.md) along with the Deep Learning or Inference Optimization presets to run the preset containers in multi-node mode depending on your preferred framework.
 
 ## Troubleshooting and Support
 If you face some issue in using the container you can find more information on how to troubleshoot [here](https://github.com/intel/ai-containers#troubleshooting). If you need more help feel free to submit an [issue](https://github.com/intel/ai-containers/issues).
