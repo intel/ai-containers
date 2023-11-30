@@ -180,7 +180,7 @@ export no_proxy=""
 ## Support
 
 The Intel AI MLOps team tracks bugs and enhancement requests using
-[GitHub issues](https://github.com/intel/mlops/issues). Before submitting a
+[GitHub issues](https://github.com/intel/ai-containers/issues). Before submitting a
 suggestion or bug report, search the existing GitHub issues to see if your issue has already been reported.
 
 * [Trademarks](http://www.intel.com/content/www/us/en/legal/trademarks.html)
