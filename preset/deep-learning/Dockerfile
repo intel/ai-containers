@@ -322,11 +322,13 @@ ARG ONECCL_BIND_PT_VERSION="N/A"
 RUN conda run -n pytorch-cpu python -m pip install --no-cache-dir py-cpuinfo && \
     conda run -n pytorch-cpu python -m pip install --no-cache-dir \
         deepspeed \
-        intel-extension-for-deepspeed
+        intel-extension-for-deepspeed \
+        tensorboardX
 RUN conda run -n pytorch-gpu python -m pip install --no-cache-dir py-cpuinfo && \
     conda run -n pytorch-gpu python -m pip install --no-cache-dir \
         deepspeed \
-        intel-extension-for-deepspeed
+        intel-extension-for-deepspeed \
+        tensorboardX
 
 ARG NEURAL_COMPRESSOR_VERSION
 

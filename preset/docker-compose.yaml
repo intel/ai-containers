@@ -90,10 +90,12 @@ services:
         - /dev/dri:/dev/dri
       ipc: host
       command: >
-        bash -c "conda run -n torch python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());print(ipex.xpu.has_onemkl())' && \
-        conda run -n torch python -c 'import neural_compressor;print(\"Neural Compressor Version:\", neural_compressor.__version__)' && \
-        conda run -n tensorflow python -c 'from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())' && \
-        conda run -n tensorflow python -c 'import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)'"
+        bash -c "conda run -n pytorch-cpu python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());' && \
+        conda run -n pytorch-cpu python -c 'import neural_compressor;print(\"Neural Compressor Version:\", neural_compressor.__version__)' && \
+        conda run -n pytorch-gpu python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());' && \
+        conda run -n pytorch-gpu python -c 'import neural_compressor;print(\"Neural Compressor Version:\", neural_compressor.__version__)' && \
+        conda run -n tensorflow-xpu python -c 'from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())' && \
+        conda run -n tensorflow-xpu python -c 'import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)'"
       image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${IDP_VERSION:-2024.0.0}-py${PYTHON_VERSION:-3.10}
       pull_policy: always
 
@@ -107,10 +109,13 @@ services:
           ONECCL_BIND_PT_WHL_URL: https://developer.intel.com/ipex-whl-stable-xpu
         target: distributed-deep-learning
       command: >
-        bash -c "conda run -n torch python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());print(ipex.xpu.has_onemkl())' && \
-        conda run -n torch bash -c 'mpirun --version' && \
-        conda run -n torch python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\noneCCL:\", oneccl.__version__)' && \
-        conda run -n tensorflow python -c 'from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())' && \
-        conda run -n tensorflow bash -c 'horovodrun --check-build && mpirun --version' && \
-        conda run -n tensorflow python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow'"
+        bash -c "conda run -n pytorch-cpu python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());' && \
+        conda run -n pytorch-cpu bash -c 'mpirun --version' && \
+        conda run -n pytorch-cpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\noneCCL:\", oneccl.__version__)' && \
+        conda run -n pytorch-gpu python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());' && \
+        conda run -n pytorch-gpu bash -c 'mpirun --version' && \
+        conda run -n pytorch-gpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\noneCCL:\", oneccl.__version__)' && \
+        conda run -n tensorflow-xpu python -c 'from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())' && \
+        conda run -n tensorflow-xpu bash -c 'horovodrun --check-build && mpirun --version' && \
+        conda run -n tensorflow-xpu python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow'"
       image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${IDP_VERSION:-2024.0.0}-py${PYTHON_VERSION:-3.10}

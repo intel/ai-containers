@@ -7,7 +7,7 @@ on:
         description: 'Enter Container Group Directory:'
         type: string
       env_overrides:
-        description: 'Enter Bash Env Variable Overrides in `KEY=VAL && KEY2=VAL2` format:'
+        description: 'Enter Bash Env Variable Overrides in `KEY=VAL KEY2=VAL2` format:'
         required: false
         type: string
       runner_label:
