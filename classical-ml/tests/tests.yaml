@@ -1,0 +1,24 @@
+classical-ml-base-idp-sklearn:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.0.0}-xgboost-${XGBOOST_VERSION:-2.0.2}-base
+    cmd: bash /tests/sklearn.sh
+    volumes:
+      - src: $PWD/classical-ml/tests
+        dst: /tests
+classical-ml-base-idp-xgboost:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.0.0}-xgboost-${XGBOOST_VERSION:-2.0.2}-base
+    cmd: bash /tests/xgboost.sh
+    volumes:
+      - src: $PWD/classical-ml/tests
+        dst: /tests
+classical-ml-base-pip-sklearn:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.0.0}-xgboost-${XGBOOST_VERSION:-2.0.2}-base
+    cmd: bash /tests/sklearn.sh
+    volumes:
+      - src: $PWD/classical-ml/tests
+        dst: /tests
+classical-ml-base-pip-xgboost:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.0.0}-xgboost-${XGBOOST_VERSION:-2.0.2}-base
+    cmd: bash /tests/xgboost.sh
+    volumes:
+      - src: $PWD/classical-ml/tests
+        dst: /tests

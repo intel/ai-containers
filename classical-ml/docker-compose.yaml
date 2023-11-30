@@ -21,8 +21,8 @@ services:
         no_proxy: ${no_proxy}
         COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME:-classical-ml}
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
-        SCIKIT_VERSION: ${SCIKIT_VERSION:-2023.1.1}
-        XGBOOST_VERSION: ${XGBOOST_VERSION:-1.7.5}
+        SCIKIT_VERSION: ${SCIKIT_VERSION:-2024.0.0}
+        XGBOOST_VERSION: ${XGBOOST_VERSION:-2.0.2}
       context: .
       dockerfile: Dockerfile
       target: ml-base-${PACKAGE_OPTION:-pip}
@@ -31,7 +31,7 @@ services:
       - python
     command: >
       bash -c "python -c 'import sklearnex, sklearn; import xgboost as xgb; print(\"Scikit version:\", sklearn.__version__, \"\\nXGBoost version:\", xgb.__version__)'"
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2023.1.1}-xgboost-${XGBOOST_VERSION:-1.7.5}-base
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.0.0}-xgboost-${XGBOOST_VERSION:-2.0.2}-base
     pull_policy: always
 
   jupyter:
@@ -43,7 +43,7 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     extends: ml-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2023.1.1}-xgboost-${XGBOOST_VERSION:-1.7.5}-jupyter
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.0.0}-xgboost-${XGBOOST_VERSION:-2.0.2}-jupyter
     network_mode: host
 
   mlflow:
@@ -55,7 +55,7 @@ services:
     environment:
       MLFLOW_TRACKING_URI: 'https://localhost:${PORT:-5000}'
     extends: jupyter
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2023.1.1}-xgboost-${XGBOOST_VERSION:-1.7.5}-mlflow
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.0.0}-xgboost-${XGBOOST_VERSION:-2.0.2}-mlflow
     ports:
       - ${PORT-5000}:${PORT:-5000}
     volumes:
