@@ -1,0 +1,114 @@
+ipex-serving-model-archive-pip:
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-torchserve
+  cmd: bash /home/model-server/model-archive/mar-test.sh
+  entrypoint: ""
+  volumes:
+    - src: $PWD/pytorch/serving/model-archive
+      dst: /home/model-server/model-archive
+    - src: $PWD/pytorch/serving/model-store
+      dst: /home/model-server/model-store
+  user: root
+  workdir: /home/model-server/model-archive
+ipex-serving-workflow-archive-pip:
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-torchserve
+  cmd: bash /home/model-server/model-archive/war-test.sh
+  entrypoint: ""
+  volumes:
+    - src: $PWD/pytorch/serving/model-archive
+      dst: /home/model-server/model-archive
+    - src: $PWD/pytorch/serving/wf-store
+      dst: /home/model-server/wf-store
+  user: root
+  workdir: /home/model-server/model-archive
+ipex-serving-rest-workflow-pip:
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-torchserve
+  cmd: bash /home/model-server/wf-store/rest-test.sh
+  serving: 'true'
+  volumes:
+    - src: $PWD/pytorch/serving/model-store
+      dst: /home/model-server/model-store
+    - src: $PWD/pytorch/serving/wf-store
+      dst: /home/model-server/wf-store
+  envs:
+    ENABLE_TORCH_PROFILER: 'true'
+  shm_size: 1g
+  workdir: /home/model-server/wf-store
+ipex-serving-rest-inference-pip:
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-torchserve
+  cmd: bash /home/model-server/model-store/rest-test.sh
+  serving: 'true'
+  volumes:
+    - src: $PWD/pytorch/serving/model-store
+      dst: /home/model-server/model-store
+  envs:
+    ENABLE_TORCH_PROFILER: 'true'
+  shm_size: 1g
+  workdir: /home/model-server/model-store
+ipex-serving-model-archive-idp:
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-torchserve
+  cmd: bash /home/model-server/model-archive/test.sh
+  entrypoint: ""
+  volumes:
+    - src: $PWD/pytorch/serving/model-archive
+      dst: /home/model-server/model-archive
+    - src: $PWD/pytorch/serving/model-store
+      dst: /home/model-server/model-store
+  user: root
+  workdir: /home/model-server/model-archive
+ipex-serving-workflow-archive-idp:
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-torchserve
+  cmd: bash /home/model-server/model-archive/war-test.sh
+  entrypoint: ""
+  volumes:
+    - src: $PWD/pytorch/serving/model-archive
+      dst: /home/model-server/model-archive
+    - src: $PWD/pytorch/serving/wf-store
+      dst: /home/model-server/wf-store
+  user: root
+  workdir: /home/model-server/model-archive
+ipex-serving-rest-workflow-idp:
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-torchserve
+  cmd: bash /home/model-server/wf-store/rest-test.sh
+  serving: 'true'
+  volumes:
+    - src: $PWD/pytorch/serving/model-store
+      dst: /home/model-server/model-store
+    - src: $PWD/pytorch/serving/wf-store
+      dst: /home/model-server/wf-store
+  envs:
+    ENABLE_TORCH_PROFILER: 'true'
+  shm_size: 1g
+  workdir: /home/model-server/wf-store
+ipex-serving-rest-inference-idp:
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-torchserve
+  cmd: bash /home/model-server/model-store/rest-test.sh
+  serving: 'true'
+  volumes:
+    - src: $PWD/pytorch/serving/model-store
+      dst: /home/model-server/model-store
+  envs:
+    ENABLE_TORCH_PROFILER: 'true'
+  shm_size: 1g
+  workdir: /home/model-server/model-store
+ipex-serving-grpc-inference-pip:
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-torchserve
+  cmd: bash /home/model-server/model-store/grpc-test.sh
+  serving: 'true'
+  volumes:
+    - src: $PWD/pytorch/serving/model-store
+      dst: /home/model-server/model-store
+  envs:
+    ENABLE_TORCH_PROFILER: 'true'
+  shm_size: 1g
+  workdir: /home/model-server/model-store
+ipex-serving-grpc-inference-idp:
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-torchserve
+  cmd: bash /home/model-server/model-store/grpc-test.sh
+  serving: 'true'
+  volumes:
+    - src: $PWD/pytorch/serving/model-store
+      dst: /home/model-server/model-store
+  envs:
+    ENABLE_TORCH_PROFILER: 'true'
+  shm_size: 1g
+  workdir: /home/model-server/model-store

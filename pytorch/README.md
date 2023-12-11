@@ -68,6 +68,27 @@ Built from IPEX XPU Base
 | --- | --- | --- |
 | PORT | `8888` | Server UI Port |
 
+### IPEX Prod
+
+Create python environment using a compile stage. Expose REST and gRPC ports. Install Java and Python. Create model-server user and create necessary directories. Create entrypoint file and add torchserve config file.
+
+| Component | Package Manager |
+| --- | --- |
+| captum | pip |
+| cython | pip |
+| intel_extension_for_pytorch | pip |
+| openjdk-17-jdk | apt |
+| pynvml | pip |
+| python3 | apt |
+| pyyaml | pip |
+| torch | pip |
+| torch-model-archiver | pip |
+| torch-workflow-archiver | pip |
+| torchaudio | pip |
+| torchserve | pip |
+| torchtext | pip |
+| torchvision | pip |
+
 #### Distributed Training on k8s
 
 Use _N_-Nodes in your Training with PyTorchJobs and Kubeflow's Training Operator with an optimized production container.
@@ -128,7 +149,7 @@ helm install ---namespace ${NAMESPACE} \
      --set imageTag=<Docker Image Tag> \
      ...
      ipex-distributed
-     ./chart
+     charts/training
 ```
 
 To see an existing configuration utilizing this method, check out [Intel® Extension for Transformers](https://github.com/intel/intel-extension-for-transformers/blob/main/docker/README.md#kubernetes)' implementation.

@@ -133,7 +133,7 @@ helm install ---namespace ${NAMESPACE} \
      --set slotsPerWorker=1 \
      ...
      itex-distributed
-     ./chart
+     charts/training
 ```
 
 To see an existing configuration utilizing this method, check out [Intel® Transfer Learning Tool](https://github.com/IntelAI/transfer-learning/blob/main/docker/README.md#kubernetes)'s implementation.

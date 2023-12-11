@@ -214,3 +214,67 @@ ARG PORT=8888
 EXPOSE $PORT
 
 CMD ["bash", "-c", "python -m jupyter notebook --notebook-dir=/~/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
+
+FROM ${COMPOSE_PROJECT_NAME}-python as torchserve-base
+
+ENV PYTHONUNBUFFERED=TRUE
+
+RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
+    numactl \
+    openjdk-17-jdk && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN useradd -m -s /bin/bash model-server && \
+    mkdir -p /home/model-server && \
+    mkdir -p /home/model-server/tmp && \
+    mkdir -p /home/model-server/logs && \
+    mkdir -p /home/model-server/model-store && \
+    chown -R model-server /home/model-server/
+
+FROM torchserve-base AS compile
+
+RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
+    g++ \
+    git \
+    wget \
+    python3-dev \
+    python3-distutils \
+    python3-venv && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m venv /home/venv
+
+ENV PATH="/home/venv/bin:$PATH"
+
+COPY serving/requirements.txt requirements.txt
+
+RUN python -m pip install --no-cache-dir -U pip setuptools && \
+    python -m pip install --no-cache-dir -r requirements.txt
+
+RUN echo -e "#!/bin/bash \n\
+set -e \n\
+if [[ \"\$1\" = "serve" ]]; then \n\
+    shift 1 \n\
+    torchserve --start --ts-config /home/model-server/config.properties --workflow-store /home/model-server/wf-store \n\
+else \n\
+    eval \"\$@\" \n\
+fi \n\
+tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh
+
+FROM torchserve-base AS torchserve
+
+USER model-server
+WORKDIR /home/model-server
+
+COPY --chown=model-server --from=compile /home/venv /home/venv
+COPY --chown=model-server --chmod=755 --from=compile /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+COPY --chown=model-server serving/config.properties /home/model-server/config.properties
+
+ENV PATH="/home/venv/bin:$PATH"
+ENV TEMP=/home/model-server/tmp
+
+# 8080/8081/8082 REST and 7070/7071 gRPC
+EXPOSE 8080 8081 8082 7070 7071
+
+ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
+CMD ["serve"]

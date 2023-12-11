@@ -1,0 +1,20 @@
+# itex-grpc-serving:
+#   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-intel-tensorflow-${TF_PACKAGE_VERSION:-2.13.0}-prod
+#   cmd: bash /models/mnist.sh
+#   serving: 'true'
+#   volumes:
+#     - src: $PWD/tensorflow/serving
+#       dst: /models
+#   env:
+#     MODEL_NAME: mnist
+#   workdir: /models
+# itex-rest-serving:
+#   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-intel-tensorflow-${TF_PACKAGE_VERSION:-2.13.0}-prod
+#   cmd: bash /models/half_plus_two.sh
+#   serving: 'true'
+#   volumes:
+#     - src: $PWD/tensorflow/serving
+#       dst: /models
+#   env:
+#     MODEL_NAME: half_plus_two
+#   workdir: /models
