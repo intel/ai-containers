@@ -1,4 +1,4 @@
-# Intel Flex (ATSM) Models Containers
+# Intel® Flex (ATSM) Model Containers
 These are the deep learning Models optimized to run on Intel's Flex Series GPU platform.
 |                                                                           Container                                                                           | Framework|                               Docker Pull Command                               |Compressed Size|
 |---------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|---------------------------------------------------------------------------------|---------------|
@@ -11,6 +11,6 @@ These are the deep learning Models optimized to run on Intel's Flex Series GPU p
 |   [Stable Diffusion inference](https://github.com/IntelAI/models/blob/v2.12.1/quickstart/generative-ai/pytorch/stable_diffusion/inference/gpu/DEVCATALOG.md)  |  PyTorch |```docker pull intel/generative-ai:pytorch-flex-gpu-stable-diffusion-inference```|     2.29GB    |
 |   [SSD-MobileNet v1 Inference](https://github.com/IntelAI/models/blob/v2.11.1/quickstart/object_detection/pytorch/ssd-mobilenet/inference/gpu/DEVCATALOG.md)  |  PyTorch |```docker pull intel/object-detection:pytorch-flex-gpu-ssd-mobilenet-inference```|     2.47GB    |
 |           [YOLOv4 inference](https://github.com/IntelAI/models/blob/v2.11.1/quickstart/object_detection/pytorch/yolov4/inference/gpu/DEVCATALOG.md)           |  PyTorch |    ```docker pull intel/object-detection:pytorch-flex-gpu-yolov4-inference```   |     2.56GB    |
-|   [SSD-MobileNet Inference](https://github.com/IntelAI/models/blob/v2.11.1/quickstart/object_detection/tensorflow/ssd-mobilenet/inference/gpu/DEVCATALOG.md)  |  PyTorch |   ```docker pull intel/object-detection:tf-flex-gpu-ssd-mobilenet-inference```  |     2.47GB    |
+|   [SSD-MobileNet Inference](https://github.com/IntelAI/models/blob/v2.11.1/quickstart/object_detection/tensorflow/ssd-mobilenet/inference/gpu/DEVCATALOG.md)  |TensorFlow|   ```docker pull intel/object-detection:tf-flex-gpu-ssd-mobilenet-inference```  |     2.47GB    |
 
 [Intel AI Containers](README.md)
