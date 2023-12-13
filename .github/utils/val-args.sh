@@ -20,14 +20,5 @@ fi
 # mydir = myvalue
 # etc.
 ##
-regex="([[:alnum:]_-]+)[[:space:]]*[:=][[:space:]]*([[:alnum:]/=_-]+)"
-while [[ $matched_line =~ $regex ]]; do
-  # Docs for BASH_REMATCH: https://www.gnu.org/software/bash/manual/html_node/Bash-Variables.html#index-BASH_005fREMATCH
-  key="${BASH_REMATCH[1]}"
-  value="${BASH_REMATCH[2]}"
-  # Print the key and value to $GITHUB_OUTPUT
-  echo "$key=$value" >> $GITHUB_OUTPUT
-  
-  # Remove the matched pair from the line
-  matched_line="${matched_line#*"${BASH_REMATCH[0]}"}"
-done
+regex="([[:alnum:]_-]+)[[:space:]]*[:=][[:space:]]*([[:alnum:]\/=_\-\s']+)"
+echo $matched_line | grep -oP $regex | sed 's/: /=/g' >> $GITHUB_OUTPUT

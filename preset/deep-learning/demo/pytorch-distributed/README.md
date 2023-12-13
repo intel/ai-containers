@@ -219,7 +219,7 @@ Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) h
         -w /tests/workdir \
         --shm-size 8GB \
         -it intel/deep-learning:2024.0-py3.10 conda run --no-capture-output \
-            -n pytorch-cpu 'source $(python -c "import oneccl_bindings_for_pytorch as torch_ccl;print(torch_ccl.cwd)")/env/setvars.sh && \
+            -n pytorch 'source $(python -c "import oneccl_bindings_for_pytorch as torch_ccl;print(torch_ccl.cwd)")/env/setvars.sh && \
             mpirun -l -ppn 1 -hosts localhost,worker python pytorch_mnist.py --device cpu --save-model'
         ```
 

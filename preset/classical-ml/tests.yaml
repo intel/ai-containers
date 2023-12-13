@@ -1,68 +1,50 @@
-dataset-librarian-3.10:
-  cmd: conda run -n classical-ml bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.10
-dataset-librarian-3.9:
-  cmd: conda run -n classical-ml bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.9
+# dataset-librarian-3.10:
+#   cmd: conda run -n classical-ml bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+#   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.10
+# dataset-librarian-3.9:
+#   cmd: conda run -n classical-ml bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+#   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.9
 modin-3.10:
-  cmd: /tests/modin/test_modin.sh
+  cmd: sample-tests/modin/test_modin.sh
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.10
   shm_size: 10.24G
-  volumes:
-    - dst: /tests
-      src: $PWD/preset/classical-ml/tests
 modin-3.9:
-  cmd: /tests/modin/test_modin.sh
+  cmd: sample-tests/modin/test_modin.sh
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.9
   shm_size: 10.24G
-  volumes:
-    - dst: /tests
-      src: $PWD/preset/classical-ml/tests
 modin-notebook-3.10:
-  cmd: papermill --log-output modin/IntelModin_Vs_Pandas.ipynb -k classical-ml
+  cmd: papermill --log-output jupyter/modin/IntelModin_Vs_Pandas.ipynb -k classical-ml
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.10
   notebook: 'true'
 modin-notebook-3.9:
-  cmd: papermill --log-output modin/IntelModin_Vs_Pandas.ipynb -k classical-ml
+  cmd: papermill --log-output jupyter/modin/IntelModin_Vs_Pandas.ipynb -k classical-ml
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.9
   notebook: 'true'
 scikit-3.10:
-  cmd: /tests/scikit/test_scikit.sh
+  cmd: sample-tests/scikit/test_scikit.sh
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.10
-  volumes:
-    - dst: /tests
-      src: $PWD/preset/classical-ml/tests
 scikit-3.9:
-  cmd: /tests/scikit/test_scikit.sh
+  cmd: sample-tests/scikit/test_scikit.sh
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.9
-  volumes:
-    - dst: /tests
-      src: $PWD/preset/classical-ml/tests
 scikit-notebook-3.10:
-  cmd: papermill --log-output sklearn/Intel_Extension_For_SKLearn_GettingStarted.ipynb -k classical-ml
+  cmd: papermill --log-output jupyter/sklearn/Intel_Extension_For_SKLearn_GettingStarted.ipynb -k classical-ml
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.10
   notebook: 'true'
 scikit-notebook-3.9:
-  cmd: papermill --log-output sklearn/Intel_Extension_For_SKLearn_GettingStarted.ipynb -k classical-ml
+  cmd: papermill --log-output jupyter/sklearn/Intel_Extension_For_SKLearn_GettingStarted.ipynb -k classical-ml
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.9
   notebook: 'true'
 xgboost-3.10:
-  cmd: /tests/xgboost/test_xgboost.sh
+  cmd: sample-tests/xgboost/test_xgboost.sh
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.10
-  volumes:
-    - dst: /tests
-      src: $PWD/preset/classical-ml/tests
 xgboost-3.9:
-  cmd: /tests/xgboost/test_xgboost.sh
+  cmd: sample-tests/xgboost/test_xgboost.sh
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.9
-  volumes:
-    - dst: /tests
-      src: $PWD/preset/classical-ml/tests
 xgboost-notebook-3.10:
-  cmd: papermill --log-output xgboost/IntelPython_XGBoost_Performance.ipynb -k classical-ml
+  cmd: papermill --log-output jupyter/xgboost/IntelPython_XGBoost_Performance.ipynb -k classical-ml
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.10
   notebook: 'true'
 xgboost-notebook-3.9:
-  cmd: papermill --log-output xgboost/IntelPython_XGBoost_Performance.ipynb -k classical-ml
+  cmd: papermill --log-output jupyter/xgboost/IntelPython_XGBoost_Performance.ipynb -k classical-ml
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.9
   notebook: 'true'

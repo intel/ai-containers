@@ -178,7 +178,7 @@ Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) h
         --network=host  \
         -w /tests intel/deep-learning:2024.0-py3.10 \
         conda run --no-capture-output \
-            -n tensorflow-xpu horovodrun --verbose \
+            -n tensorflow horovodrun --verbose \
             -np 2 \
             -H localhost:1,worker:1 \
             python tensorflow2_keras_mnist.py
@@ -213,7 +213,7 @@ Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) h
         --network=host  \
         -w /tests intel/deep-learning:2024.0-py3.10 \
         conda run --no-capture-output \
-            -n tensorflow-xpu horovodrun --verbose \
+            -n tensorflow horovodrun --verbose \
             -np 2 \
             -H localhost:1,worker:1 \
             python tensorflow2_keras_mnist.py

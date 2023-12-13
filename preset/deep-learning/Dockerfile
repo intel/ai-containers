@@ -106,12 +106,11 @@ RUN apt-get update && \
 FROM dgpu-base as deep-learning-python
 
 # Setting up non-root directories
-ARG USERNAME
-RUN useradd --uid 1000 -d /home/${USERNAME} -s /bin/bash -m ${USERNAME}
-USER $USERNAME
-WORKDIR /home/${USERNAME}
+RUN useradd --uid 1000 -d /home/dev -s /bin/bash -m dev
+USER dev
+WORKDIR /home/dev
 
-ENV CONDA_ROOT=/home/${USERNAME}/conda
+ENV CONDA_ROOT=/home/dev/conda
 
 # Miniconda Python Installation
 ARG MINICONDA_VERSION
@@ -200,9 +199,8 @@ RUN conda create -yn pytorch-gpu -c ${INTEL_CHANNEL} -c conda-forge \
         evaluate  && \
     conda run -n pytorch-gpu python -m pip install -U accelerate && \
     conda run -n pytorch-gpu python -m pip install git+https://github.com/huggingface/optimum-intel.git && \
-    conda clean -y --all
-
-RUN echo "unset OCL_ICD_VENDORS" >> ${CONDA_ROOT}/envs/pytorch-gpu/etc/conda/activate.d/activate-opencl-rt.sh
+    conda clean -y --all && \
+    echo "unset OCL_ICD_VENDORS" >> ${CONDA_ROOT}/envs/pytorch-gpu/etc/conda/activate.d/activate-opencl-rt.sh
 
 # TensorFlow Installtion
 ARG TF_PACKAGE
@@ -217,7 +215,7 @@ ARG HOROVOD_WITHOUT_MXNET=1
 ARG HOROVOD_WITHOUT_GLOO=1
 ARG HOROVOD_WITH_MPI=1
 
-RUN conda create -yn tensorflow-xpu -c ${INTEL_CHANNEL} -c conda-forge \
+RUN conda create -yn tensorflow -c ${INTEL_CHANNEL} -c conda-forge \
         matplotlib-base \
         numba-dpex=0.21.4 \
         numpy=1.24.3 \
@@ -232,27 +230,25 @@ RUN conda create -yn tensorflow-xpu -c ${INTEL_CHANNEL} -c conda-forge \
         dpnp \
         scipy \
         onnx
-RUN conda install -yn tensorflow-xpu ipython ipykernel kernda -c conda-forge
-RUN conda run -n tensorflow-xpu python -m pip install --no-cache-dir \
+RUN conda install -yn tensorflow ipython ipykernel kernda -c conda-forge
+RUN conda run -n tensorflow python -m pip install --no-cache-dir \
         tensorflow_hub \
         py-cpuinfo \
         requests \
         cryptography
-RUN conda run -n tensorflow-xpu python -m pip install --no-deps --no-cache-dir --ignore-installed \
+RUN conda run -n tensorflow python -m pip install --no-deps --no-cache-dir --ignore-installed \
         python-dotenv \
         tqdm \
         cloud-data-connector \
         dataset-librarian && \
-    conda clean -y --all
-
-RUN echo "unset OCL_ICD_VENDORS" >> ${CONDA_ROOT}/envs/tensorflow-xpu/etc/conda/activate.d/activate-opencl-rt.sh
+    conda clean -y --all && \
+    echo "unset OCL_ICD_VENDORS" >> ${CONDA_ROOT}/envs/tensorflow/etc/conda/activate.d/activate-opencl-rt.sh
 
 FROM deep-learning-python as deep-learning-jupyter
 
 ARG KERNEL_NAME_PT="Intel PyTorch"
 ARG KERNEL_NAME_TF="Intel TensorFlow"
-ENV PORT=8888
-EXPOSE $PORT
+EXPOSE 8888
 
 RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
     mkdir ~/.local && chmod a+rwx ~/.local
@@ -262,13 +258,11 @@ RUN \
     ${CONDA_ROOT}/envs/pytorch-cpu/bin/kernda -o -y ~/.local/share/jupyter/kernels/$(echo pytorch-cpu | sed -e 's/\(.*\)/\L\1/')/kernel.json && \
     ${CONDA_ROOT}/envs/pytorch-gpu/bin/python -m ipykernel install --user --name pytorch-gpu --display-name "${KERNEL_NAME_PT}" && \
     ${CONDA_ROOT}/envs/pytorch-gpu/bin/kernda -o -y ~/.local/share/jupyter/kernels/$(echo pytorch-gpu | sed -e 's/\(.*\)/\L\1/')/kernel.json && \
-    ${CONDA_ROOT}/envs/tensorflow-xpu/bin/python -m ipykernel install --user --name tensorflow-xpu --display-name "${KERNEL_NAME_TF}" && \
-    ${CONDA_ROOT}/envs/tensorflow-xpu/bin/kernda -o -y ~/.local/share/jupyter/kernels/$(echo tensorflow-xpu | sed -e 's/\(.*\)/\L\1/')/kernel.json && \
+    ${CONDA_ROOT}/envs/tensorflow/bin/python -m ipykernel install --user --name tensorflow --display-name "${KERNEL_NAME_TF}" && \
+    ${CONDA_ROOT}/envs/tensorflow/bin/kernda -o -y ~/.local/share/jupyter/kernels/$(echo tensorflow | sed -e 's/\(.*\)/\L\1/')/kernel.json && \
     python -m ipykernel.kernelspec --user
 
-WORKDIR /home/${USERNAME}/jupyter
-
-CMD ["bash", "-c", "jupyter notebook --notebook-dir=~/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "jupyter notebook --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
 FROM deep-learning-jupyter as distributed-deep-learning
 
@@ -306,18 +300,12 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
         /etc/ssh/ssh_host_*_key.pub && \
     rm -rf /var/lib/apt/lists/*
 
-RUN rm -rf /usr/bin/apt*
-
 RUN mkdir -p /var/run/sshd
 
 # https://github.com/openucx/ucx/issues/4742#issuecomment-584059909
 ENV UCX_TLS=ud,sm,self
 
-ARG USERNAME
-USER $USERNAME
-
-ARG ONECCL_BIND_PT_WHL_URL="N/A"
-ARG ONECCL_BIND_PT_VERSION="N/A"
+USER dev
 
 RUN conda run -n pytorch-cpu python -m pip install --no-cache-dir py-cpuinfo && \
     conda run -n pytorch-cpu python -m pip install --no-cache-dir \
@@ -330,31 +318,5 @@ RUN conda run -n pytorch-gpu python -m pip install --no-cache-dir py-cpuinfo && 
         intel-extension-for-deepspeed \
         tensorboardX
 
-ARG NEURAL_COMPRESSOR_VERSION
-
-COPY --chown=${USERNAME} notebooks/deep-learning /home/${USERNAME}/jupyter
-
-FROM deep-learning-jupyter as inc-base
-
-ENV SIGOPT_PROJECT=.
-
-ARG INC_VERSION: ${INC_VERSION:-2.2.1}
-
-RUN conda install -yn tensorflow-xpu -c ${INTEL_CHANNEL} -c conda-forge \
-        neural-compressor=${NEURAL_COMPRESSOR_VERSION} && \
-    conda install -yn pytorch-cpu -c ${INTEL_CHANNEL} -c conda-forge \
-        neural-compressor=${NEURAL_COMPRESSOR_VERSION} && \
-    conda install -yn pytorch-gpu -c ${INTEL_CHANNEL} -c conda-forge \
-        neural-compressor=${NEURAL_COMPRESSOR_VERSION}
-
-RUN conda run -n tensorflow-xpu python -m pip install --no-deps --no-cache-dir \
-        tf2onnx \
-        onnxruntime && \
-    conda clean -y --all
-
-USER root
-
-ARG USERNAME
-USER $USERNAME
-
-COPY --chown=${USERNAME} notebooks/inference-optimization /home/${USERNAME}/jupyter
+COPY --chown=dev notebooks /home/dev/jupyter
+COPY --chown=dev tests /home/dev/sample-tests

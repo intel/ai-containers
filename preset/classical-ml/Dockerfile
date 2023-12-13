@@ -59,12 +59,11 @@ RUN apt-get update -y && \
 FROM classical-ml-base as classical-ml-python
 
 # Setting up non-root directories
-ARG USERNAME
-RUN useradd --uid 1000 -d /home/${USERNAME} -s /bin/bash -m ${USERNAME}
-USER $USERNAME
-WORKDIR /home/${USERNAME}
+RUN useradd --uid 1000 -d /home/dev -s /bin/bash -m dev
+USER dev
+WORKDIR /home/dev
 
-ENV CONDA_ROOT=/home/${USERNAME}/conda
+ENV CONDA_ROOT=/home/dev/conda
 ARG MINICONDA_VERSION
 ARG PYTHON_VERSION
 ARG IDP_VERSION
@@ -119,19 +118,19 @@ RUN conda run -n classical-ml python -m pip install --no-deps --no-cache-dir \
 ENV PYTHONSTARTUP=~/.patch_sklearn.py
 COPY base/.patch_sklearn.py ~/.patch_sklearn.py
 
-ENV PYTHONSTARTUP=/home/${USERNAME}/.patch_sklearn.py
-COPY base/.patch_sklearn.py /home/${USERNAME}/.patch_sklearn.py
+ENV PYTHONSTARTUP=/home/dev/.patch_sklearn.py
+COPY base/.patch_sklearn.py /home/dev/.patch_sklearn.py
 
 FROM classical-ml-python as classical-ml-jupyter
 
-ENV PORT=8888
-EXPOSE $PORT
+EXPOSE 8888
 
 RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
     mkdir ~/.local && chmod a+rwx ~/.local
 
-WORKDIR /home/${USERNAME}/jupyter
-COPY --chown=${USERNAME} notebooks /home/${USERNAME}/jupyter
+WORKDIR /home/dev
+COPY --chown=dev notebooks /home/dev/jupyter
+COPY --chown=dev tests /home/dev/sample-tests
 
 RUN conda run -n classical-ml python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy && \
     ${CONDA_ROOT}/envs/classical-ml/bin/python -m ipykernel install --user --name classical-ml --display-name "Classical ML" && \
@@ -139,7 +138,7 @@ RUN conda run -n classical-ml python -m pip install --no-cache-dir jupyterlab ju
     ${CONDA_ROOT}/envs/classical-ml/bin/python -m ipykernel.kernelspec --user && \
     conda clean -y --all
 
-CMD ["bash", "-c", "source activate classical-ml && jupyter notebook --notebook-dir=~/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source activate classical-ml && jupyter notebook --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
 ENV BASH_ENV ~/.bash_profile
 RUN echo "conda activate classical-ml" >> ~/.bashrc
