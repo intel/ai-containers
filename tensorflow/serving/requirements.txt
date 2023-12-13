@@ -1,0 +1,5 @@
+numpy
+pillow
+requests
+tensorflow
+tensorflow-serving-api

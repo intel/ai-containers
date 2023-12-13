@@ -1,4 +1,4 @@
-# Intel Max (PVC) Models Containers
+# Intel® Max (PVC) Model Containers
 These are the deep learning Models optimized to run on Intel's Max Series GPU platform.
 |                                                                          Container                                                                          | Framework|                               Docker Pull Command                              |Compressed Size|
 |-------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|--------------------------------------------------------------------------------|---------------|
@@ -10,5 +10,7 @@ These are the deep learning Models optimized to run on Intel's Max Series GPU pl
 |   [ResNet50 v1.5 Training](https://github.com/IntelAI/models/blob/master/quickstart/image_recognition/tensorflow/resnet50v1_5/training/gpu/DEVCATALOG.md)   |TensorFlow|   ```docker pull intel/image-recognition:tf-max-gpu-resnet50v1-5-training```   |     2.32GB    |
 |     [BERT Large Inference](https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/tensorflow/bert_large/inference/gpu/DEVCATALOG.md)    |TensorFlow|    ```docker pull intel/language-modeling:tf-max-gpu-bert-large-inference```   |     3.33GB    |
 |      [BERT Large Training](https://github.com/IntelAI/models/blob/master/quickstart/language_modeling/tensorflow/bert_large/training/gpu/DEVCATALOG.md)     |TensorFlow|    ```docker pull intel/language-modeling:tf-max-gpu-bert-large-training```    |     2.32GB    |
+|          [DLRM Training](https://github.com/IntelAI/models/blob/v3.0.0/quickstart/recommendation/pytorch/torchrec_dlrm/training/gpu/DEVCATALOG.md)          |  PyTorch |      ```docker pull intel/recommendation:pytorch-max-gpu-dlrm-training```      |     2.98GB    |
+|         [DLRM Inference](https://github.com/IntelAI/models/blob/v3.0.0/quickstart/recommendation/pytorch/torchrec_dlrm/inference/gpu/DEVCATALOG.md)         |  PyTorch |      ```docker pull intel/recommendation:pytorch-max-gpu-dlrm-inference```     |     2.91GB    |
 
 [Intel AI Containers](README.md)

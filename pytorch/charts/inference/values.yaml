@@ -1,0 +1,29 @@
+name: ipex-serving
+deploy:
+  image: pytorch/torchserve:latest-cpu
+  models: all
+  modelConfig: /home/model-server/config.properties
+  replicas: 1
+  resources:
+    limits:
+      cpu: 24
+      memory: 16Gi
+    requests:
+      cpu: 1000m
+      memory: 512Mi
+  storage:
+    nfs:
+      enable: false
+      server: nil
+      path: nil
+      readOnly: true
+      subPath: nil
+    pvc:
+      enable: false
+      claimName: nil
+      subPath: nil
+    s3:
+      enable: false
+      path: nil
+service:
+  type: NodePort

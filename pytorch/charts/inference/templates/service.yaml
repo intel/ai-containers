@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.name }}
+spec:
+  ports:
+    - name: rest-1
+      {{- if eq .Values.service.type "NodePort" }}
+      nodePort: 30000
+      {{- else }}
+      targetPort: 30000
+      {{- end }}
+      port: 8080
+    - name: rest-2
+      {{- if eq .Values.service.type "NodePort" }}
+      nodePort: 30001
+      {{- else }}
+      targetPort: 30001
+      {{- end }}
+      port: 8081
+    - name: rest-3
+      {{- if eq .Values.service.type "NodePort" }}
+      nodePort: 30002
+      {{- else }}
+      targetPort: 30002
+      {{- end }}
+      port: 8082
+    - name: grpc-1
+      {{- if eq .Values.service.type "NodePort" }}
+      nodePort: 30003
+      {{- else }}
+      targetPort: 30003
+      {{- end }}
+      port: 7070
+    - name: grpc-2
+      {{- if eq .Values.service.type "NodePort" }}
+      nodePort: 30004
+      {{- else }}
+      targetPort: 30004
+      {{- end }}
+      port: 7071
+  selector:
+    app: {{ .Values.name }}
+  type: {{ .Values.service.type }}

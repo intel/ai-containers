@@ -12,8 +12,8 @@
 | MINICONDA_VERSION | `latest-Linux-x86_64` | Miniconda Version from `https://repo.anaconda.com/miniconda` |
 | PACKAGE_OPTION | `pip` | Stock Python (pypi) or Intel Python (conda) (`pip` or `idp`) |
 | PYTHON_VERSION | `3.10` | Python Version |
-| SCIKIT_VERSION | 2023.1.1` | Intel SKLearn Version |
-| XGBOOST_VERSION | 1.7.5` | XGBoost Version |
+| SCIKIT_VERSION | `2024.0.0` | Intel SKLearn Version |
+| XGBOOST_VERSION | `2.0.2` | XGBoost Version |
 
 ### Jupyter
 

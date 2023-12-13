@@ -5,24 +5,18 @@ dataset-librarian-3.9:
   cmd: conda run -n data-analytics bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-2024.0.0-py3.9
 modin-3.10:
-  cmd: /tests/modin/test_modin.sh
+  cmd: sample-tests/modin/test_modin.sh
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-2024.0.0-py3.10
-  shm_size: 10.24G
-  volumes:
-    - dst: /tests
-      src: $PWD/preset/data-analytics/tests
+  shm_size: 10G
 modin-3.9:
-  cmd: /tests/modin/test_modin.sh
+  cmd: sample-tests/modin/test_modin.sh
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-2024.0.0-py3.9
-  shm_size: 10.24G
-  volumes:
-    - dst: /tests
-      src: $PWD/preset/data-analytics/tests
+  shm_size: 10G
 modin-notebook-3.10:
-  cmd: papermill --log-output modin/IntelModin_Vs_Pandas.ipynb -k data-analytics
+  cmd: papermill --log-output jupyter/modin/IntelModin_Vs_Pandas.ipynb -k data-analytics
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-2024.0.0-py3.10
   notebook: 'true'
 modin-notebook-3.9:
-  cmd: papermill --log-output modin/IntelModin_Vs_Pandas.ipynb -k data-analytics
+  cmd: papermill --log-output jupyter/modin/IntelModin_Vs_Pandas.ipynb -k data-analytics
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-2024.0.0-py3.9
   notebook: 'true'

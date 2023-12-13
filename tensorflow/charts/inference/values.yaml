@@ -1,0 +1,33 @@
+name: itex-serving
+deploy:
+  image: intel/intel-extension-for-tensorflow:serving-cpu
+  modelConfig: nil
+  resources:
+    limits:
+      cpu: 4000m
+      memory: 4Gi
+    requests:
+      cpu: 1000m
+      memory: 512Mi
+  storage:
+    nfs:
+      enable: false
+      server: nil
+      path: nil
+      readOnly: true
+      subPath: nil
+    pvc:
+      enable: false
+      claimName: nil
+      subPath: nil
+    s3:
+      enable: false
+      path: nil
+service:
+  type: NodePort
+
+hpa:
+  enable: false
+  maxReplicas: 10
+  minReplicas: 1
+  targetCPUUtilizationPercentage: 80

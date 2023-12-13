@@ -1,4 +1,4 @@
-# Intel GPU Base Containers
+# Intel® GPU Base Containers
 Intel® Data Center GPU Max Series and Intel® Data Center GPU Flex Series base containers
 |                                                                                        Container                                                                                       |Framework|                           Docker Pull Command                          |Compressed Size|
 |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|------------------------------------------------------------------------|---------------|

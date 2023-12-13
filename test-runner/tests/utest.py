@@ -25,7 +25,7 @@ def test_container_run_serving(test_input):
         if hasattr(test, "img") and hasattr(test, "serving"):
             log, returncode = test.container_run()
             assert returncode == 0
-            assert log == "Python 3.11.6"
+            assert log == "Python 3.11.7"
 
 def test_run(test_input):
     for test in test_input:

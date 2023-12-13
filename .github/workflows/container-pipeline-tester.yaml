@@ -7,7 +7,7 @@ on:
         description: 'Enter Container Group Directory:'
         type: string
       env_overrides:
-        description: 'Enter Bash Env Variable Overrides in `KEY=VAL && KEY2=VAL2` format:'
+        description: 'Enter Bash Env Variable Overrides in `KEY=VAL KEY2=VAL2` format:'
         required: false
         type: string
       runner_label:
@@ -15,6 +15,11 @@ on:
         default: test-runner
         required: true
         type: string
+      no-build:
+        description: 'No build'
+        default: false
+        required: true
+        type: boolean
   workflow_call:
     inputs:
       group_dir:
@@ -26,6 +31,10 @@ on:
       runner_label:
         required: true
         type: string
+      no-build:
+        default: false
+        required: false
+        type: boolean
 jobs:
   setup-build-matrix:
     outputs:
@@ -57,12 +66,15 @@ jobs:
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
+        if: ${{ !inputs.no-build }}
       - uses: docker/login-action@v3
         with:
           registry: ${{ vars.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
+        if: ${{ !inputs.no-build }}
       - name: Build Container Group
+        if: ${{ !inputs.no-build }}
         uses: ./.github
         with:
           group_dir: ${{ inputs.group_dir }}

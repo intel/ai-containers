@@ -3,7 +3,7 @@ from py_markdown_table.markdown_table import markdown_table
 
 LANDING_PAGE_URL = "README.md"
 
-LANDING_PAGE_DRSCRIPTION="""This page provides overview of AI Containers for many Intel 
+LP_DESCRIPTION="""This page provides overview of AI Containers for many Intel 
 optiomized open-source frameworks such as PyTorch, TensorFlow, SciKit Learn, 
 XGBoost, Modin etc. Also provides containers for open-source deep learning models 
 optimized by Intel to run on Intel® Xeon® Scalable processors and Intel® Data Center GPUs."""
@@ -15,16 +15,16 @@ def generate_group_readme(cont_file, cont_group):
     with open(cont_file, 'r') as file:
         yaml_data = yaml.safe_load(file)[cont_group]
         readme_fname = yaml_data['readme']
-        readme = "# "+ yaml_data['title'] + "\n"
+        readme = "# "+ yaml_data['_title'] + "\n"
         readme += yaml_data['description'] + "\n"
         if len(yaml_data['containers']) <=3:
             return
         for container in yaml_data['containers']:
             row = {}
             if not container['url']:
-                row['Container'] = container['title']
+                row['Container'] = container['_title']
             else:
-                row['Container'] = "["+ container['title']+"]("+container['url']+")"
+                row['Container'] = "["+ container['_title']+"]("+container['url']+")"
             row['Framework'] = container['framework']
             row['Docker Pull Command'] = "```" + container['pull-cmd'] + "```"
             row['Compressed Size'] = container['compressed-size']
@@ -46,13 +46,13 @@ def generate_group_readme(cont_file, cont_group):
 # TODO: this menthod is pretty much copy-pasta of above menthod, merge it soon!
 def generate_main_readme(container_yaml, groups, readme_fname):
     readme = "# Intel AI Containers\n"
-    readme += LANDING_PAGE_DRSCRIPTION + "\n"
+    readme += LP_DESCRIPTION + "\n"
     with open(container_yaml, 'r') as file:
         yaml_data = yaml.safe_load(file)
         for group in groups:
             data = []
             yaml_group = yaml_data[group]
-            readme += "## "+ yaml_group['title'] + "\n"
+            readme += "## "+ yaml_group['_title'] + "\n"
             readme += yaml_group['description'] + "\n"
             count = 0
             for container in yaml_group['containers']:
@@ -61,9 +61,9 @@ def generate_main_readme(container_yaml, groups, readme_fname):
                 count += 1
                 row = {}
                 if not container['url']:
-                    row['Container'] = container['title']
+                    row['Container'] = container['_title']
                 else:
-                    row['Container'] = "["+ container['title']+"]("+container['url']+")"
+                    row['Container'] = "["+ container['_title']+"]("+container['url']+")"
                 row['Framework'] = container['framework']
                 row['Docker Pull Command'] = "```" + container['pull-cmd'] + "```"
                 row['Compressed Size'] = container['compressed-size']
@@ -78,14 +78,13 @@ def generate_main_readme(container_yaml, groups, readme_fname):
             readme += markdown
             if len(yaml_group['containers']) >3:
                 readme += "\n\n\n"
-                readme += "[Complete list of GPU base containers]("+ yaml_group['readme']+")\n"
+                readme += "[Complete list of Containers]("+ yaml_group['readme']+")\n"
             readme += "\n"
     with open(readme_fname, "w") as file:
         file.write(readme)
     return  
 
-groups = ['preset', 'intel-python', 'gpu-base', 'cpu-base', 'atsm-models',
-                    'pvc-models', 'cpu-models']
+groups = ['intel-python', 'cpu-base', 'gpu-base', 'cpu-models', 'atsm-models', 'pvc-models', 'ai-tools', 'preset', 'ai-workflows']
 container_yaml = 'ai-containers.yaml'
 
 # Generate container groups readmes

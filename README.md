@@ -104,24 +104,19 @@ ${INC_VERSION:-2.1.0} -> ${INC_VERSION:-2.1.1}
 
 And then build and test using GitHub Actions.
 
-## Notebooks and Model Serving
+## Notebooks and MLFlow
 
 ### Jupyter
-
-Add a Jupyter Notebook.
-
-Start the Jupyter Server and copy the url (something like `http://127.0.0.1:$PORT/?token=***`) into your browser, the port is 8888 by default.
+When using a container intended to launch a jupyter notebook server, start the Jupyter Server via the docker run command and copy the url (something like `http://127.0.0.1:$PORT/?token=***`) into your browser, the port is 8888 by default.
 
 ```bash
-export PORT=<myport>
 cd <framework>
 docker compose build jupyter
-docker compose run -d --rm jupyter jupyter notebook --notebook-dir=/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root
+docker compose run -d --rm <image-name> jupyter notebook --notebook-dir=/jupyter --ip 0.0.0.0 --no-browser --allow-root
 ```
 
-### MLFlow
-
-Add a MLFLow Example:
+## MLFlow
+Add an MLFLow Example:
 
 - [TensorFlow](https://github.com/mlflow/mlflow/blob/master/examples/tensorflow/train.py)
 - [PyTorch](https://github.com/mlflow/mlflow/blob/master/examples/pytorch/MNIST/mnist_autolog_example.py)
@@ -169,18 +164,17 @@ export DOCKER_RUN_ENVS="-e ftp_proxy=${ftp_proxy} \
   -e SOCKS_PROXY=${SOCKS_PROXY}"
 ```
 
-Proxies will be automatically utilized with `docker compose`. Instead of removing the proxy entries, try setting their value to be an empty string:
-
 ```bash
-export http_proxy=""
-export https_proxy=""
-export no_proxy=""
+docker build $DOCKER_BUILD_ARGS -t my:tag .
+docker run $DOCKER_RUN_ENVS --rm -it my:tag
 ```
 
 ## Support
 
 The Intel AI MLOps team tracks bugs and enhancement requests using
-[GitHub issues](https://github.com/intel/mlops/issues). Before submitting a
+[GitHub issues](https://github.com/intel/ai-containers/issues). Before submitting a
 suggestion or bug report, search the existing GitHub issues to see if your issue has already been reported.
+
+---
 
 * [Trademarks](http://www.intel.com/content/www/us/en/legal/trademarks.html)

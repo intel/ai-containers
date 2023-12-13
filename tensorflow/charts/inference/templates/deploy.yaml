@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.name }}
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: {{ .Values.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.name }}
+    spec:
+      hostNetwork: true
+      containers:
+        - name: tf-serving
+          image: {{ .Values.deploy.image }}
+          {{- if ne .Values.deploy.modelConfig "nil" }}
+          args:
+            - '--model_config_file={{ .Values.deploy.modelConfig }}'
+          {{- end }}
+          ports:
+            - containerPort: 8501
+              name: rest
+            - containerPort: 8500
+              name: grpc
+          volumeMounts:
+            - name: model
+              mountPath: /models
+              {{- if and .Values.deploy.storage.nfs.enable (ne .Values.deploy.storage.nfs.subPath "nil") }}
+              subPath: {{ .Values.deploy.storage.nfs.subPath }}
+              {{- else if and .Values.deploy.storage.pvc.enable (ne .Values.deploy.storage.pvc.subPath "nil") }}
+              subPath: {{ .Values.deploy.storage.pvc.subPath }}
+              {{ end }}
+          resources:
+            requests:
+              cpu: {{ .Values.deploy.resources.requests.cpu }}
+              memory: {{ .Values.deploy.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.deploy.resources.limits.cpu }}
+              memory: {{ .Values.deploy.resources.limits.memory }}
+      volumes:
+        - name: model
+          {{- if .Values.deploy.storage.nfs.enable }}
+          nfs:
+            server: {{ .Values.deploy.storage.nfs.server }}
+            path: {{ .Values.deploy.storage.nfs.path }}
+            readOnly: {{ .Values.deploy.storage.nfs.readOnly }}
+          {{- else if .Values.deploy.storage.s3.enable }}
+          hostPath:
+            path: {{ .Values.deploy.storage.s3.path }}
+          {{- else if .Values.deploy.storage.pvc.enable }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.deploy.storage.pvc.claimName }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}

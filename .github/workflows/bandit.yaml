@@ -1,0 +1,16 @@
+name: Bandit Scan
+on:
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  scan-bandit:
+    if: github.event.review.state == 'approved'
+    uses: intel-innersource/frameworks.ai.infrastructure.code-scan-tools/.github/workflows/Scanner_Bandit.yml@one-ci-cd
+    with:
+      org: ${{ github.repository_owner }}
+      repo: ${{ github.event.repository.name }}
+      refs: ${{ github.event.pull_request.base.ref }} 
+      runners: "['k8-runners']"
+    secrets:
+      token: ${{ secrets.ACTION_TOKEN }}

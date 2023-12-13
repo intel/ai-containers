@@ -28,6 +28,7 @@ ARG XGBOOST_VERSION
 
 RUN python -m pip install --no-cache-dir \
     daal4py \
+    matplotlib \
     scikit-learn-intelex${SCIKIT_VERSION:+==${SCIKIT_VERSION}} \
     threadpoolctl \
     xgboost${XGBOOST_VERSION:+==${XGBOOST_VERSION}}
@@ -48,13 +49,12 @@ ARG XGBOOST_VERSION
 
 ENV BASH_ENV /root/.bash_profile
 
-RUN conda install -n idp -y -c intel \
+RUN python -m pip install --no-cache-dir --ignore-installed \
     daal4py \
-    scikit-learn-intelex${SCIKIT_VERSION:+==${SCIKIT_VERSION}}
-
-RUN python -m pip install --no-cache-dir \
+    matplotlib \
     # https://github.com/intel/scikit-learn-intelex/blob/master/requirements-test.txt
     numpy==1.23.0 \ 
+    scikit-learn-intelex${SCIKIT_VERSION:+==${SCIKIT_VERSION}} \
     threadpoolctl \
     xgboost${XGBOOST_VERSION:+==${XGBOOST_VERSION}} && \
     apt-get clean && conda clean -y --all

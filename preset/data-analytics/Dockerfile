@@ -56,18 +56,14 @@ RUN apt-get update -y && \
     xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
-#Remove apt utilities from container
-RUN rm -rf /usr/bin/apt*
-
 FROM data-analytics-base as data-analytics-python
 
-#Setting up non-root directories
-ARG USERNAME
-RUN useradd --uid 1000 -d /home/${USERNAME} -s /bin/bash -m ${USERNAME}
-USER $USERNAME
-WORKDIR /home/${USERNAME}
+# Setting up non-root directories
+RUN useradd --uid 1000 -d /home/dev -s /bin/bash -m dev
+USER dev
+WORKDIR /home/dev
 
-ENV CONDA_ROOT=/home/${USERNAME}/conda
+ENV CONDA_ROOT=/home/dev/conda
 
 ARG MINICONDA_VERSION
 ARG PYTHON_VERSION
@@ -112,15 +108,14 @@ RUN conda run -n data-analytics python -m pip install --no-deps --no-cache-dir \
 
 FROM data-analytics-python as data-analytics-jupyter
 
-ENV PORT=8888
-EXPOSE $PORT
-
+EXPOSE 8888
 
 RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
     mkdir ~/.local && chmod a+rwx ~/.local
 
-WORKDIR /home/${USERNAME}/jupyter
-COPY --chown=${USERNAME} notebooks /home/${USERNAME}/jupyter
+WORKDIR /home/dev
+COPY --chown=dev notebooks /home/dev/jupyter
+COPY --chown=dev tests /home/dev/sample-tests
 
 RUN conda run -n data-analytics python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy && \
     ${CONDA_ROOT}/envs/data-analytics/bin/python -m ipykernel install --user --name data-analytics --display-name "Data Analytics" && \
@@ -128,7 +123,7 @@ RUN conda run -n data-analytics python -m pip install --no-cache-dir jupyterlab 
     ${CONDA_ROOT}/envs/data-analytics/bin/python -m ipykernel.kernelspec --user && \
     conda clean -y --all
 
-CMD ["bash", "-c", "source activate data-analytics && jupyter notebook --notebook-dir=~/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source activate data-analytics && jupyter notebook --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
 ENV BASH_ENV ~/.bash_profile
 RUN echo "conda activate data-analytics" >> ~/.bashrc
