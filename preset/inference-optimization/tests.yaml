@@ -7,11 +7,11 @@ inference-optimization-inc-ipex-quantization-notebook-3.10-gpu:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
   notebook: 'true'
 inference-optimization-inc-ipex-quantization-notebook-3.9-cpu:
-  cmd: papermill --log-output jupyter/inc-ipex-quantization/quantize_with_inc.ipynb -k pytorch-cpu --cwd jupyter/inc-ipex-quantization
+  cmd: papermill --log-output jupyter/inc-ipex-quantization/quantize_with_inc.ipynb result.ipynb -k pytorch-cpu --cwd jupyter/inc-ipex-quantization
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   notebook: 'true'
 inference-optimization-inc-ipex-quantization-notebook-3.9-gpu:
-  cmd: papermill --log-output jupyter/inc-ipex-quantization/quantize_with_inc.ipynb -k pytorch-gpu --cwd jupyter/inc-ipex-quantization
+  cmd: papermill --log-output jupyter/inc-ipex-quantization/quantize_with_inc.ipynb result.ipynb -k pytorch-gpu --cwd jupyter/inc-ipex-quantization
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   notebook: 'true'
 inference-optimization-inc-itex-notebook-3.10:
@@ -19,7 +19,7 @@ inference-optimization-inc-itex-notebook-3.10:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
   notebook: 'true'
 inference-optimization-inc-itex-notebook-3.9:
-  cmd: papermill --log-output jupyter/inc-itex/inc_sample_tensorflow.ipynb -k tensorflow --cwd jupyter/inc-itex
+  cmd: papermill --log-output jupyter/inc-itex/inc_sample_tensorflow.ipynb result.ipynb -k tensorflow --cwd jupyter/inc-itex
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   notebook: 'true'
 inference-optimization-inc-tensorflow-3.10:
@@ -59,11 +59,11 @@ inference-optimization-itex-3.9:
   cmd: conda run -n tensorflow python -W ignore sample-tests/intel_extension_for_tensorflow/test_itex.py
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
 inference-optimization-itex-inference-notebook-3.10:
-  cmd: papermill --log-output jupyter/itex-inference/tutorial_optimize_TensorFlow_pretrained_model.ipynb -k tensorflow --cwd jupyter/itex-inference
+  cmd: papermill --log-output jupyter/itex-inference/tutorial_optimize_TensorFlow_pretrained_model.ipynb result.ipynb -k tensorflow --cwd jupyter/itex-inference
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
   notebook: 'true'
 inference-optimization-itex-inference-notebook-3.9:
-  cmd: papermill --log-output jupyter/itex-inference/tutorial_optimize_TensorFlow_pretrained_model.ipynb -k tensorflow --cwd jupyter/itex-inference
+  cmd: papermill --log-output jupyter/itex-inference/tutorial_optimize_TensorFlow_pretrained_model.ipynb result.ipynb -k tensorflow --cwd jupyter/itex-inference
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   notebook: 'true'
 inference-optimization-onnx-3.10:
