@@ -1,4 +1,7 @@
 name: Container Pipeline Tester
+
+permissions: read-all
+
 on:
   workflow_dispatch:
     inputs:
