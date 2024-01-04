@@ -4,8 +4,6 @@ on:
     branches:
       - develop
 
-permissions: read-all
-
 jobs:
   unit-test:
     runs-on: [ test-runner ]
