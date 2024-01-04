@@ -1,12 +1,12 @@
 ---
-name: Review Pipeline Validation
+name: Checkbox Pipeline Validation
 on:
-  pull_request_review:
-    types: [submitted, edited]
+  pull_request:
+    types: [edited]
 jobs:
-  check-review:
+  check-description-checkbox:
     runs-on: [ k8-runners ]
-    if: contains(github.event.review.body, '/test-group') && !contains(github.event.pull_request.labels.*.name, 'validating')
+    if: contains(github.event.pull_request.body, '- [x] Automated Validation (Do not edit, check to begin Validation)') && contains(github.event.pull_request.body, '/test-group') && !contains(github.event.pull_request.labels.*.name, 'validating')
     outputs:
       group_dir: ${{ steps.comment-inputs.outputs.group_dir }}
       env_overrides: ${{ steps.comment-inputs.outputs.env_overrides }}
@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Get Inputs
         id: comment-inputs
-        run: bash .github/utils/val-args.sh "${{ github.event.review.body }}"
+        run: bash .github/utils/val-args.sh "${{ github.event.pull_request.body }}"
       - name: Remove PASS Label
         if: contains(github.event.pull_request.labels.*.name, 'PASS')
         uses: actions/github-script@v7
@@ -51,21 +51,21 @@ jobs:
               labels: ['validating']
             })
   container-pipeline-tester:
-    needs: [ check-review ]
-    if: needs.check-review.outputs.group_dir && needs.check-review.outputs.runner_label
-    uses: ./.github/workflows/container-pipeline-tester.yaml
-    with:
-      group_dir: ${{ needs.check-review.outputs.group_dir }}
-      env_overrides: ${{ needs.check-review.outputs.env_overrides || '' }}
-      runner_label: ${{ needs.check-review.outputs.runner_label }}
-    secrets: inherit
+      needs: [ check-description-checkbox ]
+      if: needs.check-description-checkbox.outputs.group_dir && needs.check-description-checkbox.outputs.runner_label
+      uses: ./.github/workflows/container-pipeline-tester.yaml
+      with:
+        group_dir: ${{ needs.check-description-checkbox.outputs.group_dir }}
+        env_overrides: ${{ needs.check-description-checkbox.outputs.env_overrides || '' }}
+        runner_label: ${{ needs.check-description-checkbox.outputs.runner_label }}
+      secrets: inherit
   status-check:
-    needs: [ check-review, container-pipeline-tester ]
-    if: ${{ always() && needs.check-review.result != 'skipped' }}
+    needs: [ check-description-checkbox, container-pipeline-tester ]
+    if: ${{ always() && needs.check-description-checkbox.result != 'skipped' }}
     runs-on: [ k8-runners ]
     steps:
       - name: Unlock
-        if: ${{ needs.check-review.result != 'skipped' }}
+        if: ${{ needs.check-description-checkbox.result != 'skipped' }}
         uses: actions/github-script@v7
         with:
           result-encoding: string
@@ -77,7 +77,7 @@ jobs:
               name: ["validating"]
             })
       - name: Set Fail Label
-        if: ${{ needs.check-review.result != 'success' || needs.container-pipeline-tester.result != 'success' }}
+        if: ${{ needs.check-description-checkbox.result != 'success' || needs.container-pipeline-tester.result != 'success' }}
         uses: actions/github-script@v7
         with:
           script: |
@@ -88,7 +88,7 @@ jobs:
               labels: ['FAIL']
             })
       - name: Set Pass Label
-        if: ${{ needs.check-review.result == 'success' && needs.container-pipeline-tester.result == 'success' }}
+        if: ${{ needs.check-description-checkbox.result == 'success' && needs.container-pipeline-tester.result == 'success' }}
         uses: actions/github-script@v7
         with:
           script: |
@@ -98,3 +98,4 @@ jobs:
               repo: context.repo.repo,
               labels: ['PASS']
             })
+            

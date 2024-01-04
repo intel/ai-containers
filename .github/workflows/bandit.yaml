@@ -3,8 +3,6 @@ on:
   pull_request_review:
     types: [submitted]
 
-permissions: read-all
-
 jobs:
   scan-bandit:
     if: github.event.review.state == 'approved'
