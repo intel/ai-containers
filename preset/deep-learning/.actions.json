@@ -1,0 +1,4 @@
+{
+    "PYTHON_VERSION": ["3.9", "3.10"],
+    "experimental": [true]
+}

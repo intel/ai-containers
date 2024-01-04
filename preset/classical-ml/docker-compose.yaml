@@ -1,0 +1,57 @@
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# Copyright (c) 2023 Intel Corporation
+#
+# -*- coding: utf-8 -*-
+#
+
+version: '3'
+services:
+  classical-ml:
+    build:
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
+        BASE_TAG: ${BASE_TAG:-22.04}
+        DAAL4PY_VERSION: ${DAAL4PY_VERSION:-2024.0.1}
+        DEVICE: ${DEVICE:-flex}
+        DPCPP_VER: ${DPCPP_VER:-2024.0.0-49819}
+        LEVEL_ZERO_DEV_VER: 1.14.0-744~22.04
+        LEVEL_ZERO_GPU_VER: 1.3.27191.42-775~22.04
+        LEVEL_ZERO_VER: 1.14.0-744~22.04
+        ICD_VER: 23.35.27191.42-775~22.04
+        IDP_VERSION: ${IDP_VERSION:-2024.0.0}
+        INTEL_CHANNEL: ${INTEL_CHANNEL:-intel}
+        MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
+        MKL_VER: ${MKL_VER:-2024.0.0-49656}
+        MODIN_VERSION: ${MODIN_VERSION:-0.24.1}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+        SCIKIT_VERSION: ${SCIKIT_VERSION:-2024.0.1}
+        XGBOOST_VERSION: ${XGBOOST_VERSION:-1.7.3}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ''
+      context: .
+      target: classical-ml-jupyter
+    command: |
+      bash -c "conda run -n classical-ml python -c 'import sklearn; import xgboost; print(\"SciKit:\", sklearn.__version__, \" XGBoost:\",xgboost.__version__)' && \
+      conda run -n classical-ml python -c 'import modin.pandas as pd, modin.config as cfg; cfg.Engine.put(\"Ray\"); df = pd.DataFrame([1]);print(df+1)'"
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${IDP_VERSION:-2024.0.0}-py${PYTHON_VERSION:-3.10}
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+    network_mode: host
+    shm_size: 12GB
+    volumes:
+      - /dev/dri/by-path:/dev/dri/by-path

@@ -1,0 +1,83 @@
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# Copyright (c) 2023 Intel Corporation
+#
+# -*- coding: utf-8 -*-
+#
+
+version: '3'
+services:
+  dl-base:
+    build:
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
+        BASE_TAG: ${BASE_TAG:-22.04}
+        DEVICE: ${DEVICE:-flex}
+        DPCPP_VER: ${DPCPP_VER:-2024.0.0-49819}
+        HOROVOD_VERSION: ${HOROVOD_VERSION:-0.28.1}
+        ICD_VER: 23.35.27191.42-775~22.04
+        IDP_VERSION: ${IDP_VERSION:-2024.0.0}
+        INTEL_CHANNEL: ${INTEL_CHANNEL:-intel}
+        IPEX_CPU_VERSION: ${IPEX_CPU_VERSION:-2.0.100}
+        IPEX_GPU_VERSION: ${IPEX_GPU_VERSION:-2.0.120}
+        ITEX_VERSION: ${ITEX_VERSION:-2.14}
+        LEVEL_ZERO_DEV_VER: 1.14.0-744~22.04
+        LEVEL_ZERO_GPU_VER: 1.3.27191.42-775~22.04
+        LEVEL_ZERO_VER: 1.14.0-744~22.04
+        MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
+        MKL_VER: ${MKL_VER:-2024.0.0-49656}
+        NEURAL_COMPRESSOR_VERSION: ${NEURAL_COMPRESSOR_VERSION:-2.3.1}
+        ONECCL_CPU_VERSION: ${ONECCL_CPU_VERSION:-2.0.0}
+        ONECCL_GPU_VERSION: ${ONECCL_GPU_VERSION:-2.0.200}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+        TF_VERSION: ${TF_VERSION:-2.14}
+        TORCH_CPU_VERSION: ${TORCH_CPU_VERSION:-2.0.1=*cpu*}
+        TORCH_GPU_VERSION: ${TORCH_GPU_VERSION:-2.0.1=*xpu*}
+        TORCHVISION_CPU_VERSION: ${TORCHVISION_CPU_VERSION:-0.15.2=*cpu*}
+        TORCHVISION_GPU_VERSION: ${TORCHVISION_GPU_VERSION:-0.15.2=*xpu*}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ''
+      context: .
+      target: deep-learning-jupyter
+    command: |
+      bash -c "conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);' && \
+      conda run -n tensorflow python -c 'import tensorflow as tf; print(tf.__version__)'"
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+    network_mode: host
+    shm_size: 12GB
+    volumes:
+      - /dev/dri/by-path:/dev/dri/by-path
+  deep-learning:
+    build:
+      args:
+        CCL_VER: 2021.11.0-49156
+      target: distributed-deep-learning
+    command: |
+      bash -c "conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);' && \
+      conda run -n pytorch-cpu bash -c 'mpirun --version' && \
+      conda run -n pytorch-cpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\nOneCCL:\", oneccl.__version__)' && \
+      conda run -n pytorch-gpu python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());print(ipex.xpu.has_onemkl())' && \
+      conda run -n pytorch-gpu bash -c 'mpirun --version' && \
+      conda run -n pytorch-gpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\nOneCCL:\", oneccl.__version__)' && \
+      conda run -n tensorflow python -c 'from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())' && \
+      conda run -n tensorflow bash -c 'horovodrun --check-build && mpirun --version' && \
+      conda run -n tensorflow python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow'"
+    depends_on:
+      - dl-base
+    extends: dl-base
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${IDP_VERSION:-2024.0.0}-py${PYTHON_VERSION:-3.10}
