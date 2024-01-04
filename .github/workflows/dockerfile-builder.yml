@@ -1,4 +1,7 @@
 name: Dockerfile Builder
+
+permissions: read-all
+
 on: 
   workflow_dispatch:
 
