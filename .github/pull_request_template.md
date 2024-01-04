@@ -15,6 +15,7 @@
 <!-- Explain how the changes have been tested, including the testing environment and any relevant test cases. -->
 
 - [ ] I have tested any changes in container groups locally with `/test-runner/test_runner.py` with all existing tests passing, and I have added new tests where necessary.
-- [ ] Automated Validation (Do not edit, check to begin Validation)
-  
-command: /test-group group_dir: my-container-group, runner_label: test-runner
+
+### Automated Testing
+
+Leave a PR comment in the following format: `/test-group group_dir: <my-container-group>, runner_label: <my-runner-label>` to run automated tests.

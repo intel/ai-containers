@@ -3,6 +3,22 @@ name: Review Pipeline Validation
 on:
   pull_request_review:
     types: [submitted, edited]
+
+permissions:
+  actions: read
+  checks: read
+  contents: read
+  deployments: read
+  discussions: read
+  id-token: write
+  issues: read
+  packages: read
+  pages: read
+  pull-requests: write
+  repository-projects: read
+  security-events: read
+  statuses: read
+
 jobs:
   check-review:
     runs-on: [ k8-runners ]
