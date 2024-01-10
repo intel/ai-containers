@@ -3,9 +3,11 @@ from shlex import split
 from shutil import rmtree
 from signal import SIGKILL
 from subprocess import Popen, PIPE
-from sys import exit as sysexit
+from sys import exit
 import logging
+import json
 import os
+import re
 # Third Party
 from expandvars import expandvars
 from python_on_whales import docker, DockerException
@@ -34,7 +36,10 @@ class Test:
         """
         self.name = name
         for key, val in arguments.items():
-            setattr(self, key, val)
+            if isinstance(val, dict):
+                setattr(self, key, val[key])
+            else:
+                setattr(self, key, val)
 
     def get_path(self, name):
         """Given a filename, find that file from the users current working directory
@@ -243,6 +248,12 @@ def parse_args():
     """
     parser = ArgumentParser()
     parser.add_argument(
+        "-a",
+        "--actions-file",
+        dest="actions_path",
+        help="-a /path/to/.actions.json"
+    )
+    parser.add_argument(
         "-f",
         "--file",
         dest="file_path",
@@ -311,15 +322,31 @@ if __name__ == "__main__":
             tests_json = full_load(test_file)
         except YAMLError as yaml_exc:
             logging.error(yaml_exc)
-            sysexit(1)
-    # Check that each test contains 'cmd' and is therefore a valid test
+            exit(1)
+    tests_list = {}
     for test in tests_json:
+        if re.search(r"\$\{([A-Za-z0-9_]*)\:\-(.*?)\}", test):
+            if args.actions_path:
+                with open(args.actions_path, "r", encoding="utf-8") as actions_file:
+                    for key, dval in json.load(actions_file).items():
+                        if isinstance(dval, list) and key != "experimental":
+                            for _, val in enumerate(dval):
+                                os.environ[key] = str(val)
+                                if expandvars(test) not in tests_json.keys():
+                                    tests_list[expandvars(test)] = { k: expandvars(v) if isinstance(v, str) else {k: v} for k, v in tests_json[test].items()}
+                                del os.environ[key]
+            else:
+                if expandvars(test) not in tests_json.keys():
+                    tests_list[expandvars(test)] = {key: expandvars(val) for key, val in tests_json[test].items()}
+        else:
+            tests_list[test] = tests_json[test]
+        # Check that each test contains 'cmd' and is therefore a valid test
         if "cmd" not in tests_json[test]:
             logging.error("Command not found for %s", test)
-            sysexit(1)
-    logging.debug("Creating Test Objects")
+            exit(1)
+    logging.debug("Creating Test Objects from: %s", tests_list)
     # For each test, create a Test Object with the test name is the key of the test in yaml
-    tests = [Test(test, tests_json[test]) for test in tests_json]
+    tests = [Test(test, tests_list[test]) for test in tests_list]
     logging.info("Setup Completed - Running Tests")
     summary = []
     ERROR = False

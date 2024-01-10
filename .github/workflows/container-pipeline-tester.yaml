@@ -113,6 +113,8 @@ jobs:
         uses: ./test-runner
         with:
           mlops_repo: ${{ vars.MLOPS_REPO }}
+          mlops_ref: ${{ github.ref }}
+          recipe_dir: ${{ inputs.group_dir }}
           registry: ${{ vars.REGISTRY }}
           test_dir: ${{ matrix.recipe }}
           token: ${{ github.token }}

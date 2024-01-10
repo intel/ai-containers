@@ -11,12 +11,16 @@ inputs:
     required: false
     default: develop
     type: string
+  recipe_dir:
+    description: 'Path to Recipe Directory'
+    required: false
+    type: string
   registry:
     description: 'Container Registry URL'
     required: true
     type: string
   test_dir:
-    description: 'Directory with tests.yaml to test'
+    description: 'Path to Test Dir'
     required: true
     type: string
   token:
@@ -37,7 +41,7 @@ runs:
         python -m venv venv
         source venv/bin/activate
         python -m pip install -r mlops/test-runner/requirements.txt
-        python mlops/test-runner/test_runner.py -f ${{ inputs.test_dir }}/tests.yaml -l ${{ inputs.test_dir }}/logs -v
+        python mlops/test-runner/test_runner.py -f ${{ inputs.test_dir }}/tests.yaml -l ${{ inputs.test_dir }}/logs -a ${{ inputs.recipe_dir }}/.actions.json -v
       env:
         PYTHONPATH: mlops/test-runner
         REGISTRY: ${{ inputs.registry }}

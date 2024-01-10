@@ -20,3 +20,6 @@ test3:
   img: ${REGISTRY}/aiops/compose-dev:latest # python 3.10
   cmd: python --version # will return python 3.11
   serving: 'true'
+test${TEST:-4}:
+  img: ${REGISTRY}/aiops/compose-dev:latest
+  cmd: echo "${TEST:-4}"

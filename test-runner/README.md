@@ -4,6 +4,7 @@
 
 ```text
 test-runner
+├── .actions.json
 ├── README.md
 ├── requirements.txt
 ├── test_runner.py
@@ -18,10 +19,12 @@ The Test Runner CLI is intended to be used manually to verify that your config f
 
 ```text
 $ python test_runner.py --help
-usage: test_runner.py [-h] [-f FILE_PATH] [-v] [-l LOGS_PATH]
+usage: test_runner.py [-h] [-a ACTIONS_PATH] [-f FILE_PATH] [-v] [-l LOGS_PATH]
 
 optional arguments:
   -h, --help            show this help message and exit
+  -a ACTIONS_PATH, --actions-file ACTIONS_PATH
+                        -a /path/to/.actions.json
   -f FILE_PATH, --file FILE_PATH
                         -f /path/to/tests.yaml
   -v, --verbose         DEBUG Loglevel
@@ -71,6 +74,10 @@ inputs:
     description: 'Test Runner Branch/Tag'
     required: false
     default: develop
+    type: string
+  recipe_dir:
+    description: 'Path to Recipe Directory'
+    required: false
     type: string
   registry:
     description: 'Container Registry URL'
@@ -132,22 +139,31 @@ test3:
   img: ${REGISTRY}/aiops/compose-dev:latest # python 3.10
   cmd: python --version # will return python 3.11
   serving: 'true'
+test${TEST:-4}:
+  img: ${REGISTRY}/aiops/compose-dev:latest
+  cmd: echo "${TEST:-4}"
 ```
 
 ```text
-$ python test_runner.py -f tests.yaml 
-2023-10-17 17:13:24,380 - root - INFO - Setup Completed - Running Tests
-2023-10-17 17:13:24,380 - root - INFO - Running Test: test1
-2023-10-17 17:13:25,621 - root - INFO - expandvars
-2023-10-17 17:13:25,870 - root - INFO - Running Test: test2
-2023-10-17 17:13:25,870 - root - INFO - test2 Started
-2023-10-17 17:13:25,886 - root - INFO - Test Output: Hello World
-2023-10-17 17:13:25,886 - root - INFO - Running Test: test3
-2023-10-17 17:13:26,641 - root - INFO - Python 3.11.6
-2023-10-17 17:13:27,142 - root - INFO - 
+$ python test_runner.py -f tests.yaml -a .actions.json 
+2024-01-09 14:33:17,104 - root - INFO - Setup Completed - Running Tests
+2024-01-09 14:33:17,104 - root - INFO - Running Test: test1
+2024-01-09 14:33:18,002 - root - INFO - expandvars
+2024-01-09 14:33:18,221 - root - INFO - Running Test: test2
+2024-01-09 14:33:18,222 - root - INFO - test2 Started
+2024-01-09 14:33:18,243 - root - INFO - Test Output: 5 World
+2024-01-09 14:33:18,244 - root - INFO - Running Test: test3
+2024-01-09 14:33:18,666 - root - INFO - Python 3.11.7
+2024-01-09 14:33:18,841 - root - INFO - Running Test: test4
+2024-01-09 14:33:19,211 - root - INFO - 4
+2024-01-09 14:33:19,454 - root - INFO - Running Test: test5
+2024-01-09 14:33:19,781 - root - INFO - 5
+2024-01-09 14:33:20,061 - root - INFO - 
 |   # | Test   | Status   |
 |-----+--------+----------|
 |   1 | test1  | PASS     |
 |   2 | test2  | PASS     |
 |   3 | test3  | PASS     |
+|   4 | test4  | PASS     |
+|   5 | test5  | PASS     |
 ```
