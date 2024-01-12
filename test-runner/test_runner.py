@@ -36,7 +36,7 @@ class Test:
         """
         self.name = name
         for key, val in arguments.items():
-            if isinstance(val, dict):
+            if isinstance(val, dict) and key == 'volumes':
                 setattr(self, key, val[key])
             else:
                 setattr(self, key, val)
@@ -337,9 +337,9 @@ if __name__ == "__main__":
                                 del os.environ[key]
             else:
                 if expandvars(test) not in tests_json.keys():
-                    tests_list[expandvars(test)] = {key: expandvars(val) for key, val in tests_json[test].items()}
+                    tests_list[expandvars(test)] = {key: expandvars(val) if isinstance(val, str) else {key: val} for key, val in tests_json[test].items()}
         else:
-            tests_list[test] = tests_json[test]
+            tests_list[test] = {key: val for key, val in tests_json[test].items()}
         # Check that each test contains 'cmd' and is therefore a valid test
         if "cmd" not in tests_json[test]:
             logging.error("Command not found for %s", test)
