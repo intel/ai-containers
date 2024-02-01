@@ -17,6 +17,9 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Remove Containers
+      shell: bash
+      run: docker system prune --force
     - name: Random Number Generator
       shell: bash
       run: echo "random-number=$(shuf -i 0-1000 -n1)" >> $GITHUB_ENV
@@ -47,10 +50,14 @@ runs:
         COMPOSE_PROJECT_NAME=${{ env.random-number }} \
         ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} images --format json | jq '.[] | "\(.Repository):\(.Tag)"' >> $GITHUB_STEP_SUMMARY
       working-directory: ${{ inputs.group_dir }}
-    - name: Remove Containers
+    - name: Un-Tag Containers
       shell: bash
       run: |
         REGISTRY=${{ inputs.registry }} \
         COMPOSE_PROJECT_NAME=${{ env.random-number }} \
         ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} down --rmi all
       working-directory: ${{ inputs.group_dir }}
+    - name: Remove Containers
+      if: ${{ always() }}
+      shell: bash
+      run: docker system prune --force
