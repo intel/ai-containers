@@ -5,8 +5,10 @@
 
 This folder contains dockerhub overview readmes for container images.
 
+[intel-extension-for-pytorch.md]: intel-extension-for-pytorch.md
 [intel-extension-for-tensorflow.md]: intel-extension-for-tensorflow.md
 
 | Readme file                         | Dockerhub link                                                |
 | ----------------------------------- | ------------------------------------------------------------- |
+| [intel-extension-for-pytorch.md]    | https://hub.docker.com/r/intel/intel-extension-for-pytorch |
 | [intel-extension-for-tensorflow.md] | https://hub.docker.com/r/intel/intel-extension-for-tensorflow |
