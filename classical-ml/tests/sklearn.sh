@@ -1,3 +1,4 @@
+#!/bin/bash
 # Copyright (c) 2022 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +26,6 @@
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
 
-#!/bin/bash
 
 wget https://raw.githubusercontent.com/intel/ai-containers/main/preset/classical-ml/tests/scikit/kmeans.py
 python kmeans.py true

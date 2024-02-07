@@ -15,6 +15,7 @@ test-runner
 ```
 
 ## Usage
+
 The Test Runner CLI is intended to be used manually to verify that your config file works properly, and then automatically later to verify those changes work in a default validation environment.
 
 ```text
@@ -32,7 +33,7 @@ optional arguments:
                         -l /path/to/logs
 ```
 
-When running tests, the Test Runner chooses `PASS` or `FAIL` based on the exit code of the application that was run with the `cmd` field in your test config. When writing tests, ensure that the application succeeds/fails according to the expected state of the application. The following code snippet describes the logical flow of the Test Runner Application for each test: 
+When running tests, the Test Runner chooses `PASS` or `FAIL` based on the exit code of the application that was run with the `cmd` field in your test config. When writing tests, ensure that the application succeeds/fails according to the expected state of the application. The following code snippet describes the logical flow of the Test Runner Application for each test:
 
 ```python
 ERROR = False
@@ -55,12 +56,12 @@ if ERROR:
 ### Unit Testing
 
 ```bash
-$ PYTHONPATH=$PWD/tests pytest tests/utest.py -W ignore::UserWarning
+PYTHONPATH=$PWD/tests pytest tests/utest.py -W ignore::UserWarning
 ```
 
 ## Composite Action
 
-This action clones a version of this repo with test-runner and runs the application on a given directory.
+This action clones a version of this repository with test-runner and runs the application on a given directory.
 
 Inputs for the action:
 
@@ -116,6 +117,7 @@ test-containers:
 ## Expected Output
 
 Given a test input:
+
 ```yaml
 test1:
   img: ${REGISTRY}/aiops/compose-dev:latest # var substitution inline
@@ -145,7 +147,7 @@ test${TEST:-4}:
 ```
 
 ```text
-$ python test_runner.py -f tests.yaml -a .actions.json 
+$ python test_runner.py -f tests.yaml -a .actions.json
 2024-01-09 14:33:17,104 - root - INFO - Setup Completed - Running Tests
 2024-01-09 14:33:17,104 - root - INFO - Running Test: test1
 2024-01-09 14:33:18,002 - root - INFO - expandvars
@@ -158,7 +160,7 @@ $ python test_runner.py -f tests.yaml -a .actions.json
 2024-01-09 14:33:19,211 - root - INFO - 4
 2024-01-09 14:33:19,454 - root - INFO - Running Test: test5
 2024-01-09 14:33:19,781 - root - INFO - 5
-2024-01-09 14:33:20,061 - root - INFO - 
+2024-01-09 14:33:20,061 - root - INFO -
 |   # | Test   | Status   |
 |-----+--------+----------|
 |   1 | test1  | PASS     |

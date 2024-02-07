@@ -25,6 +25,8 @@
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
 
+# pylint: skip-file
+
 import argparse
 
 import grpc

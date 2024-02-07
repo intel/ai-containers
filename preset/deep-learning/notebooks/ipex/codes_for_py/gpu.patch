@@ -10,7 +10,7 @@ index 00eb371b..a3ded045 100755
 +    model = model.to("xpu", memory_format=torch.channels_last)
      optim = torch.optim.SGD(model.parameters(), lr=0.01)
      crite = nn.MSELoss(reduction='sum')
- 
+
 @@ -104,7 +104,8 @@ def main():
          '''
          model.train()
@@ -28,5 +28,5 @@ index 00eb371b..a3ded045 100755
 -            data = data.to(memory_format=torch.channels_last)
 +            data = data.to("xpu", memory_format=torch.channels_last)
              y = model(data)
- 
+
  if __name__ == '__main__':

@@ -1,7 +1,6 @@
+---
 name: Container Pipeline Tester
-
 permissions: read-all
-
 on:
   workflow_dispatch:
     inputs:
@@ -19,7 +18,7 @@ on:
         required: true
         type: string
       no-build:
-        description: 'No build'
+        description: No build
         default: false
         required: true
         type: boolean

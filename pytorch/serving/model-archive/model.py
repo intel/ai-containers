@@ -25,8 +25,11 @@
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
 
+# pylint: skip-file
+
 from torchvision.models.squeezenet import SqueezeNet
+
 
 class ImageClassifier(SqueezeNet):
     def __init__(self):
-        super(ImageClassifier, self).__init__('1_1')
+        super(ImageClassifier, self).__init__("1_1")

@@ -38,9 +38,9 @@ RUN python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${
 
 # Add Intel TF Licensing
 RUN	mkdir /licensing && \
-    wget -O - https://github.com/Intel-tensorflow/tensorflow/archive/v${TF_PACKAGE_VERSION}.tar.gz | \
+    wget --progress=dot:giga -O - https://github.com/Intel-tensorflow/tensorflow/archive/v${TF_PACKAGE_VERSION}.tar.gz | \
 	tar -xz -C /licensing --strip=2 "tensorflow-${TF_PACKAGE_VERSION}/third_party_programs_license/" && \
-    curl --insecure https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE -o /licensing/TF_LICENSE
+    wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE -O /licensing/TF_LICENSE
 
 FROM ${COMPOSE_PROJECT_NAME}-python AS tf-base-idp
 
@@ -64,9 +64,9 @@ RUN python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${
 
 # Add Intel TF Licensing
 RUN	mkdir /licensing && \
-    wget -O - https://github.com/Intel-tensorflow/tensorflow/archive/v${TF_PACKAGE_VERSION}.tar.gz | \
+    wget --progress=dot:giga -O - https://github.com/Intel-tensorflow/tensorflow/archive/v${TF_PACKAGE_VERSION}.tar.gz | \
 	tar -xz -C /licensing --strip=2 "tensorflow-${TF_PACKAGE_VERSION}/third_party_programs_license/" && \
-    curl --insecure https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE -o /licensing/TF_LICENSE
+    wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE -O /licensing/TF_LICENSE
 
 FROM tf-base-${PACKAGE_OPTION} AS jupyter
 
@@ -88,7 +88,7 @@ RUN python -m pip install --no-cache-dir mlflow
 ARG PORT=5000
 EXPOSE $PORT
 
-CMD ["mlflow", "server", "-h", "0.0.0.0", "-p", $PORT]
+CMD ["mlflow", "server", "-h", "0.0.0.0", "-p", "$PORT"]
 
 FROM tf-base-${PACKAGE_OPTION} AS openmpi
 
@@ -149,8 +149,8 @@ ARG INC_VER
 
 ENV SIGOPT_PROJECT=.
 
-RUN curl --insecure https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-tensorflow.txt -o /licensing/third-party-programs-tensorflow.txt && \
-    curl --insecure https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -o /licensing/LICENSE
+RUN wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-tensorflow.txt -O /licensing/third-party-programs-tensorflow.txt && \
+    wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
 
 FROM horovod AS multinode-pip
 
@@ -170,7 +170,6 @@ RUN apt-get update && \
     apt-utils \
     build-essential \
     clinfo \
-    curl \
     git \
     gnupg2 \
     gpg-agent \
@@ -188,7 +187,7 @@ ARG DPCPP_VER
 ARG MKL_VER
 ARG CCL_VER
 
-RUN no_proxy="" wget -qO - https://repositories.intel.com/graphics/intel-graphics.key | \
+RUN no_proxy="" wget --progress=dot:giga -qO - https://repositories.intel.com/graphics/intel-graphics.key | \
     gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
 RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/graphics/ubuntu jammy max" | \
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
@@ -202,7 +201,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
-RUN no_proxy="" wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+RUN no_proxy="" wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
    | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
    echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
    | tee /etc/apt/sources.list.d/oneAPI.list

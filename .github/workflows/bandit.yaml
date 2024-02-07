@@ -1,10 +1,9 @@
+---
 name: Bandit Scan
 on:
   pull_request_review:
     types: [submitted]
-
 permissions: read-all
-
 jobs:
   scan-bandit:
     if: github.event.review.state == 'approved'
@@ -12,7 +11,7 @@ jobs:
     with:
       org: ${{ github.repository_owner }}
       repo: ${{ github.event.repository.name }}
-      refs: ${{ github.event.pull_request.base.ref }} 
-      runners: "['k8-runners']"
+      refs: ${{ github.event.pull_request.base.ref }}
+      runners: '[''k8-runners'']'
     secrets:
       token: ${{ secrets.ACTION_TOKEN }}

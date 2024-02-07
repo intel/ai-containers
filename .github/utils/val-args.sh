@@ -21,4 +21,4 @@ fi
 # etc.
 ##
 regex="([[:alnum:]_-]+)[[:space:]]*[:=][[:space:]]*([[:alnum:]\/=_\-\s']+)"
-echo $matched_line | grep -oP $regex | sed 's/: /=/g' >> $GITHUB_OUTPUT
+echo "$matched_line" | grep -oP "$regex" | sed 's/: /=/g' >> "$GITHUB_OUTPUT"

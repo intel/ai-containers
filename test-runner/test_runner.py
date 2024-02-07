@@ -1,23 +1,51 @@
+# Copyright (c) 2022 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ============================================================================
+#
+# This file was assembled from multiple pieces, whose use is documented
+# throughout. Please refer to the TensorFlow dockerfiles documentation
+# for more information.
+# based on https://github.com/pytorch/pytorch/blob/master/Dockerfile
+#
+# NOTE: To build this you will need a docker version >= 19.03 and DOCKER_BUILDKIT=1
+#
+#       If you do not use buildkit you are not going to have a good time
+#
+#       For reference:
+#           https://docs.docker.com/develop/develop-images/build_enhancements/
+
+import json
+import logging
+import os
+import re
+import sys
 from argparse import ArgumentParser
 from shlex import split
 from shutil import rmtree
 from signal import SIGKILL
-from subprocess import Popen, PIPE
-from sys import exit
-import logging
-import json
-import os
-import re
+from subprocess import PIPE, Popen
+
 # Third Party
 from expandvars import expandvars
-from python_on_whales import docker, DockerException
+from python_on_whales import DockerException, docker
 from tabulate import tabulate
-from yaml import full_load, YAMLError
+from yaml import YAMLError, full_load
 
 
 class Test:
     """A class to represent a test, attributes are set dynamically via yaml config during __init__
-    
+
     Methods:
         get_path(name=""):
             Given a filename, find that file from the users current working directory
@@ -26,6 +54,7 @@ class Test:
         run():
             Create a process for cmd on Baremetal System
     """
+
     def __init__(self, name, arguments):
         """Initialize Test Object
 
@@ -36,7 +65,7 @@ class Test:
         """
         self.name = name
         for key, val in arguments.items():
-            if isinstance(val, dict) and key == 'volumes':
+            if isinstance(val, dict) and key == "volumes":
                 setattr(self, key, val[key])
             else:
                 setattr(self, key, val)
@@ -50,11 +79,11 @@ class Test:
         Returns:
             string: Path to filename of input name
         """
-        for root, dirs, files in os.walk(os.getcwd()):
+        for root, _, files in os.walk(os.getcwd()):
             if name in files:
                 return os.path.join(root, name)
         logging.error("Notebook Dockerfile not found")
-        exit(1)
+        sys.exit(1)
 
     def container_run(self):
         """Use Python on Whales to run a Docker Container with img and cmd
@@ -85,30 +114,30 @@ class Test:
         env.update(default_env)
         # If Notebook modify image to include papermill
         if hasattr(self, "notebook"):
-            if self.notebook == 'true':
-                try: # Try for Docker CLI Failure Conditions
+            if self.notebook == "true":
+                try:  # Try for Docker CLI Failure Conditions
                     docker.run(img, ["which", "papermill"])
                 except DockerException as papermill_not_found:
                     logging.debug("Papermill not found: %s", papermill_not_found)
                     docker.build(
                         # context path
-                        '.',
+                        ".",
                         # Image Input and Proxy Args
                         build_args={
-                            "BASE_IMAGE_NAME": img.split(':')[0],
-                            "BASE_IMAGE_TAG": img.split(':')[1],
+                            "BASE_IMAGE_NAME": img.split(":")[0],
+                            "BASE_IMAGE_TAG": img.split(":")[1],
                             "http_proxy": os.environ.get("http_proxy"),
-                            "https_proxy": os.environ.get("https_proxy")
+                            "https_proxy": os.environ.get("https_proxy"),
                         },
                         # Input File
                         file=self.get_path("Dockerfile.notebook"),
                         # Output Tag = Input Tag
-                        tags=[img]
+                        tags=[img],
                     )
         if hasattr(self, "serving"):
-            if self.serving == 'true':
+            if self.serving == "true":
                 log = ""
-                try: # Try for Docker CLI Failure Conditions
+                try:  # Try for Docker CLI Failure Conditions
                     serving_container = docker.run(
                         # Image
                         img,
@@ -119,14 +148,28 @@ class Test:
                         # Volumes
                         volumes=volumes,
                         # Networks
-                        networks=['host'],
+                        networks=["host"],
                         # Misc
-                        cap_add=[self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"],
-                        devices=[expandvars(self.device) if hasattr(self, "device") else "/dev/dri"],
-                        entrypoint=expandvars(self.entrypoint) if hasattr(self, "entrypoint") else None,
+                        cap_add=[
+                            self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"
+                        ],
+                        devices=[
+                            (
+                                expandvars(self.device)
+                                if hasattr(self, "device")
+                                else "/dev/dri"
+                            )
+                        ],
+                        entrypoint=(
+                            expandvars(self.entrypoint)
+                            if hasattr(self, "entrypoint")
+                            else None
+                        ),
                         hostname=self.hostname if hasattr(self, "hostname") else None,
                         ipc=self.ipc if hasattr(self, "ipc") else None,
-                        privileged=self.privileged if hasattr(self, "privileged") else True,
+                        privileged=(
+                            self.privileged if hasattr(self, "privileged") else True
+                        ),
                         pull=self.pull if hasattr(self, "pull") else "missing",
                         shm_size=self.shm_size if hasattr(self, "shm_size") else None,
                     )
@@ -142,28 +185,49 @@ class Test:
                         # Volumes
                         volumes=volumes,
                         # Networks
-                        networks=['host'],
+                        networks=["host"],
                         # Misc
-                        cap_add=[self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"],
-                        devices=[expandvars(self.device) if hasattr(self, "device") else "/dev/dri"],
-                        entrypoint=expandvars(self.entrypoint) if hasattr(self, "entrypoint") else None,
+                        cap_add=[
+                            self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"
+                        ],
+                        devices=[
+                            (
+                                expandvars(self.device)
+                                if hasattr(self, "device")
+                                else "/dev/dri"
+                            )
+                        ],
+                        entrypoint=(
+                            expandvars(self.entrypoint)
+                            if hasattr(self, "entrypoint")
+                            else None
+                        ),
                         hostname=self.hostname if hasattr(self, "hostname") else None,
                         ipc=self.ipc if hasattr(self, "ipc") else None,
-                        privileged=self.privileged if hasattr(self, "privileged") else True,
+                        privileged=(
+                            self.privileged if hasattr(self, "privileged") else True
+                        ),
                         pull=self.pull if hasattr(self, "pull") else "missing",
                         remove=self.rm if hasattr(self, "rm") else True,
                         user=self.user if hasattr(self, "user") else None,
                         shm_size=self.shm_size if hasattr(self, "shm_size") else None,
-                        workdir=expandvars(self.workdir) if hasattr(self, "workdir") else None,
+                        workdir=(
+                            expandvars(self.workdir)
+                            if hasattr(self, "workdir")
+                            else None
+                        ),
                     )
                 except DockerException as err:
-                    return "DockerException", err.return_code  # assume the return code is 0 unless otherwise specified
+                    return (
+                        "DockerException",
+                        err.return_code,
+                    )  # assume the return code is 0 unless otherwise specified
                 finally:
                     # Log within the function to retain scope for debugging
-                    for stream_type, stream_content in client_output:
+                    for _, stream_content in client_output:
                         # All process logs will have the stream_type of stderr despite it being stdout
-                        logging.info(stream_content.decode('utf-8').strip())
-                        log += stream_content.decode('utf-8').strip()
+                        logging.info(stream_content.decode("utf-8").strip())
+                        log += stream_content.decode("utf-8").strip()
                     logging.debug("--- Server Logs ---")
                     logging.debug(docker.logs(serving_container))
                     docker.stop(serving_container, time=None)
@@ -183,9 +247,20 @@ class Test:
                 volumes=volumes,
                 # Misc
                 cap_add=[self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"],
-                devices=[expandvars(self.device) if hasattr(self, "device") else "/dev/dri"],
-                entrypoint=expandvars(self.entrypoint) if hasattr(self, "entrypoint") else None,
-                groups_add=[expandvars(self.group-add) if hasattr(self, "group-add") else "109", "44"],
+                devices=[
+                    expandvars(self.device) if hasattr(self, "device") else "/dev/dri"
+                ],
+                entrypoint=(
+                    expandvars(self.entrypoint) if hasattr(self, "entrypoint") else None
+                ),
+                groups_add=[
+                    (
+                        expandvars(self.groups_add)
+                        if hasattr(self, "group-add")
+                        else "109"
+                    ),
+                    "44",
+                ],
                 hostname=self.hostname if hasattr(self, "hostname") else None,
                 ipc=self.ipc if hasattr(self, "ipc") else None,
                 privileged=self.privileged if hasattr(self, "privileged") else True,
@@ -196,13 +271,16 @@ class Test:
                 workdir=expandvars(self.workdir) if hasattr(self, "workdir") else None,
             )
         except DockerException as err:
-            return "DockerException", err.return_code  # assume the return code is 0 unless otherwise specified
+            return (
+                "DockerException",
+                err.return_code,
+            )  # assume the return code is 0 unless otherwise specified
         # Log within the function to retain scope for debugging
         log = ""
-        for stream_type, stream_content in output_generator:
+        for _, stream_content in output_generator:
             # All process logs will have the stream_type of stderr despite it being stdout
-            logging.info(stream_content.decode('utf-8').strip())
-            log += stream_content.decode('utf-8').strip()
+            logging.info(stream_content.decode("utf-8").strip())
+            log += stream_content.decode("utf-8").strip()
         return log, 0
 
     def run(self):
@@ -235,9 +313,10 @@ class Test:
                 logging.error(stderr.decode("utf-8"))
             if stdout:
                 logging.info("Test Output: %s", stdout.decode("utf-8"))
-            return stdout.decode("utf-8"), p.returncode
+            return stdout.decode("utf-8"), p.RETURNCODE
         except KeyboardInterrupt:
             os.killpg(os.getpgid(p.pid), SIGKILL)
+            return "Keyboard Interrupt", 1
 
 
 def parse_args():
@@ -248,30 +327,14 @@ def parse_args():
     """
     parser = ArgumentParser()
     parser.add_argument(
-        "-a",
-        "--actions-file",
-        dest="actions_path",
-        help="-a /path/to/.actions.json"
+        "-a", "--actions-file", dest="actions_path", help="-a /path/to/.actions.json"
+    )
+    parser.add_argument("-f", "--file", dest="file_path", help="-f /path/to/tests.yaml")
+    parser.add_argument(
+        "-v", "--verbose", dest="log_level", action="store_true", help="DEBUG Loglevel"
     )
     parser.add_argument(
-        "-f",
-        "--file",
-        dest="file_path",
-        help="-f /path/to/tests.yaml"
-    )
-    parser.add_argument(
-        "-v",
-        "--verbose",
-        dest="log_level",
-        action="store_true",
-        help="DEBUG Loglevel"
-    )
-    parser.add_argument(
-        "-l",
-        "--logs",
-        dest="logs_path",
-        default="output",
-        help="-l /path/to/logs"
+        "-l", "--logs", dest="logs_path", default="output", help="-l /path/to/logs"
     )
 
     return parser.parse_args()
@@ -284,14 +347,14 @@ def set_log_filename(logger, name, logs_path):
         logger (logging.RootLogger): Current logger context
         name (string): New or Existing logger filename
         logs_path (string): Path to logs folder
-    """    
-    testHandler = logging.FileHandler(f"{logs_path}/{name}.log")
+    """
+    test_handler = logging.FileHandler(f"{logs_path}/{name}.log")
     # Handler[0] is the stream output to stdout/stderr
     # Handler[1] is always the file handler, see the logging declaration handlers parameter
-    testHandler.setFormatter(logger.handlers[1].formatter)
-    testHandler.setLevel(logger.handlers[1].level)
+    test_handler.setFormatter(logger.handlers[1].formatter)
+    test_handler.setLevel(logger.handlers[1].level)
     logger.removeHandler(logger.handlers[1])
-    logger.addHandler(testHandler)
+    logger.addHandler(test_handler)
 
 
 if __name__ == "__main__":
@@ -322,7 +385,7 @@ if __name__ == "__main__":
             tests_json = full_load(test_file)
         except YAMLError as yaml_exc:
             logging.error(yaml_exc)
-            exit(1)
+            sys.exit(1)
     tests_list = {}
     for test in tests_json:
         if re.search(r"\$\{([A-Za-z0-9_]*)\:\-(.*?)\}", test):
@@ -333,24 +396,34 @@ if __name__ == "__main__":
                             for _, val in enumerate(dval):
                                 os.environ[key] = str(val)
                                 if expandvars(test) not in tests_json.keys():
-                                    tests_list[expandvars(test)] = { k: expandvars(v) if isinstance(v, str) else {k: v} for k, v in tests_json[test].items()}
+                                    tests_list[expandvars(test)] = {
+                                        k: (
+                                            expandvars(v)
+                                            if isinstance(v, str)
+                                            else {k: v}
+                                        )
+                                        for k, v in tests_json[test].items()
+                                    }
                                 del os.environ[key]
             else:
                 if expandvars(test) not in tests_json.keys():
-                    tests_list[expandvars(test)] = {key: expandvars(val) if isinstance(val, str) else {key: val} for key, val in tests_json[test].items()}
+                    tests_list[expandvars(test)] = {
+                        key: expandvars(val) if isinstance(val, str) else {key: val}
+                        for key, val in tests_json[test].items()
+                    }
         else:
-            tests_list[test] = {key: val for key, val in tests_json[test].items()}
+            tests_list[test] = dict(tests_json[test].items())
         # Check that each test contains 'cmd' and is therefore a valid test
         if "cmd" not in tests_json[test]:
             logging.error("Command not found for %s", test)
-            exit(1)
+            sys.exit(1)
     logging.debug("Creating Test Objects from: %s", tests_list)
     # For each test, create a Test Object with the test name is the key of the test in yaml
     tests = [Test(test, tests_list[test]) for test in tests_list]
     logging.info("Setup Completed - Running Tests")
     summary = []
     ERROR = False
-    returncode = 1
+    RETURNCODE = 1
     for idx, test in enumerate(tests):
         # Set Context to test-runner.log
         set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
@@ -359,15 +432,17 @@ if __name__ == "__main__":
         set_log_filename(logging.getLogger(), test.name, args.logs_path)
         logging.debug("Attrs: %s", dir(test)[26:])
         # If 'img' is present in the test, ensure that the test is a container run, otherwise run on baremetal
-        # returns the stdout of the test and the returncode
-        try: # Try for Runtime Failure Conditions
-            log, returncode = test.container_run() if hasattr(test, "img") else test.run()
+        # returns the stdout of the test and the RETURNCODE
+        try:  # Try for Runtime Failure Conditions
+            log, RETURNCODE = (
+                test.container_run() if hasattr(test, "img") else test.run()
+            )
         except:
             summary.append([idx + 1, test.name, "FAIL"])
             ERROR = True
             continue
         finally:
-            if returncode != 0 and ERROR == False:
+            if RETURNCODE != 0 and ERROR is False:
                 summary.append([idx + 1, test.name, "FAIL"])
                 ERROR = True
                 continue
@@ -379,6 +454,8 @@ if __name__ == "__main__":
     for container in remaining_containers:
         docker.stop(container, time=None)
     # Print Summary Table
-    logging.info("\n%s", tabulate(summary, headers=["#", "Test", "Status"], tablefmt="orgtbl"))
+    logging.info(
+        "\n%s", tabulate(summary, headers=["#", "Test", "Status"], tablefmt="orgtbl")
+    )
     if ERROR:
-        exit(1)
+        sys.exit(1)

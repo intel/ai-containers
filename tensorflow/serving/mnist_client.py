@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-
+# pylint: skip-file
 #!/usr/bin/env python2.7
 
 """A client that talks to tensorflow_model_server loaded with mnist model.
@@ -30,15 +30,13 @@ from __future__ import print_function
 import sys
 import threading
 
-# This is a placeholder for a Google-internal import.
-
 import grpc
+import mnist_input_data
 import numpy
 import tensorflow as tf
+from tensorflow_serving.apis import predict_pb2, prediction_service_pb2_grpc
 
-from tensorflow_serving.apis import predict_pb2
-from tensorflow_serving.apis import prediction_service_pb2_grpc
-import mnist_input_data
+# This is a placeholder for a Google-internal import.
 
 
 tf.compat.v1.app.flags.DEFINE_integer(

@@ -43,7 +43,6 @@ RUN apt-get update -y && \
     apt-get install -y --no-install-recommends --fix-missing \
     bzip2 \
     ca-certificates \
-    curl \
     diffutils \
     gcc \
     git \
@@ -69,18 +68,18 @@ ARG PYTHON_VERSION
 ARG IDP_VERSION
 ARG INTEL_CHANNEL
 
-RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
+RUN wget --progress=dot:giga --no-check-certificate "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh" -O miniconda.sh && \
     chmod +x miniconda.sh && \
-    ./miniconda.sh -b -p ${CONDA_ROOT} && \
+    ./miniconda.sh -b -p "${CONDA_ROOT}" && \
     rm ./miniconda.sh && \
-    ln -s ${CONDA_ROOT} ${CONDA_ROOT}/../miniconda3 && \
-    export PATH=${CONDA_ROOT}/bin/:${PATH} && \
+    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniconda3" && \
+    export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda update -y conda && \
     conda config --set solver libmamba && \
     conda config --show solver && \
     conda config --add channels intel && \
     conda init --all && \
-    conda clean -y --all 
+    conda clean -y --all
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 
@@ -133,9 +132,9 @@ COPY --chown=dev notebooks /home/dev/jupyter
 COPY --chown=dev tests /home/dev/sample-tests
 
 RUN conda run -n classical-ml python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy && \
-    ${CONDA_ROOT}/envs/classical-ml/bin/python -m ipykernel install --user --name classical-ml --display-name "Classical ML" && \
-    ${CONDA_ROOT}/envs/classical-ml/bin/kernda -o -y ~/.local/share/jupyter/kernels/$(echo classical-ml | sed -e 's/\(.*\)/\L\1/')/kernel.json && \
-    ${CONDA_ROOT}/envs/classical-ml/bin/python -m ipykernel.kernelspec --user && \
+    "${CONDA_ROOT}/envs/classical-ml/bin/python" -m ipykernel install --user --name classical-ml --display-name "Classical ML" && \
+    "${CONDA_ROOT}/envs/classical-ml/bin/kernda" -o -y "$HOME/.local/share/jupyter/kernels/$(echo classical-ml | sed -e 's/\(.*\)/\L\1/')/kernel.json" && \
+    "${CONDA_ROOT}/envs/classical-ml/bin/python" -m ipykernel.kernelspec --user && \
     conda clean -y --all
 
 CMD ["bash", "-c", "source activate classical-ml && jupyter notebook --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]

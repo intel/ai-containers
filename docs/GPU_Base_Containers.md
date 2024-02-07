@@ -1,5 +1,7 @@
 # Intel® GPU Base Containers
+
 Intel® Data Center GPU Max Series and Intel® Data Center GPU Flex Series base containers
+
 |                                                                                        Container                                                                                       |Framework|                           Docker Pull Command                          |Compressed Size|
 |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------|------------------------------------------------------------------------|---------------|
 |                  [Intel® Extension for PyTorch* Container for Flex Series](https://github.com/intel/intel-extension-for-pytorch/blob/v2.0.110%2Bxpu/docker/README.md)                  | PyTorch |         ```docker pull intel-extension-for-pytorch:xpu-flex```         |     7.04GB    |

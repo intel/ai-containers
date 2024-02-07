@@ -4,7 +4,7 @@ index b644dc37..88512841 100755
 +++ b/kubernetes/kserve/build_image.sh
 @@ -1,8 +1,8 @@
  #!/bin/bash
- 
+
  MACHINE=cpu
 -DOCKER_TAG="pytorch/torchserve-kfs:latest"
 -BASE_IMAGE="pytorch/torchserve:latest-cpu"
@@ -16,7 +16,7 @@ index b644dc37..88512841 100755
 @@ -57,4 +57,4 @@ fi
  cp ../../frontend/server/src/main/resources/proto/*.proto .
  cp -r ../../third_party .
- 
+
 -DOCKER_BUILDKIT=1 docker build --file "$DOCKER_FILE" --build-arg BASE_IMAGE=$BASE_IMAGE -t "$DOCKER_TAG" .
 +DOCKER_BUILDKIT=1 docker build --file "$DOCKER_FILE" --build-arg http_proxy=${http_proxy} --build-arg https_proxy=${https_proxy} --build-arg BASE_IMAGE=$BASE_IMAGE -t "$DOCKER_TAG" .
 diff --git a/kubernetes/kserve/config.properties b/kubernetes/kserve/config.properties

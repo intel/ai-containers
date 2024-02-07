@@ -48,17 +48,17 @@ Built from Base
 
 | Environment Variable Name | Default Value | Description |
 | --- | --- | --- |
-| ICD_VER | `23.17.26241.33-647~22.04` | OpenCL Version |
-| LEVEL_ZERO_GPU_VER | `1.3.26241.33-647~22.04` | Level Zero GPU Version |
-| LEVEL_ZERO_VER | `1.11.0-647~22.04` | Level Zero Version |
-| DPCPP_VER | `2023.2.1-16` | DPCPP Version | 
-| MKL Version | `2023.2.0-49495` | MKL Version |
-| CCL_VER | `2021.10.0-49084` | CCL Version |
-| TORCH_VERSION | `2.0.1a0+cxx11.abi` | Torch Version |
-| TORCHVISION_VERSION | `0.15.2a0+cxx11.abi` | Torchvision Version |
-| IPEX_VERSION | `2.0.110+xpu` | IPEX Version |
-| TORCH_WHL_URL | `https://developer.intel.com/ipex-whl-stable-xpu` | Wheel URL |
-| ONECCL_BIND_PT_VERSION | `2.0.100` | TorchCCL Version | 
+| ICD_VER | `23.30.26918.50-736~22.04` | OpenCL Version |
+| LEVEL_ZERO_GPU_VER | `1.3.26918.50-736~22.04` | Level Zero GPU Version |
+| LEVEL_ZERO_VER | `1.13.1-719~22.04` | Level Zero Version |
+| DPCPP_VER | `2024.0.0-49819` | DPCPP Version |
+| MKL Version | `2024.0.0-49656` | MKL Version |
+| CCL_VER | `2021.11.1-6` | CCL Version |
+| TORCH_VERSION | `2.1.0a0+cxx11.abi` | Torch Version |
+| TORCHVISION_VERSION | `0.16.0a0+cxx11.abi` | Torchvision Version |
+| IPEX_VERSION | `2.1.10+xpu` | IPEX Version |
+| TORCH_WHL_URL | `https://pytorch-extension.intel.com/release-whl/stable/xpu/us/` | Wheel URL |
+| ONECCL_BIND_PT_VERSION | `2.1.100` | TorchCCL Version |
 
 ### IPEX XPU Jupyter
 

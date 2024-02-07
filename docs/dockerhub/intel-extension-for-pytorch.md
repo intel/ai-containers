@@ -1,4 +1,4 @@
-# Intel® Extension for Pytorch*
+# Intel® Extension for Pytorch\*
 
 [Intel® Extension for PyTorch*] extends [PyTorch*] with up-to-date feature optimizations for an extra performance boost on Intel hardware.
 
@@ -8,7 +8,7 @@ On Intel CPUs optimizations take advantage of the following instuction sets:
 * Intel® Advanced Vector Extensions 512 (Intel® AVX-512)
 * Vector Neural Network Instructions (VNNI)
 
-On Intel GPUs Intel® Extension for PyTorch* provides easy GPU acceleration through the PyTorch* `xpu` device. The following Intel GPUs are supported:
+On Intel GPUs Intel® Extension for PyTorch\* provides easy GPU acceleration through the PyTorch* `xpu` device. The following Intel GPUs are supported:
 
 * [Intel® Arc™ A-Series Graphics]
 * [Intel® Data Center GPU Flex Series]
@@ -98,7 +98,7 @@ It is the image user's responsibility to ensure that any use of these images com
 
 \* Other names and brands may be claimed as the property of others.
 
-[Below are links used in these document. They are not rendered.]: #
+<!--Below are links used in these document. They are not rendered: -->
 
 [Intel® Arc™ A-Series Graphics]: https://ark.intel.com/content/www/us/en/ark/products/series/227957/intel-arc-a-series-graphics.html
 [Intel® Data Center GPU Flex Series]: https://ark.intel.com/content/www/us/en/ark/products/series/230021/intel-data-center-gpu-flex-series.html

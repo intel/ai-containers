@@ -1,3 +1,4 @@
+<!-- textlint-disable -->
 Preset Container - Inference Optimization Py 3.9- Third Party Programs File
 
 This file contains the list of third party software (“third party programs”)
@@ -11,7 +12,7 @@ party programs as set forth in the “third-party-programs.txt” or other simil
 Third party programs and their corresponding required notices and/or license
 terms are listed below.
 
--------------------------------------------------------------	
+-------------------------------------------------------------
 
 START LICENSE(S) FOR ---------- jupyter-notebook/lab-extension -----------------------------
 
@@ -914,7 +915,7 @@ are permitted provided that the following conditions are met:
 3. Neither the name of Dan Haim nor the names of his contributors may be used
    to endorse or promote products derived from this software without specific
    prior written permission.
-   
+
 THIS SOFTWARE IS PROVIDED BY DAN HAIM "AS IS" AND ANY EXPRESS OR IMPLIED
 WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
 MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
@@ -4050,7 +4051,7 @@ This project includes code from the autobrew project.
 The following files are based on code from the autobrew project:
 * r/tools/autobrew
 * dev/tasks/homebrew-formulae/autobrew/apache-arrow.rb
-* dev/tasks/homebrew-formulae/autobrew/apache-arrow-static.rb 
+* dev/tasks/homebrew-formulae/autobrew/apache-arrow-static.rb
 
 Copyright (c) 2019, Jeroen Ooms
 License: MIT
@@ -5044,10 +5045,10 @@ END LICENSE(S) FOR ---------- azureml -----------------------------
 
 START LICENSE(S) FOR ---------- azureml-core -----------------------------
 
-    
+
 This software is made available to you on the condition that you agree to
 [your agreement][1] governing your use of Azure.
-If you do not have an existing agreement governing your use of Azure, you agree that 
+If you do not have an existing agreement governing your use of Azure, you agree that
 your agreement governing use of Azure is the [Microsoft Online Subscription Agreement][2]
 (which incorporates the [Online Services Terms][3]).
 By using the software you agree to these terms. This software may collect data
@@ -5057,7 +5058,7 @@ to learn more about how Microsoft processes personal data.
 [1]: https://azure.microsoft.com/en-us/support/legal/
 [2]: https://azure.microsoft.com/en-us/support/legal/subscription-agreement/
 [3]: http://www.microsoftvolumelicensing.com/DocumentSearch.aspx?Mode=3&DocumentTypeId=46
-[4]: http://go.microsoft.com/fwlink/?LinkId=248681 
+[4]: http://go.microsoft.com/fwlink/?LinkId=248681
 
 
 END LICENSE(S) FOR ---------- azureml-core -----------------------------
@@ -8286,16 +8287,16 @@ are met:
 1. Redistributions of source code must retain the above copyright
    notice, this list of conditions and the following disclaimer.
 
-2. The origin of this software must not be misrepresented; you must 
-   not claim that you wrote the original software.  If you use this 
-   software in a product, an acknowledgment in the product 
+2. The origin of this software must not be misrepresented; you must
+   not claim that you wrote the original software.  If you use this
+   software in a product, an acknowledgment in the product
    documentation would be appreciated but is not required.
 
 3. Altered source versions must be plainly marked as such, and must
    not be misrepresented as being the original software.
 
-4. The name of the author may not be used to endorse or promote 
-   products derived from this software without specific prior written 
+4. The name of the author may not be used to endorse or promote
+   products derived from this software without specific prior written
    permission.
 
 THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS
@@ -10888,7 +10889,7 @@ START LICENSE(S) FOR ---------- daal -----------------------------
 
    ============================================================================
 
-   Intel® Integrated Performance Primitives (Intel® IPP) Library: Copyright 2019 Intel Corporation 
+   Intel® Integrated Performance Primitives (Intel® IPP) Library: Copyright 2019 Intel Corporation
    Intel® Math Kernel Library (Intel® MKL): Copyright 2019 Intel Corporation
 
    List of third party for Intel® Integrated Performance Primitives (Intel® IPP) is available in the third-party-programs-ipp.txt file
@@ -10896,71 +10897,71 @@ START LICENSE(S) FOR ---------- daal -----------------------------
    List of third party for Intel® Math Kernel Library (Intel® MKL) is available in the third-party-programs-mkl.txt file
 
    ------------------------------
-   
+
    Intel Simplified Software License (Version April 2018)
 
-     Use and Redistribution.  You may use and redistribute the software 
+     Use and Redistribution.  You may use and redistribute the software
      (the “Software”), without modification, provided the following conditions are met:
 
-     * Redistributions must reproduce the above copyright notice and the following 
-     terms of use in the Software and in the documentation and/or other materials 
+     * Redistributions must reproduce the above copyright notice and the following
+     terms of use in the Software and in the documentation and/or other materials
      provided with the distribution.
 
-     * Neither the name of Intel nor the names of its suppliers may be used to endorse 
+     * Neither the name of Intel nor the names of its suppliers may be used to endorse
      or promote products derived from this Software without specific prior written permission.
 
      * No reverse engineering, decompilation, or disassembly of this Software is permitted.
 
-     Limited patent license.  Intel grants you a world-wide, royalty-free, non-exclusive 
-     license under patents it now or hereafter owns or controls to make, have made, use, 
-     import, offer to sell and sell (“Utilize”) this Software, but solely to the extent 
-     that any such patent is necessary to Utilize the Software alone. The patent license 
-     shall not apply to any combinations which include this software.  
+     Limited patent license.  Intel grants you a world-wide, royalty-free, non-exclusive
+     license under patents it now or hereafter owns or controls to make, have made, use,
+     import, offer to sell and sell (“Utilize”) this Software, but solely to the extent
+     that any such patent is necessary to Utilize the Software alone. The patent license
+     shall not apply to any combinations which include this software.
      No hardware per se is licensed hereunder.
 
-     Third party and other Intel programs.  “Third Party Programs” are the files listed 
-     in the “third-party-programs.txt” text file that is included with the Software and 
-     may include Intel programs under separate license terms. Third Party Programs, 
-     even if included with the distribution of the Materials, are governed by separate 
-     license terms and those license terms solely govern your use of those programs. 
+     Third party and other Intel programs.  “Third Party Programs” are the files listed
+     in the “third-party-programs.txt” text file that is included with the Software and
+     may include Intel programs under separate license terms. Third Party Programs,
+     even if included with the distribution of the Materials, are governed by separate
+     license terms and those license terms solely govern your use of those programs.
 
-     DISCLAIMER.  THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
-     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS 
-     FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT ARE DISCLAIMED. THIS SOFTWARE IS NOT 
-     INTENDED FOR USE IN SYSTEMS OR APPLICATIONS WHERE FAILURE OF THE SOFTWARE MAY CAUSE 
-     PERSONAL INJURY OR DEATH AND YOU AGREE THAT YOU ARE FULLY RESPONSIBLE FOR ANY CLAIMS, 
-     COSTS, DAMAGES, EXPENSES, AND ATTORNEYS’ FEES ARISING OUT OF ANY SUCH USE, EVEN IF ANY 
+     DISCLAIMER.  THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+     INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS
+     FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT ARE DISCLAIMED. THIS SOFTWARE IS NOT
+     INTENDED FOR USE IN SYSTEMS OR APPLICATIONS WHERE FAILURE OF THE SOFTWARE MAY CAUSE
+     PERSONAL INJURY OR DEATH AND YOU AGREE THAT YOU ARE FULLY RESPONSIBLE FOR ANY CLAIMS,
+     COSTS, DAMAGES, EXPENSES, AND ATTORNEYS’ FEES ARISING OUT OF ANY SUCH USE, EVEN IF ANY
      CLAIM ALLEGES THAT INTEL WAS NEGLIGENT REGARDING THE DESIGN OR MANUFACTURE OF THE MATERIALS.
 
-     LIMITATION OF LIABILITY. IN NO EVENT WILL INTEL BE LIABLE FOR ANY DIRECT, INDIRECT, 
-     INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, 
-     PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
-     INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
-     LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE 
-     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. YOU AGREE TO INDEMNIFY 
-     AND HOLD INTEL HARMLESS AGAINST ANY CLAIMS AND EXPENSES RESULTING FROM YOUR USE OR 
+     LIMITATION OF LIABILITY. IN NO EVENT WILL INTEL BE LIABLE FOR ANY DIRECT, INDIRECT,
+     INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+     PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+     INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+     LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+     OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. YOU AGREE TO INDEMNIFY
+     AND HOLD INTEL HARMLESS AGAINST ANY CLAIMS AND EXPENSES RESULTING FROM YOUR USE OR
      UNAUTHORIZED USE OF THE SOFTWARE.
 
-     No support.  Intel may make changes to the Software, at any time without notice, and is not 
+     No support.  Intel may make changes to the Software, at any time without notice, and is not
      obligated to support, update or provide training for the Software.
 
-     Termination. Intel may terminate your right to use the Software in the event of your breach 
+     Termination. Intel may terminate your right to use the Software in the event of your breach
      of this Agreement and you fail to cure the breach within a reasonable period of time.
 
-     Feedback.  Should you provide Intel with comments, modifications, corrections, enhancements 
-     or other input (“Feedback”) related to the Software Intel will be free to use, disclose, 
-     reproduce, license or otherwise distribute or exploit the Feedback in its sole discretion 
-     without any obligations or restrictions of any kind, including without limitation, 
+     Feedback.  Should you provide Intel with comments, modifications, corrections, enhancements
+     or other input (“Feedback”) related to the Software Intel will be free to use, disclose,
+     reproduce, license or otherwise distribute or exploit the Feedback in its sole discretion
+     without any obligations or restrictions of any kind, including without limitation,
      intellectual property rights or licensing obligations.
 
-     Compliance with laws.  You agree to comply with all relevant laws and regulations governing 
+     Compliance with laws.  You agree to comply with all relevant laws and regulations governing
      your use, transfer, import or export (or prohibition thereof) of the Software.
 
-     Governing law.  All disputes will be governed by the laws of the United States of America and 
-     the State of Delaware without reference to conflict of law principles and subject to the 
-     exclusive jurisdiction of the state or federal courts sitting in the State of Delaware, and 
-     each party agrees that it submits to the personal jurisdiction and venue of those courts and 
-     waives any objections. The United Nations Convention on Contracts for the International 
+     Governing law.  All disputes will be governed by the laws of the United States of America and
+     the State of Delaware without reference to conflict of law principles and subject to the
+     exclusive jurisdiction of the state or federal courts sitting in the State of Delaware, and
+     each party agrees that it submits to the personal jurisdiction and venue of those courts and
+     waives any objections. The United Nations Convention on Contracts for the International
      Sale of Goods (1980) is specifically excluded and will not apply to the Software.
 
      *Other names and brands may be claimed as the property of others.
@@ -10971,7 +10972,7 @@ START LICENSE(S) FOR ---------- daal -----------------------------
    ------------------------------
    Copyright 2019 Intel Corporation
    Apache 2.0
-   
+
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -12389,7 +12390,7 @@ Copyright (c) 2001-2011 Python Software Foundation
 License: PYTHON SOFTWARE FOUNDATION LICENSE VERSION 2
          See http://www.opensource.org/licenses/Python-2.0 for full terms
 Note: backport changes by Raymond were originally distributed under MIT
-      license, but since the original license for Python is more 
+      license, but since the original license for Python is more
       restrictive than MIT, code cannot be released under its terms and
       still adheres to the limitations of Python license.
 
@@ -13470,13 +13471,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -13678,7 +13679,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -13693,9 +13694,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -14065,7 +14066,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -14076,7 +14077,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -14099,7 +14100,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -14127,7 +14128,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -14327,7 +14328,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -14409,7 +14410,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -14604,7 +14605,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -14618,7 +14619,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -14646,7 +14647,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -14808,30 +14809,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 contrib/unicode:
@@ -15073,13 +15074,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -15281,7 +15282,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -15296,9 +15297,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -15668,7 +15669,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -15679,7 +15680,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -15702,7 +15703,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -15730,7 +15731,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -15930,7 +15931,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -16012,7 +16013,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -16207,7 +16208,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -16221,7 +16222,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -16249,7 +16250,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -16411,30 +16412,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 contrib/unicode:
@@ -17321,13 +17322,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -17529,7 +17530,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -17544,9 +17545,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -17916,7 +17917,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -17927,7 +17928,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -17950,7 +17951,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -17978,7 +17979,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -18178,7 +18179,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -18260,7 +18261,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -18455,7 +18456,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -18469,7 +18470,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -18497,7 +18498,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -18659,30 +18660,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 contrib/unicode:
@@ -27403,7 +27404,7 @@ Mozilla Public License Version 2.0
     means any form of the work other than Source Code Form.
 
 1.7. "Larger Work"
-    means a work that combines Covered Software with other material, in 
+    means a work that combines Covered Software with other material, in
     a separate file or files, that is not Covered Software.
 
 1.8. "License"
@@ -28489,7 +28490,7 @@ Copyright (c) 2021-2022 Intel Corporation
 
    END OF TERMS AND CONDITIONS
 
-   
+
 
 END LICENSE(S) FOR ---------- intel-extension-for-tensorflow -----------------------------
 
@@ -28689,7 +28690,7 @@ Copyright (c) 2021-2022 Intel Corporation
 
    END OF TERMS AND CONDITIONS
 
-   
+
 
 END LICENSE(S) FOR ---------- intel-extension-for-tensorflow-lib -----------------------------
 
@@ -31627,8 +31628,8 @@ Use and Redistribution. You may use and redistribute the software (the
 * Redistributions must reproduce the above copyright notice and the following
   terms of use in the Software and in the documentation and/or other materials
   provided with the distribution.
-* Neither the name of Intel nor the names of its suppliers may be used to 
-  endorse or promote products derived from this Software without specific  
+* Neither the name of Intel nor the names of its suppliers may be used to
+  endorse or promote products derived from this Software without specific
   prior written permission.
 * No reverse engineering, decompilation, or disassembly of this Software is
   permitted.
@@ -31706,8 +31707,8 @@ Use and Redistribution. You may use and redistribute the software (the
 * Redistributions must reproduce the above copyright notice and the following
   terms of use in the Software and in the documentation and/or other materials
   provided with the distribution.
-* Neither the name of Intel nor the names of its suppliers may be used to 
-  endorse or promote products derived from this Software without specific  
+* Neither the name of Intel nor the names of its suppliers may be used to
+  endorse or promote products derived from this Software without specific
   prior written permission.
 * No reverse engineering, decompilation, or disassembly of this Software is
   permitted.
@@ -31791,8 +31792,8 @@ Use and Redistribution. You may use and redistribute the software (the
 * Redistributions must reproduce the above copyright notice and the following
   terms of use in the Software and in the documentation and/or other materials
   provided with the distribution.
-* Neither the name of Intel nor the names of its suppliers may be used to 
-  endorse or promote products derived from this Software without specific  
+* Neither the name of Intel nor the names of its suppliers may be used to
+  endorse or promote products derived from this Software without specific
   prior written permission.
 * No reverse engineering, decompilation, or disassembly of this Software is
   permitted.
@@ -34395,13 +34396,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -34603,7 +34604,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -34618,9 +34619,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -34990,7 +34991,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -35001,7 +35002,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -35024,7 +35025,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -35052,7 +35053,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -35252,7 +35253,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -35334,7 +35335,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -35529,7 +35530,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -35543,7 +35544,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -35571,7 +35572,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -35733,30 +35734,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 contrib/unicode:
@@ -36176,13 +36177,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -36384,7 +36385,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -36399,9 +36400,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -36771,7 +36772,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -36782,7 +36783,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -36805,7 +36806,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -36833,7 +36834,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -37033,7 +37034,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -37115,7 +37116,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -37310,7 +37311,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -37324,7 +37325,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -37352,7 +37353,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -37514,30 +37515,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 contrib/unicode:
@@ -38428,7 +38429,7 @@ from <https://sourceware.org/git/glibc.git>
 * The Sun RPC support (from rpcsrc-4.0) is covered by the following
   license:
 
-    Copyright (c) 2010, Oracle America, Inc. 
+    Copyright (c) 2010, Oracle America, Inc.
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are
@@ -38943,7 +38944,7 @@ from <https://sourceware.org/git/glibc.git>
 * The Sun RPC support (from rpcsrc-4.0) is covered by the following
   license:
 
-    Copyright (c) 2010, Oracle America, Inc. 
+    Copyright (c) 2010, Oracle America, Inc.
 
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are
@@ -39462,13 +39463,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -39670,7 +39671,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -39685,9 +39686,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -40057,7 +40058,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -40068,7 +40069,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -40091,7 +40092,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -40119,7 +40120,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -40319,7 +40320,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -40401,7 +40402,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -40596,7 +40597,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -40610,7 +40611,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -40638,7 +40639,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -40800,30 +40801,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 contrib/unicode:
@@ -41244,7 +41245,7 @@ modified by someone else and passed on, the recipients should know
 that what they have is not the original version, so that the original
 author's reputation will not be affected by problems that might be
 introduced by others.
-
+
   Finally, software patents pose a constant threat to the existence of
 any free program.  We wish to make sure that a company cannot
 effectively restrict the users of a free program by obtaining a
@@ -41300,7 +41301,7 @@ modification follow.  Pay close attention to the difference between a
 "work based on the library" and a "work that uses the library".  The
 former contains code derived from the library, whereas the latter must
 be combined with the library in order to run.
-
+
                   GNU LESSER GENERAL PUBLIC LICENSE
    TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 
@@ -41347,7 +41348,7 @@ Library.
   You may charge a fee for the physical act of transferring a copy,
 and you may at your option offer warranty protection in exchange for a
 fee.
-
+
   2. You may modify your copy or copies of the Library or any portion
 of it, thus forming a work based on the Library, and copy and
 distribute such modifications or work under the terms of Section 1
@@ -41405,7 +41406,7 @@ instead of to this License.  (If a newer version than version 2 of the
 ordinary GNU General Public License has appeared, then you can specify
 that version instead if you wish.)  Do not make any other change in
 these notices.
-
+
   Once this change is made in a given copy, it is irreversible for
 that copy, so the ordinary GNU General Public License applies to all
 subsequent copies and derivative works made from that copy.
@@ -41456,7 +41457,7 @@ Library will still fall under Section 6.)
 distribute the object code for the work under the terms of Section 6.
 Any executables containing that work also fall under Section 6,
 whether or not they are linked directly with the Library itself.
-
+
   6. As an exception to the Sections above, you may also combine or
 link a "work that uses the Library" with the Library to produce a
 work containing portions of the Library, and distribute that work
@@ -41518,7 +41519,7 @@ restrictions of other proprietary libraries that do not normally
 accompany the operating system.  Such a contradiction means you cannot
 use both them and the Library together in an executable that you
 distribute.
-
+
   7. You may place library facilities that are a work based on the
 Library side-by-side in a single library together with other library
 facilities not covered by this License, and distribute such a combined
@@ -41559,7 +41560,7 @@ subject to these terms and conditions.  You may not impose any further
 restrictions on the recipients' exercise of the rights granted herein.
 You are not responsible for enforcing compliance by third parties with
 this License.
-
+
   11. If, as a consequence of a court judgment or allegation of patent
 infringement or for any other reason (not limited to patent issues),
 conditions are imposed on you (whether by court order, agreement or
@@ -41611,7 +41612,7 @@ conditions either of that version or of any later version published by
 the Free Software Foundation.  If the Library does not specify a
 license version number, you may choose any version ever published by
 the Free Software Foundation.
-
+
   14. If you wish to incorporate parts of the Library into other free
 programs whose distribution conditions are incompatible with these,
 write to the author to ask for permission.  For software which is
@@ -41645,7 +41646,7 @@ SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGES.
 
                      END OF TERMS AND CONDITIONS
-
+
            How to Apply These Terms to Your New Libraries
 
   If you develop a new library, and you want it to be of the greatest
@@ -43869,10 +43870,10 @@ Copyright:
 
   Copyright (c) 1992, 1993
  	The Regents of the University of California.  All rights reserved.
- 
+
   This code is derived from software contributed to Berkeley by
   Christos Zoulas of Cornell University.
- 
+
   Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions
   are met:
@@ -43884,7 +43885,7 @@ Copyright:
   3. Neither the name of the University nor the names of its contributors
      may be used to endorse or promote products derived from this software
      without specific prior written permission.
- 
+
   THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
   ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -44217,13 +44218,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -44425,7 +44426,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -44440,9 +44441,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -44812,7 +44813,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -44823,7 +44824,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -44846,7 +44847,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -44874,7 +44875,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -45074,7 +45075,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -45156,7 +45157,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -45351,7 +45352,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -45365,7 +45366,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -45393,7 +45394,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -45555,30 +45556,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 contrib/unicode:
@@ -45884,7 +45885,7 @@ License: MIT
  distribute, sub license, and/or sell copies of the Software, and to
  permit persons to whom the Software is furnished to do so, subject to
  the following conditions:
- . 
+ .
  The above copyright notice and this permission notice (including the
  next paragraph) shall be included in all copies or substantial portions
  of the Software.
@@ -47196,7 +47197,7 @@ License: MIT
  distribute, sub license, and/or sell copies of the Software, and to
  permit persons to whom the Software is furnished to do so, subject to
  the following conditions:
- . 
+ .
  The above copyright notice and this permission notice (including the
  next paragraph) shall be included in all copies or substantial portions
  of the Software.
@@ -47693,7 +47694,7 @@ License: MIT
  distribute, sub license, and/or sell copies of the Software, and to
  permit persons to whom the Software is furnished to do so, subject to
  the following conditions:
- . 
+ .
  The above copyright notice and this permission notice (including the
  next paragraph) shall be included in all copies or substantial portions
  of the Software.
@@ -47861,13 +47862,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -48069,7 +48070,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -48084,9 +48085,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -48456,7 +48457,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -48467,7 +48468,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -48490,7 +48491,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -48518,7 +48519,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -48718,7 +48719,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -48800,7 +48801,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -48995,7 +48996,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -49009,7 +49010,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -49037,7 +49038,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -49199,30 +49200,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 contrib/unicode:
@@ -49939,13 +49940,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -50147,7 +50148,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -50162,9 +50163,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -50534,7 +50535,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -50545,7 +50546,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -50568,7 +50569,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -50596,7 +50597,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -50796,7 +50797,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -50878,7 +50879,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -51073,7 +51074,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -51087,7 +51088,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -51115,7 +51116,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -51277,30 +51278,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 contrib/unicode:
@@ -51741,9 +51742,9 @@ IBM
 IS
 -----------------------------------
 # Full Copyright Statement
-# 
+#
 #    Copyright (C) The Internet Society (1999).  All Rights Reserved.
-# 
+#
 #    This document and translations of it may be copied and furnished to
 #    others, and derivative works that comment on or otherwise explain it
 #    or assist in its implementation may be prepared, copied, published
@@ -51757,10 +51758,10 @@ IS
 #    copyrights defined in the Internet Standards process must be
 #    followed, or as required to translate it into languages other than
 #    English.
-# 
+#
 #    The limited permissions granted above are perpetual and will not be
 #    revoked by the Internet Society or its successors or assigns.
-# 
+#
 #    This document and the information contained herein is provided on an
 #    "AS IS" basis and THE INTERNET SOCIETY AND THE INTERNET ENGINEERING
 #    TASK FORCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
@@ -51805,14 +51806,14 @@ ISC
 
 JC
 -----------------------------------
- * This software is not subject to any license of Silicon Graphics 
+ * This software is not subject to any license of Silicon Graphics
  * Inc. or Purdue University.
  *
  * Redistribution and use in source and binary forms are permitted
  * without restriction or fee of any kind as long as this notice
  * is preserved.
 
-The following is additional information from Juan C. Gomez on how 
+The following is additional information from Juan C. Gomez on how
 this license is to be interpreted:
 -----
 Local-Date: Fri, 06 Jun 2003 13:18:52 -0400
@@ -51830,7 +51831,7 @@ license. Please forward this email to Kurt so he does the appropriate
 changes to the files to reflect this.
 
 
-Regards, Juan                                                                                       
+Regards, Juan
 -----------------------------------
 
 
@@ -51839,7 +51840,7 @@ MA
  * Copyright (c) 2000, Mark Adamson, Carnegie Mellon.  All rights reserved.
  * This software is not subject to any license of Carnegie Mellon University.
  *
- * Redistribution and use in source and binary forms are permitted without 
+ * Redistribution and use in source and binary forms are permitted without
  * restriction or fee of any kind as long as this notice is preserved.
  *
  * The name "Carnegie Mellon" must not be used to endorse or promote
@@ -52309,13 +52310,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -52517,7 +52518,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -52532,9 +52533,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -52812,7 +52813,7 @@ libhsail-rt/rt/fp16.c is licensed under the following terms:
    a copy of the GCC Runtime Library Exception along with this program;
    see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
    <http://www.gnu.org/licenses/>.
- 
+
 newlib-nvptx-20yymmdd/:
 
 Upstream Authors:
@@ -52821,7 +52822,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -52832,7 +52833,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -52855,7 +52856,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -52883,7 +52884,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -53083,7 +53084,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -53165,7 +53166,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -53360,7 +53361,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -53374,7 +53375,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -53402,7 +53403,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -53564,30 +53565,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 END LICENSE(S) FOR ---------- liblsan0 -----------------------------
@@ -54208,7 +54209,7 @@ modified by someone else and passed on, the recipients should know
 that what they have is not the original version, so that the original
 author's reputation will not be affected by problems that might be
 introduced by others.
-
+
   Finally, software patents pose a constant threat to the existence of
 any free program.  We wish to make sure that a company cannot
 effectively restrict the users of a free program by obtaining a
@@ -54264,7 +54265,7 @@ modification follow.  Pay close attention to the difference between a
 "work based on the library" and a "work that uses the library".  The
 former contains code derived from the library, whereas the latter must
 be combined with the library in order to run.
-
+
                   GNU LESSER GENERAL PUBLIC LICENSE
    TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
 
@@ -54311,7 +54312,7 @@ Library.
   You may charge a fee for the physical act of transferring a copy,
 and you may at your option offer warranty protection in exchange for a
 fee.
-
+
   2. You may modify your copy or copies of the Library or any portion
 of it, thus forming a work based on the Library, and copy and
 distribute such modifications or work under the terms of Section 1
@@ -54369,7 +54370,7 @@ instead of to this License.  (If a newer version than version 2 of the
 ordinary GNU General Public License has appeared, then you can specify
 that version instead if you wish.)  Do not make any other change in
 these notices.
-
+
   Once this change is made in a given copy, it is irreversible for
 that copy, so the ordinary GNU General Public License applies to all
 subsequent copies and derivative works made from that copy.
@@ -54420,7 +54421,7 @@ Library will still fall under Section 6.)
 distribute the object code for the work under the terms of Section 6.
 Any executables containing that work also fall under Section 6,
 whether or not they are linked directly with the Library itself.
-
+
   6. As an exception to the Sections above, you may also combine or
 link a "work that uses the Library" with the Library to produce a
 work containing portions of the Library, and distribute that work
@@ -54482,7 +54483,7 @@ restrictions of other proprietary libraries that do not normally
 accompany the operating system.  Such a contradiction means you cannot
 use both them and the Library together in an executable that you
 distribute.
-
+
   7. You may place library facilities that are a work based on the
 Library side-by-side in a single library together with other library
 facilities not covered by this License, and distribute such a combined
@@ -54523,7 +54524,7 @@ subject to these terms and conditions.  You may not impose any further
 restrictions on the recipients' exercise of the rights granted herein.
 You are not responsible for enforcing compliance by third parties with
 this License.
-
+
   11. If, as a consequence of a court judgment or allegation of patent
 infringement or for any other reason (not limited to patent issues),
 conditions are imposed on you (whether by court order, agreement or
@@ -54575,7 +54576,7 @@ conditions either of that version or of any later version published by
 the Free Software Foundation.  If the Library does not specify a
 license version number, you may choose any version ever published by
 the Free Software Foundation.
-
+
   14. If you wish to incorporate parts of the Library into other free
 programs whose distribution conditions are incompatible with these,
 write to the author to ask for permission.  For software which is
@@ -54609,7 +54610,7 @@ SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
 DAMAGES.
 
                      END OF TERMS AND CONDITIONS
-
+
            How to Apply These Terms to Your New Libraries
 
   If you develop a new library, and you want it to be of the greatest
@@ -57724,13 +57725,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -57932,7 +57933,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -57947,9 +57948,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -58319,7 +58320,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -58330,7 +58331,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -58353,7 +58354,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -58381,7 +58382,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -58581,7 +58582,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -58663,7 +58664,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -58858,7 +58859,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -58872,7 +58873,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -58900,7 +58901,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -59062,30 +59063,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 contrib/unicode:
@@ -59223,7 +59224,7 @@ files are:
     Foundation; with no Invariant Sections, no Front-Cover Texts, and
     no Back-Cover Texts.  A copy of the license is included in the
     section entitled "GNU Free Documentation License".
-			      
+
 On Debian systems, the complete text of the GNU Free Documentation License
 can be found in `/usr/share/common-licenses/GFDL'.
 
@@ -59231,7 +59232,7 @@ The Debian packaging is:
 
     Copyright (C) 1999-2009 Matthias Klose <doko@debian.org>
 
-and is licensed under the GPL version 3, 
+and is licensed under the GPL version 3,
 see `/usr/share/common-licenses/GPL-3'.
 
 
@@ -60765,13 +60766,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -60973,7 +60974,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -60988,9 +60989,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -61360,7 +61361,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -61371,7 +61372,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -61394,7 +61395,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -61422,7 +61423,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -61622,7 +61623,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -61704,7 +61705,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -61899,7 +61900,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -61913,7 +61914,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -61941,7 +61942,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -62103,30 +62104,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 contrib/unicode:
@@ -62240,66 +62241,66 @@ Copyright:
 Licenses:
 
     Sun Industry Standards Source License 1.0
-    
+
     DEFINITIONS
-    
+
     1.1.  "Commercial Use" means distribution or otherwise
     making the Original Code available to a third party.
-    
+
     1.2.  "Contributor Version" means the combination of the
     Original Code, and the Modifications made by that particular
     Contributor.
-    
+
     1.3.  "Electronic Distribution Mechanism" means a mechanism
     generally accepted in the software development community for
     the electronic transfer of data.
-    
+
     1.4.  "Executable" means Original Code in any form other
     than Source Code.
-    
+
     1.5.  "Initial Developer" means the individual or entity
     identified as the Initial Developer in the Source Code
     notice required by 2 (Exhibit A)
-    
+
     1.6.  "Larger Work" means a work which combines Original
     Code or portions thereof with code not governed by the terms
     of this License.
-    
+
     1.7.  "License" means this document.
-    
+
     1.8.  "Licensable" means having the right to grant, to the
     maximum extent possible, whether at the time of the initial
     grant or subsequently acquired, any and all of the rights
     conveyed herein.
-    
+
     1.9.  "Modifications" means any addition to or deletion from
     the substance or structure of either the Original Code or
     any previous Modifications.  A Modification is:
-    
+
     A.  Any addition to or deletion from the contents of a file
     containing Original Code or previous Modifications.
-    
+
     B.  Any new file that contains any part of the Original Code
     or previous Modifications.  .
-    
+
     1.10.  "Original Code" means Source Code of computer
     software code which is described in the Source Code notice
     required by Exhibit A as Original Code.
-    
+
     1.11.  "Patent Claims" means any patent claims, now owned or
     hereafter acquired, including without limitation, method,
     process, and apparatus claims, in any patent Licensable by
     grantor.
-    
+
     1.12.  "Source Code" means the preferred form of the
     Original Code for making modifications to it, including all
     modules it contains, plus any associated interface
     definition files, or scripts used to control compilation and
     installation of an Executable.
-    
+
     1.13.  "Standards" means the standard identified in Exhibit
     B or a subsequent version of such standard.
-    
+
     1.14.  "You" or "Your" means an individual or a legal entity
     exercising rights under, and complying with all of the terms
     of, this License or a future version of this License issued
@@ -62311,40 +62312,40 @@ Licenses:
     contract or otherwise, or (b) ownership of more than fifty
     percent (50%) of the outstanding shares or beneficial
     ownership of such entity.
-    
+
     2.0 SOURCE CODE LICENSE
-    
+
     2.1 The Initial Developer Grant:  The Initial Developer
     hereby grants You a world-wide, royalty-free, non-exclusive
     license, subject to third party intellectual property
     claims:
-    
+
     a) under intellectual property rights (other than patent or
     trademark) Licensable by Initial Developer to use,
     reproduce, modify, display, perform, sub license and
     distribute the Original Code (or portions thereof )with or
     without Modifications, and/or as part of a Larger Work; and
-    
+
     b) under Patents Claims infringed by the making, using or
     selling of Original Code, to make, have made, use, practice,
     sell, and offer for sale, and/or otherwise dispose of the
     Original Code (or portions thereof).
-    
+
     c) the licenses granted in this Section 2.1(a ) and (b) are
     effective on the date Initial Developer first distributes
     Original Code under the terms of this License.
-    
+
     d) Notwithstanding Section 2.1(b )above, no patent license
     is granted:  1) for code that You delete from the Original
     Code; 2) separate from the Original Code; or 3) for
     infringements caused by:  i) the modification of the
     Original Code or
-    
+
     ii) the combination of the Original Code with other software
     or devices, including but not limited to Modifications.
-    
+
     3.0 DISTRIBUTION OBLIGATIONS
-    
+
     3.1 Application of License.  The Source Code version of
     Original Code may be distributed only under the terms of
     this License or a future version of this License released
@@ -62366,7 +62367,7 @@ Licenses:
     available to all third parties under the same terms as the
     license on a royalty free basis within thirty (30) days of
     Your first customer shipment of Your Modifications.
-    
+
     3.2 Required Notices.  You must duplicate the notice in
     Exhibit A in each file of the Source Code.  If it is not
     possible to put such notice in a particular Source Code file
@@ -62381,7 +62382,7 @@ Licenses:
     and to charge a fee for, warranty, support, indemnity or
     liability obligations to one or more recipients of Your
     version of the Code.  However, You may do so only
-    
+
     on Your own behalf, and not on behalf of the Initial
     Developer.  You must make it absolutely clear than any such
     warranty, support, indemnity or liability obligation is
@@ -62389,7 +62390,7 @@ Licenses:
     Initial Developer for any liability incurred by the Initial
     Developer as a result of warranty, support, indemnity or
     liability terms You offer.
-    
+
     3.3 Distribution of Executable Versions.  You may distribute
     Original Code in Executable and Source form only if the
     requirements of Section 3.1 and 3.2 have been met for that
@@ -62410,24 +62411,24 @@ Licenses:
     Developer .  You hereby agree to indemnify the Initial
     Developer for any liability incurred by the Initial
     Developer as a result of any such terms You offer .
-    
+
     3.4 Larger Works.  You may create a Larger Work by combining
     Original Code with other code not governed by the terms of
     this License and distribute the Larger Work as a single
     product.  In such a case, You must make sure the
     requirements of this License are fulfilled for the Original
     Code.
-    
+
     4.0 INABILITY TO COMPLY DUE TO STATUTE OR REGULATION
-    
+
     If it is impossible for You to comply with any of the terms
     of this License with respect to some or all of the Original
     Code due to statute, judicial order, or regulation then You
     must:
-    
+
     a) comply with the terms of this License to the maximum
     extent possible; and
-    
+
     b) describe the limitations and the code they affect.  Such
     description must be included in the LEGAL file described in
     Section 3.2 and must be included with all distributions of
@@ -62435,19 +62436,19 @@ Licenses:
     or regulation, such description must be sufficiently
     detailed for a recipient of ordinary skill to be able to
     understand it.
-    
+
     5.0 APPLICATION OF THIS LICENSE This License applies to code
     to which the Initial Developer has attached the notice in
     Exhibit A and to related Modifications as set out in Section
     3.1.
-    
+
     6.0 VERSIONS OF THE LICENSE
-    
+
     6.1 New Versions.  Sun Microsystems, Inc.  Sun may publish
     revised and/or new versions of the License from time to
     time.  Each version will be given a distinguishing version
     number .
-    
+
     6.2 Effect of New Versions.  Once Original Code has been
     published under a particular version of the License, You may
     always continue to use it under the terms of that version.
@@ -62455,7 +62456,7 @@ Licenses:
     terms of any subsequent version of the License published by
     Sun.  No one other than Sun has the right to modify the
     terms applicable to Original Code.
-    
+
     7.  DISCLAIMER OF W ARRANTY.  ORIGINAL CODE IS PROVIDED
     UNDER THIS LICENSE ON AN "AS IS" BASIS, WITHOUT WARRANTY OF
     ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, WITHOUT
@@ -62469,9 +62470,9 @@ Licenses:
     WARRANTY CONSTITUTES AN ESSENTIAL PART OF THIS LICENSE.  NO
     USE OF ANY ORIGINAL CODE IS AUTHORIZED HEREUNDER EXCEPT
     UNDER THIS DISCLAIMER.
-    
+
     8.0 TERMINATION
-    
+
     8.1 This License and the rights granted hereunder will
     terminate automatically if You fail to comply with terms
     herein and fail to cure such breach within 30 days of
@@ -62480,13 +62481,13 @@ Licenses:
     termination of this License.  Provisions which, by their
     nature, must remain in effect beyond the termination of this
     License shall survive.
-    
+
     8.2 .In the event of termination under Section 8.1 above,
     all end user license agreements (excluding distributors and
     resellers) which have been validly granted by You or any
     distributor hereunder prior to termination shall survive
     termination.
-    
+
     9.0 LIMIT OF LIABILITY UNDER NO CIRCUMSTANCES AND UNDER NO
     LEGAL THEORY, WHETHER TORT (INCLUDING NEGLIGENCE) ,CONTRACT,
     OR OTHER WISE, SHALL YOU, THE INITIAL DEVELOPER, ANY OTHER
@@ -62504,7 +62505,7 @@ Licenses:
     JURISDICTIONS DO NOT ALLOW THE EXCLUSION OR LIMITATION OF
     INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THIS EXCLUSION AND
     LIMITATION MAY NOT APPLY TO YOU.
-    
+
     10.0 U .S.  GOVERNMENT END USERS U.S.  Government:  If this
     Software is being acquired by or on behalf of the U.S.
     Government or by a U.S.  Government prime contractor or
@@ -62514,7 +62515,7 @@ Licenses:
     .R.  227.7201 through 227.7202-4 (for Department of Defense
     (DoD) acquisitions )and with 48 C.F.R.2.101 and 12.212( for
     non-DoD acquisitions).
-    
+
     11.0 MISCELLANEOUS This License represents the complete
     agreement concerning subject matter hereof.  If any
     provision of this License is held to be unenforceable, such
@@ -62536,43 +62537,43 @@ Licenses:
     or regulation which provides that the language of a contract
     shall be construed against the drafter shall not apply to
     this License.
-    
+
     EXHIBIT A - Sun Standards
-    
+
     "The contents of this file are subject to the Sun Standards
     License Version 1.0 the (the "License";) You may not use
     this file except in compliance with the License.  You may
     obtain a copy of the License at
     _______________________________.
-    
+
         Software distributed under the License is distributed on
     an "AS IS" basis, WITHOUT WARRANTY OF ANY KIND, either
     express or implied.  See the License for the specific
     language governing rights and limitations under the License.
-    
+
     The Original Code is Copyright 1998 by Sun Microsystems, Inc
-    
+
     The Initial Developer of the Original Code is:  Sun
     Microsystems, Inc.
-    
+
     Portions created by _____________________________ are
     Copyright ______________________________.
-    
+
     All Rights Reserved.
-    
+
     Contributors:  ______________________________________.
-    
+
     EXHIBIT B - Sun Standards
-    
+
     The Standard is defined as the following IETF RFCs:
-    
+
     RFC1831:  RPC:  Remote Procedure Call Protocol Specification
     Version 2 RFC1832:  XDR:  External Data REpresentation
     Standard RFC1833:  Binding Protocols for ONC RPC Version 2
     RFC2078:  Generic Security Service Application Program
     Interface, Version 2 RFC2203:  RPCSEC_GSS Protocol
     Specification RFC2695:  Authentication Mechanisms for ONC RPC
-   
+
 
 
     Copyright (c) Copyright (c) Bull S.A.  2005  All Rights Reserved.
@@ -62586,7 +62587,7 @@ Licenses:
        documentation and/or other materials provided with the distribution.
     3. The name of the author may not be used to endorse or promote products
        derived from this software without specific prior written permission.
-    
+
     THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
     IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
     OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -62597,7 +62598,7 @@ Licenses:
     THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
     (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
     THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    
+
 
 
 
@@ -62609,7 +62610,7 @@ Licenses:
     2. Redistributions in binary form must reproduce the above copyright
        notice, this list of conditions and the following disclaimer in the
        documentation and/or other materials provided with the distribution.
-    
+
     THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
     ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
     IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -62628,7 +62629,7 @@ Licenses:
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions
     are met:
-  
+
     1. Redistributions of source code must retain the above copyright
        notice, this list of conditions and the following disclaimer.
     2. Redistributions in binary form must reproduce the above copyright
@@ -62637,7 +62638,7 @@ Licenses:
     3. Neither the name of the University nor the names of its
        contributors may be used to endorse or promote products derived
        from this software without specific prior written permission.
-  
+
     THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESS OR IMPLIED
     WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
     MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -62667,7 +62668,7 @@ Licenses:
     4. Neither the name of the author nor the names of any co-contributors
        may be used to endorse or promote products derived from this software
        without specific prior written permission.
-    
+
     THIS SOFTWARE IS PROVIDED BY Bill Paul AND CONTRIBUTORS ``AS IS'' AND
     ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
     IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -62692,7 +62693,7 @@ Licenses:
     - Neither the name of Sun Microsystems, Inc. nor the names of its
       contributors may be used to endorse or promote products derived
       from this software without specific prior written permission.
-    
+
     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
     AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
     IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -62841,13 +62842,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -63049,7 +63050,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -63064,9 +63065,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -63436,7 +63437,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -63447,7 +63448,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -63470,7 +63471,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -63498,7 +63499,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -63698,7 +63699,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -63780,7 +63781,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -63975,7 +63976,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -63989,7 +63990,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -64017,7 +64018,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -64179,30 +64180,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 contrib/unicode:
@@ -64409,13 +64410,13 @@ modification, are permitted provided that the following conditions are
 met:
 
     (1) Redistributions of source code must retain the above copyright
-    notice, this list of conditions and the following disclaimer. 
+    notice, this list of conditions and the following disclaimer.
 
     (2) Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in
     the documentation and/or other materials provided with the
-    distribution.  
-    
+    distribution.
+
     (3) The name of the author may not be used to
     endorse or promote products derived from this software without
     specific prior written permission.
@@ -64617,7 +64618,7 @@ Library General Public License for more details.
 libquadmath/math:
 
 atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
-    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov> 
+    Copyright 2001 by Stephen L. Moshier <moshier@na-net.ornl.gov>
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Lesser General Public
@@ -64632,9 +64633,9 @@ atanq.c, expm1q.c, j0q.c, j1q.c, log1pq.c, logq.c:
 coshq.c, erfq.c, jnq.c, lgammaq.c, powq.c, roundq.c:
    Changes for 128-bit __float128 are
    Copyright (C) 2001 Stephen L. Moshier <moshier@na-net.ornl.gov>
-   and are incorporated herein by permission of the author.  The author 
+   and are incorporated herein by permission of the author.  The author
    reserves the right to distribute this material elsewhere under different
-   copying permissions.  These modifications are distributed here under 
+   copying permissions.  These modifications are distributed here under
    the following terms:
 
     This library is free software; you can redistribute it and/or
@@ -65004,7 +65005,7 @@ Jeff Johnston <jjohnstn@redhat.com>
 Tom Fitzsimmons <fitzsim@redhat.com>
 
 The newlib subdirectory is a collection of software from several sources.
-Each file may have its own copyright/license that is embedded in the source 
+Each file may have its own copyright/license that is embedded in the source
 file.
 
 This list documents those licenses which are more restrictive than
@@ -65015,7 +65016,7 @@ specific targets.  Certain clauses only apply if you are building the
 code as part of your binary.
 
 Note that this list may omit certain licenses that
-only pertain to the copying/modifying of the individual source code. 
+only pertain to the copying/modifying of the individual source code.
 If you are distributing the source code, then you do not need to
 worry about these omitted licenses, so long as you do not modify the
 copyright information already in place.
@@ -65038,7 +65039,7 @@ All rights reserved.
 Redistribution and use in source and binary forms are permitted
 provided that the above copyright notice and this paragraph are
 duplicated in all such forms and that any documentation,
-and other materials related to such distribution and use 
+and other materials related to such distribution and use
 acknowledge that the software was developed
 by the University of California, Berkeley.  The name of the
 University may not be used to endorse or promote products derived
@@ -65066,7 +65067,7 @@ WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
 
 [1c]
 
-Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994 
+Copyright (c) 1981, 1983, 1986, 1988, 1989, 1991, 1992, 1993, 1994
 The Regents of the University of California.
 All rights reserved.
 
@@ -65266,7 +65267,7 @@ Copyright (C) 1993 by Sun Microsystems, Inc. All rights reserved.
 
 Developed at SunPro, a Sun Microsystems, Inc. business.
 Permission to use, copy, modify, and distribute this
-software is freely granted, provided that this notice 
+software is freely granted, provided that this notice
 is preserved.
 
 (8) Hewlett Packard
@@ -65348,7 +65349,7 @@ provided this notice is not removed or altered.  All other rights are
 reserved by SuperH.
 
 SUPERH MAKES NO WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, WITH REGARD TO
-THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL, 
+THIS SOFTWARE.  IN NO EVENT SHALL SUPERH BE LIABLE FOR INDIRECT, SPECIAL,
 INCIDENTAL OR CONSEQUENTIAL DAMAGES IN CONNECTION WITH OR ARISING FROM
 THE FURNISHING, PERFORMANCE, OR USE OF THIS SOFTWARE.
 
@@ -65543,7 +65544,7 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
 OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-(20) DJ Delorie (i386) 
+(20) DJ Delorie (i386)
 
 Copyright (C) 1991 DJ Delorie
 All rights reserved.
@@ -65557,7 +65558,7 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 (21) Free Software Foundation LGPL License (*-linux* targets only)
 
-   Copyright (C) 1990-1999, 2000, 2001 
+   Copyright (C) 1990-1999, 2000, 2001
    Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Mark Kettenis <kettenis@phys.uva.nl>, 1997.
@@ -65585,7 +65586,7 @@ This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU Library General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.
-                                                     
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -65747,30 +65748,30 @@ belonging to Cygnus Solutions and Cygnus Support.
 Copyright (c) 1994, 1997, 2001, 2002, 2003, 2004 Red Hat Incorporated.
 All rights reserved.
 
-Redistribution and use in source and binary forms, with or without 
-modification, are permitted provided that the following conditions are met: 
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
 
-    Redistributions of source code must retain the above copyright 
+    Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
 
     Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the
     documentation and/or other materials provided with the distribution.
 
-    The name of Red Hat Incorporated may not be used to endorse 
-    or promote products derived from this software without specific 
+    The name of Red Hat Incorporated may not be used to endorse
+    or promote products derived from this software without specific
     prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL RED HAT INCORPORATED BE LIABLE FOR ANY
 DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
 (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND 
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 contrib/unicode:
@@ -67573,14 +67574,14 @@ all copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-DIGITAL EQUIPMENT CORPORATION BE LIABLE FOR ANY CLAIM, DAMAGES, INCLUDING, 
-BUT NOT LIMITED TO CONSEQUENTIAL OR INCIDENTAL DAMAGES, OR OTHER LIABILITY, 
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR 
+DIGITAL EQUIPMENT CORPORATION BE LIABLE FOR ANY CLAIM, DAMAGES, INCLUDING,
+BUT NOT LIMITED TO CONSEQUENTIAL OR INCIDENTAL DAMAGES, OR OTHER LIABILITY,
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
 IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-Except as contained in this notice, the name of Digital Equipment Corporation 
+Except as contained in this notice, the name of Digital Equipment Corporation
 shall not be used in advertising or otherwise to promote the sale, use or other
-dealings in this Software without prior written authorization from Digital 
+dealings in this Software without prior written authorization from Digital
 Equipment Corporation.
 
 Copyright (c) 1997 by Silicon Graphics Computer Systems, Inc.
@@ -67620,7 +67621,7 @@ NCD. DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL NCD.
 BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
 WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
-OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN 
+OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
 CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 Copyright 1991,1993 by Digital Equipment Corporation, Maynard, Massachusetts,
@@ -67655,8 +67656,8 @@ documentation, and that the name of Hewlett-Packard not be used in
 advertising or publicity pertaining to distribution of the
 software without specific, written prior permission.
 
-Hewlett-Packard makes no representations about the 
-suitability of this software for any purpose.  It is provided 
+Hewlett-Packard makes no representations about the
+suitability of this software for any purpose.  It is provided
 "as is" without express or implied warranty.
 
 This software is not subject to any license of the American
@@ -67930,7 +67931,7 @@ and others.
 
 This package was put together by the Ubuntu Kernel Team, from
 sources retrieved from upstream linux git.
-The sources may be found at most Linux ftp sites, including 
+The sources may be found at most Linux ftp sites, including
 ftp://ftp.kernel.org/pub/linux/kernel/
 
 This package is currently maintained by the
@@ -69285,13 +69286,13 @@ Copyright (c) 2012-2020, Vincent Danjean <Vincent.Danjean@ens-lyon.org>
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -72358,7 +72359,7 @@ Comment:
  under the same terms as Perl itself.
 
 Files: cpan/podlators/t/style/module-version.t
-Copyright: 
+Copyright:
  Copyright 2014, 2015, 2016 Russ Allbery <eagle@eyrie.org>
  Copyright 2012, 2013, 2014 The Board of Trustees of the Leland Stanford Junior University
 License: Expat
@@ -75273,7 +75274,7 @@ Comment:
  under the same terms as Perl itself.
 
 Files: cpan/podlators/t/style/module-version.t
-Copyright: 
+Copyright:
  Copyright 2014, 2015, 2016 Russ Allbery <eagle@eyrie.org>
  Copyright 2012, 2013, 2014 The Board of Trustees of the Leland Stanford Junior University
 License: Expat
@@ -79387,7 +79388,7 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-  * Redistributions of source code must retain the above copyright notice, 
+  * Redistributions of source code must retain the above copyright notice,
     this list of conditions and the following disclaimer.
 
   * Redistributions in binary form must reproduce the above copyright notice,
@@ -79395,8 +79396,8 @@ modification, are permitted provided that the following conditions are met:
     and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
 LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
 CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
@@ -79404,7 +79405,7 @@ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
 INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGE. 
+POSSIBILITY OF SUCH DAMAGE.
 
 
 END LICENSE(S) FOR ---------- pyasn1 -----------------------------
@@ -79417,7 +79418,7 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-  * Redistributions of source code must retain the above copyright notice, 
+  * Redistributions of source code must retain the above copyright notice,
     this list of conditions and the following disclaimer.
 
   * Redistributions in binary form must reproduce the above copyright notice,
@@ -79425,8 +79426,8 @@ modification, are permitted provided that the following conditions are met:
     and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
 LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
 CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
@@ -79434,7 +79435,7 @@ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
 INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGE. 
+POSSIBILITY OF SUCH DAMAGE.
 
 
 END LICENSE(S) FOR ---------- pyasn1-modules -----------------------------
@@ -79445,13 +79446,13 @@ Copyright (c) 2014, Piotr Dollar and Tsung-Yi Lin
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met: 
+modification, are permitted provided that the following conditions are met:
 
 1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer. 
+   list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution. 
+   and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -79465,7 +79466,7 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The views and conclusions contained in the software and documentation are those
-of the authors and should not be interpreted as representing official policies, 
+of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of the FreeBSD Project.
 
 
@@ -79506,24 +79507,24 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
-* Redistributions of source code must retain the above copyright notice, this 
+* Redistributions of source code must retain the above copyright notice, this
   list of conditions and the following disclaimer.
-* Redistributions in binary form must reproduce the above copyright notice, 
-  this list of conditions and the following disclaimer in the documentation 
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
   and/or other materials provided with the distribution.
-* Neither the name of the copyright holder nor the names of its contributors may 
-  be used to endorse or promote products derived from this software without 
+* Neither the name of the copyright holder nor the names of its contributors may
+  be used to endorse or promote products derived from this software without
   specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
-LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
-GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
-HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
-LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
@@ -79928,7 +79929,7 @@ files are:
     Foundation; with no Invariant Sections, no Front-Cover Texts, and
     no Back-Cover Texts.  A copy of the license is included in the
     section entitled "GNU Free Documentation License".
-			      
+
 On Debian systems, the complete text of the GNU Free Documentation License
 can be found in `/usr/share/common-licenses/GFDL'.
 
@@ -79936,7 +79937,7 @@ The Debian packaging is:
 
     Copyright (C) 1999-2009 Matthias Klose <doko@debian.org>
 
-and is licensed under the GPL version 3, 
+and is licensed under the GPL version 3,
 see `/usr/share/common-licenses/GPL-3'.
 
 
@@ -80439,21 +80440,21 @@ START LICENSE(S) FOR ---------- schema -----------------------------
 Copyright (c) 2012 Vladimir Keleshev, <vladimir@keleshev.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in 
-the Software without restriction, including without limitation the rights to 
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies 
-of the Software, and to permit persons to whom the Software is furnished to do 
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
 so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all 
+The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
@@ -81015,7 +81016,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 --------------------------------------------------------------------------------
 
-The files under the directory sympy/parsing/latex 
+The files under the directory sympy/parsing/latex
 are directly copied from latex2sympy project and are licensed as:
 
 Copyright 2016, latex2sympy
@@ -82780,7 +82781,7 @@ START LICENSE(S) FOR ---------- torchvision -----------------------------
 
 BSD 3-Clause License
 
-Copyright (c) Soumith Chintala 2016, 
+Copyright (c) Soumith Chintala 2016,
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -85285,5 +85286,4 @@ The following third party programs have their own third party program files. The
 The Dockerfile depends on the use of the following additional layers.
 1. ubuntu:20.04 https://hub.docker.com/_/ubuntu tag 20.04
 
-Other names and brands may be claimed as the property of others. 
-
+Other names and brands may be claimed as the property of others.

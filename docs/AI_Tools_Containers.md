@@ -1,5 +1,7 @@
 # Intel® AI Tools
+
 These are Domain Toolkit Containers that use the latest transformers and LLM technology with Intel optimizations.
+
 |                                                                Container                                                                |      Framework     |                Docker Pull Command               |Compressed Size|
 |-----------------------------------------------------------------------------------------------------------------------------------------|--------------------|--------------------------------------------------|---------------|
 |              [Intel® Transfer Learning Toolkit](https://github.com/IntelAI/transfer-learning/blob/v0.5.0/docker/README.md)              |PyTorch & TensorFlow|    ```docker pull intel/ai-tools:tlt-0.5.0```    |    910.64MB   |

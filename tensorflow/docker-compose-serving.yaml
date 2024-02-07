@@ -2,10 +2,10 @@ version: '3'
 services:
   tf-serving:
     image: tensorflow/serving:latest-devel-mkl
-    build: 
+    build:
       context: ./serving/tensorflow_serving/tools/docker
       dockerfile: Dockerfile.devel-mkl
-      args: 
+      args:
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
         no_proxy: ${no_proxy}
@@ -21,7 +21,7 @@ services:
 
   serving-mkl:
     image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.12.0}-serving-mkl
-    build: 
+    build:
       context: ./serving/tensorflow_serving/tools/docker
       dockerfile: Dockerfile.mkl
       args:

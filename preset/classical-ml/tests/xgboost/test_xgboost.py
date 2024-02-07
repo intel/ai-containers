@@ -1,22 +1,23 @@
-import numpy as np
-import pickle
-import xgboost as xgb
+# pylint: skip-file
 import os
+import pickle
 
+import numpy as np
+import xgboost as xgb
 from sklearn.datasets import load_svmlight_file
 
 param = {
-   'alpha': 0.9,
-   'max_bin': 256,
-   'scale_pos_weight': 2,
-   'learning_rate': 0.1,
-   'subsample': 1,
-   'reg_lambda': 1,
-   'min_child_weight': 0,
-   'max_depth': 8,
-   'max_leaves': 2**8,
-   'tree_method': 'hist',
-   "objective": 'binary:logistic'
+    "alpha": 0.9,
+    "max_bin": 256,
+    "scale_pos_weight": 2,
+    "learning_rate": 0.1,
+    "subsample": 1,
+    "reg_lambda": 1,
+    "min_child_weight": 0,
+    "max_depth": 8,
+    "max_leaves": 2**8,
+    "tree_method": "hist",
+    "objective": "binary:logistic",
 }
 
 # X is a scipy csr matrix, XGBoost supports many other input types,

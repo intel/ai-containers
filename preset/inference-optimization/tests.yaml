@@ -1,3 +1,4 @@
+---
 inference-optimization-inc-ipex-quantization-notebook-3.10-cpu:
   cmd: papermill --log-output jupyter/inc-ipex-quantization/quantize_with_inc.ipynb result.ipynb -k pytorch-cpu --cwd jupyter/inc-ipex-quantization
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
@@ -23,22 +24,22 @@ inference-optimization-inc-itex-notebook-3.9:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   notebook: 'true'
 inference-optimization-inc-tensorflow-3.10:
-  cmd: bash -i sample-tests/neural_compressor/tensorflow/run.sh cpu
+  cmd: conda run -n tensorflow sample-tests/neural_compressor/tensorflow/run.sh cpu
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
 inference-optimization-inc-tensorflow-3.9:
-  cmd: bash -i sample-tests/neural_compressor/tensorflow/run.sh cpu
+  cmd: conda run -n tensorflow sample-tests/neural_compressor/tensorflow/run.sh cpu
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
 inference-optimization-inc-torch-3.10-cpu:
-  cmd: bash -i sample-tests/neural_compressor/torch/run.sh pytorch-cpu cpu
+  cmd: conda run -n pytorch-cpu sample-tests/neural_compressor/torch/run.sh cpu
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
 inference-optimization-inc-torch-3.10-gpu:
-  cmd: bash -i sample-tests/neural_compressor/torch/run.sh pytorch-gpu cpu
+  cmd: conda run -n pytorch-gpu sample-tests/neural_compressor/torch/run.sh cpu
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
 inference-optimization-inc-torch-3.9-cpu:
-  cmd: bash -i sample-tests/neural_compressor/torch/run.sh pytorch-cpu cpu
+  cmd: conda run -n pytorch-cpu sample-tests/neural_compressor/torch/run.sh cpu
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
 inference-optimization-inc-torch-3.9-gpu:
-  cmd: bash -i sample-tests/neural_compressor/torch/run.sh pytorch-gpu cpu
+  cmd: conda run -n pytorch-gpu sample-tests/neural_compressor/torch/run.sh  cpu
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
 inference-optimization-ipex-3.10-cpu:
   cmd: conda run -n pytorch-cpu python -W ignore sample-tests/intel_extension_for_pytorch/test_ipex.py --device cpu --ipex
@@ -67,10 +68,10 @@ inference-optimization-itex-inference-notebook-3.9:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
   notebook: 'true'
 inference-optimization-onnx-3.10:
-  cmd: bash -i sample-tests/onnx/run.sh
+  cmd: conda run -n tensorflow sample-tests/onnx/run.sh
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.10
 inference-optimization-onnx-3.9:
-  cmd: bash -i sample-tests/onnx/run.sh
+  cmd: conda run -n tensorflow sample-tests/onnx/run.sh
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.0.0-py3.9
 inference-optimization-tensorflow-dataset-librarian-3.10:
   cmd: conda run -n tensorflow bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'

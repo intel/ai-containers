@@ -1,5 +1,7 @@
 # Intel® CPU Model Containers
+
 These are the deep learning Models optimized to run on Intel® Xeon® Scalable processors
+
 |                                                                                  Container                                                                                 | Framework|                                  Docker Pull Command                                  |Compressed Size|
 |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|---------------------------------------------------------------------------------------|---------------|
 |          [ResNet 50v1.5 Training](https://github.com/IntelAI/models/blob/r3.1/quickstart/image_recognition/tensorflow/resnet50v1_5/training/cpu/README_DEV_CAT.md)         |TensorFlow|     ```docker pull intel/image-recognition:centos-tf-cpu-resnet50v1-5-training```     |     1.46GB    |

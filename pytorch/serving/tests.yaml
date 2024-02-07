@@ -1,7 +1,8 @@
+---
 ipex-serving-model-archive-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-torchserve
   cmd: bash /home/model-server/model-archive/mar-test.sh
-  entrypoint: ""
+  entrypoint: ''
   volumes:
     - src: $PWD/pytorch/serving/model-archive
       dst: /home/model-server/model-archive
@@ -12,7 +13,7 @@ ipex-serving-model-archive-${PACKAGE_OPTION:-pip}:
 ipex-serving-workflow-archive-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-torchserve
   cmd: bash /home/model-server/model-archive/war-test.sh
-  entrypoint: ""
+  entrypoint: ''
   volumes:
     - src: $PWD/pytorch/serving/model-archive
       dst: /home/model-server/model-archive

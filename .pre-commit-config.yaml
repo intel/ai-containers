@@ -1,10 +1,47 @@
+---
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
--   repo: local
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
     hooks:
-    -   id: pytest-test-runner
+      - id: check-added-large-files
+      - id: check-ast
+      - id: check-merge-conflict
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: forbid-submodules
+      - id: sort-simple-yaml
+      - id: trailing-whitespace
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.1-beta
+    hooks:
+      - id: hadolint-docker
+        args: ["--config", ".github/linters/.hadolint.yaml"]
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.38.0
+    hooks:
+      - id: markdownlint
+        args: ["--config", ".github/linters/.markdown-lint.yaml"]
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.9.0
+    hooks:
+      - id: shellcheck
+  - repo: https://github.com/ambv/black
+    rev: 23.12.1
+    hooks:
+      - id: black
+        exclude: ^preset
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        args: ["--rcfile=.github/linters/.python-lint"]
+      - id: pytest-test-runner
         name: pytest-test-runner
         language: system
-        always_run: true
+        types: [python]
         entry: bash -c 'cd test-runner && pytest tests/utest.py -W ignore::UserWarning'

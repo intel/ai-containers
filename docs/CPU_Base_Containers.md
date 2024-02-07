@@ -1,5 +1,7 @@
 # Intel® CPU Base Containers
+
 Base containers to run on Intel® Xeon® Scalable processors
+
 |                                 Container                                 | Framework|                                    Docker Pull Command                                   |Compressed Size|
 |---------------------------------------------------------------------------|----------|------------------------------------------------------------------------------------------|---------------|
 |                 Intel® Optimizations for TensorFlow (PIP)                 |TensorFlow|            ```docker pull intel/intel-optimized-tensorflow:2.14.0-pip-base```            |    405.53MB   |

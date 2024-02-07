@@ -7,6 +7,6 @@ spec:
   storageClassName: {{ .Values.pvcScn }}
   accessModes:
     - "ReadWriteOnce"
-  resources: 
+  resources:
     requests:
       storage: {{ .Values.pvcResources }}

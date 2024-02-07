@@ -1,3 +1,4 @@
+# pylint: skip-file
 """
 ===========================================================
 A demo of K-Means clustering on the handwritten digits data
@@ -33,13 +34,15 @@ silhouette   silhouette coefficient
 # handwritten digits from 0 to 9. In the context of clustering, one would like
 # to group images such that the handwritten digits on the image are the same.
 
-import numpy as np
 import sys
 
-if len(sys.argv) == 2 and sys.argv[1] == 'true': #Enable intel opt
+import numpy as np
+
+if len(sys.argv) == 2 and sys.argv[1] == "true":  # Enable intel opt
     from sklearnex import patch_sklearn
+
     patch_sklearn()
-    print('Intel optimization for scikit enabled')
+    print("Intel optimization for scikit enabled")
 
 from sklearn.datasets import load_digits
 

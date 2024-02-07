@@ -1,3 +1,4 @@
+#!/bin/bash
 # Copyright (c) 2022 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,14 +26,12 @@
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
 
-#!/bin/bash
-
 mkdir -p /home/dev/data /home/dev/output
-cd /home/dev/data
+cd /home/dev/data || exit
 wget https://raw.githubusercontent.com/dmlc/xgboost/master/demo/data/agaricus.txt.train
 wget https://raw.githubusercontent.com/dmlc/xgboost/master/demo/data/agaricus.txt.test
 wget https://raw.githubusercontent.com/dmlc/xgboost/master/demo/data/featmap.txt
-cd ..
+cd .. || exit
 
 wget https://raw.githubusercontent.com/intel/ai-containers/main/preset/classical-ml/tests/xgboost/test_xgboost.py
 python test_xgboost.py

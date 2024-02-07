@@ -11,18 +11,10 @@ deploy:
       memory: 512Mi
   storage:
     nfs:
-      enable: false
       server: nil
       path: nil
       readOnly: true
       subPath: nil
-    pvc:
-      enable: false
-      claimName: nil
-      subPath: nil
-    s3:
-      enable: false
-      path: nil
 service:
   type: NodePort
 

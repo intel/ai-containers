@@ -1,11 +1,11 @@
-hello-world:
-    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.0}-base
-    cmd: echo "hello world"
-# ipex-xpu-jupyter-idp:
-#     img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.110xpu}-ipex-xpu-jupyter
-#     cmd: python -m papermill --log-output  /~/jupyter/xpu.ipynb -k python3
-#     notebook: 'true'
-# ipex-xpu-jupyter-pip:
-#     img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.0.110xpu}-ipex-xpu-jupyter
-#     cmd: python -m papermill --log-output  /~/jupyter/xpu.ipynb -k python3
-#     notebook: 'true'
+# hello-world:
+  # img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.0}-base
+  # cmd: echo "hello world"
+ipex-xpu-jupyter-idp:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.10xpu}-ipex-xpu-jupyter
+    cmd: python -m papermill --log-output  /~/jupyter/xpu.ipynb -k python3
+    notebook: 'true'
+ipex-xpu-jupyter-pip:
+    img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.10xpu}-ipex-xpu-jupyter
+    cmd: python -m papermill --log-output  /~/jupyter/xpu.ipynb -k python3
+    notebook: 'true'

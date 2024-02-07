@@ -82,7 +82,7 @@ RUN python -m pip install --no-cache-dir mlflow
 ARG PORT=5000
 EXPOSE $PORT
 
-CMD ["mlflow", "server", "-h", "0.0.0.0", "-p", $PORT]
+CMD ["mlflow", "server", "-h", "0.0.0.0", "-p", "$PORT"]
 
 FROM ipex-base-${PACKAGE_OPTION} AS multinode
 
@@ -106,9 +106,9 @@ RUN python -m pip install --no-cache-dir oneccl_bind_pt${ONECCL_VERSION:+==${ONE
 
 RUN mkdir -p /licensing
 
-RUN curl --insecure https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -o /licensing/oneccl_third_party_programs.txt && \
-    curl --insecure https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -o /licensing/third-party-programs-pytorch.txt && \
-    curl --insecure https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -o /licensing/LICENSE
+RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
+    wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
+    wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
 
 FROM multinode AS multinode-pip
 
@@ -116,7 +116,7 @@ RUN apt-get install -y --no-install-recommends --fix-missing virtualenv
 
 RUN virtualenv --system-site-packages inc && echo "source /inc/bin/activate" > ~/.bashrc
 
-FROM multinode AS multinode-idp 
+FROM multinode AS multinode-idp
 
 FROM ${COMPOSE_PROJECT_NAME}-python AS ipex-xpu-base
 
@@ -125,13 +125,12 @@ RUN apt-get update && \
     apt-utils \
     build-essential \
     clinfo \
-    curl \
     git \
     gnupg2 \
     gpg-agent \
     rsync \
     unzip \
-    wget && \
+    wget -q  && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
@@ -148,10 +147,10 @@ ARG IPEX_VERSION
 ARG ONECCL_BIND_PT_VERSION
 ARG TORCH_WHL_URL
 
-RUN no_proxy=$no_proxy wget -qO - https://repositories.intel.com/graphics/intel-graphics.key | \
+RUN no_proxy=$no_proxy wget -q  -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
     gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/graphics/ubuntu jammy max" | \
-    tee  /etc/apt/sources.list.d/intel.gpu.jammy.list
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
+    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
@@ -162,7 +161,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
-RUN no_proxy=$no_proxy wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+RUN no_proxy=$no_proxy wget -q  -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
    | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
    echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
    | tee /etc/apt/sources.list.d/oneAPI.list
@@ -173,10 +172,10 @@ RUN apt-get update && \
     intel-oneapi-runtime-mkl=${MKL_VER} \
     intel-oneapi-runtime-ccl=${CCL_VER};
 
-RUN python -m pip install torch==${TORCH_VERSION} -f ${TORCH_WHL_URL} && \
-    python -m pip install intel_extension_for_pytorch==${IPEX_VERSION} -f ${TORCH_WHL_URL} && \
-    python -m pip install torchvision==${TORCHVISION_VERSION} -f ${TORCH_WHL_URL} && \
-    python -m pip install oneccl_bind_pt==${ONECCL_BIND_PT_VERSION} -f ${TORCH_WHL_URL};
+RUN python -m pip install --no-cache-dir torch==${TORCH_VERSION} --extra-index-url ${TORCH_WHL_URL} && \
+    python -m pip install --no-cache-dir intel_extension_for_pytorch==${IPEX_VERSION} --extra-index-url ${TORCH_WHL_URL} && \
+    python -m pip install --no-cache-dir torchvision==${TORCHVISION_VERSION} --extra-index-url ${TORCH_WHL_URL} && \
+    python -m pip install --no-cache-dir oneccl_bind_pt==${ONECCL_BIND_PT_VERSION} --extra-index-url ${TORCH_WHL_URL};
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib:/opt/intel/oneapi/lib/intel64:$LD_LIBRARY_PATH
 
@@ -197,11 +196,11 @@ FROM ipex-xpu-base AS ipex-xpu-jupyter
 
 USER root
 
-RUN python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy 
+RUN python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy
 
 USER user
 
-RUN if [ ! -d $(which conda) ]; then \
+RUN if [ ! -d "$(which conda)" ]; then \
     echo "conda activate idp" >> ~/.bashrc; \
     fi
 
@@ -246,6 +245,7 @@ RUN python3 -m venv /home/venv
 
 ENV PATH="/home/venv/bin:$PATH"
 
+WORKDIR /home/model-server
 COPY serving/requirements.txt requirements.txt
 
 RUN python -m pip install --no-cache-dir -U pip setuptools && \
