@@ -2,9 +2,10 @@
 name: Test Runner Unit Tests
 on:
   pull_request:
-    branches:
-      - develop
 permissions: read-all
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   unit-test:
     runs-on: [ test-runner ]
@@ -19,7 +20,7 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-          venv/bin/python -m pip install pytest
+          venv/bin/python -m pip install pytest hypothesis
           venv/bin/python -m pip install -r requirements.txt
         working-directory: ${{ github.workspace }}/test-runner
       - name: Unit Test

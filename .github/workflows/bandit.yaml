@@ -3,6 +3,9 @@ name: Bandit Scan
 on:
   pull_request_review:
     types: [submitted]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 permissions: read-all
 jobs:
   scan-bandit:

@@ -1,5 +1,7 @@
 import pytest
 import yaml
+from hypothesis import given
+from hypothesis.strategies import dictionaries, text
 from test_runner import Test
 
 
@@ -43,3 +45,23 @@ def test_run(test_input):
             log, returncode = test.run()
             assert returncode == 0
             assert log == "Hello World"
+
+
+@given(name=text(), arguments=dictionaries(text(), text()))
+def test_fuzz_container_run(name, arguments):
+    "Fuzz container_run()."
+    try:
+        test = Test(name, arguments)
+        test.container_run()
+    except Exception as e:
+        print(f"Caught exception: {e}")
+
+
+@given(name=text(), arguments=dictionaries(text(), text()))
+def test_fuzz_run(name, arguments):
+    "Fuzz run()."
+    try:
+        test = Test(name, arguments)
+        test.run()
+    except Exception as e:
+        print(f"Caught exception: {e}")
