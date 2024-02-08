@@ -3,12 +3,12 @@ cython
 pynvml
 pyyaml
 -f https://download.pytorch.org/whl/torch_stable.html
-torch==2.1.0+cpu
+torch==2.2.0+cpu
 torch-model-archiver
 torch-workflow-archiver
-torchaudio==2.1.0+cpu
+torchaudio==2.2.0+cpu
 torchserve
-torchtext==0.16.0+cpu
-torchvision==0.16.0+cpu
+torchtext==0.17.0+cpu
+torchvision==0.17.0+cpu
 -f https://developer.intel.com/ipex-whl-stable-cpu
-intel_extension_for_pytorch==2.1.0+cpu
+intel_extension_for_pytorch==2.2.0+cpu

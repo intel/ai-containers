@@ -6,10 +6,11 @@ This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. use
 
 ## Project Setup
 
-Define your project's registry each time you use the project:
+Define your project's registry and repository each time you use the project:
 
 ```bash
 export REGISTRY=<registry_name>
+export REPO=<repo_name>
 ```
 
 ### Set Up Docker Engine

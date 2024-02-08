@@ -82,6 +82,7 @@ jobs:
           group_dir: ${{ inputs.group_dir }}
           env_overrides: ${{ inputs.env_overrides }}
           registry: ${{ vars.REGISTRY }}
+          repo: ${{ vars.REPO }}
   setup-test:
     needs: [ build-containers ]
     runs-on: [ k8-runners ]

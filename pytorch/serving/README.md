@@ -16,7 +16,7 @@ Follow the instructions found in the link above depending on whether you are int
 curl -O https://download.pytorch.org/models/squeezenet1_1-b8a52dc0.pth
 docker run --rm -it \
            -v $PWD:/home/model-server \
-           intel/intel-optimized-pytorch:2.1.0-serving-cpu \
+           intel/intel-optimized-pytorch:2.2.0-serving-cpu \
            torch-model-archiver --model-name squeezenet \
             --version 1.0 \
             --model-file model-archive/model.py \

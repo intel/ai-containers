@@ -26,10 +26,15 @@
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
 
+ARG REGISTRY
+ARG REPO
+ARG GITHUB_RUN_NUMBER
+ARG BASE_IMAGE_NAME
+ARG BASE_IMAGE_TAG
 ARG PACKAGE_OPTION=pip
-
-ARG COMPOSE_PROJECT_NAME
-FROM ${COMPOSE_PROJECT_NAME}-python AS ipex-base-pip
+ARG PYTHON_VERSION
+ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-base
+FROM ${PYTHON_BASE} AS ipex-base-pip
 
 ARG IPEX_VERSION
 ARG PYTORCH_VERSION
@@ -44,7 +49,7 @@ RUN python -m pip install --no-cache-dir \
     intel_extension_for_pytorch==${IPEX_VERSION}+cpu \
     -f https://developer.intel.com/ipex-whl-stable-cpu
 
-FROM ${COMPOSE_PROJECT_NAME}-python AS ipex-base-idp
+FROM ${PYTHON_BASE} AS ipex-base-idp
 
 ARG IPEX_VERSION
 ARG PYTORCH_VERSION
@@ -70,19 +75,9 @@ RUN mkdir -p /jupyter/ && chmod -R a+rwx /jupyter/
 RUN mkdir /.local && chmod a+rwx /.local
 WORKDIR /jupyter
 
-ARG PORT=8888
-EXPOSE $PORT
+EXPOSE 8888
 
-CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
-
-FROM ipex-base-${PACKAGE_OPTION} AS mlflow
-
-RUN python -m pip install --no-cache-dir mlflow
-
-ARG PORT=5000
-EXPOSE $PORT
-
-CMD ["mlflow", "server", "-h", "0.0.0.0", "-p", "$PORT"]
+CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
 FROM ipex-base-${PACKAGE_OPTION} AS multinode
 
@@ -118,7 +113,7 @@ RUN virtualenv --system-site-packages inc && echo "source /inc/bin/activate" > ~
 
 FROM multinode AS multinode-idp
 
-FROM ${COMPOSE_PROJECT_NAME}-python AS ipex-xpu-base
+FROM ${PYTHON_BASE} AS ipex-xpu-base
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
@@ -134,23 +129,15 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
-ARG ICD_VER
-ARG LEVEL_ZERO_GPU_VER
-ARG LEVEL_ZERO_VER
-ARG LEVEL_ZERO_DEV_VER
-ARG DPCPP_VER
-ARG MKL_VER
-ARG CCL_VER
-ARG TORCH_VERSION
-ARG TORCHVISION_VERSION
-ARG IPEX_VERSION
-ARG ONECCL_BIND_PT_VERSION
-ARG TORCH_WHL_URL
-
 RUN no_proxy=$no_proxy wget -q  -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
     gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
 RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
+
+ARG ICD_VER
+ARG LEVEL_ZERO_GPU_VER
+ARG LEVEL_ZERO_VER
+ARG LEVEL_ZERO_DEV_VER
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
@@ -166,55 +153,47 @@ RUN no_proxy=$no_proxy wget -q  -O- https://apt.repos.intel.com/intel-gpg-keys/G
    echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
    | tee /etc/apt/sources.list.d/oneAPI.list
 
+ARG DPCPP_VER
+ARG MKL_VER
+ARG CCL_VER
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
     intel-oneapi-runtime-dpcpp-cpp=${DPCPP_VER} \
     intel-oneapi-runtime-mkl=${MKL_VER} \
     intel-oneapi-runtime-ccl=${CCL_VER};
 
-RUN python -m pip install --no-cache-dir torch==${TORCH_VERSION} --extra-index-url ${TORCH_WHL_URL} && \
-    python -m pip install --no-cache-dir intel_extension_for_pytorch==${IPEX_VERSION} --extra-index-url ${TORCH_WHL_URL} && \
-    python -m pip install --no-cache-dir torchvision==${TORCHVISION_VERSION} --extra-index-url ${TORCH_WHL_URL} && \
-    python -m pip install --no-cache-dir oneccl_bind_pt==${ONECCL_BIND_PT_VERSION} --extra-index-url ${TORCH_WHL_URL};
+ARG PYTORCH_XPU_VERSION
+ARG TORCHAUDIO_XPU_VERSION
+ARG TORCHVISION_XPU_VERSION
+ARG IPEX_XPU_VERSION
+ARG ONECCL_VERSION
+
+RUN python -m pip install --no-cache-dir \
+    torch==${PYTORCH_XPU_VERSION} \
+    intel_extension_for_pytorch==${IPEX_XPU_VERSION} \
+    torchvision==${TORCHVISION_XPU_VERSION} \
+    oneccl_bind_pt==${ONECCL_VERSION} \
+    --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib:/opt/intel/oneapi/lib/intel64:$LD_LIBRARY_PATH
 
-ARG UNAME=user
-ARG GID=109
-ARG GNAME=render
-ARG VNAME=video
-
-RUN useradd -m -s /bin/bash $UNAME
-
-RUN groupadd -g $GID $GNAME
-
-RUN usermod -a -G $VNAME,$GNAME $UNAME
-
-USER user
-
 FROM ipex-xpu-base AS ipex-xpu-jupyter
 
-USER root
-
 RUN python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy
-
-USER user
 
 RUN if [ ! -d "$(which conda)" ]; then \
     echo "conda activate idp" >> ~/.bashrc; \
     fi
 
-RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/
+WORKDIR /jupyter
+COPY --chown=root notebooks/ipex-xpu.ipynb /jupyter/xpu.ipynb
 
-WORKDIR /~/jupyter
-COPY --chown=user notebooks/ipex/ipex-xpu.ipynb /~/jupyter/xpu.ipynb
+EXPOSE 8888
 
-ARG PORT=8888
-EXPOSE $PORT
+CMD ["bash", "-c", "python -m jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
-CMD ["bash", "-c", "python -m jupyter notebook --notebook-dir=/~/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
-
-FROM ${COMPOSE_PROJECT_NAME}-python as torchserve-base
+FROM ${PYTHON_BASE} as torchserve-base
 
 ENV PYTHONUNBUFFERED=TRUE
 

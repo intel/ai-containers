@@ -1,6 +1,9 @@
 version: '3'
+include:
+  - path:
+      - ../python/docker-compose.yaml
 services:
-  python:
+  ipex-base:
     build:
       args:
         http_proxy: ${http_proxy}
@@ -8,33 +11,25 @@ services:
         no_proxy: ""
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-22.04}
-        IDP_VERSION: core
-        MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
-        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
-      context: ../python
-      dockerfile: ../python/Dockerfile
-      target: ${PACKAGE_OPTION:-pip}
-    pull_policy: always
-  ipex-base:
-    build:
-      args:
         COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME:-pytorch}
-        IPEX_VERSION: ${IPEX_VERSION:-2.1.0}
+        GITHUB_RUN_NUMBER: ${GITHUB_RUN_NUMER:-0}
+        IPEX_VERSION: ${IPEX_VERSION:-2.2.0}
+        MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
-        PYTORCH_VERSION: ${PYTORCH_VERSION:-2.1.0+cpu}
-        TORCHAUDIO_VERSION: ${TORCHAUDIO_VERSION:-2.1.0+cpu}
-        TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.16.0+cpu}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+        PYTORCH_VERSION: ${PYTORCH_VERSION:-2.2.0+cpu}
+        REGISTRY: ${REGISTRY}
+        REPO: ${REPO}
+        TORCHAUDIO_VERSION: ${TORCHAUDIO_VERSION:-2.2.0+cpu}
+        TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.17.0+cpu}
       context: .
-      dockerfile: Dockerfile
       target: ipex-base-${PACKAGE_OPTION:-pip}
-    extends: python
     depends_on:
-      - python
+      - ${PACKAGE_OPTION:-pip}-base
     command: >
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)'"
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.0}-base
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.2.0}-base
     pull_policy: always
-
   jupyter:
     build:
       target: jupyter
@@ -44,35 +39,20 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     extends: ipex-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.0}-jupyter
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.2.0}-jupyter
     network_mode: host
-
-  mlflow:
-    build:
-      args:
-        PORT: ${PORT:-5000}
-      target: mlflow
-    command: "python -m mlflow --version"
-    environment:
-      MLFLOW_TRACKING_URI: 'https://localhost:${PORT:-5000}'
-    extends: jupyter
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.0}-mlflow
     ports:
-      - ${PORT-5000}:${PORT:-5000}
-    volumes:
-      - /$PWD:/mlflow
-
+      - 8888:8888
   multinode:
     build:
       args:
-        INC_VERSION: ${INC_VERSION:-2.3.1}
-        ONECCL_VERSION: ${IPEX_VERSION:-2.1.0+cpu}
+        INC_VERSION: ${INC_VERSION:-2.4.1}
+        ONECCL_VERSION: ${IPEX_VERSION:-2.2.0+cpu}
       target: multinode-${PACKAGE_OPTION:-pip}
     command: >
       sh -c "python -c 'import neural_compressor;import oneccl_bindings_for_pytorch as oneccl; print(\"Neural Compressor Version:\", neural_compressor.__version__, \"\\nOneCCL:\", oneccl.__version__)'"
     extends: ipex-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.0}-oneccl-inc-${INC_VERSION:-2.3.1}
-
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.2.0}-oneccl-inc-${INC_VERSION:-2.4.1}
   ipex-xpu-base:
     build:
       args:
@@ -83,30 +63,27 @@ services:
         DPCPP_VER: ${DPCPP_VER:-2024.0.0-49819}
         MKL_VER: ${MKL_VER:-2024.0.0-49656}
         CCL_VER: ${CCL_VER:-2021.11.1-6}
-        TORCH_VERSION: ${TORCH_VERSION:-2.1.0a0+cxx11.abi}
-        TORCHAUDIO_VERSION: ${TORCHAUDIO_VERSION:-2.1.0a0+cxx11.abi}
-        TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.16.0a0+cxx11.abi}
-        IPEX_VERSION: ${IPEX_VERSION:-2.1.10+xpu}
-        TORCH_WHL_URL: ${TORCH_WHL_URL:-https://pytorch-extension.intel.com/release-whl/stable/xpu/us/}
-        ONECCL_BIND_PT_VERSION: ${ONECCL_BIND_PT_VERSION:-2.1.100}
+        PYTORCH_XPU_VERSION: ${PYTORCH_VERSION:-2.1.0a0+cxx11.abi}
+        TORCHAUDIO_XPU_VERSION: ${TORCHAUDIO_VERSION:-2.1.0a0+cxx11.abi}
+        TORCHVISION_XPU_VERSION: ${TORCHVISION_VERSION:-0.16.0a0+cxx11.abi}
+        IPEX_XPU_VERSION: ${IPEX_VERSION:-2.1.10+xpu}
+        ONECCL_VERSION: ${ONECCL_VERSION:-2.1.100}
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
         NO_PROXY: ''
       target: ipex-xpu-base
     command: >
         python -c "import torch;print(torch.device('xpu'));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());print(torch.__version__); print(ipex.__version__); [print(f'[{i}]: {ipex.xpu.get_device_properties(i)}') for i in range(ipex.xpu.device_count())];"
     extends: ipex-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.10xpu}-ipex-xpu-base
-
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.10xpu}-xpu-base
   ipex-xpu-jupyter:
     build:
-      args:
-        PORT: ${PORT:-8888}
       target: ipex-xpu-jupyter
     extends: ipex-xpu-base
     command: >
       bash -c "python -m jupyter --version"
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.10xpu}-ipex-xpu-jupyter
-
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.10xpu}-xpu-jupyter
+    ports:
+      - 8888:8888
   torchserve:
     build:
       target: torchserve
@@ -114,3 +91,9 @@ services:
     entrypoint: ""
     extends: ipex-base
     image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-torchserve
+    ports:
+      - 8080:8080
+      - 8081:8081
+      - 8082:8082
+      - 7070:7070
+      - 7071:7071

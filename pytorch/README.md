@@ -9,29 +9,15 @@
 | BASE_IMAGE_NAME | `ubuntu` | Base Operating System |
 | BASE_IMAGE_TAG | `22.04` | Base Operating System Version |
 | IDP_VERSION | `core` | Intel Distribution of Python version(either `full` or `core`) |
-| IPEX_VERSION | `2.1.0` | Intel Extension for PyTorch Version |
+| IPEX_VERSION | `2.2.0` | Intel Extension for PyTorch Version |
 | MINICONDA_VERSION | `latest-Linux-x86_64` | Miniconda Version from `https://repo.anaconda.com/miniconda` |
 | PACKAGE_OPTION | `pip` | Stock Python (pypi) or Intel Python (conda) (`pip` or `idp`) |
 | PYTHON_VERSION | `3.10` | Python Version |
-| PYTORCH_VERSION | `2.1.0+cpu` | PyTorch Version |
-| TORCHAUDIO_VERSION | `2.1.0+cpu` | TorchAudio Version |
-| TORCHVISION_VERSION | `0.16.0+cpu` | TorchVision Version |
+| PYTORCH_VERSION | `2.2.0+cpu` | PyTorch Version |
+| TORCHAUDIO_VERSION | `2.2.0+cpu` | TorchAudio Version |
+| TORCHVISION_VERSION | `0.17.0+cpu` | TorchVision Version |
 
 ### Jupyter
-
-Built from Base
-
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| PORT | `8888` | Server UI Port |
-
-### MLFlow
-
-Built from Base
-
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| PORT | `5000` | Server UI Port |
 
 ### MultiNode
 
@@ -39,10 +25,10 @@ Built from Base
 
 | Environment Variable Name | Default Value | Description |
 | --- | --- | --- |
-| INC_VERSION | `2.3.1` | Neural Compressor Version |
-| ONECCL_VERSION | `2.1.0+cpu` | TorchCCL Version |
+| INC_VERSION | `2.4.1` | Neural Compressor Version |
+| ONECCL_VERSION | `2.2.0+cpu` | TorchCCL Version |
 
-### IPEX XPU Base
+### XPU Base
 
 Built from Base
 
@@ -54,46 +40,20 @@ Built from Base
 | DPCPP_VER | `2024.0.0-49819` | DPCPP Version |
 | MKL Version | `2024.0.0-49656` | MKL Version |
 | CCL_VER | `2021.11.1-6` | CCL Version |
-| TORCH_VERSION | `2.1.0a0+cxx11.abi` | Torch Version |
-| TORCHVISION_VERSION | `0.16.0a0+cxx11.abi` | Torchvision Version |
-| IPEX_VERSION | `2.1.10+xpu` | IPEX Version |
-| TORCH_WHL_URL | `https://pytorch-extension.intel.com/release-whl/stable/xpu/us/` | Wheel URL |
-| ONECCL_BIND_PT_VERSION | `2.1.100` | TorchCCL Version |
+| PYTORCH_XPU_VERSION | `2.1.0a0+cxx11.abi` | Torch Version |
+| TORCHVISION_XPU_VERSION | `0.16.0a0+cxx11.abi` | Torchvision Version |
+| IPEX_XPU_VERSION | `2.1.10+xpu` | IPEX Version |
+| ONECCL_VERSION | `2.1.100` | TorchCCL Version |
 
-### IPEX XPU Jupyter
+### XPU Jupyter
 
-Built from IPEX XPU Base
+## TorchServe
 
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| PORT | `8888` | Server UI Port |
-
-### IPEX Prod
-
-Create python environment using a compile stage. Expose REST and gRPC ports. Install Java and Python. Create model-server user and create necessary directories. Create entrypoint file and add torchserve config file.
-
-| Component | Package Manager |
-| --- | --- |
-| captum | pip |
-| cython | pip |
-| intel_extension_for_pytorch | pip |
-| openjdk-17-jdk | apt |
-| pynvml | pip |
-| python3 | apt |
-| pyyaml | pip |
-| torch | pip |
-| torch-model-archiver | pip |
-| torch-workflow-archiver | pip |
-| torchaudio | pip |
-| torchserve | pip |
-| torchtext | pip |
-| torchvision | pip |
-
-#### Distributed Training on k8s
+## Distributed Training on k8s
 
 Use _N_-Nodes in your Training with PyTorchJobs and Kubeflow's Training Operator with an optimized production container.
 
-##### Distributed Production Container
+### Distributed Production Container
 
 Create a Distributed Production Container using Intel Optimized PyTorch MultiNode layers. For Example:
 
@@ -110,13 +70,13 @@ COPY --from=prod-base /usr/local/bin /usr/local/bin
 ...
 ```
 
-##### Build the Container with New Stage
+#### Build the Container with New Stage
 
 ```bash
 docker build ... --target prod -t my_container:prod .
 ```
 
-##### Configure Kubernetes
+### Configure Kubernetes
 
 Using an existing Kubernetes Cluster of any flavor, install the standalone training operator from GitHub or use a pre-existing Kubeflow configuration.
 
@@ -126,7 +86,7 @@ kubectl apply -k "github.com/kubeflow/training-operator/manifests/overlays/stand
 
 Ensure that the training operator deployment readiness status `1/1` before proceeding.
 
-##### Deploy Distributed Job
+### Deploy Distributed Job
 
 Install [Helm](https://helm.sh/docs/intro/install/)
 
@@ -154,7 +114,7 @@ helm install ---namespace ${NAMESPACE} \
 
 To see an existing configuration utilizing this method, check out [Intel® Extension for Transformers](https://github.com/intel/intel-extension-for-transformers/blob/main/docker/README.md#kubernetes)' implementation.
 
-##### Troubleshooting
+### Troubleshooting
 
 - [TorchCCL Reference](https://github.com/intel/torch-ccl)
 - [PyTorchJob Reference](https://www.kubeflow.org/docs/components/training/pytorch/)
