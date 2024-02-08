@@ -23,10 +23,13 @@ Ensure you have Docker Compose installed on your machine. If you don't have this
 ```bash
 DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
 mkdir -p $DOCKER_CONFIG/cli-plugins
-curl -SL https://github.com/docker/compose/releases/download/v2.19.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+curl -SL https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
 chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 docker compose version
 ```
+
+> [!CAUTION]
+> Docker compose `v2.20.0` is the minimum required version for some container groups.
 
 #### Development Container
 
