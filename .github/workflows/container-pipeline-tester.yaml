@@ -61,6 +61,8 @@ jobs:
       credentials:
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
+      volumes:
+        - /usr/local/share/ca-certificates/:/usr/local/share/ca-certificates/
     env: ${{ matrix }}
     runs-on: [ builder ]
     strategy:
@@ -75,6 +77,8 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
         if: ${{ !inputs.no-build }}
+      - name: Setup Intel Certificates
+        run: update-ca-certificates --fresh
       - name: Build Container Group
         if: ${{ !inputs.no-build }}
         uses: ./.github
