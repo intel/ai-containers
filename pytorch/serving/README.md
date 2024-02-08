@@ -25,42 +25,25 @@ docker run --rm -it \
             --export-path /home/model-server
 ```
 
-### Build Container
+### Test Model
 
-If a dependency required for model predictions is not found in the [requirements.txt](./requirements.txt) used to build torchserve, you will need to add a new container layer to the container with those dependencies.
+Test Torchserve with the new archived model. The example below is for the squeezenet model.
 
-1. Create a new dockerfile, this will serve as the basis to add your model dependencies into your torchserve service.
-
-    ```dockerfile
-    FROM intel/intel-optimized-pytorch:2.1.0-serving-cpu as torchserve
-
-    COPY requirements.txt requirements.txt
-    RUN python -m pip install -r requirements.txt
-    ```
-
-2. Build and Test Torchserve with the new dependencies. The example below is for the squeezenet model.
-
-    ```bash
-    # Ensure you are in the same directory as your Dockerfile
-    docker build -t torchserve:squeezenet .
-    # Download a pre-archived model for testing
-    curl -O https://torchserve.pytorch.org/mar_files/squeezenet1_1.mar
-    # Run torchserve with the pre-archived model
-    # Assuming that the above pre-archived model is in the current working directory
-    docker run -d --rm \
-              -v $PWD:/home/model-server/model-store \
-              --net=host \
-              torchserve:squeezenet
-    # Verify that the container has launched successfully
-    IMAGE=$(docker ps -aqf "ancestor=torchserve:squeezenet")
-    docker logs $IMAGE
-    # Attempt to register the model and make an inference request
-    curl -X POST "http://localhost:8081/models?initial_workers=1&synchronous=true&url=squeezenet1_1.mar&model_name=squeezenet"
-    curl -O https://raw.githubusercontent.com/pytorch/serve/master/docs/images/kitten_small.jpg
-    curl -X POST http://localhost:8080/v2/models/squeezenet/infer -T kitten_small.jpg
-    # Stop the container
-    docker container stop $IMAGE
-    ```
+```bash
+# Assuming that the above pre-archived model is in the current working directory
+docker run -d --rm --name server \
+          -v $PWD:/home/model-server/model-store \
+          --net=host \
+          intel/intel-optimized-pytorch:2.2.0-serving-cpu
+# Verify that the container has launched successfully
+docker logs server
+# Attempt to register the model and make an inference request
+curl -X POST "http://localhost:8081/models?initial_workers=1&synchronous=true&url=squeezenet1_1.mar&model_name=squeezenet"
+curl -O https://raw.githubusercontent.com/pytorch/serve/master/docs/images/kitten_small.jpg
+curl -X POST http://localhost:8080/v2/models/squeezenet/infer -T kitten_small.jpg
+# Stop the container
+docker container stop server
+```
 
 ### Modify TorchServe Config File
 
@@ -94,18 +77,17 @@ As demonstrated in the above example, models must be registered before they can 
 
     ```bash
     # Assuming that the above pre-archived model is in the current working directory
-    docker run -d --rm \
+    docker run -d --rm --name server \
               -v $PWD:/home/model-server/model-store \
               -v $PWD/config.properties:/home/model-server/config.properties \
               --net=host \
-              torchserve:squeezenet
+              intel/intel-optimized-pytorch:2.2.0-serving-cpu
     # Verify that the container has launched successfully
-    IMAGE=$(docker ps -aqf "ancestor=torchserve:squeezenet")
-    docker logs $IMAGE
+    docker logs server
     # Check the models list
     curl -X GET "http://localhost:8081/models"
     # Stop the container
-    docker container stop $IMAGE
+    docker container stop server
     ```
 
     Expected Output:
@@ -135,11 +117,11 @@ Using the provided [helm chart](../charts/inference) your model can scale to mul
 
 2. (Optional) Push TorchServe Image to a Private Registry
 
-    If you added layers to an existing torchserve container image in a [previous step](#build-container), use `docker push` to add that image to a private registry that your cluster can access.
+    If you added layers to an existing torchserve container image in a [previous step](#test-model), use `docker push` to add that image to a private registry that your cluster can access.
 
 3. Set up Model Storage
 
-    Your model archive file will no longer be accessible from your local environment, so it needs to be added to either an S3 bucket (via [Mountpoint](https://github.com/awslabs/mountpoint-s3/blob/main/doc/CONFIGURATION.md) or Cluster Configuration), [PVC](https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/), or [NFS](https://kubernetes.io/docs/concepts/storage/volumes/#nfs).
+    Your model archive file will no longer be accessible from your local environment, so it needs to be added to a [PVC](https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/) using a network storage solution like [NFS](https://kubernetes.io/docs/concepts/storage/volumes/#nfs).
 
 4. Install TorchServe Chart
 
@@ -148,7 +130,7 @@ Using the provided [helm chart](../charts/inference) your model can scale to mul
     ```bash
     helm install \
         --namespace=<namespace> \
-        --set deploy.image=intel/intel-optimized-pytorch:2.1.0-serving-cpu \
+        --set deploy.image=intel/intel-optimized-pytorch:2.2.0-serving-cpu \
         --set deploy.models='squeezenet=squeezenet1_1.mar' \
         --set deploy.storage.pvc.enable=true \
         --set deploy.storage.pvc.claimName=squeezenet \
