@@ -118,7 +118,7 @@ class Test:
                 try:  # Try for Docker CLI Failure Conditions
                     docker.run(img, ["which", "papermill"])
                 except DockerException as papermill_not_found:
-                    logging.debug("Papermill not found: %s", papermill_not_found)
+                    logging.error("Papermill not found: %s", papermill_not_found)
                     docker.build(
                         # context path
                         ".",
@@ -137,151 +137,133 @@ class Test:
         if hasattr(self, "serving"):
             if self.serving == "true":
                 log = ""
-                try:  # Try for Docker CLI Failure Conditions
-                    serving_container = docker.run(
-                        # Image
-                        img,
-                        # Stream Logs
-                        detach=True,
-                        # Envs
-                        envs=env,
-                        # Volumes
-                        volumes=volumes,
-                        # Networks
-                        networks=["host"],
-                        # Misc
-                        cap_add=[
-                            self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"
-                        ],
-                        devices=[
-                            (
-                                expandvars(self.device)
-                                if hasattr(self, "device")
-                                else "/dev/dri"
-                            )
-                        ],
-                        entrypoint=(
-                            expandvars(self.entrypoint)
-                            if hasattr(self, "entrypoint")
-                            else None
-                        ),
-                        hostname=self.hostname if hasattr(self, "hostname") else None,
-                        ipc=self.ipc if hasattr(self, "ipc") else None,
-                        privileged=(
-                            self.privileged if hasattr(self, "privileged") else True
-                        ),
-                        pull=self.pull if hasattr(self, "pull") else "missing",
-                        shm_size=self.shm_size if hasattr(self, "shm_size") else None,
-                    )
-                    client_output = docker.run(
-                        # Image
-                        "python:3.11-slim-bullseye",
-                        # Command
-                        split(expandvars(self.cmd)),
-                        # Stream Logs
-                        stream=True,
-                        # Envs
-                        envs=env,
-                        # Volumes
-                        volumes=volumes,
-                        # Networks
-                        networks=["host"],
-                        # Misc
-                        cap_add=[
-                            self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"
-                        ],
-                        devices=[
-                            (
-                                expandvars(self.device)
-                                if hasattr(self, "device")
-                                else "/dev/dri"
-                            )
-                        ],
-                        entrypoint=(
-                            expandvars(self.entrypoint)
-                            if hasattr(self, "entrypoint")
-                            else None
-                        ),
-                        hostname=self.hostname if hasattr(self, "hostname") else None,
-                        ipc=self.ipc if hasattr(self, "ipc") else None,
-                        privileged=(
-                            self.privileged if hasattr(self, "privileged") else True
-                        ),
-                        pull=self.pull if hasattr(self, "pull") else "missing",
-                        remove=self.rm if hasattr(self, "rm") else True,
-                        user=self.user if hasattr(self, "user") else None,
-                        shm_size=self.shm_size if hasattr(self, "shm_size") else None,
-                        workdir=(
-                            expandvars(self.workdir)
-                            if hasattr(self, "workdir")
-                            else None
-                        ),
-                    )
-                except DockerException as err:
-                    return (
-                        "DockerException",
-                        err.return_code,
-                    )  # assume the return code is 0 unless otherwise specified
-                finally:
-                    # Log within the function to retain scope for debugging
-                    for _, stream_content in client_output:
-                        # All process logs will have the stream_type of stderr despite it being stdout
-                        logging.info(stream_content.decode("utf-8").strip())
-                        log += stream_content.decode("utf-8").strip()
-                    logging.debug("--- Server Logs ---")
-                    logging.debug(docker.logs(serving_container))
-                    docker.stop(serving_container, time=None)
-                return log, 0
-        # Try for Docker CLI Failure Conditions
-        try:  # https://gabrieldemarmiesse.github.io/python-on-whales/sub-commands/container/#python_on_whales.components.container.cli_wrapper.ContainerCLI.run
-            output_generator = docker.run(
-                # Image
-                img,
-                # Command
-                split(expandvars(self.cmd)),
-                # Stream Logs
-                stream=True,
-                # Envs
-                envs=env,
-                # Volumes
-                volumes=volumes,
-                # Misc
-                cap_add=[self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"],
-                devices=[
-                    expandvars(self.device) if hasattr(self, "device") else "/dev/dri"
-                ],
-                entrypoint=(
-                    expandvars(self.entrypoint) if hasattr(self, "entrypoint") else None
-                ),
-                groups_add=[
-                    (
-                        expandvars(self.groups_add)
-                        if hasattr(self, "group-add")
-                        else "109"
+                serving_container = docker.run(
+                    # Image
+                    img,
+                    # Stream Logs
+                    detach=True,
+                    # Envs
+                    envs=env,
+                    # Volumes
+                    volumes=volumes,
+                    # Networks
+                    networks=["host"],
+                    # Misc
+                    cap_add=[
+                        self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"
+                    ],
+                    devices=[
+                        (
+                            expandvars(self.device)
+                            if hasattr(self, "device")
+                            else "/dev/dri"
+                        )
+                    ],
+                    entrypoint=(
+                        expandvars(self.entrypoint)
+                        if hasattr(self, "entrypoint")
+                        else None
                     ),
-                    "44",
-                ],
-                hostname=self.hostname if hasattr(self, "hostname") else None,
-                ipc=self.ipc if hasattr(self, "ipc") else None,
-                privileged=self.privileged if hasattr(self, "privileged") else True,
-                pull=self.pull if hasattr(self, "pull") else "missing",
-                remove=self.rm if hasattr(self, "rm") else True,
-                user=self.user if hasattr(self, "user") else None,
-                shm_size=self.shm_size if hasattr(self, "shm_size") else None,
-                workdir=expandvars(self.workdir) if hasattr(self, "workdir") else None,
-            )
-        except DockerException as err:
-            return (
-                "DockerException",
-                err.return_code,
-            )  # assume the return code is 0 unless otherwise specified
+                    hostname=self.hostname if hasattr(self, "hostname") else None,
+                    ipc=self.ipc if hasattr(self, "ipc") else None,
+                    privileged=(
+                        self.privileged if hasattr(self, "privileged") else True
+                    ),
+                    pull=self.pull if hasattr(self, "pull") else "missing",
+                    shm_size=self.shm_size if hasattr(self, "shm_size") else None,
+                )
+                client_output = docker.run(
+                    # Image
+                    "python:3.11-slim-bullseye",
+                    # Command
+                    split(expandvars(self.cmd)),
+                    # Stream Logs
+                    stream=True,
+                    # Envs
+                    envs=env,
+                    # Volumes
+                    volumes=volumes,
+                    # Networks
+                    networks=["host"],
+                    # Misc
+                    cap_add=[
+                        self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"
+                    ],
+                    devices=[
+                        (
+                            expandvars(self.device)
+                            if hasattr(self, "device")
+                            else "/dev/dri"
+                        )
+                    ],
+                    entrypoint=(
+                        expandvars(self.entrypoint)
+                        if hasattr(self, "entrypoint")
+                        else None
+                    ),
+                    hostname=self.hostname if hasattr(self, "hostname") else None,
+                    ipc=self.ipc if hasattr(self, "ipc") else None,
+                    privileged=(
+                        self.privileged if hasattr(self, "privileged") else True
+                    ),
+                    pull=self.pull if hasattr(self, "pull") else "missing",
+                    remove=self.rm if hasattr(self, "rm") else True,
+                    user=self.user if hasattr(self, "user") else None,
+                    shm_size=self.shm_size if hasattr(self, "shm_size") else None,
+                    workdir=(
+                        expandvars(self.workdir) if hasattr(self, "workdir") else None
+                    ),
+                )
+                # Log within the function to retain scope for debugging
+                for _, stream_content in client_output:
+                    # All process logs will have the stream_type of stderr despite it being stdout
+                    logging.info(stream_content.decode("utf-8").strip())
+                    log += stream_content.decode("utf-8").strip()
+                logging.debug("--- Server Logs ---")
+                logging.debug(docker.logs(serving_container))
+                docker.stop(serving_container, time=None)
+                return log
+        # Try for Docker CLI Failure Conditions
+        # https://gabrieldemarmiesse.github.io/python-on-whales/sub-commands/container/#python_on_whales.components.container.cli_wrapper.ContainerCLI.run
+        output_generator = docker.run(
+            # Image
+            img,
+            # Command
+            split(expandvars(self.cmd)),
+            # Stream Logs
+            stream=True,
+            # Envs
+            envs=env,
+            # Volumes
+            volumes=volumes,
+            # Misc
+            cap_add=[self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"],
+            devices=[
+                expandvars(self.device) if hasattr(self, "device") else "/dev/dri"
+            ],
+            entrypoint=(
+                expandvars(self.entrypoint) if hasattr(self, "entrypoint") else None
+            ),
+            groups_add=[
+                (expandvars(self.groups_add) if hasattr(self, "group-add") else "109"),
+                "44",
+            ],
+            hostname=self.hostname if hasattr(self, "hostname") else None,
+            ipc=self.ipc if hasattr(self, "ipc") else None,
+            privileged=self.privileged if hasattr(self, "privileged") else True,
+            pull=self.pull if hasattr(self, "pull") else "missing",
+            remove=self.rm if hasattr(self, "rm") else True,
+            user=self.user if hasattr(self, "user") else None,
+            shm_size=self.shm_size if hasattr(self, "shm_size") else None,
+            workdir=expandvars(self.workdir) if hasattr(self, "workdir") else None,
+        )
         # Log within the function to retain scope for debugging
         log = ""
         for _, stream_content in output_generator:
             # All process logs will have the stream_type of stderr despite it being stdout
             logging.info(stream_content.decode("utf-8").strip())
             log += stream_content.decode("utf-8").strip()
-        return log, 0
+        return log
 
     def run(self):
         """Create a process for cmd on Baremetal System
@@ -313,10 +295,10 @@ class Test:
                 logging.error(stderr.decode("utf-8"))
             if stdout:
                 logging.info("Test Output: %s", stdout.decode("utf-8"))
-            return stdout.decode("utf-8"), p.RETURNCODE
+            return stdout.decode("utf-8")
         except KeyboardInterrupt:
             os.killpg(os.getpgid(p.pid), SIGKILL)
-            return "Keyboard Interrupt", 1
+            raise KeyboardInterrupt
 
 
 def parse_args():
@@ -329,7 +311,9 @@ def parse_args():
     parser.add_argument(
         "-a", "--actions-file", dest="actions_path", help="-a /path/to/.actions.json"
     )
-    parser.add_argument("-f", "--file", dest="file_path", help="-f /path/to/tests.yaml")
+    parser.add_argument(
+        "-f", "--file", dest="file_path", help="-f /path/to/tests.yaml", required=True
+    )
     parser.add_argument(
         "-v", "--verbose", dest="log_level", action="store_true", help="DEBUG Loglevel"
     )
@@ -361,11 +345,11 @@ if __name__ == "__main__":
     # Parse CLI Args
     args = parse_args()
     # Verify Logfile Handler Paths
-    if os.path.exists(args.logs_path) is False:
-        os.mkdir(args.logs_path)
+    if not os.path.exists(args.logs_path):
+        os.makedirs(args.logs_path)
     else:
         rmtree(args.logs_path)
-        os.mkdir(args.logs_path)
+        os.makedirs(args.logs_path)
     # Set up Logging for test-runner context
     logging.basicConfig(
         level=logging.INFO,
@@ -423,7 +407,6 @@ if __name__ == "__main__":
     logging.info("Setup Completed - Running Tests")
     summary = []
     ERROR = False
-    RETURNCODE = 1
     for idx, test in enumerate(tests):
         # Set Context to test-runner.log
         set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
@@ -434,18 +417,16 @@ if __name__ == "__main__":
         # If 'img' is present in the test, ensure that the test is a container run, otherwise run on baremetal
         # returns the stdout of the test and the RETURNCODE
         try:  # Try for Runtime Failure Conditions
-            log, RETURNCODE = (
-                test.container_run() if hasattr(test, "img") else test.run()
-            )
-        except:
+            log = test.container_run() if hasattr(test, "img") else test.run()
+        except DockerException as err:
+            logging.error(err)
             summary.append([idx + 1, test.name, "FAIL"])
             ERROR = True
             continue
-        finally:
-            if RETURNCODE != 0 and ERROR is False:
-                summary.append([idx + 1, test.name, "FAIL"])
-                ERROR = True
-                continue
+        except KeyboardInterrupt:
+            summary.append([idx + 1, test.name, "FAIL"])
+            ERROR = True
+            break
         summary.append([idx + 1, test.name, "PASS"])
     # Switch logging context back to the initial state
     set_log_filename(logging.getLogger(), "test-runner", args.logs_path)

@@ -41,14 +41,19 @@ for idx, test in enumerate(tests):
   # ...
   try:
       log, returncode = test.container_run() if hasattr(test, "img") else test.run()
-  except:
+  except DockerException as err:
+      logging.error(err)
       summary.append([idx + 1, test.name, "FAIL"])
       ERROR = True
-      continue # skip next line
+      continue
+  except KeyboardInterrupt:
+      summary.append([idx + 1, test.name, "FAIL"])
+      ERROR = True
+      break
   summary.append([idx + 1, test.name, "PASS"])
 # ...
 if ERROR:
-    exit(1)
+    sys.exit(1)
 ```
 
 >Note: The Test Runner Application's PASS/FAIL message and exit code are determined by the executed subprocess raising an exception during runtime. If for whatever reason the execution of the `container_run()` or `run()` functions would yield no log outputs, then the state of the host's environment does not match the pre-requisites for `test_runner.py` to be executed with that configuration.
