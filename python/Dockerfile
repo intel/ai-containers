@@ -65,6 +65,7 @@ ENV PATH /opt/conda/envs/idp/bin:/opt/conda/condabin:/opt/conda/bin/:${PATH}
 ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64:/opt/conda/envs/idp/lib:${LD_LIBRARY_PATH}
 
 RUN echo "conda activate idp" >> ~/.bashrc
+SHELL ["conda", "run", "-n", "idp", "/bin/bash", "-c"]
 
 RUN conda run -n idp python -m pip install --no-cache-dir numpy==1.22.4
 
