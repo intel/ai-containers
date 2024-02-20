@@ -24,7 +24,7 @@ ipex-serving-workflow-archive-${PACKAGE_OPTION:-pip}:
 ipex-serving-rest-workflow-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-torchserve
   cmd: bash /home/model-server/wf-store/rest-test.sh
-  serving: 'true'
+  serving: True
   volumes:
     - src: $PWD/pytorch/serving/model-store
       dst: /home/model-server/model-store
@@ -37,7 +37,7 @@ ipex-serving-rest-workflow-${PACKAGE_OPTION:-pip}:
 ipex-serving-rest-inference-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-torchserve
   cmd: bash /home/model-server/model-store/rest-test.sh
-  serving: 'true'
+  serving: True
   volumes:
     - src: $PWD/pytorch/serving/model-store
       dst: /home/model-server/model-store
@@ -48,7 +48,7 @@ ipex-serving-rest-inference-${PACKAGE_OPTION:-pip}:
 ipex-serving-grpc-inference-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-torchserve
   cmd: bash /home/model-server/model-store/grpc-test.sh
-  serving: 'true'
+  serving: True
   volumes:
     - src: $PWD/pytorch/serving/model-store
       dst: /home/model-server/model-store

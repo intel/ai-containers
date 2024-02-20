@@ -16,11 +16,11 @@ modin-3.9:
 modin-notebook-3.10:
   cmd: papermill --log-output jupyter/modin/IntelModin_Vs_Pandas.ipynb -k classical-ml
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.10
-  notebook: 'true'
+  notebook: True
 modin-notebook-3.9:
   cmd: papermill --log-output jupyter/modin/IntelModin_Vs_Pandas.ipynb -k classical-ml
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.9
-  notebook: 'true'
+  notebook: True
 scikit-3.10:
   cmd: conda run -n classical-ml sample-tests/scikit/test_scikit.sh
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.10
@@ -30,11 +30,11 @@ scikit-3.9:
 scikit-notebook-3.10:
   cmd: papermill --log-output jupyter/sklearn/Intel_Extension_For_SKLearn_GettingStarted.ipynb -k classical-ml
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.10
-  notebook: 'true'
+  notebook: True
 scikit-notebook-3.9:
   cmd: papermill --log-output jupyter/sklearn/Intel_Extension_For_SKLearn_GettingStarted.ipynb -k classical-ml
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.9
-  notebook: 'true'
+  notebook: True
 xgboost-3.10:
   cmd: conda run -n classical-ml sample-tests/xgboost/test_xgboost.sh
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.10
@@ -44,8 +44,8 @@ xgboost-3.9:
 xgboost-notebook-3.10:
   cmd: papermill --log-output jupyter/xgboost/IntelPython_XGBoost_Performance.ipynb -k classical-ml
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.10
-  notebook: 'true'
+  notebook: True
 xgboost-notebook-3.9:
   cmd: papermill --log-output jupyter/xgboost/IntelPython_XGBoost_Performance.ipynb -k classical-ml
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${PRESET_RELEASE:-2024.0.0}-py3.9
-  notebook: 'true'
+  notebook: True

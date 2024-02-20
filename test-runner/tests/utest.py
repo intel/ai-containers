@@ -1,8 +1,14 @@
+import os
+import sys
+
 import pytest
 import yaml
 from hypothesis import given
 from hypothesis.strategies import dictionaries, text
-from test_runner import Test
+
+sys.path.append(os.environ.get("PWD"))
+# pylint: disable-next=wrong-import-position
+from utils.test import Test
 
 
 @pytest.fixture
@@ -17,7 +23,7 @@ def test_input():
             pytest.raises(yaml_exc)
             for test in tests_json:
                 tests_list[test] = tests_json[test]
-    return [Test(test, tests_list[test]) for test in tests_list]
+    return [Test(name=test, **tests_list[test]) for test in tests_list]
 
 
 def test_container_run(test_input):
@@ -51,7 +57,7 @@ def test_run(test_input):
 def test_fuzz_container_run(name, arguments):
     "Fuzz container_run()."
     try:
-        test = Test(name, arguments)
+        test = Test(name=name, **arguments)
         test.container_run()
     except Exception as e:
         print(f"Caught exception: {e}")
@@ -61,7 +67,7 @@ def test_fuzz_container_run(name, arguments):
 def test_fuzz_run(name, arguments):
     "Fuzz run()."
     try:
-        test = Test(name, arguments)
+        test = Test(name=name, **arguments)
         test.run()
     except Exception as e:
         print(f"Caught exception: {e}")

@@ -31,281 +31,22 @@ import os
 import re
 import sys
 from argparse import ArgumentParser
-from shlex import split
 from shutil import rmtree
-from signal import SIGKILL
-from subprocess import PIPE, Popen
+from typing import List
 
 # Third Party
 from expandvars import expandvars
 from python_on_whales import DockerException, docker
 from tabulate import tabulate
+from utils.test import Test
 from yaml import YAMLError, full_load
 
 
-class Test:
-    """A class to represent a test, attributes are set dynamically via yaml config during __init__
-
-    Methods:
-        get_path(name=""):
-            Given a filename, find that file from the users current working directory
-        container_run():
-            Use Python on Whales to run a Docker Container with img and cmd
-        run():
-            Create a process for cmd on Baremetal System
-    """
-
-    def __init__(self, name, arguments):
-        """Initialize Test Object
-
-        Args:
-            name (string): Test name based on the key of the config's dictionary arguments
-            arguments (dict): Given a test from a yaml config file, arguments is a dictionary of
-                              those configs with the same yaml structure
-        """
-        self.name = name
-        for key, val in arguments.items():
-            if isinstance(val, dict) and key == "volumes":
-                setattr(self, key, val[key])
-            else:
-                setattr(self, key, val)
-
-    def get_path(self, name):
-        """Given a filename, find that file from the users current working directory
-
-        Args:
-            name (string): Filename
-
-        Returns:
-            string: Path to filename of input name
-        """
-        for root, _, files in os.walk(os.getcwd()):
-            if name in files:
-                return os.path.join(root, name)
-        logging.error("Notebook Dockerfile not found")
-        sys.exit(1)
-
-    def container_run(self):
-        """Use Python on Whales to run a Docker Container with img and cmd
-
-        Returns:
-            string: Concatenated streamed stdout and stderr output from subprocess
-            int: Exit code
-        """
-        # Define each volume as (src, dst) for a list of volumes
-        volumes = (
-            [(expandvars(vol["src"]), expandvars(vol["dst"])) for vol in self.volumes]
-            if hasattr(self, "volumes")
-            else []
-        )
-        # Define each env as {key: value} for a dict of envs
-        env = (
-            {key: expandvars(val) for key, val in self.env.items()}
-            if hasattr(self, "env")
-            else {}
-        )
-        default_env = {
-            "http_proxy": os.environ.get("http_proxy"),
-            "https_proxy": os.environ.get("https_proxy"),
-            "no_proxy": os.environ.get("no_proxy"),
-        }
-        img = expandvars(self.img)
-        # Always add proxies to the envs list
-        env.update(default_env)
-        # If Notebook modify image to include papermill
-        if hasattr(self, "notebook"):
-            if self.notebook == "true":
-                try:  # Try for Docker CLI Failure Conditions
-                    docker.run(img, ["which", "papermill"])
-                except DockerException as papermill_not_found:
-                    logging.error("Papermill not found: %s", papermill_not_found)
-                    docker.build(
-                        # context path
-                        ".",
-                        # Image Input and Proxy Args
-                        build_args={
-                            "BASE_IMAGE_NAME": img.split(":")[0],
-                            "BASE_IMAGE_TAG": img.split(":")[1],
-                            "http_proxy": os.environ.get("http_proxy"),
-                            "https_proxy": os.environ.get("https_proxy"),
-                        },
-                        # Input File
-                        file=self.get_path("Dockerfile.notebook"),
-                        # Output Tag = Input Tag
-                        tags=[img],
-                    )
-        if hasattr(self, "serving"):
-            if self.serving == "true":
-                log = ""
-                serving_container = docker.run(
-                    # Image
-                    img,
-                    # Stream Logs
-                    detach=True,
-                    # Envs
-                    envs=env,
-                    # Volumes
-                    volumes=volumes,
-                    # Networks
-                    networks=["host"],
-                    # Misc
-                    cap_add=[
-                        self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"
-                    ],
-                    devices=[
-                        (
-                            expandvars(self.device)
-                            if hasattr(self, "device")
-                            else "/dev/dri"
-                        )
-                    ],
-                    entrypoint=(
-                        expandvars(self.entrypoint)
-                        if hasattr(self, "entrypoint")
-                        else None
-                    ),
-                    hostname=self.hostname if hasattr(self, "hostname") else None,
-                    ipc=self.ipc if hasattr(self, "ipc") else None,
-                    privileged=(
-                        self.privileged if hasattr(self, "privileged") else True
-                    ),
-                    pull=self.pull if hasattr(self, "pull") else "missing",
-                    shm_size=self.shm_size if hasattr(self, "shm_size") else None,
-                )
-                client_output = docker.run(
-                    # Image
-                    "python:3.11-slim-bullseye",
-                    # Command
-                    split(expandvars(self.cmd)),
-                    # Stream Logs
-                    stream=True,
-                    # Envs
-                    envs=env,
-                    # Volumes
-                    volumes=volumes,
-                    # Networks
-                    networks=["host"],
-                    # Misc
-                    cap_add=[
-                        self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"
-                    ],
-                    devices=[
-                        (
-                            expandvars(self.device)
-                            if hasattr(self, "device")
-                            else "/dev/dri"
-                        )
-                    ],
-                    entrypoint=(
-                        expandvars(self.entrypoint)
-                        if hasattr(self, "entrypoint")
-                        else None
-                    ),
-                    hostname=self.hostname if hasattr(self, "hostname") else None,
-                    ipc=self.ipc if hasattr(self, "ipc") else None,
-                    privileged=(
-                        self.privileged if hasattr(self, "privileged") else True
-                    ),
-                    pull=self.pull if hasattr(self, "pull") else "missing",
-                    remove=self.rm if hasattr(self, "rm") else True,
-                    user=self.user if hasattr(self, "user") else None,
-                    shm_size=self.shm_size if hasattr(self, "shm_size") else None,
-                    workdir=(
-                        expandvars(self.workdir) if hasattr(self, "workdir") else None
-                    ),
-                )
-                # Log within the function to retain scope for debugging
-                for _, stream_content in client_output:
-                    # All process logs will have the stream_type of stderr despite it being stdout
-                    logging.info(stream_content.decode("utf-8").strip())
-                    log += stream_content.decode("utf-8").strip()
-                logging.debug("--- Server Logs ---")
-                logging.debug(docker.logs(serving_container))
-                docker.stop(serving_container, time=None)
-                return log
-        # Try for Docker CLI Failure Conditions
-        # https://gabrieldemarmiesse.github.io/python-on-whales/sub-commands/container/#python_on_whales.components.container.cli_wrapper.ContainerCLI.run
-        output_generator = docker.run(
-            # Image
-            img,
-            # Command
-            split(expandvars(self.cmd)),
-            # Stream Logs
-            stream=True,
-            # Envs
-            envs=env,
-            # Volumes
-            volumes=volumes,
-            # Misc
-            cap_add=[self.cap_add if hasattr(self, "cap_add") else "AUDIT_READ"],
-            devices=[
-                expandvars(self.device) if hasattr(self, "device") else "/dev/dri"
-            ],
-            entrypoint=(
-                expandvars(self.entrypoint) if hasattr(self, "entrypoint") else None
-            ),
-            groups_add=[
-                (expandvars(self.groups_add) if hasattr(self, "group-add") else "109"),
-                "44",
-            ],
-            hostname=self.hostname if hasattr(self, "hostname") else None,
-            ipc=self.ipc if hasattr(self, "ipc") else None,
-            privileged=self.privileged if hasattr(self, "privileged") else True,
-            pull=self.pull if hasattr(self, "pull") else "missing",
-            remove=self.rm if hasattr(self, "rm") else True,
-            user=self.user if hasattr(self, "user") else None,
-            shm_size=self.shm_size if hasattr(self, "shm_size") else None,
-            workdir=expandvars(self.workdir) if hasattr(self, "workdir") else None,
-        )
-        # Log within the function to retain scope for debugging
-        log = ""
-        for _, stream_content in output_generator:
-            # All process logs will have the stream_type of stderr despite it being stdout
-            logging.info(stream_content.decode("utf-8").strip())
-            log += stream_content.decode("utf-8").strip()
-        return log
-
-    def run(self):
-        """Create a process for cmd on Baremetal System
-
-        Returns:
-            string: Concatenated streamed stdout and stderr output from subprocess
-            int: Exit code
-        """
-        # Define each env as {key: value} for a dict of envs
-        env = (
-            {key: expandvars(val) for key, val in self.env.items()}
-            if hasattr(self, "env")
-            else {}
-        )
-        # Add host env to config envs
-        env.update(os.environ.copy())
-        logging.debug("Env: %s", env)
-        logging.info("%s Started", self.name)
-        p = Popen(
-            self.cmd,
-            stdout=PIPE,
-            stderr=PIPE,
-            env=env,
-            shell=True,
-        )
-        try:
-            stdout, stderr = p.communicate()
-            if stderr:
-                logging.error(stderr.decode("utf-8"))
-            if stdout:
-                logging.info("Test Output: %s", stdout.decode("utf-8"))
-            return stdout.decode("utf-8")
-        except KeyboardInterrupt:
-            os.killpg(os.getpgid(p.pid), SIGKILL)
-            raise KeyboardInterrupt
-
-
 def parse_args():
-    """Use argparse to parse command line arguments
+    """Parse command line arguments.
 
     Returns:
-        dict: Parsed command line arguments
+        dict: command line arguments
     """
     parser = ArgumentParser()
     parser.add_argument(
@@ -324,13 +65,13 @@ def parse_args():
     return parser.parse_args()
 
 
-def set_log_filename(logger, name, logs_path):
-    """Change filehandler file name in current logger context
+def set_log_filename(logger: logging.Logger, name: str, logs_path: str):
+    """Swap the current logger filename to another filename.
 
     Args:
-        logger (logging.RootLogger): Current logger context
-        name (string): New or Existing logger filename
-        logs_path (string): Path to logs folder
+        logger (logging.Logger): logger context
+        name (str): name of the new log filename
+        logs_path (str): path to the new log filename
     """
     test_handler = logging.FileHandler(f"{logs_path}/{name}.log")
     # Handler[0] is the stream output to stdout/stderr
@@ -339,6 +80,51 @@ def set_log_filename(logger, name, logs_path):
     test_handler.setLevel(logger.handlers[1].level)
     logger.removeHandler(logger.handlers[1])
     logger.addHandler(test_handler)
+
+
+def get_test_list(args: dict, tests_yaml: List[dict]):
+    """Parse tests from yaml file and expand them if necessary.
+
+    Args:
+        args (dict): command line arguments
+        tests_yaml (List[dict]): list of tests imported from a yaml file
+
+    Returns:
+        List[dict]: list of expanded tests
+    """
+    tests_list = {}
+    for test in tests_yaml:
+        if re.search(r"\$\{([A-Za-z0-9_]*)\:\-(.*?)\}", test):
+            if args.actions_path:
+                with open(args.actions_path, "r", encoding="utf-8") as actions_file:
+                    for key, dval in json.load(actions_file).items():
+                        if isinstance(dval, list) and key != "experimental":
+                            for _, val in enumerate(dval):
+                                os.environ[key] = str(val)
+                                if expandvars(test) not in tests_yaml.keys():
+                                    tests_list[expandvars(test)] = {
+                                        k: (
+                                            expandvars(v)
+                                            if isinstance(v, str)
+                                            else {k: v}
+                                        )
+                                        for k, v in tests_yaml[test].items()
+                                    }
+                                del os.environ[key]
+            else:
+                if expandvars(test) not in tests_yaml.keys():
+                    tests_list[expandvars(test)] = {
+                        key: expandvars(val) if isinstance(val, str) else {key: val}
+                        for key, val in tests_yaml[test].items()
+                    }
+        else:
+            tests_list[test] = dict(tests_yaml[test].items())
+        # Check that each test contains 'cmd' and is therefore a valid test
+        if "cmd" not in tests_yaml[test]:
+            logging.error("Command not found for %s", test)
+            sys.exit(1)
+
+    return tests_list
 
 
 if __name__ == "__main__":
@@ -370,40 +156,10 @@ if __name__ == "__main__":
         except YAMLError as yaml_exc:
             logging.error(yaml_exc)
             sys.exit(1)
-    tests_list = {}
-    for test in tests_json:
-        if re.search(r"\$\{([A-Za-z0-9_]*)\:\-(.*?)\}", test):
-            if args.actions_path:
-                with open(args.actions_path, "r", encoding="utf-8") as actions_file:
-                    for key, dval in json.load(actions_file).items():
-                        if isinstance(dval, list) and key != "experimental":
-                            for _, val in enumerate(dval):
-                                os.environ[key] = str(val)
-                                if expandvars(test) not in tests_json.keys():
-                                    tests_list[expandvars(test)] = {
-                                        k: (
-                                            expandvars(v)
-                                            if isinstance(v, str)
-                                            else {k: v}
-                                        )
-                                        for k, v in tests_json[test].items()
-                                    }
-                                del os.environ[key]
-            else:
-                if expandvars(test) not in tests_json.keys():
-                    tests_list[expandvars(test)] = {
-                        key: expandvars(val) if isinstance(val, str) else {key: val}
-                        for key, val in tests_json[test].items()
-                    }
-        else:
-            tests_list[test] = dict(tests_json[test].items())
-        # Check that each test contains 'cmd' and is therefore a valid test
-        if "cmd" not in tests_json[test]:
-            logging.error("Command not found for %s", test)
-            sys.exit(1)
+    tests_list = get_test_list(args, tests_json)
     logging.debug("Creating Test Objects from: %s", tests_list)
     # For each test, create a Test Object with the test name is the key of the test in yaml
-    tests = [Test(test, tests_list[test]) for test in tests_list]
+    tests = [Test(name=test, **tests_list[test]) for test in tests_list]
     logging.info("Setup Completed - Running Tests")
     summary = []
     ERROR = False
@@ -417,7 +173,7 @@ if __name__ == "__main__":
         # If 'img' is present in the test, ensure that the test is a container run, otherwise run on baremetal
         # returns the stdout of the test and the RETURNCODE
         try:  # Try for Runtime Failure Conditions
-            log = test.container_run() if hasattr(test, "img") else test.run()
+            log = test.container_run() if test.img else test.run()
         except DockerException as err:
             logging.error(err)
             summary.append([idx + 1, test.name, "FAIL"])

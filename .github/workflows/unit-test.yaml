@@ -27,5 +27,4 @@ jobs:
         run: venv/bin/python -m pytest tests/utest.py -W ignore::UserWarning
         working-directory: ${{ github.workspace }}/test-runner
         env:
-          PYTHONPATH: ${{ github.workspace }}/test-runner/tests
           REGISTRY: ${{ vars.REGISTRY }}
