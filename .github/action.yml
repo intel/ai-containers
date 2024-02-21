@@ -13,12 +13,19 @@ inputs:
     type: string
   registry:
     description: Container Registry URL
-    required: true
+    required: false
+    default: 'intel'
     type: string
   repo:
     description: Container Project Repository
-    required: true
+    required: false
+    default: 'ai-containers'
     type: string
+  no-push:
+    description: Do not push to Registry
+    required: false
+    default: false
+    type: boolean
 runs:
   using: composite
   steps:
@@ -35,6 +42,7 @@ runs:
       working-directory: ${{ inputs.group_dir }}
     - name: Push Containers
       shell: bash
+      if: ${{ !fromJson(inputs.no-push) }}
       run: |
         REGISTRY=${{ inputs.registry }} \
         REPO=${{ inputs.repo }} \
