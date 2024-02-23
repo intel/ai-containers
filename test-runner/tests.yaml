@@ -3,10 +3,10 @@ test1:
   cmd: bash -c "head -n 1 /workspace/requirements.txt" # volume mounted file
 # device: /dev/dri
 # ipc: host
-  notebook: 'true' # single quotes
+  notebook: True # single quotes
   env:
     REGISTRY: ${REGISTRY} # substitute env from host
-    DEBUG: "true" # double quotes
+    DEBUG: 'true' # double quotes
   volumes:
     - src: /tf_dataset
       dst: /tmp
@@ -19,4 +19,7 @@ test2:
 test3:
   img: ${REGISTRY}/aiops/compose-dev:latest # python 3.10
   cmd: python --version # will return python 3.11
-  serving: 'true'
+  serving: True
+test${TEST:-4}:
+  img: ${REGISTRY}/aiops/compose-dev:latest
+  cmd: echo "${TEST:-4}"

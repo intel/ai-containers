@@ -1,4 +1,5 @@
 # Intel® AI Tools Selector Preset Containers
+
 Intel® AI Tools Selector Preset Containers provides data scientists and developers with environment to perform various data-science tasks such as data analysis, data processing, machine learning and deep learning models training and inference. Each container is equipped with the Python packages and tools suited for each tasks while being powered by Intel® Distribution For Python. More detail about each container is described in the table below.
 
 ## Preset Containers
@@ -21,15 +22,18 @@ docker pull intel/deep-learning:latest-py3.9
 ```
 
 ## Run Preset Container
+
 There are 3 modes to run these containers:
 
 * [Interactive](#run-in-interactive-mode)
 * [Jupyter](#run-using-jupyter-notebook)
 * [Multi-Node Distributed Training](#run-in-multi-node-distributed-mode-advanced) (Deep Learning and Inference Optimization)
 
->**Note:** Modify the commands below to fit your use case, especially the image, environment variables, and GPU device path.
+> [!NOTE]
+> Modify the commands below to fit your use case, especially the image, environment variables, and GPU device path.
 
 ### Run in Interactive Mode
+
 This mode allows running the container in an interactive shell. This enables the ability to interact with the container's bash shell. Below is the command to start the container in interactive mode:
 
 #### Run on CPU
@@ -41,10 +45,11 @@ docker run -it --rm \
     intel/deep-learning:latest-py3.9 bash
 ```
 
->**Note:** Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications(Ex. Modin). Docker recommends increasing shared memory size using `--shm-size`.
-
+> [!NOTE]
+> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications(Ex. Modin). Docker recommends increasing shared memory size using `--shm-size`.
 
 #### Run on GPU
+
 Find your machine's `RENDER` and `VIDEO` group values to enable [Intel® Flex/Max GPU](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu.html).
 
 ```bash
@@ -65,31 +70,33 @@ docker run -it --rm \
     intel/deep-learning:latest-py3.9 bash
 ```
 
->**Note:** Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications(Ex. Modin). Docker recommends increasing shared memory size using `--shm-size`.
-
+> [!NOTE]
+> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications(Ex. Modin). Docker recommends increasing shared memory size using `--shm-size`.
 
 #### Next Steps
 
 1. For Deep Learning and Inference Optimization containers there will be separate conda environments for each AI framework: `pytorch-cpu`, `pytorch-gpu` and `tensorflow`. Use the command below to activate one environment:
 
-```bash
-conda activate <env-name>
-```
+    ```bash
+    conda activate <env-name>
+    ```
 
 2. Select a test from the `sample-tests` folder and run it using the following command as an example:
 
-```bash
-bash sample-tests/onnx/run.sh
-# or if no bash script is found
-python sample-tests/intel_extension_for_tensorflow/test_itex.py
-```
+    ```bash
+    bash sample-tests/onnx/run.sh
+    # or if no bash script is found
+    python sample-tests/intel_extension_for_tensorflow/test_itex.py
+    ```
 
 ### Run using Jupyter Notebook
+
 This mode launches a jupyterlab notebook server. The command below will start the jupyterlab server which can be accessed from a web browser. Each container includes jupyter kernel to enable conda environment in jupyter notebook. The port for this server is `8888` and is exposed by default when you run the container.
 
->**Note:** When launching a jupyter notebook server this way, docker assigns a [network](https://docs.docker.com/engine/tutorials/networkingcontainers/) such that the container can communicate with other applications like a web browser. By default docker launches containers with the `bridge` network, but if you are trying to access this server from a machine you are `ssh`'ing into, change the network mode with the `--net=host` flag and ensure you are local port forwarding with `ssh -L 8888:8888`.
+> [!NOTE]
+> When launching a jupyter notebook server this way, docker assigns a [network](https://docs.docker.com/engine/tutorials/networkingcontainers/) such that the container can communicate with other applications like a web browser. By default docker launches containers with the `bridge` network, but if you are trying to access this server from a machine you are `ssh`'ing into, change the network mode with the `--net=host` flag and ensure you are local port forwarding with `ssh -L 8888:8888`.
 
-#### Run on CPU
+#### Run on Jupyter CPU
 
 ```bash
 docker run -it --rm \
@@ -98,9 +105,11 @@ docker run -it --rm \
     intel/deep-learning:latest-py3.9
 ```
 
->**Note:** Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications(Ex. Modin). Docker recommends increasing shared memory size using `--shm-size`.
+> [!NOTE]
+> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications(Ex. Modin). Docker recommends increasing shared memory size using `--shm-size`.
 
-#### Run on GPU
+#### Run on Jupyter GPU
+
 Find your machine's `RENDER` and `VIDEO` group values to enable [Intel® Flex/Max GPU](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu.html).
 
 ```bash
@@ -121,7 +130,8 @@ docker run -it --rm \
     intel/deep-learning:latest-py3.9
 ```
 
->**Note:** Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications(Ex. Modin). Docker recommends increasing shared memory size using `--shm-size`.
+> [!NOTE]
+> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications(Ex. Modin). Docker recommends increasing shared memory size using `--shm-size`.
 
 #### Next Steps
 
@@ -149,6 +159,7 @@ docker run ... intel/deep-learning:latest-py3.9 \
 You can follow the instructions provided for [Tensorflow](./deep-learning/demo/tensorflow-distributed/README.md) and [PyTorch](./deep-learning/demo/pytorch-distributed/README.md) along with the Deep Learning or Inference Optimization presets using your preferred framework.
 
 ## Troubleshooting and Support
+
 If you face some issue in using the container you can find more information on how to troubleshoot [here](https://github.com/intel/ai-containers#troubleshooting). If you need more help feel free to submit an [issue](https://github.com/intel/ai-containers/issues).
 
 ---

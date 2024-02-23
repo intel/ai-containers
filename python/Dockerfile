@@ -40,7 +40,6 @@ SHELL ["/bin/bash", "-c"]
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends --fix-missing \
     ca-certificates \
-    curl/jammy-updates \
     wget
 
 FROM base AS idp
@@ -49,15 +48,15 @@ ARG PYTHON_VERSION
 ARG MINICONDA_VERSION
 ARG IDP_VERSION=core
 
-RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
+RUN wget --progress=dot:giga --no-check-certificate "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh" -O miniconda.sh && \
     chmod +x miniconda.sh && \
     ./miniconda.sh -b -p /opt/conda && \
     rm ./miniconda.sh && \
     ln -s /opt/conda ~/miniconda3 && \
-    export PATH=/opt/conda/bin/:${PATH} && \
+    export PATH="/opt/conda/bin/:${PATH}" && \
     conda update -y conda && \
     conda config --add channels intel && \
-    conda create -yn idp intelpython3_${IDP_VERSION} python=${PYTHON_VERSION} && \
+    conda create -yn idp "intelpython3_${IDP_VERSION}" "python=${PYTHON_VERSION}" && \
     conda init --all && \
     apt-get clean && conda clean -y --all && \
     rm -rf /var/lib/apt/lists/*
@@ -66,6 +65,7 @@ ENV PATH /opt/conda/envs/idp/bin:/opt/conda/condabin:/opt/conda/bin/:${PATH}
 ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64:/opt/conda/envs/idp/lib:${LD_LIBRARY_PATH}
 
 RUN echo "conda activate idp" >> ~/.bashrc
+SHELL ["conda", "run", "-n", "idp", "/bin/bash", "-c"]
 
 RUN conda run -n idp python -m pip install --no-cache-dir numpy==1.22.4
 
@@ -87,9 +87,9 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
 RUN rm -rf /usr/lib/python${PYTHON_VERSION}/EXTERNALLY-MANAGED
 
 # Some TF tools expect a "python" binary
-RUN ln -sf $(which python${PYTHON_VERSION}) /usr/local/bin/python && \
-    ln -sf $(which python${PYTHON_VERSION}) /usr/local/bin/python3 && \
-    ln -sf $(which python${PYTHON_VERSION}) /usr/bin/python
+RUN ln -sf "$(which python${PYTHON_VERSION})" /usr/local/bin/python && \
+    ln -sf "$(which python${PYTHON_VERSION})" /usr/local/bin/python3 && \
+    ln -sf "$(which python${PYTHON_VERSION})" /usr/bin/python
 
 RUN python -m pip --no-cache-dir install --upgrade \
     pip \

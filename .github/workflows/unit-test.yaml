@@ -1,31 +1,30 @@
+---
 name: Test Runner Unit Tests
 on:
   pull_request:
-    branches:
-      - develop
-
 permissions: read-all
-
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   unit-test:
     runs-on: [ test-runner ]
     steps:
-    - uses: actions/checkout@v4
-    - uses: docker/login-action@v3
-      with:
-        registry: ${{ vars.REGISTRY }}
-        username: ${{ secrets.REGISTRY_USER }}
-        password: ${{ secrets.REGISTRY_TOKEN }}
-    - name: Install requirements
-      run: | 
-        python -m venv venv
-        source venv/bin/activate
-        venv/bin/python -m pip install pytest
-        venv/bin/python -m pip install -r requirements.txt
-      working-directory: ${{ github.workspace }}/test-runner
-    - name: Unit Test
-      run: venv/bin/python -m pytest tests/utest.py -W ignore::UserWarning
-      working-directory: ${{ github.workspace }}/test-runner
-      env:
-        PYTHONPATH: ${{ github.workspace }}/test-runner/tests
-        REGISTRY: ${{ vars.REGISTRY }}
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.REGISTRY }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
+      - name: Install requirements
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          venv/bin/python -m pip install pytest hypothesis
+          venv/bin/python -m pip install -r requirements.txt
+        working-directory: ${{ github.workspace }}/test-runner
+      - name: Unit Test
+        run: venv/bin/python -m pytest tests/utest.py -W ignore::UserWarning
+        working-directory: ${{ github.workspace }}/test-runner
+        env:
+          REGISTRY: ${{ vars.REGISTRY }}

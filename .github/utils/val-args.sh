@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euf -o pipefail
+
 # Input string
 input_string="$1"
 
@@ -13,12 +15,16 @@ else
 fi
 
 # Use regex to extract key-value pairs with the cases:
-# my-dir: my-value
-# my_dir: my_value
-# my_dir=my-value
-# my_dir=my-value
-# mydir = myvalue
-# etc.
-##
-regex="([[:alnum:]_-]+)[[:space:]]*[:=][[:space:]]*([[:alnum:]\/=_\-\s']+)"
-echo $matched_line | grep -oP $regex | sed 's/: /=/g' >> $GITHUB_OUTPUT
+# The regex now ensures that there is at least one 'a-zA-Z' value present
+regex="([a-zA-Z]+[a-zA-Z0-9_-]+)\s*[:=]\s*([a-zA-Z0-9\/=_\-\s']+)"
+key_val_pairs=$(echo "$matched_line" | grep -oP "$regex" | sed 's/: /=/g')
+
+# Check if there is at least one key-value pair
+if [[ -z "$key_val_pairs" ]]; then
+  echo "Error: The matched line does not contain any valid key-value pairs."
+  exit 1
+fi
+
+# Print the key-value pairs
+echo "$key_val_pairs"
+echo "$key_val_pairs" >> "$GITHUB_OUTPUT"

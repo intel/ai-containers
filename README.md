@@ -1,14 +1,16 @@
 # Intel® AI Containers
+
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8270/badge)](https://www.bestpractices.dev/projects/8270)
 
 This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. used to scale out AI containers with versions of TensorFlow and PyTorch that have been optimized for Intel platforms. Scaling is done with python, Docker, kubernetes, kubeflow, cnvrg.io, Helm, and other container orchestration frameworks for use in the cloud and on-premise.
 
 ## Project Setup
 
-Define your project's registry each time you use the project:
+Define your project's registry and repository each time you use the project:
 
 ```bash
 export REGISTRY=<registry_name>
+export REPO=<repo_name>
 ```
 
 ### Set Up Docker Engine
@@ -22,10 +24,13 @@ Ensure you have Docker Compose installed on your machine. If you don't have this
 ```bash
 DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
 mkdir -p $DOCKER_CONFIG/cli-plugins
-curl -SL https://github.com/docker/compose/releases/download/v2.19.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+curl -SL https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
 chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 docker compose version
 ```
+
+> [!CAUTION]
+> Docker compose `v2.20.0` is the minimum required version for some container groups.
 
 #### Development Container
 
@@ -80,7 +85,7 @@ For more information on how to customize your recipe, see the [docker compose do
 
 ### Partial Layer Integration
 
-When re-using the AI Ingredient Containers for Intel Architectures it is often more efficient to only use portions of the image rather than all of the layers. The provided examples copy only the python environment and cli tools installed in the image.
+When re-using the AI Ingredient Containers for Intel Architectures it is often more efficient to only use portions of the image rather than all of the layers. The provided examples copy only the python environment and command-line tools installed in the image.
 
 For Stock Python:
 
@@ -108,7 +113,8 @@ And then build and test using GitHub Actions.
 ## Notebooks and MLFlow
 
 ### Jupyter
-When using a container intended to launch a jupyter notebook server, start the Jupyter Server via the docker run command and copy the url (something like `http://127.0.0.1:$PORT/?token=***`) into your browser, the port is 8888 by default.
+
+When using a container intended to launch a jupyter notebook server, start the Jupyter Server via the docker run command and copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser, the port is 8888 by default.
 
 ```bash
 cd <framework>
@@ -117,6 +123,7 @@ docker compose run -d --rm <image-name> jupyter notebook --notebook-dir=/jupyter
 ```
 
 ## MLFlow
+
 Add an MLFLow Example:
 
 - [TensorFlow](https://github.com/mlflow/mlflow/blob/master/examples/tensorflow/train.py)
@@ -139,13 +146,13 @@ Access the results at `https://localhost:<port>`, the default port is 5000.
 
 ## Troubleshooting
 
-* See the [Docker Troubleshooting Article](https://docs.docker.com/engine/install/troubleshoot/).
-* Verify that [Docker Engine Post-Install Steps](https://docs.docker.com/engine/install/linux-postinstall/) are completed.
-* When facing socket error check the group membership of the user and ensure they are part of the `docker` group.
-* After changing any docker files or configs, restart the docker service `sudo systemctl restart docker`.
-* Enable [Docker Desktop for WSL 2](https://docs.docker.com/desktop/windows/wsl/).
-* If you are trying to access a container UI from the browser, make sure you have [port forwarded](https://code.visualstudio.com/docs/remote/ssh#_forwarding-a-port-creating-ssh-tunnel) and reconnect.
-* If your environment requires a proxy to access the internet, export your development system's proxy settings to the docker environment:
+- See the [Docker Troubleshooting Article](https://docs.docker.com/engine/install/troubleshoot/).
+- Verify that [Docker Engine Post-Install Steps](https://docs.docker.com/engine/install/linux-postinstall/) are completed.
+- When facing socket error check the group membership of the user and ensure they are part of the `docker` group.
+- After changing any docker files or configs, restart the docker service `sudo systemctl restart docker`.
+- Enable [Docker Desktop for WSL 2](https://docs.docker.com/desktop/windows/wsl/).
+- If you are trying to access a container UI from the browser, make sure you have [port forwarded](https://code.visualstudio.com/docs/remote/ssh#_forwarding-a-port-creating-ssh-tunnel) and reconnect.
+- If your environment requires a proxy to access the internet, export your development system's proxy settings to the docker environment:
 
 ```bash
 export DOCKER_BUILD_ARGS="--build-arg ftp_proxy=${ftp_proxy} \
@@ -178,4 +185,4 @@ suggestion or bug report, search the existing GitHub issues to see if your issue
 
 ---
 
-* [Trademarks](http://www.intel.com/content/www/us/en/legal/trademarks.html)
+- [Trademarks](http://www.intel.com/content/www/us/en/legal/trademarks.html)

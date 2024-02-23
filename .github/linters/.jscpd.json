@@ -1,0 +1,5 @@
+{
+    "ignore": [
+        "test-runner/test_runner.py"
+    ]
+}

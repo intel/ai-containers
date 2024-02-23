@@ -3,7 +3,6 @@ name: Review Pipeline Validation
 on:
   pull_request_review:
     types: [submitted, edited]
-
 permissions:
   actions: read
   checks: read
@@ -18,7 +17,6 @@ permissions:
   repository-projects: read
   security-events: read
   statuses: read
-
 jobs:
   check-review:
     runs-on: [ k8-runners ]
@@ -27,11 +25,14 @@ jobs:
       group_dir: ${{ steps.comment-inputs.outputs.group_dir }}
       env_overrides: ${{ steps.comment-inputs.outputs.env_overrides }}
       runner_label: ${{ steps.comment-inputs.outputs.runner_label }}
+      no-build: ${{ steps.comment-inputs.outputs.no-build || false }}
     steps:
       - uses: actions/checkout@v4
       - name: Get Inputs
         id: comment-inputs
-        run: bash .github/utils/val-args.sh "${{ github.event.review.body }}"
+        run: bash .github/utils/val-args.sh "$BODY"
+        env:
+          BODY: ${{ github.event.review.body }}
       - name: Remove PASS Label
         if: contains(github.event.pull_request.labels.*.name, 'PASS')
         uses: actions/github-script@v7
@@ -74,6 +75,7 @@ jobs:
       group_dir: ${{ needs.check-review.outputs.group_dir }}
       env_overrides: ${{ needs.check-review.outputs.env_overrides || '' }}
       runner_label: ${{ needs.check-review.outputs.runner_label }}
+      no-build: ${{ fromJSON(needs.check-review.outputs.no-build) }}
     secrets: inherit
   status-check:
     needs: [ check-review, container-pipeline-tester ]

@@ -16,35 +16,33 @@
 # limitations under the License.
 #
 #
+# pylint: skip-file
 
 from neural_compressor.config import PostTrainingQuantConfig
-from neural_compressor.data import DataLoader
-from neural_compressor.data import Datasets
+from neural_compressor.data import DataLoader, Datasets
 from neural_compressor.quantization import fit
 from neural_compressor.utils.utility import set_workspace
+from torchvision.models import ResNet18_Weights, resnet18
 
-from torchvision.models import resnet18, ResNet18_Weights
 
 def main(args):
-
     # Built-in dummy dataset
     set_workspace(args.workspace)
-    dataset = Datasets('pytorch')['dummy'](shape=(1, 3, 224, 224))
+    dataset = Datasets("pytorch")["dummy"](shape=(1, 3, 224, 224))
     # Built-in calibration dataloader and evaluation dataloader for Quantization.
-    dataloader = DataLoader(framework='pytorch', dataset=dataset)
+    dataloader = DataLoader(framework="pytorch", dataset=dataset)
     # Post Training Quantization Config
-    config = PostTrainingQuantConfig(args.device, backend='ipex')
+    config = PostTrainingQuantConfig(args.device, backend="ipex")
     model = resnet18(weights=ResNet18_Weights.DEFAULT).to(args.device)
     # Just call fit to do quantization.
-    q_model = fit(model=model,
-                  conf=config,
-                  calib_dataloader=dataloader)
+    q_model = fit(model=model, conf=config, calib_dataloader=dataloader)
 
 
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('--device', default='cpu', choices=['cpu', 'xpu'])
-    parser.add_argument('--workspace', required=True)
+    parser.add_argument("--device", default="cpu", choices=["cpu", "xpu"])
+    parser.add_argument("--workspace", required=True)
     args = parser.parse_args()
     main(args)

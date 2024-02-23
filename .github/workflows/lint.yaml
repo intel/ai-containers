@@ -1,0 +1,31 @@
+---
+name: Lint
+permissions: read-all
+on:
+  push: null
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    name: Lint
+    runs-on: [k8-runners]
+    permissions:
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Super-linter
+        uses: super-linter/super-linter/slim@v5.7.2
+        env:
+          DEFAULT_BRANCH: main
+          # To report GitHub Actions status checks
+          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
+          GITHUB_ACTIONS_COMMAND_ARGS: '-ignore SC.*'
+          VALIDATE_KUBERNETES_KUBECONFORM: false
+          VALIDATE_NATURAL_LANGUAGE: false
+          VALIDATE_PYTHON_FLAKE8: false
+          VALIDATE_PYTHON_MYPY: false

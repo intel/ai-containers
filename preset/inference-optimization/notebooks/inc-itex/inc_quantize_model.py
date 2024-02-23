@@ -1,28 +1,36 @@
+# pylint: skip-file
 import sys
 
 try:
     import neural_compressor as inc
+
     print("neural_compressor version {}".format(inc.__version__))
 except:
     try:
         import lpot as inc
+
         print("LPOT version {}".format(inc.__version__))
     except:
         import ilit as inc
+
         print("iLiT version {}".format(inc.__version__))
 
-if inc.__version__ == '1.2':
-    print("This script doesn't support LPOT 1.2, please install LPOT 1.1, 1.2.1 or newer")
+if inc.__version__ == "1.2":
+    print(
+        "This script doesn't support LPOT 1.2, please install LPOT 1.1, 1.2.1 or newer"
+    )
     sys.exit(1)
 
-import alexnet
 import math
+
+import alexnet
 import mnist_dataset
 
 
 def save_int8_frezon_pb(q_model, path):
     from tensorflow.python.platform import gfile
-    f = gfile.GFile(path, 'wb')
+
+    f = gfile.GFile(path, "wb")
     f.write(q_model.graph_def.SerializeToString())
     print("Save to {}".format(path))
 
@@ -32,13 +40,20 @@ class Dataloader(object):
         self.batch_size = batch_size
 
     def __iter__(self):
-        x_train, y_train, label_train, x_test, y_test, label_test = mnist_dataset.read_data()
+        (
+            x_train,
+            y_train,
+            label_train,
+            x_test,
+            y_test,
+            label_test,
+        ) = mnist_dataset.read_data()
         batch_nums = math.ceil(len(x_test) / self.batch_size)
 
         for i in range(batch_nums - 1):
             begin = i * self.batch_size
             end = (i + 1) * self.batch_size
-            yield x_test[begin: end], label_test[begin: end]
+            yield x_test[begin:end], label_test[begin:end]
 
         begin = (batch_nums - 1) * self.batch_size
         yield x_test[begin:], label_test[begin:]
@@ -47,6 +62,7 @@ class Dataloader(object):
 def auto_tune(input_graph_path, yaml_config, batch_size):
     fp32_graph = alexnet.load_pb(input_graph_path)
     from neural_compressor import experimental
+
     quan = experimental.Quantization(yaml_config)
     dataloader = Dataloader(batch_size)
     quan.model = fp32_graph

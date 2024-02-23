@@ -1,7 +1,6 @@
+---
 name: Container Pipeline Tester
-
 permissions: read-all
-
 on:
   workflow_dispatch:
     inputs:
@@ -19,7 +18,7 @@ on:
         required: true
         type: string
       no-build:
-        description: 'No build'
+        description: No build
         default: false
         required: true
         type: boolean
@@ -62,6 +61,8 @@ jobs:
       credentials:
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
+      volumes:
+        - /usr/local/share/ca-certificates/:/usr/local/share/ca-certificates/
     env: ${{ matrix }}
     runs-on: [ builder ]
     strategy:
@@ -76,6 +77,8 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
         if: ${{ !inputs.no-build }}
+      - name: Setup Intel Certificates
+        run: update-ca-certificates --fresh
       - name: Build Container Group
         if: ${{ !inputs.no-build }}
         uses: ./.github
@@ -83,6 +86,8 @@ jobs:
           group_dir: ${{ inputs.group_dir }}
           env_overrides: ${{ inputs.env_overrides }}
           registry: ${{ vars.REGISTRY }}
+          repo: ${{ vars.REPO }}
+          no-push: false
   setup-test:
     needs: [ build-containers ]
     runs-on: [ k8-runners ]
@@ -113,6 +118,8 @@ jobs:
         uses: ./test-runner
         with:
           mlops_repo: ${{ vars.MLOPS_REPO }}
+          mlops_ref: ${{ github.ref }}
+          recipe_dir: ${{ inputs.group_dir }}
           registry: ${{ vars.REGISTRY }}
           test_dir: ${{ matrix.recipe }}
           token: ${{ github.token }}

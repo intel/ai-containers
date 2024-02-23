@@ -55,7 +55,6 @@ RUN apt-get update -y && \
     ca-certificates \
     clinfo \
     cmake \
-    curl \
     diffutils \
     g++ \
     gcc \
@@ -81,11 +80,11 @@ ARG LEVEL_ZERO_DEV_VER
 ARG DPCPP_VER
 ARG MKL_VER
 
-RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+RUN wget --progress=dot:giga -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
       gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg && \
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
         tee /etc/apt/sources.list.d/intel-gpu-jammy.list &&\
-    wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+    wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
         | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
     echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
         | tee /etc/apt/sources.list.d/oneAPI.list
@@ -102,7 +101,7 @@ RUN apt-get update && \
     libglib2.0-0  && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-    
+
 FROM dgpu-base as deep-learning-python
 
 # Setting up non-root directories
@@ -117,12 +116,12 @@ ARG MINICONDA_VERSION
 ARG PYTHON_VERSION
 ARG IDP_VERSION
 
-RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
+RUN wget --progress=dot:giga --no-check-certificate "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh" -O miniconda.sh && \
     chmod +x miniconda.sh && \
-    ./miniconda.sh -b -p ${CONDA_ROOT} && \
+    ./miniconda.sh -b -p "${CONDA_ROOT}" && \
     rm ./miniconda.sh && \
-    ln -s ${CONDA_ROOT} ${CONDA_ROOT}/../miniconda3 && \
-    export PATH=${CONDA_ROOT}/bin/:${PATH} && \
+    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniconda3" && \
+    export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda update -y conda && \
     conda config --add channels intel && \
     conda init --all && \
@@ -254,12 +253,12 @@ RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
     mkdir ~/.local && chmod a+rwx ~/.local
 
 RUN \
-    ${CONDA_ROOT}/envs/pytorch-cpu/bin/python -m ipykernel install --user --name pytorch-cpu --display-name "${KERNEL_NAME_PT}" && \
-    ${CONDA_ROOT}/envs/pytorch-cpu/bin/kernda -o -y ~/.local/share/jupyter/kernels/$(echo pytorch-cpu | sed -e 's/\(.*\)/\L\1/')/kernel.json && \
-    ${CONDA_ROOT}/envs/pytorch-gpu/bin/python -m ipykernel install --user --name pytorch-gpu --display-name "${KERNEL_NAME_PT}" && \
-    ${CONDA_ROOT}/envs/pytorch-gpu/bin/kernda -o -y ~/.local/share/jupyter/kernels/$(echo pytorch-gpu | sed -e 's/\(.*\)/\L\1/')/kernel.json && \
-    ${CONDA_ROOT}/envs/tensorflow/bin/python -m ipykernel install --user --name tensorflow --display-name "${KERNEL_NAME_TF}" && \
-    ${CONDA_ROOT}/envs/tensorflow/bin/kernda -o -y ~/.local/share/jupyter/kernels/$(echo tensorflow | sed -e 's/\(.*\)/\L\1/')/kernel.json && \
+    "${CONDA_ROOT}/envs/pytorch-cpu/bin/python" -m ipykernel install --user --name pytorch-cpu --display-name "${KERNEL_NAME_PT}" && \
+    "${CONDA_ROOT}/envs/pytorch-cpu/bin/kernda" -o -y "$HOME/.local/share/jupyter/kernels/$(echo pytorch-cpu | sed -e 's/\(.*\)/\L\1/')/kernel.json" && \
+    "${CONDA_ROOT}/envs/pytorch-gpu/bin/python" -m ipykernel install --user --name pytorch-gpu --display-name "${KERNEL_NAME_PT}" && \
+    "${CONDA_ROOT}/envs/pytorch-gpu/bin/kernda" -o -y "$HOME/.local/share/jupyter/kernels/$(echo pytorch-gpu | sed -e 's/\(.*\)/\L\1/')/kernel.json" && \
+    "${CONDA_ROOT}/envs/tensorflow/bin/python" -m ipykernel install --user --name tensorflow --display-name "${KERNEL_NAME_TF}" && \
+    "${CONDA_ROOT}/envs/tensorflow/bin/kernda" -o -y "$HOME/.local/share/jupyter/kernels/$(echo tensorflow | sed -e 's/\(.*\)/\L\1/')/kernel.json" && \
     python -m ipykernel.kernelspec --user
 
 CMD ["bash", "-c", "jupyter notebook --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
@@ -278,7 +277,7 @@ RUN if [ ${CCL_VER} != "N/A" ]; then \
     fi
 
 # oneCCl specific flags
-ENV CCL_ROOT="/opt/intel/oneapi/lib/intel64" 
+ENV CCL_ROOT="/opt/intel/oneapi/lib/intel64"
 ENV CCL_ZE_IPC_EXCHANGE=sockets
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib/intel64/libfabric:${LD_LIBRARY_PATH}
 

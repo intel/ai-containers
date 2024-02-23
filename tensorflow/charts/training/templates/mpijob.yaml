@@ -45,7 +45,7 @@ spec:
       template:
         spec:
           containers:
-          - image: "{{ .Values.imageName }}:{{ .Values.imageTag }}" 
+          - image: "{{ .Values.imageName }}:{{ .Values.imageTag }}"
             name: mpi
             resources:
               limits:

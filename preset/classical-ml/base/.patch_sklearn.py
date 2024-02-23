@@ -25,8 +25,9 @@
 #
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
+# pylint: skip-file
 
-from sklearnex import patch_sklearn
-from sklearnex import unpatch_sklearn
+from sklearnex import patch_sklearn, unpatch_sklearn
+
 patch_sklearn()
 print("To disable Intel(R) Extension for Scikit-learn*, you can run: unpatch_sklearn()")

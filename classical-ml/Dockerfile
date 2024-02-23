@@ -36,11 +36,11 @@ RUN python -m pip install --no-cache-dir \
 COPY base/.patch_sklearn.py ${HOME}/.patch_sklearn.py
 
 RUN mkdir -p /licensing && \
-	wget -O - https://github.com/intel/scikit-learn-intelex/archive/refs/tags/${SCIKIT_VERSION}.tar.gz | \
+	wget --progress=dot:giga -O - https://github.com/intel/scikit-learn-intelex/archive/refs/tags/${SCIKIT_VERSION}.tar.gz | \
 	tar -xz -C /licensing --strip=2 "scikit-learn-intelex-${SCIKIT_VERSION}/doc/third-party-programs-sklearnex.txt" \
 	"scikit-learn-intelex-${SCIKIT_VERSION}/doc/daal4py/third-party-programs.txt"
 
-RUN curl --insecure https://raw.githubusercontent.com/intel/scikit-learn-intelex/${SCIKIT_VERSION}/LICENSE -o /licensing/SCIKIT_LICENSE
+RUN wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/intel/scikit-learn-intelex/${SCIKIT_VERSION}/LICENSE -O /licensing/SCIKIT_LICENSE
 
 FROM ${COMPOSE_PROJECT_NAME}-python AS ml-base-idp
 
@@ -53,7 +53,7 @@ RUN python -m pip install --no-cache-dir --ignore-installed \
     daal4py \
     matplotlib \
     # https://github.com/intel/scikit-learn-intelex/blob/master/requirements-test.txt
-    numpy==1.23.0 \ 
+    numpy==1.23.0 \
     scikit-learn-intelex${SCIKIT_VERSION:+==${SCIKIT_VERSION}} \
     threadpoolctl \
     xgboost${XGBOOST_VERSION:+==${XGBOOST_VERSION}} && \
@@ -63,11 +63,10 @@ ENV PYTHONSTARTUP=${HOME}/.patch_sklearn.py
 COPY base/.patch_sklearn.py ${HOME}/.patch_sklearn.py
 
 RUN mkdir -p /licensing && \
-	wget -O - https://github.com/intel/scikit-learn-intelex/archive/refs/tags/${SCIKIT_VERSION}.tar.gz | \
+	wget --progress=dot:giga -O - https://github.com/intel/scikit-learn-intelex/archive/refs/tags/${SCIKIT_VERSION}.tar.gz | \
 	tar -xz -C /licensing --strip=2 "scikit-learn-intelex-${SCIKIT_VERSION}/doc/third-party-programs-sklearnex.txt" \
-	"scikit-learn-intelex-${SCIKIT_VERSION}/doc/daal4py/third-party-programs.txt"
-
-RUN curl --insecure https://raw.githubusercontent.com/intel/scikit-learn-intelex/${SCIKIT_VERSION}/LICENSE -o /licensing/SCIKIT_LICENSE
+	"scikit-learn-intelex-${SCIKIT_VERSION}/doc/daal4py/third-party-programs.txt" && \
+    wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/intel/scikit-learn-intelex/${SCIKIT_VERSION}/LICENSE -O /licensing/SCIKIT_LICENSE
 
 FROM ml-base-${PACKAGE_OPTION} AS jupyter
 
@@ -89,4 +88,4 @@ RUN python -m pip install --no-cache-dir mlflow
 ARG PORT=5000
 EXPOSE $PORT
 
-CMD ["mlflow", "server", "-h", "0.0.0.0", "-p", $PORT]
+CMD ["mlflow", "server", "-h", "0.0.0.0", "-p", "$PORT"]

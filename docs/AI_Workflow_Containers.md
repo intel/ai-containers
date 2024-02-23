@@ -1,5 +1,7 @@
 # Intel® AI Workflows
+
 These containers are for domain use-cases like Disease Prediction, Credit Card Fraud Detection, and Document Automation.
+
 |                                                           Container                                                          |Framework|                         Docker Pull Command                         |Compressed Size|
 |------------------------------------------------------------------------------------------------------------------------------|---------|---------------------------------------------------------------------|---------------|
 |              [Document Automation Fine Tuning](https://github.com/intel/document-automation/blob/main/README.md)             |    -    |   ```docker pull intel/ai-workflows:doc-automation-fine-tuning```   |     2.53GB    |

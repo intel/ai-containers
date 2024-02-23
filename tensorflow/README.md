@@ -50,7 +50,7 @@ Built from Base
 | ICD_VER | `23.17.26241.33-647~22.04` | OpenCL Version |
 | LEVEL_ZERO_GPU_VER | `1.3.26241.33-647~22.04` | Level Zero GPU Version |
 | LEVEL_ZERO_VER | `1.11.0-647~22.04` | Level Zero Version |
-| DPCPP_VER | `2023.2.1-16` | DPCPP Version | 
+| DPCPP_VER | `2023.2.1-16` | DPCPP Version |
 | MKL Version | `2023.2.0-49495` | MKL Version |
 | CCL_VER | `2021.10.0-49084` | CCL Version |
 | TF_VERSION | `2.13` | TensorFlow Version |

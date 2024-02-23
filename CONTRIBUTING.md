@@ -1,57 +1,67 @@
 # Contributing
 
-### License
+Thank you for considering contributing to Intel® AI Containers! We welcome your help to make this project better.
 
-Intel AI Machine Learning Operations is licensed under the terms in [LICENSE](#license). By contributing to the project, you agree to the license and copyright terms therein and release your contribution under these terms.
+## Getting Started
 
-### Sign your work
+Before you start contributing, please take a moment to review the following guidelines.
 
-Please use the sign-off line at the end of the patch. Your signature certifies that you wrote the patch or otherwise have the right to pass it on as an open-source patch. The rules are pretty simple: if you can certify
-the below (from [developercertificate.org](http://developercertificate.org/)):
+## Code of Conduct
 
-```
-Developer Certificate of Origin
-Version 1.1
+This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). Please review it to understand the expectations for participant behavior.
 
-Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
-660 York Street, Suite 102,
-San Francisco, CA 94110 USA
+### How to Contribute
 
-Everyone is permitted to copy and distribute verbatim copies of this
-license document, but changing it is not allowed.
+1. Fork the repository.
+2. Create a new branch for your contribution: `git checkout -b feature/your-feature`.
+3. Install [pre-commit](https://pre-commit.com/), [Docker](https://docs.docker.com/engine/install/), and [Python 3.8+](https://www.python.org/downloads/).
+4. Follow the [Project Setup](README.md#project-setup) steps.
+5. Install the third-party python dependencies necessary for pre-commit with `pip install pytest pylint black`.
+6. Make your changes, commit, and sign your changes: `git commit -s -m 'Add your feature'`.
+7. Push to the branch: `git push origin feature/your-feature`.
+8. Submit a pull request.
 
-Developer's Certificate of Origin 1.1
+## Contribution Guidelines
 
-By making a contribution to this project, I certify that:
+To ensure a smooth and effective contribution process, please follow these guidelines:
 
-(a) The contribution was created in whole or in part by me and I
-    have the right to submit it under the open source license
-    indicated in the file; or
+### Reporting Issues
 
-(b) The contribution is based upon previous work that, to the best
-    of my knowledge, is covered under an appropriate open source
-    license and I have the right under that license to submit that
-    work with modifications, whether created in whole or in part
-    by me, under the same open source license (unless I am
-    permitted to submit under a different license), as indicated
-    in the file; or
+- Before creating a new issue, check if it already exists.
+- Use a clear and descriptive title for the issue.
+- Provide a detailed description of the issue, including steps to reproduce it.
 
-(c) The contribution was provided directly to me by some other
-    person who certified (a), (b) or (c) and I have not modified
-    it.
+### Making Changes
 
-(d) I understand and agree that this project and the contribution
-    are public and that a record of the contribution (including all
-    personal information I submit with it, including my sign-off) is
-    maintained indefinitely and may be redistributed consistent with
-    this project or the open source license(s) involved.
-```
+- Fork the repository and create a new branch for your changes.
+- Keep each pull request focused on a single feature or bugfix.
+- Write clear and descriptive commit messages.
+- Keep code changes concise and well-documented.
+- Ensure that your code adheres to the project's coding standards.
 
-Then you just add a line to every git commit message:
+### Testing
 
-    Signed-off-by: Joe Smith <joe.smith@email.com>
+- Include tests for your changes, if applicable. Utilize the [test-runner](./test-runner/README.md) test framework for creating your tests
+- Ensure that all existing tests pass before submitting a pull request.
+- Provide information on how to test your changes.
+- Utilize automated testing by following the [Pull Request Template](./.github/pull_request_template.md)'s guidelines on how to run your container tests using GitHub Actions.
 
-Use your real name (sorry, no pseudonyms or anonymous contributions.)
+### Documentation
 
-If you set your `user.name` and `user.email` git configs, you can sign your
-commit automatically with `git commit -s`.
+- If you make changes that affect the project's documentation, update it accordingly.
+- Document new features and functionalities.
+
+### Code Style
+
+- Follow the established [code style](https://google.github.io/styleguide/pyguide.html) for this project.
+- Consistent and clean code is highly appreciated.
+
+### Pull Requests
+
+- Include a summary of your changes in your pull request.
+- Reference the relevant issue(s) if applicable.
+- Be responsive to feedback and be ready to make further changes if necessary.
+
+## License
+
+Intel® AI Containers is licensed under the terms in [LICENSE](#license). By contributing to the project, you agree to the license and copyright terms therein and release your contribution under these terms.

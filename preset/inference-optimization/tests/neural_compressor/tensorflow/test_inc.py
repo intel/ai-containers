@@ -16,32 +16,35 @@
 # limitations under the License.
 #
 #
+# pylint: skip-file
 
 from neural_compressor.config import PostTrainingQuantConfig
-from neural_compressor.data import DataLoader
-from neural_compressor.data import Datasets
+from neural_compressor.data import DataLoader, Datasets
 from neural_compressor.quantization import fit
 from neural_compressor.utils.utility import set_workspace
 
-def main(args):
 
+def main(args):
     # Built-in dummy dataset
     set_workspace(args.workspace)
-    dataset = Datasets('tensorflow')['dummy'](shape=(1, 224, 224, 3))
+    dataset = Datasets("tensorflow")["dummy"](shape=(1, 224, 224, 3))
     # Built-in calibration dataloader and evaluation dataloader for Quantization.
-    dataloader = DataLoader(framework='tensorflow', dataset=dataset)
+    dataloader = DataLoader(framework="tensorflow", dataset=dataset)
     # Post Training Quantization Config
-    config = PostTrainingQuantConfig(args.device, backend='itex')
+    config = PostTrainingQuantConfig(args.device, backend="itex")
     # Just call fit to do quantization.
-    q_model = fit(model="/home/dev/input_model/mobilenet_v1_1.0_224_frozen.pb",
-                  conf=config,
-                  calib_dataloader=dataloader)
+    q_model = fit(
+        model="/home/dev/input_model/mobilenet_v1_1.0_224_frozen.pb",
+        conf=config,
+        calib_dataloader=dataloader,
+    )
 
 
 if __name__ == "__main__":
     import argparse
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('--device', default='cpu', choices=['cpu', 'gpu'])
-    parser.add_argument('--workspace', required=True)
+    parser.add_argument("--device", default="cpu", choices=["cpu", "gpu"])
+    parser.add_argument("--workspace", required=True)
     args = parser.parse_args()
     main(args)

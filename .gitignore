@@ -1,4 +1,5 @@
 .env
+**/.hypothesis
 .pytest*
 .secrets
 .vscode

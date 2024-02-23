@@ -43,7 +43,6 @@ RUN apt-get update -y && \
     apt-get install -y --no-install-recommends --fix-missing \
     bzip2 \
     ca-certificates \
-    curl \
     diffutils \
     gcc \
     git \
@@ -70,12 +69,12 @@ ARG PYTHON_VERSION
 ARG IDP_VERSION
 ARG INTEL_CHANNEL
 
-RUN wget --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \        
+RUN wget --progress=dot:giga --no-check-certificate "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh" -O miniconda.sh && \
     chmod +x miniconda.sh && \
-    ./miniconda.sh -b -p ${CONDA_ROOT} && \
+    ./miniconda.sh -b -p "${CONDA_ROOT}" && \
     rm ./miniconda.sh && \
-    ln -s ${CONDA_ROOT} ${CONDA_ROOT}/../miniconda3 && \
-    export PATH=${CONDA_ROOT}/bin/:${PATH} && \
+    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniconda3" && \
+    export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda update -y conda && \
     conda config --set solver libmamba && \
     conda config --show solver && \
@@ -97,8 +96,8 @@ RUN conda create -yn data-analytics && \
     conda install -yn data-analytics ipython ipykernel kernda -c conda-forge && \
     conda clean -y --all
 
-RUN conda install -n data-analytics -y -c ${INTEL_CHANNEL} -c conda-forge \
-        modin-ray=${MODIN_VERSION} \
+RUN conda install -n data-analytics -y -c "${INTEL_CHANNEL}" -c conda-forge \
+        modin-ray="${MODIN_VERSION}" \
         python-dotenv \
         tqdm
 
@@ -118,9 +117,9 @@ COPY --chown=dev notebooks /home/dev/jupyter
 COPY --chown=dev tests /home/dev/sample-tests
 
 RUN conda run -n data-analytics python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy && \
-    ${CONDA_ROOT}/envs/data-analytics/bin/python -m ipykernel install --user --name data-analytics --display-name "Data Analytics" && \
-    ${CONDA_ROOT}/envs/data-analytics/bin/kernda -o -y ~/.local/share/jupyter/kernels/$(echo data-analytics | sed -e 's/\(.*\)/\L\1/')/kernel.json && \
-    ${CONDA_ROOT}/envs/data-analytics/bin/python -m ipykernel.kernelspec --user && \
+    "${CONDA_ROOT}/envs/data-analytics/bin/python" -m ipykernel install --user --name data-analytics --display-name "Data Analytics" && \
+    "${CONDA_ROOT}/envs/data-analytics/bin/kernda" -o -y "$HOME/.local/share/jupyter/kernels/$(echo data-analytics | sed -e 's/\(.*\)/\L\1/')/kernel.json" && \
+    "${CONDA_ROOT}/envs/data-analytics/bin/python" -m ipykernel.kernelspec --user && \
     conda clean -y --all
 
 CMD ["bash", "-c", "source activate data-analytics && jupyter notebook --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
