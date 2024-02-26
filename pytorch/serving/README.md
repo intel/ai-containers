@@ -162,3 +162,60 @@ There are some additional steps that can be taken to prepare your service for yo
 - Integrate an [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) to your service to serve to a hostname rather than an ip address.
 - Integrate [MLFlow](https://github.com/mlflow/mlflow-torchserve).
 - Integrate an [SSL Certificate](https://pytorch.org/serve/configuration.html#enable-ssl) in your model config file to serve models securely.
+
+### KServe
+
+Apply Intel Optimizations to KServe by patching the serving runtimes to use Intel Optimized Serving Containers with `kubectl apply -f patch.yaml`
+
+> [!NOTE]
+> You can modify this `patch.yaml` file to change the serving runtime pod configuration.
+
+#### Create an Endpoint
+
+1. Create a volume with the follow file configuration:
+
+    ```text
+    my-volume
+    ├── config
+    │   └── config.properties
+    └── model-store
+        └── my-model.mar
+    ```
+
+2. Modify your TorchServe Server Configuration with the following:
+
+    ```text
+    ...
+    enable_metrics_api=true
+    metrics_mode=prometheus
+    model_store=/mnt/models/model-store
+    model_snapshot={"name":"startup.cfg","modelCount":1,"models":{"my-model":{"1.0":{"defaultVersion":true,"marName":"my-model.mar"}}}}
+    ```
+
+3. Create a new endpoint
+
+    ```yaml
+    apiVersion: "serving.kserve.io/v1beta1"
+    kind: "InferenceService"
+    metadata:
+      name: "ipex-torchserve-sample"
+    spec:
+      predictor:
+        model:
+          modelFormat:
+            name: pytorch
+          protocolVersion: v2
+          storageUri: pvc://my-volume
+    ```
+
+4. Test the endpoint
+
+    ```bash
+    curl -v -H "Host: ${SERVICE_HOSTNAME}" http://${INGRESS_HOST}:${INGRESS_PORT}/v2/models
+    ```
+
+> [!TIP]
+> You can find your `SERVICE_HOSTNAME` in the KubeFlow UI with the copy button and removing the `http://` from the url.
+
+> [!TIP]
+> You can find your ingress information with `kubectl get svc -n istio-system | grep istio-ingressgateway` and using the external IP and port mapped to `80`.
