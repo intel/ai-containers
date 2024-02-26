@@ -27,6 +27,10 @@ repos:
     rev: v0.9.0
     hooks:
       - id: shellcheck
+  - repo: https://github.com/cisagov/pre-commit-shfmt
+    rev: v0.0.2
+    hooks:
+      - id: shfmt
   - repo: https://github.com/ambv/black
     rev: 23.12.1
     hooks:

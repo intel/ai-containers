@@ -26,7 +26,6 @@
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
 
-
 wget https://raw.githubusercontent.com/intel/ai-containers/main/preset/classical-ml/tests/scikit/kmeans.py
 python kmeans.py true
 
