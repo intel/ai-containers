@@ -18,13 +18,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Super-linter
-        uses: super-linter/super-linter/slim@v5.7.2
+        uses: super-linter/super-linter/slim@v6.2.0
         env:
-          DEFAULT_BRANCH: main
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
           GITHUB_ACTIONS_COMMAND_ARGS: '-ignore SC.*'
+          VALIDATE_BASH_EXEC: false
+          VALIDATE_CHECKOV: false
           VALIDATE_KUBERNETES_KUBECONFORM: false
           VALIDATE_NATURAL_LANGUAGE: false
           VALIDATE_PYTHON_FLAKE8: false
