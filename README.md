@@ -9,9 +9,13 @@ This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. use
 Define your project's registry and repository each time you use the project:
 
 ```bash
+# REGISTRY/REPO:TAG
 export REGISTRY=<registry_name>
 export REPO=<repo_name>
 ```
+
+> [!NOTE]
+> `REGISTRY` and `REPO` are used to authenticate with the private registry necessary to push completed container layers and saved them for testing and publication. For example: `REGISTRY=intel && REPO=intel-extension-for-pytorch` would become `intel/intel-extension-for-pytorch` as the name of the container image, followed by the tag generated from the service found in that project's compose file.
 
 ### Set Up Docker Engine
 
