@@ -47,7 +47,7 @@ runs:
         REGISTRY=${{ inputs.registry }} \
         REPO=${{ inputs.repo }} \
         COMPOSE_PROJECT_NAME=${{ env.random-number }} \
-        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} push --ignore-push-failures
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} push
       working-directory: ${{ inputs.group_dir }}
     - name: Print Containers
       shell: bash
