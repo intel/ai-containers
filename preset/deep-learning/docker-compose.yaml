@@ -53,8 +53,6 @@ services:
     command: |
       bash -c "conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);' && \
       conda run -n tensorflow python -c 'import tensorflow as tf; print(tf.__version__)'"
-    devices:
-      - /dev/dri:/dev/dri
     environment:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}

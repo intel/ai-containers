@@ -45,8 +45,6 @@ services:
     command: >
         bash -c "conda run -n data-analytics python -c 'import modin.pandas as pd, modin.config as cfg; cfg.Engine.put(\"Ray\"); df = pd.DataFrame([1]);print(df+1)'"
     image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-${IDP_VERSION:-2024.0.0}-py${PYTHON_VERSION:-3.10}
-    devices:
-      - /dev/dri:/dev/dri
     environment:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
