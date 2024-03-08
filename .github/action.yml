@@ -1,6 +1,6 @@
 ---
 name: Build Container Group Action
-description: https://github.com/intel/ai-containers/blob/main/.github/container_pipeline_format
+description: Given the inputs found below, build all containers found in a docker-compose.yaml file for a given configuration
 author: tyler.titsworth@intel.com
 inputs:
   group_dir:
