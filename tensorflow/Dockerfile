@@ -76,19 +76,9 @@ RUN mkdir -p /jupyter/ && chmod -R a+rwx /jupyter/
 RUN mkdir /.local && chmod a+rwx /.local
 WORKDIR /jupyter
 
-ARG PORT=8888
-EXPOSE $PORT
+EXPOSE 8888
 
-CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
-
-FROM tf-base-${PACKAGE_OPTION} AS mlflow
-
-RUN python -m pip install --no-cache-dir mlflow
-
-ARG PORT=5000
-EXPOSE $PORT
-
-CMD ["mlflow", "server", "-h", "0.0.0.0", "-p", "$PORT"]
+CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
 FROM tf-base-${PACKAGE_OPTION} AS openmpi
 
@@ -238,7 +228,6 @@ RUN mkdir /.local && chmod a+rwx /.local
 WORKDIR /jupyter
 COPY notebooks/itex/itex-xpu.ipynb /jupyter/xpu.ipynb
 
-ARG PORT=8888
-EXPOSE $PORT
+EXPOSE 8888
 
-CMD ["bash", "-c", "jupyter notebook --notebook-dir=/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]

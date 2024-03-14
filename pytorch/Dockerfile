@@ -77,7 +77,7 @@ WORKDIR /jupyter
 
 EXPOSE 8888
 
-CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
 FROM ipex-base-${PACKAGE_OPTION} AS multinode
 
@@ -191,7 +191,7 @@ COPY --chown=root notebooks/ipex-xpu.ipynb /jupyter/xpu.ipynb
 
 EXPOSE 8888
 
-CMD ["bash", "-c", "python -m jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
 FROM ${PYTHON_BASE} as torchserve-base
 

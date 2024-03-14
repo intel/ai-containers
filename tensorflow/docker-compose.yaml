@@ -36,8 +36,6 @@ services:
 
   jupyter:
     build:
-      args:
-        PORT: ${PORT:-8888}
       target: jupyter
     command: >
       bash -c "python -m jupyter --version"
@@ -49,19 +47,6 @@ services:
     network_mode: host
     volumes:
       - /$PWD:/jupyter
-
-  mlflow:
-    build:
-      args:
-        PORT: ${PORT:-5000}
-      target: mlflow
-    command: bash -c "python -m mlflow --version"
-    environment:
-      MLFLOW_TRACKING_URI: 'https://localhost:${PORT:-5000}'
-    extends: jupyter
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_PACKAGE:-intel-tensorflow}-${TF_PACKAGE_VERSION:-2.14.0}-mlflow
-    volumes:
-      - /$PWD:/mlflow
 
   multinode:
     build:
@@ -93,8 +78,6 @@ services:
   #   image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.13}-itex-xpu-base
   # itex-xpu-jupyter:
   #   build:
-  #     args:
-  #       PORT: ${PORT:-8888}
   #     target: itex-xpu-jupyter
   #   extends: itex-xpu-base
   #   command: >

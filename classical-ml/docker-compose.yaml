@@ -45,18 +45,3 @@ services:
     extends: ml-base
     image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.0.0}-xgboost-${XGBOOST_VERSION:-2.0.2}-jupyter
     network_mode: host
-
-  mlflow:
-    build:
-      args:
-        PORT: ${PORT:-5000}
-      target: mlflow
-    command: "python -m mlflow --version"
-    environment:
-      MLFLOW_TRACKING_URI: 'https://localhost:${PORT:-5000}'
-    extends: jupyter
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.0.0}-xgboost-${XGBOOST_VERSION:-2.0.2}-mlflow
-    ports:
-      - ${PORT-5000}:${PORT:-5000}
-    volumes:
-      - /$PWD:/mlflow
