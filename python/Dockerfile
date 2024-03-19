@@ -96,3 +96,8 @@ RUN python -m pip --no-cache-dir install --upgrade \
     numpy \
     setuptools \
     psutil
+
+RUN python -m pip --no-cache-dir install \
+    mkl \
+    mkl-include \
+    intel-openmp
