@@ -86,11 +86,13 @@ services:
       - 8888:8888
   torchserve:
     build:
+      args:
+        PACKAGE_OPTION: pip
       target: torchserve
     command: torchserve --version
     entrypoint: ""
     extends: ipex-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-torchserve
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-torchserve
     ports:
       - 8080:8080
       - 8081:8081

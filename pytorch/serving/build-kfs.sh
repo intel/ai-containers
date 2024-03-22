@@ -8,4 +8,5 @@ cd serve/kubernetes/kserve || exit
 git apply ../../../serving/kfs.patch
 git submodule update --init --recursive
 ./build_image.sh
+cd ../../../ || exit
 rm -rf serve/

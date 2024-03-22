@@ -29,7 +29,7 @@ class Test(BaseModel):
     serving: Optional[bool] = False
     cap_add: Optional[str] = "AUDIT_READ"
     device: Optional[str] = "/dev/dri"
-    entrypoint: Optional[str] = None
+    entrypoint: Optional[str] = ""
     groups_add: Optional[List[str]] = ["109", "44"]
     hostname: Optional[str] = None
     ipc: Optional[str] = None
@@ -65,8 +65,9 @@ class Test(BaseModel):
         Returns:
             str: client output log
         """
+        # Always add proxies to the envs list
         log = ""
-        serving_container = docker.run(
+        with docker.run(
             # Image
             img,
             # Stream Logs
@@ -86,40 +87,39 @@ class Test(BaseModel):
             privileged=self.privileged,
             pull=self.pull,
             shm_size=self.shm_size,
-        )
-        client_output = docker.run(
-            # Image
-            "python:3.11-slim-bullseye",
-            # Command
-            split(expandvars(self.cmd)),
-            # Stream Logs
-            stream=True,
-            # Envs
-            envs=env,
-            # Volumes
-            volumes=volumes,
-            # Networks
-            networks=["host"],
-            # Misc
-            cap_add=[self.cap_add],
-            devices=[expandvars(self.device)],
-            hostname=self.hostname,
-            ipc=self.ipc,
-            privileged=self.privileged,
-            pull=self.pull,
-            remove=True,
-            user=self.user,
-            shm_size=self.shm_size,
-            workdir=(expandvars(self.workdir) if self.workdir else None),
-        )
-        # Log within the function to retain scope for debugging
-        for _, stream_content in client_output:
-            # All process logs will have the stream_type of stderr despite it being stdout
-            logging.info(stream_content.decode("utf-8").strip())
-            log += stream_content.decode("utf-8").strip()
-        logging.debug("--- Server Logs ---")
-        logging.debug(docker.logs(serving_container))
-        docker.stop(serving_container, time=None)
+        ) as serving_container:
+            client_output = docker.run(
+                # Image
+                "python:3.11-slim-bullseye",
+                # Command
+                split(expandvars(self.cmd)),
+                # Stream Logs
+                stream=True,
+                # Envs
+                envs=env,
+                # Volumes
+                volumes=volumes,
+                # Networks
+                networks=["host"],
+                # Misc
+                cap_add=[self.cap_add],
+                devices=[expandvars(self.device)],
+                hostname=self.hostname,
+                ipc=self.ipc,
+                privileged=self.privileged,
+                pull=self.pull,
+                remove=True,
+                user=self.user,
+                shm_size=self.shm_size,
+                workdir=(expandvars(self.workdir) if self.workdir else None),
+            )
+            # Log within the function to retain scope for debugging
+            for _, stream_content in client_output:
+                # All process logs will have the stream_type of stderr despite it being stdout
+                logging.info(stream_content.decode("utf-8").strip())
+                log += stream_content.decode("utf-8").strip()
+            logging.debug("--- Server Logs ---")
+            logging.debug(docker.logs(serving_container))
 
         return log
 
@@ -165,8 +165,15 @@ class Test(BaseModel):
         env = (
             {key: expandvars(val) for key, val in self.env.items()} if self.env else {}
         )
+        default_env = {
+            "http_proxy": os.environ.get("http_proxy"),
+            "https_proxy": os.environ.get("https_proxy"),
+            "no_proxy": os.environ.get("no_proxy"),
+        }
+        # Always add proxies to the envs list
+        env.update(default_env)
         img = expandvars(self.img)
-        if self.serving is True:
+        if self.serving:
             log = Test.serving_run(self, img, env, volumes)
         else:
             if self.notebook is True:
@@ -185,7 +192,7 @@ class Test(BaseModel):
                 # Misc
                 cap_add=[self.cap_add],
                 devices=[expandvars(self.device)],
-                entrypoint=(expandvars(self.entrypoint) if self.entrypoint else None),
+                entrypoint=(expandvars(self.entrypoint) if self.entrypoint else ""),
                 groups_add=[expandvars(self.groups_add)],
                 hostname=self.hostname,
                 ipc=self.ipc,

@@ -103,11 +103,7 @@ def get_test_list(args: dict, tests_yaml: List[dict]):
                                 os.environ[key] = str(val)
                                 if expandvars(test) not in tests_yaml.keys():
                                     tests_list[expandvars(test)] = {
-                                        k: (
-                                            expandvars(v)
-                                            if isinstance(v, str)
-                                            else {k: v}
-                                        )
+                                        k: (expandvars(v) if isinstance(v, str) else v)
                                         for k, v in tests_yaml[test].items()
                                     }
                                 del os.environ[key]
