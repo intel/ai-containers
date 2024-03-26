@@ -36,11 +36,11 @@ RUN python -m pip install --no-cache-dir \
 COPY base/.patch_sklearn.py ${HOME}/.patch_sklearn.py
 
 RUN mkdir -p /licensing && \
-	wget --progress=dot:giga -O - https://github.com/intel/scikit-learn-intelex/archive/refs/tags/${SCIKIT_VERSION}.tar.gz | \
-	tar -xz -C /licensing --strip=2 "scikit-learn-intelex-${SCIKIT_VERSION}/doc/third-party-programs-sklearnex.txt" \
-	"scikit-learn-intelex-${SCIKIT_VERSION}/doc/daal4py/third-party-programs.txt"
+    wget --progress=dot:giga -O - "https://github.com/intel/scikit-learn-intelex/archive/refs/heads/main.tar.gz" | \
+    tar -xz -C /licensing --strip=2 "scikit-learn-intelex-main/doc/third-party-programs-sklearnex.txt" \
+    "scikit-learn-intelex-main/doc/daal4py/third-party-programs.txt"
 
-RUN wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/intel/scikit-learn-intelex/${SCIKIT_VERSION}/LICENSE -O /licensing/SCIKIT_LICENSE
+RUN wget --progress=dot:giga --no-check-certificate "https://raw.githubusercontent.com/intel/scikit-learn-intelex/main/LICENSE" -O /licensing/SCIKIT_LICENSE
 
 FROM ${COMPOSE_PROJECT_NAME}-python AS ml-base-idp
 
@@ -63,10 +63,11 @@ ENV PYTHONSTARTUP=${HOME}/.patch_sklearn.py
 COPY base/.patch_sklearn.py ${HOME}/.patch_sklearn.py
 
 RUN mkdir -p /licensing && \
-	wget --progress=dot:giga -O - https://github.com/intel/scikit-learn-intelex/archive/refs/tags/${SCIKIT_VERSION}.tar.gz | \
-	tar -xz -C /licensing --strip=2 "scikit-learn-intelex-${SCIKIT_VERSION}/doc/third-party-programs-sklearnex.txt" \
-	"scikit-learn-intelex-${SCIKIT_VERSION}/doc/daal4py/third-party-programs.txt" && \
-    wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/intel/scikit-learn-intelex/${SCIKIT_VERSION}/LICENSE -O /licensing/SCIKIT_LICENSE
+    wget --progress=dot:giga -O - "https://github.com/intel/scikit-learn-intelex/archive/refs/heads/main.tar.gz" | \
+    tar -xz -C /licensing --strip=2 "scikit-learn-intelex-main/doc/third-party-programs-sklearnex.txt" \
+    "scikit-learn-intelex-main/doc/daal4py/third-party-programs.txt"
+
+RUN wget --progress=dot:giga --no-check-certificate "https://raw.githubusercontent.com/intel/scikit-learn-intelex/main/LICENSE" -O /licensing/SCIKIT_LICENSE
 
 FROM ml-base-${PACKAGE_OPTION} AS jupyter
 
