@@ -248,7 +248,7 @@ Apply Intel Optimizations to KServe by patching the serving runtimes to use Inte
         filename=str(args.filename).split(".")[0], ext="json"
     )
     with open(result_file, "w") as outfile:
-        json.dump(request, outfile, indent=4, sort_keys=True)   
+        json.dump(request, outfile, indent=4, sort_keys=True)
     ```
 
    Using the script will produce a json file to use as a prediction payload:

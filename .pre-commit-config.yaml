@@ -1,6 +1,4 @@
 ---
-# See https://pre-commit.com for more information
-# See https://pre-commit.com/hooks.html for more hooks
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
@@ -13,6 +11,21 @@ repos:
       - id: forbid-submodules
       - id: sort-simple-yaml
       - id: trailing-whitespace
+  - repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.5
+    hooks:
+      - id: insert-license
+        files: |
+          (?x)^(
+            .*(py|yaml|yml|sh|Dockerfile)|
+          )$
+        args:
+          [
+            --license-filepath=.github/license_template.txt,
+            --use-current-year,
+            --detect-license-in-X-top-lines=40,
+            --skip-license-insertion-comment=Copyright,
+          ]
   - repo: https://github.com/hadolint/hadolint
     rev: v2.12.1-beta
     hooks:
