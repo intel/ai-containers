@@ -254,10 +254,10 @@ spec:
       imagePullPolicy: Always
       resources:
         requests:
-          cpu: "1"
+          cpu: "8"
           memory: 2Gi
         limits:
-          cpu: "1"
+          cpu: "4"
           memory: 2Gi
 ---
 # Source: kserve/templates/clusterservingruntimes.yaml
