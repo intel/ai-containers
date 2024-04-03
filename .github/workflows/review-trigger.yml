@@ -17,24 +17,14 @@ name: Review Pipeline Validation
 on:
   pull_request_review:
     types: [submitted, edited]
-permissions:
-  actions: read
-  checks: read
-  contents: read
-  deployments: read
-  discussions: read
-  id-token: write
-  issues: read
-  packages: read
-  pages: read
-  pull-requests: write
-  repository-projects: read
-  security-events: read
-  statuses: read
+permissions: read-all
 jobs:
   check-review:
     runs-on: [ k8-runners ]
     if: contains(github.event.review.body, '/test-group') && !contains(github.event.pull_request.labels.*.name, 'validating')
+    permissions:
+      contents: read
+      pull-requests: write
     outputs:
       group_dir: ${{ steps.comment-inputs.outputs.group_dir }}
       env_overrides: ${{ steps.comment-inputs.outputs.env_overrides }}
@@ -94,6 +84,9 @@ jobs:
   status-check:
     needs: [ check-review, container-pipeline-tester ]
     if: ${{ always() && needs.check-review.result != 'skipped' }}
+    permissions:
+      checks: write
+      pull-requests: write
     runs-on: [ k8-runners ]
     steps:
       - name: Unlock
