@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-version: '3'
 include:
   - path:
       - ../python/docker-compose.yaml
@@ -25,7 +24,6 @@ services:
         no_proxy: ""
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-22.04}
-        COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME:-pytorch}
         GITHUB_RUN_NUMBER: ${GITHUB_RUN_NUMBER:-0}
         IPEX_VERSION: ${IPEX_VERSION:-2.2.0}
         MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
@@ -42,7 +40,7 @@ services:
       - ${PACKAGE_OPTION:-pip}-base
     command: >
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)'"
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.2.0}-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.2.0}-base
     pull_policy: always
   jupyter:
     build:
@@ -53,7 +51,7 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     extends: ipex-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.2.0}-jupyter
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.2.0}-jupyter
     network_mode: host
     ports:
       - 8888:8888
@@ -66,7 +64,7 @@ services:
     command: >
       sh -c "python -c 'import neural_compressor;import oneccl_bindings_for_pytorch as oneccl; print(\"Neural Compressor Version:\", neural_compressor.__version__, \"\\nOneCCL:\", oneccl.__version__)'"
     extends: ipex-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.2.0}-oneccl-inc-${INC_VERSION:-2.4.1}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.2.0}-oneccl-inc-${INC_VERSION:-2.4.1}
   ipex-xpu-base:
     build:
       args:
@@ -89,14 +87,14 @@ services:
     command: >
         python -c "import torch;print(torch.device('xpu'));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());print(torch.__version__); print(ipex.__version__); [print(f'[{i}]: {ipex.xpu.get_device_properties(i)}') for i in range(ipex.xpu.device_count())];"
     extends: ipex-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.20xpu}-xpu-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.20xpu}-xpu-base
   ipex-xpu-jupyter:
     build:
       target: ipex-xpu-jupyter
     extends: ipex-xpu-base
     command: >
       bash -c "python -m jupyter --version"
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.20xpu}-xpu-jupyter
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.20xpu}-xpu-jupyter
     ports:
       - 8888:8888
   torchserve:
@@ -107,7 +105,7 @@ services:
     command: torchserve --version
     entrypoint: ""
     extends: ipex-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-torchserve
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-torchserve
     ports:
       - 8080:8080
       - 8081:8081

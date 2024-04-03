@@ -17,10 +17,10 @@ test1:
   cmd: bash -c "head -n 1 /workspace/requirements.txt" # volume mounted file
 # device: /dev/dri
 # ipc: host
-  notebook: True # single quotes
+  notebook: True
   env:
     REGISTRY: ${REGISTRY} # substitute env from host
-    DEBUG: 'true' # double quotes
+    DEBUG: 'true' # single quotes
   volumes:
     - src: /tf_dataset
       dst: /tmp
