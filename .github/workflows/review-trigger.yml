@@ -27,6 +27,11 @@ jobs:
       runner_label: ${{ steps.comment-inputs.outputs.runner_label }}
       no-build: ${{ steps.comment-inputs.outputs.no-build || false }}
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - uses: actions/checkout@v4
       - name: Get Inputs
         id: comment-inputs
@@ -82,6 +87,11 @@ jobs:
     if: ${{ always() && needs.check-review.result != 'skipped' }}
     runs-on: [ k8-runners ]
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - name: Unlock
         if: ${{ needs.check-review.result != 'skipped' }}
         uses: actions/github-script@v7

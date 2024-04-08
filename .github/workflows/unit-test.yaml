@@ -10,6 +10,11 @@ jobs:
   unit-test:
     runs-on: [ test-runner ]
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
       - uses: actions/checkout@v4
       - uses: docker/login-action@v3
         with:
