@@ -9,7 +9,7 @@ concurrency:
 jobs:
   build:
     name: Lint
-    runs-on: [k8-runners]
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: read
