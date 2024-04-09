@@ -68,51 +68,60 @@ ARG PYTHON_VERSION
 ARG IDP_VERSION
 ARG INTEL_CHANNEL
 
-RUN wget --progress=dot:giga --no-check-certificate "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh" -O miniconda.sh && \
+RUN wget --progress=dot:giga --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \
     chmod +x miniconda.sh && \
     ./miniconda.sh -b -p "${CONDA_ROOT}" && \
     rm ./miniconda.sh && \
-    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniconda3" && \
+    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniconda3"  && \
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda update -y conda && \
-    conda config --set solver libmamba && \
-    conda config --show solver && \
+    conda config --add channels conda-forge && \
     conda config --add channels intel && \
     conda init --all && \
+    conda install -c conda-forge \
+        jupyterlab \
+        notebook \
+        jupyterhub \
+        jupyter-server-proxy  && \
+        jupyter labextension disable "@jupyterlab/apputils-extension:announcements" && \
     conda clean -y --all
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 
-ARG SCIKIT_VERSION
+ARG IDP_VERSION
+ARG DPNP_VERSION
 ARG XGBOOST_VERSION
 ARG MODIN_VERSION
-ARG DAAL4PY_VERSION
+ARG NUMPY_VERSION
+ARG SKLEARNEX_VERSION
 
-RUN conda create -yn classical-ml && \
-    conda install -yn classical-ml -c ${INTEL_CHANNEL} \
-        matplotlib-base \
-        numba-dpex=0.21.4 \
-        numpy=1.24.3 \
-        ipp=2021.10 \
-        intelpython=${IDP_VERSION} \
+# Conda packages
+RUN conda create -yn classical-ml -c ${INTEL_CHANNEL} -c conda-forge \
+        dpnp=${DPNP_VERSION} \
+        numpy=${NUMPY_VERSION} \
         python=${PYTHON_VERSION} \
-        scikit-learn-intelex==${SCIKIT_VERSION} \
-        matplotlib \
-        daal4py=${DAAL4PY_VERSION} \
-        scipy \
-        xgboost${XGBOOST_VERSION:+==${XGBOOST_VERSION}} \
-        threadpoolctl && \
-    conda install -yn classical-ml ipython ipykernel kernda -c conda-forge && \
-    conda clean -y --all
-
-RUN conda install -n classical-ml -y -c ${INTEL_CHANNEL} -c conda-forge \
+        scikit-learn-intelex==${SKLEARNEX_VERSION} \
+        xgboost=${XGBOOST_VERSION} \
         modin-ray=${MODIN_VERSION} \
         python-dotenv \
-        tqdm
+        tqdm \
+        matplotlib-base \
+        dataset_librarian \
+        threadpoolctl \
+        ipython \
+        ipykernel \
+        kernda \
+        protobuf=4.24 \
+        'pillow>=10.2.0' \
+        'tornado>=6.3.3' && \
+    conda clean -y --all
 
+
+
+# PyPI packages
 RUN conda run -n classical-ml python -m pip install --no-deps --no-cache-dir \
-    dataset-librarian \
     cloud-data-connector
+
 
 ENV PYTHONSTARTUP=~/.patch_sklearn.py
 COPY base/.patch_sklearn.py ~/.patch_sklearn.py
@@ -131,13 +140,12 @@ WORKDIR /home/dev
 COPY --chown=dev notebooks /home/dev/jupyter
 COPY --chown=dev tests /home/dev/sample-tests
 
-RUN conda run -n classical-ml python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy && \
-    "${CONDA_ROOT}/envs/classical-ml/bin/python" -m ipykernel install --user --name classical-ml --display-name "Classical ML" && \
+RUN "${CONDA_ROOT}/envs/classical-ml/bin/python" -m ipykernel install --user --name classical-ml --display-name "Classical ML" && \
     "${CONDA_ROOT}/envs/classical-ml/bin/kernda" -o -y "$HOME/.local/share/jupyter/kernels/$(echo classical-ml | sed -e 's/\(.*\)/\L\1/')/kernel.json" && \
     "${CONDA_ROOT}/envs/classical-ml/bin/python" -m ipykernel.kernelspec --user && \
     conda clean -y --all
 
-CMD ["bash", "-c", "source activate classical-ml && jupyter notebook --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source activate classical-ml && jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
 ENV BASH_ENV ~/.bash_profile
 RUN echo "conda activate classical-ml" >> ~/.bashrc

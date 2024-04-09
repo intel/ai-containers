@@ -16,7 +16,11 @@
 name: Lint
 permissions: read-all
 on:
-  push: null
+  pull_request: null
+  push:
+    branches:
+      - develop
+      - main
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true

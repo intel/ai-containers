@@ -24,7 +24,7 @@ parser.add_argument("--device", default="cpu", choices=["cpu", "xpu"])
 parser.add_argument("--ipex", action="store_true")
 args = parser.parse_args()
 
-model = models.resnet50(pretrained=False)
+model = models.resnet50(weights="ResNet50_Weights.DEFAULT")
 model.eval()
 data = torch.rand(1, 3, 224, 224)
 

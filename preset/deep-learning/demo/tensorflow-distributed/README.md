@@ -227,11 +227,14 @@ docker run --rm -t \
     --network=host  \
     -w /tests intel/deep-learning:2024.0-py3.10 \
     conda run --no-capture-output \
-        -n tensorflow horovodrun --verbose \
+        -n tensorflow-cpu bash -c 'export ITEX_ENABLE_NEXTPLUGGABLE_DEVICE=0 && \
+        horovodrun --verbose \
         -np 2 \
         -H localhost:1,worker:1 \
-        python tensorflow2_keras_mnist.py
+        python tensorflow2_keras_mnist.py'
 ```
 
 > [!NOTE]
-> That the number of processes spawned on each node will be dependent on the parameters specified with `horovodrun` command. You can modify the horovodrun command to your needs from the [documentation here](https://horovod.readthedocs.io/en/stable/running_include.html) and [here](https://horovod.readthedocs.io/en/stable/docker_include.html). For the workflow to work all nodes need to communicate with each other and be able to pass the MPI messages among all processes.  This requires the correct environment setup based on the specific networking setup you have. [Intel® MPI documentation](https://www.intel.com/content/www/us/en/docs/mpi-library/developer-reference-linux/2021-10/environment-variable-reference.html) provides the necessary environment variables to control the communication between processes using MPI.
+>
+> * That the number of processes spawned on each node will be dependent on the parameters specified with `horovodrun` command. You can modify the horovodrun command to your needs from the [documentation here](https://horovod.readthedocs.io/en/stable/running_include.html) and [here](https://horovod.readthedocs.io/en/stable/docker_include.html). For the workflow to work all nodes need to communicate with each other and be able to pass the MPI messages among all processes.  This requires the correct environment setup based on the specific networking setup you have. [Intel® MPI documentation](https://www.intel.com/content/www/us/en/docs/mpi-library/developer-reference-linux/2021-10/environment-variable-reference.html) provides the necessary environment variables to control the communication between processes using MPI.
+> * Intel® Extension for TensorFlow* has enabled Next Pluggable Device as default in v2.15.0. To use the PluggableDevice, simply export the variable `ITEX_ENABLE_NEXTPLUGGABLE_DEVICE=0`.

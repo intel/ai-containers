@@ -76,33 +76,44 @@ RUN wget --progress=dot:giga --no-check-certificate "https://repo.anaconda.com/m
     ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniconda3" && \
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda update -y conda && \
-    conda config --set solver libmamba && \
-    conda config --show solver && \
+    conda config --add channels conda-forge && \
     conda config --add channels intel && \
     conda init --all && \
+    conda install -c conda-forge \
+        jupyterlab \
+        notebook \
+        jupyterhub \
+        jupyter-server-proxy && \
+        jupyter labextension disable "@jupyterlab/apputils-extension:announcements" && \
     conda clean -y --all
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 
-RUN conda create -yn data-analytics && \
-    conda install -yn data-analytics -c ${INTEL_CHANNEL} \
-        matplotlib-base \
-        numba-dpex=0.21.4 \
-        numpy=1.24.3 \
-        ipp=2021.10 \
-        intelpython=${IDP_VERSION} \
-        python=${PYTHON_VERSION} \
-        scipy && \
-    conda install -yn data-analytics ipython ipykernel kernda -c conda-forge && \
-    conda clean -y --all
+ARG IDP_VERSION
+ARG DPNP_VERSION
+ARG MODIN_VERSION
+ARG NUMPY_VERSION
 
-RUN conda install -n data-analytics -y -c "${INTEL_CHANNEL}" -c conda-forge \
+# data-analytics Env - conda packages
+RUN conda create -yn data-analytics -c "${INTEL_CHANNEL}" -c conda-forge \
+        dpnp="${DPNP_VERSION}" \
+        numpy="${NUMPY_VERSION}" \
+        python="${PYTHON_VERSION}" \
         modin-ray="${MODIN_VERSION}" \
         python-dotenv \
-        tqdm
+        tqdm \
+        matplotlib-base \
+        dataset_librarian \
+        threadpoolctl \
+        ipython \
+        ipykernel \
+        kernda  \
+        protobuf=4.24 \
+        'pillow>=10.2.0' \
+        'tornado>=6.3.3' && \
+    conda clean -y --all
 
 RUN conda run -n data-analytics python -m pip install --no-deps --no-cache-dir \
-    dataset-librarian \
     cloud-data-connector
 
 FROM data-analytics-python as data-analytics-jupyter
@@ -112,17 +123,15 @@ EXPOSE 8888
 RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
     mkdir ~/.local && chmod a+rwx ~/.local
 
-WORKDIR /home/dev
 COPY --chown=dev notebooks /home/dev/jupyter
 COPY --chown=dev tests /home/dev/sample-tests
 
-RUN conda run -n data-analytics python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy && \
-    "${CONDA_ROOT}/envs/data-analytics/bin/python" -m ipykernel install --user --name data-analytics --display-name "Data Analytics" && \
+RUN "${CONDA_ROOT}/envs/data-analytics/bin/python" -m ipykernel install --user --name data-analytics --display-name "Data Analytics" && \
     "${CONDA_ROOT}/envs/data-analytics/bin/kernda" -o -y "$HOME/.local/share/jupyter/kernels/$(echo data-analytics | sed -e 's/\(.*\)/\L\1/')/kernel.json" && \
     "${CONDA_ROOT}/envs/data-analytics/bin/python" -m ipykernel.kernelspec --user && \
     conda clean -y --all
 
-CMD ["bash", "-c", "source activate data-analytics && jupyter notebook --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source activate data-analytics && jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
 ENV BASH_ENV ~/.bash_profile
 RUN echo "conda activate data-analytics" >> ~/.bashrc

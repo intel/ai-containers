@@ -35,17 +35,28 @@ FROM ${COMPOSE_PROJECT_NAME}-dl-base as inference-optimization
 
 ENV SIGOPT_PROJECT=.
 
-ARG INC_VERSION
+ARG NEURAL_COMPRESSOR_VERSION
 ARG INTEL_CHANNEL
 
-RUN conda install -yn tensorflow -c ${INTEL_CHANNEL} -c conda-forge \
-        neural-compressor=${INC_VERSION} && \
-    conda install -yn pytorch-cpu -c ${INTEL_CHANNEL} -c conda-forge \
-        neural-compressor=${INC_VERSION} && \
-    conda install -yn pytorch-gpu -c ${INTEL_CHANNEL} -c conda-forge \
-        neural-compressor=${INC_VERSION}
 
-RUN conda run -n tensorflow python -m pip install --no-deps --no-cache-dir \
+RUN conda install -yn pytorch-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
+        neural-compressor="${NEURAL_COMPRESSOR_VERSION}"
+
+RUN conda install -yn pytorch-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
+        neural-compressor="${NEURAL_COMPRESSOR_VERSION}"
+
+RUN conda install -yn tensorflow-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
+        neural-compressor="${NEURAL_COMPRESSOR_VERSION}"
+
+RUN conda install -yn tensorflow-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
+        neural-compressor="${NEURAL_COMPRESSOR_VERSION}"
+
+RUN conda run -n tensorflow-cpu python -m pip install --no-deps --no-cache-dir \
+        tf2onnx \
+        onnxruntime && \
+    conda clean -y --all
+
+RUN conda run -n tensorflow-gpu python -m pip install --no-deps --no-cache-dir \
         tf2onnx \
         onnxruntime && \
     conda clean -y --all

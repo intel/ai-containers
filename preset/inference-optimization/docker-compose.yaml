@@ -23,36 +23,38 @@ services:
         BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
         BASE_TAG: ${BASE_TAG:-22.04}
         DEVICE: ${DEVICE:-flex}
-        DPCPP_VER: ${DPCPP_VER:-2024.0.0-49819}
-        HOROVOD_VERSION: ${HOROVOD_VERSION:-0.28.1}
-        ICD_VER: 23.35.27191.42-775~22.04
-        IDP_VERSION: ${IDP_VERSION:-2024.0.0}
+        DPNP_VERSION: ${NUMBA_DPEX_VERSION:-0.14.0}
+        HOROVOD_VERSION: ${HOROVOD_VERSION:-0.28.1.4}
+        ICD_VER: 23.43.27642.40-803~22.04
+        IDP_VERSION: ${IDP_VERSION:-2024.1.0}
+        IMPI_VERSION: ${IMPI_VERSION:-2021.12}
         INTEL_CHANNEL: ${INTEL_CHANNEL:-intel}
-        IPEX_CPU_VERSION: ${IPEX_CPU_VERSION:-2.0.100}
-        IPEX_GPU_VERSION: ${IPEX_GPU_VERSION:-2.0.120}
-        ITEX_VERSION: ${ITEX_VERSION:-2.14}
+        IPEX_CPU_VERSION: ${IPEX_CPU_VERSION:-2.2.0=*cpu*}
+        IPEX_GPU_VERSION: ${IPEX_GPU_VERSION:-2.1.20=*xpu*}
+        ITEX_VERSION: ${ITEX_VERSION:-2.15}
         LEVEL_ZERO_DEV_VER: 1.14.0-744~22.04
-        LEVEL_ZERO_GPU_VER: 1.3.27191.42-775~22.04
+        LEVEL_ZERO_GPU_VER: 1.3.27642.40-803~22.04
         LEVEL_ZERO_VER: 1.14.0-744~22.04
         MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
-        MKL_VER: ${MKL_VER:-2024.0.0-49656}
-        NEURAL_COMPRESSOR_VERSION: ${NEURAL_COMPRESSOR_VERSION:-2.3.1}
-        ONECCL_CPU_VERSION: ${ONECCL_CPU_VERSION:-2.0.0}
-        ONECCL_GPU_VERSION: ${ONECCL_GPU_VERSION:-2.0.200}
+        MPI_VERSION: ${MPI_VERSION:-2021.12.0}
+        NEURAL_COMPRESSOR_VERSION: ${NEURAL_COMPRESSOR_VERSION:-2.4.1}
+        NUMBA_DPEX_VERSION: ${NUMBA_DPEX_VERSION:-0.22.1}
+        NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4}
+        ONECCL_CPU_VERSION: ${ONECCL_CPU_VERSION:-2.2.0=*cpu*}
+        ONECCL_GPU_VERSION: ${ONECCL_GPU_VERSION:-2.1.200=*xpu*}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
-        TF_VERSION: ${TF_VERSION:-2.14}
-        TORCH_CPU_VERSION: ${TORCH_CPU_VERSION:-2.0.1=*cpu*}
-        TORCH_GPU_VERSION: ${TORCH_GPU_VERSION:-2.0.1=*xpu*}
-        TORCHVISION_CPU_VERSION: ${TORCHVISION_CPU_VERSION:-0.15.2=*cpu*}
-        TORCHVISION_GPU_VERSION: ${TORCHVISION_GPU_VERSION:-0.15.2=*xpu*}
+        TF_VERSION: ${TF_VERSION:-2.15}
+        TORCHAUDIO_CPU_VERSION: ${TORCHAUDIO_CPU_VERSION:-2.2.0=*cpu*}
+        TORCHAUDIO_GPU_VERSION: ${TORCHAUDIO_GPU_VERSION:-2.1.0=*xpu*}
+        TORCHVISION_CPU_VERSION: ${TORCHVISION_CPU_VERSION:-0.17=*cpu*}
+        TORCHVISION_GPU_VERSION: ${TORCHVISION_GPU_VERSION:-0.16.0=*xpu*}
+        TORCH_CPU_VERSION: ${TORCH_CPU_VERSION:-2.2.0=*cpu*}
+        TORCH_GPU_VERSION: ${TORCH_GPU_VERSION:-2.1.0=*xpu*}
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
         no_proxy: ''
       context: ../deep-learning
       target: deep-learning-jupyter
-    command: |
-      bash -c "conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);' && \
-      conda run -n tensorflow python -c 'import tensorflow as tf; print(tf.__version__)'"
     environment:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
@@ -60,6 +62,10 @@ services:
     shm_size: 12GB
     volumes:
       - /dev/dri/by-path:/dev/dri/by-path
+    command: |
+      bash -c "conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);' && \
+      conda run -n tensorflow-cpu python -c 'import tensorflow as tf; print(tf.__version__)'"
+
 
   inference-optimization:
     build:
@@ -67,14 +73,16 @@ services:
         COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME:-preset}
       context: .
       target: inference-optimization
+    depends_on:
+      - dl-base
+    extends: dl-base
+    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
     command: |
       bash -c "conda run -n pytorch-cpu python -c 'import intel_extension_for_pytorch as ipex;print(ipex.__version__);' && \
       conda run -n pytorch-cpu python -c 'import neural_compressor;print(\"Neural Compressor Version:\", neural_compressor.__version__)' && \
       conda run -n pytorch-gpu python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());' && \
       conda run -n pytorch-gpu python -c 'import neural_compressor;print(\"Neural Compressor Version:\", neural_compressor.__version__)' && \
-      conda run -n tensorflow python -c 'from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())' && \
-      conda run -n tensorflow python -c 'import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)'"
-    depends_on:
-      - dl-base
-    extends: dl-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${IDP_VERSION:-2024.0.0}-py${PYTHON_VERSION:-3.10}
+      conda run -n tensorflow-cpu python -c 'import intel_extension_for_tensorflow as itex;print(itex.__version__);' && \
+      conda run -n tensorflow-cpu python -c 'import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)' && \
+      conda run -n tensorflow-gpu python -c 'from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())' && \
+      conda run -n tensorflow-gpu python -c 'import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)'"
