@@ -15,23 +15,28 @@
 ---
 name: Test Runner Unit Tests
 on:
-  pull_request:
+  push: null
 permissions: read-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   unit-test:
-    runs-on: [ test-runner ]
+    runs-on: [ k8-runners ]
     steps:
+      - uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
       - uses: actions/checkout@v4
       - uses: docker/login-action@v3
         with:
-          registry: ${{ vars.REGISTRY }}
+          registry: ${{ secrets.REGISTRY }}
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
       - name: Install requirements
         run: |
+          sudo apt-get update -y
+          sudo apt-get install python3.8-venv -y
           python -m venv venv
           source venv/bin/activate
           venv/bin/python -m pip install pytest hypothesis
@@ -41,4 +46,4 @@ jobs:
         run: venv/bin/python -m pytest tests/utest.py -W ignore::UserWarning
         working-directory: ${{ github.workspace }}/test-runner
         env:
-          REGISTRY: ${{ vars.REGISTRY }}
+          REGISTRY: ${{ secrets.REGISTRY }}

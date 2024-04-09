@@ -12,39 +12,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-name: Lint
-permissions: read-all
-on:
-  pull_request: null
-  push:
-    branches:
-      - develop
-      - main
+# Dependency Review Action
+#
+# This Action will scan dependency manifest files that change as part of a Pull Request,
+# surfacing known-vulnerable versions of the packages declared or updated in the PR.
+# Once installed, if the workflow run is marked as required,
+# PRs introducing known-vulnerable packages will be blocked from merging.
+#
+# Source repository: https://github.com/actions/dependency-review-action
+name: 'Dependency Review'
+on: [pull_request]
+permissions:
+  contents: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  build:
-    name: Lint
-    runs-on: k8-runners # ubuntu-latest
+  dependency-review:
+    runs-on: ubuntu-latest
     steps:
       - uses: step-security/harden-runner@v2
         with:
           egress-policy: audit
-      - name: Checkout code
+      - name: 'Checkout Repository'
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Super-linter
-        uses: super-linter/super-linter/slim@v6.3.1
-        env:
-          # To report GitHub Actions status checks
-          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
-          GITHUB_ACTIONS_COMMAND_ARGS: '-ignore SC.*'
-          VALIDATE_BASH_EXEC: false
-          VALIDATE_CHECKOV: false
-          VALIDATE_KUBERNETES_KUBECONFORM: false
-          VALIDATE_NATURAL_LANGUAGE: false
-          VALIDATE_PYTHON_FLAKE8: false
-          VALIDATE_PYTHON_MYPY: false
+      - name: 'Dependency Review'
+        uses: actions/dependency-review-action@v4

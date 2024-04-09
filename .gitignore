@@ -7,3 +7,4 @@
 **.ipynb_checkpoints**
 logs/
 output/
+venv/

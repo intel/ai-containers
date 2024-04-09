@@ -1,6 +1,10 @@
 # Intel® AI Containers
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8270/badge)](https://www.bestpractices.dev/projects/8270)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/intel/ai-containers/badge)](https://securityscorecards.dev/viewer/?uri=github.com/intel/ai-containers)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fintel%2Fai-containers.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fintel%2Fai-containers?ref=badge_shield&issueType=license)
+[![CodeQL](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql)
+[![Unit Tests](https://github.com/intel/ai-containers/actions/workflows/unit-test.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/unit-test.yaml)
 
 This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. used to scale out AI containers with versions of TensorFlow and PyTorch that have been optimized for Intel platforms. Scaling is done with python, Docker, kubernetes, kubeflow, cnvrg.io, Helm, and other container orchestration frameworks for use in the cloud and on-premise.
 
