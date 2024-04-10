@@ -77,7 +77,7 @@ WORKDIR /jupyter
 
 EXPOSE 8888
 
-CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
 FROM ipex-base-${PACKAGE_OPTION} AS multinode
 
@@ -113,7 +113,7 @@ RUN virtualenv --system-site-packages inc && echo "source /inc/bin/activate" > ~
 
 FROM multinode AS multinode-idp
 
-FROM ${PYTHON_BASE} AS ipex-xpu-base
+FROM ${PYTHON_BASE} AS ipex-xpu-base-pip
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
@@ -129,9 +129,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
-RUN no_proxy=$no_proxy wget -q  -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
     gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 
 ARG ICD_VER
@@ -164,21 +164,70 @@ RUN apt-get update && \
     intel-oneapi-runtime-ccl=${CCL_VER};
 
 ARG PYTORCH_XPU_VERSION
-ARG TORCHAUDIO_XPU_VERSION
+ARG TORCHVISION_XPU_VERSION
+ARG IPEX_XPU_VERSION
+ARG ONECCL_VERSION
+ARG WHL_VERSION
+ARG WHL_URL
+
+RUN python -m pip install --no-cache-dir \
+    torch==${PYTORCH_XPU_VERSION}.${WHL_VERSION} \
+    torchaudio==${PYTORCH_XPU_VERSION}.${WHL_VERSION} \
+    intel_extension_for_pytorch==${IPEX_XPU_VERSION}+xpu \
+    torchvision==${TORCHVISION_XPU_VERSION}.${WHL_VERSION} \
+    oneccl_bind_pt==${ONECCL_VERSION} \
+    --extra-index-url ${WHL_URL}
+
+ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
+
+FROM ${PYTHON_BASE} AS ipex-xpu-base-idp
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    apt-utils \
+    build-essential \
+    clinfo \
+    git \
+    gnupg2 \
+    gpg-agent \
+    rsync \
+    unzip \
+    wget -q  && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+    gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
+    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
+
+ARG ICD_VER
+ARG LEVEL_ZERO_GPU_VER
+ARG LEVEL_ZERO_VER
+ARG LEVEL_ZERO_DEV_VER
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    intel-opencl-icd=${ICD_VER} \
+    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
+    level-zero=${LEVEL_ZERO_VER} \
+    level-zero-dev=${LEVEL_ZERO_DEV_VER} && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+ARG PYTORCH_XPU_VERSION
 ARG TORCHVISION_XPU_VERSION
 ARG IPEX_XPU_VERSION
 ARG ONECCL_VERSION
 
-RUN python -m pip install --no-cache-dir \
-    torch==${PYTORCH_XPU_VERSION} \
-    intel_extension_for_pytorch==${IPEX_XPU_VERSION} \
-    torchvision==${TORCHVISION_XPU_VERSION} \
-    oneccl_bind_pt==${ONECCL_VERSION} \
-    --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us
+RUN conda install intel-extension-for-pytorch=${IPEX_XPU_VERSION}=*xpu* \
+    torchvision=${TORCHVISION_XPU_VERSION} \
+    torchaudio=${PYTORCH_XPU_VERSION} \
+    oneccl_bind_pt=$ONECCL_VERSION -c intel/label/oneapi -c intel -c conda-forge
 
-ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib:/opt/intel/oneapi/lib/intel64:$LD_LIBRARY_PATH
+ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
 
-FROM ipex-xpu-base AS ipex-xpu-jupyter
+FROM ipex-xpu-base-${PACKAGE_OPTION} AS ipex-xpu-jupyter
 
 RUN python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy
 
@@ -191,7 +240,7 @@ COPY --chown=root notebooks/ipex-xpu.ipynb /jupyter/xpu.ipynb
 
 EXPOSE 8888
 
-CMD ["bash", "-c", "python -m jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
 FROM ${PYTHON_BASE} as torchserve-base
 

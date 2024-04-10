@@ -1,27 +1,43 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 ---
 name: Lint
 permissions: read-all
 on:
-  push: null
+  pull_request: null
+  push:
+    branches:
+      - develop
+      - main
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   build:
     name: Lint
-    runs-on: [k8-runners]
-    permissions:
-      contents: read
-      packages: read
-      # To report GitHub Actions status checks
-      statuses: write
+    runs-on: k8-runners # ubuntu-latest
     steps:
+      - uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Super-linter
-        uses: super-linter/super-linter/slim@v6.2.0
+        uses: super-linter/super-linter/slim@v6.3.1
         env:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}

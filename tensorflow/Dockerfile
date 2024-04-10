@@ -18,31 +18,32 @@
 # throughout. Please refer to the TensorFlow dockerfiles documentation
 # for more information.
 
+ARG REGISTRY
+ARG REPO
+ARG GITHUB_RUN_NUMBER
+ARG BASE_IMAGE_NAME
+ARG BASE_IMAGE_TAG
 ARG PACKAGE_OPTION=pip
-ARG MPI=openmpi
-
-ARG COMPOSE_PROJECT_NAME
-FROM ${COMPOSE_PROJECT_NAME}-python AS tf-base-pip
+ARG PYTHON_VERSION
+ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-base
+FROM ${PYTHON_BASE} AS tf-base-pip
 
 # Intel Optimizations specific Envs
 ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
     KMP_BLOCKTIME=1 \
     KMP_SETTINGS=1
 
-ARG TF_PACKAGE
-ARG TF_PACKAGE_VERSION
+ARG TF_VERSION
 
-RUN python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}} \
+RUN python -m pip install --no-cache-dir tensorflow==${TF_VERSION} \
+    intel-extension-for-tensorflow \
     tensorflow_hub \
     Pillow
 
-# Add Intel TF Licensing
-RUN	mkdir /licensing && \
-    wget --progress=dot:giga -O - https://github.com/Intel-tensorflow/tensorflow/archive/v${TF_PACKAGE_VERSION}.tar.gz | \
-	tar -xz -C /licensing --strip=2 "tensorflow-${TF_PACKAGE_VERSION}/third_party_programs_license/" && \
-    wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE -O /licensing/TF_LICENSE
+ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/THIRD-PARTY-PROGRAMS.txt /licenses/
+ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-program-of-intel-extension-for-tensorflow.txt /licenses/
 
-FROM ${COMPOSE_PROJECT_NAME}-python AS tf-base-idp
+FROM ${PYTHON_BASE} AS tf-base-idp
 
 # Intel Optimizations specific Envs
 ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
@@ -52,21 +53,15 @@ ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
 ENV PATH /usr/bin:/root/conda/envs/idp/bin:/root/conda/condabin:~/conda/bin/:${PATH}
 
 ENV TF_ENABLE_ONEDNN_OPTS=1
-ARG TF_PACKAGE
-ARG TF_PACKAGE_VERSION
+ARG TF_VERSION
 
-RUN python -m pip install --no-cache-dir ${TF_PACKAGE}${TF_PACKAGE_VERSION:+==${TF_PACKAGE_VERSION}} \
+RUN python -m pip install --no-cache-dir tensorflow==${TF_VERSION} \
+    intel-extension-for-tensorflow \
     tensorflow_hub \
-    Pillow \
-    certifi==2023.7.22 \
-    cryptography==41.0.3 \
-    scipy==1.11.1
+    Pillow
 
-# Add Intel TF Licensing
-RUN	mkdir /licensing && \
-    wget --progress=dot:giga -O - https://github.com/Intel-tensorflow/tensorflow/archive/v${TF_PACKAGE_VERSION}.tar.gz | \
-	tar -xz -C /licensing --strip=2 "tensorflow-${TF_PACKAGE_VERSION}/third_party_programs_license/" && \
-    wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/Intel-tensorflow/tensorflow/v${TF_PACKAGE_VERSION}/LICENSE -O /licensing/TF_LICENSE
+ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/THIRD-PARTY-PROGRAMS.txt /licenses/
+ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-program-of-intel-extension-for-tensorflow.txt /licenses/
 
 FROM tf-base-${PACKAGE_OPTION} AS jupyter
 
@@ -76,19 +71,9 @@ RUN mkdir -p /jupyter/ && chmod -R a+rwx /jupyter/
 RUN mkdir /.local && chmod a+rwx /.local
 WORKDIR /jupyter
 
-ARG PORT=8888
-EXPOSE $PORT
+EXPOSE 8888
 
-CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
-
-FROM tf-base-${PACKAGE_OPTION} AS mlflow
-
-RUN python -m pip install --no-cache-dir mlflow
-
-ARG PORT=5000
-EXPOSE $PORT
-
-CMD ["mlflow", "server", "-h", "0.0.0.0", "-p", "$PORT"]
+CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
 FROM tf-base-${PACKAGE_OPTION} AS openmpi
 
@@ -97,15 +82,9 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     openmpi-bin \
     openmpi-common
 
-FROM tf-base-${PACKAGE_OPTION} AS mpich
-
-RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
-    mpich \
-    libmpich-dev
-
 RUN python -m pip install --no-cache-dir impi-rt
 
-FROM ${MPI} AS horovod
+FROM openmpi AS horovod
 
 ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64
 
@@ -143,14 +122,14 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN python -m pip install --no-cache-dir horovod${HOROVOD_VERSION+==${HOROVOD_VERSION}}
+RUN python -m pip install --no-cache-dir horovod==${HOROVOD_VERSION}
 
 ARG INC_VER
 
 ENV SIGOPT_PROJECT=.
 
-RUN wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-tensorflow.txt -O /licensing/third-party-programs-tensorflow.txt && \
-    wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
+RUN wget --progress=dot:giga --no-check-certificate https://github.com/intel/neural-compressor/raw/master/docker/third-party-programs-tensorflow.txt -O /licenses/inc-third-party-programs-tensorflow.txt && \
+    wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licenses/INC_LICENSE
 
 FROM horovod AS multinode-pip
 
@@ -163,7 +142,7 @@ RUN python -m pip install --no-cache-dir neural-compressor${INC_VER:+==${INC_VER
     cython \
     tf2onnx
 
-FROM ${COMPOSE_PROJECT_NAME}-python AS itex-xpu-base
+FROM ${PYTHON_BASE} AS itex-xpu-base-pip
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
@@ -187,9 +166,9 @@ ARG DPCPP_VER
 ARG MKL_VER
 ARG CCL_VER
 
-RUN no_proxy="" wget --progress=dot:giga -qO - https://repositories.intel.com/graphics/intel-graphics.key | \
+RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
     gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/graphics/ubuntu jammy max" | \
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 
 RUN apt-get update && \
@@ -218,18 +197,68 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
-ARG TF_VER="2.13"
+ARG TF_VER="2.15.0"
 
 RUN python -m pip --no-cache-dir install tensorflow==${TF_VER}
 
-RUN python -m pip --no-cache-dir install --upgrade intel-extension-for-tensorflow[xpu]
+RUN  python -m pip --no-cache-dir install --upgrade intel-extension-for-tensorflow[xpu]
 
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/THIRD-PARTY-PROGRAMS.txt /licenses/
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-program-of-intel-extension-for-tensorflow.txt /licenses/
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-programs-of-intel-tensorflow.txt /licenses/
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-programs-of-intel-optimization-for-horovod.txt /licenses/
 
-FROM itex-xpu-base AS itex-xpu-jupyter
+ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
+
+FROM ${PYTHON_BASE} AS itex-xpu-base-idp
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    apt-utils \
+    build-essential \
+    clinfo \
+    git \
+    gnupg2 \
+    gpg-agent \
+    rsync \
+    unzip \
+    wget && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+ARG ICD_VER
+ARG LEVEL_ZERO_GPU_VER
+ARG LEVEL_ZERO_VER
+ARG LEVEL_ZERO_DEV_VER
+
+
+RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+    gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
+    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    intel-opencl-icd=${ICD_VER} \
+    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
+    level-zero=${LEVEL_ZERO_VER} \
+    level-zero-dev=${LEVEL_ZERO_DEV_VER} && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+ARG TF_VER="2.15.0"
+
+RUN conda install intel-extension-for-tensorflow=${TF_VER}=*xpu* \
+    -c intel/label/oneapi -c intel -c conda-forge
+
+ENV LD_LIBRARY_PATH=/opt/conda/envs/idp/lib:$LD_LIBRARY_PATH
+
+ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/THIRD-PARTY-PROGRAMS.txt /licenses/
+ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-program-of-intel-extension-for-tensorflow.txt /licenses/
+ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-programs-of-intel-tensorflow.txt /licenses/
+ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-programs-of-intel-optimization-for-horovod.txt /licenses/
+
+FROM itex-xpu-base-${PACKAGE_OPTION} AS itex-xpu-jupyter
 
 RUN python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy
 
@@ -238,7 +267,6 @@ RUN mkdir /.local && chmod a+rwx /.local
 WORKDIR /jupyter
 COPY notebooks/itex/itex-xpu.ipynb /jupyter/xpu.ipynb
 
-ARG PORT=8888
-EXPOSE $PORT
+EXPOSE 8888
 
-CMD ["bash", "-c", "jupyter notebook --notebook-dir=/jupyter --port $PORT --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]

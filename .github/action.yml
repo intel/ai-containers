@@ -1,6 +1,20 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 ---
 name: Build Container Group Action
-description: https://github.com/intel/ai-containers/blob/main/.github/container_pipeline_format
+description: Given the inputs found below, build all containers found in a docker-compose.yaml file for a given configuration
 author: tyler.titsworth@intel.com
 inputs:
   group_dir:
@@ -47,7 +61,7 @@ runs:
         REGISTRY=${{ inputs.registry }} \
         REPO=${{ inputs.repo }} \
         COMPOSE_PROJECT_NAME=${{ env.random-number }} \
-        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} push --ignore-push-failures
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} push
       working-directory: ${{ inputs.group_dir }}
     - name: Print Containers
       shell: bash
@@ -55,7 +69,7 @@ runs:
         REGISTRY=${{ inputs.registry }} \
         REPO=${{ inputs.repo }} \
         COMPOSE_PROJECT_NAME=${{ env.random-number }} \
-        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} images --format json | jq '.[] | "\(.Repository):\(.Tag)"' >> $GITHUB_STEP_SUMMARY
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} images --format json | jq --arg registry "${{ secrets.registry }}" '.[] | select(.Repository | contains($registry)) | "\(.Repository):\(.Tag)"' | jq -s '.' >> $GITHUB_STEP_SUMMARY
       working-directory: ${{ inputs.group_dir }}
     - name: Un-Tag Containers
       if: ${{ always() }}

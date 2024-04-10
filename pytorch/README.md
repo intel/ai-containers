@@ -34,16 +34,18 @@ Built from Base
 
 | Environment Variable Name | Default Value | Description |
 | --- | --- | --- |
-| ICD_VER | `23.30.26918.50-736~22.04` | OpenCL Version |
-| LEVEL_ZERO_GPU_VER | `1.3.26918.50-736~22.04` | Level Zero GPU Version |
-| LEVEL_ZERO_VER | `1.13.1-719~22.04` | Level Zero Version |
-| DPCPP_VER | `2024.0.0-49819` | DPCPP Version |
-| MKL Version | `2024.0.0-49656` | MKL Version |
-| CCL_VER | `2021.11.1-6` | CCL Version |
+| ICD_VER | `23.43.27642.40-803~22.04` | OpenCL Version |
+| LEVEL_ZERO_GPU_VER | `1.3.27642.40-803~22.04` | Level Zero GPU Version |
+| LEVEL_ZERO_VER | `1.14.0-744~22.04` | Level Zero Version |
+| LEVEL_ZERO_DEV_VER | `1.14.0-744~22.04` | Level Zero Dev Version |
+| DPCPP_VER | `2024.1.0-963` | DPCPP Version |
+| MKL Version | `2024.1.0-691` | MKL Version |
+| CCL_VER | `2021.12.0-309` | CCL Version |
 | PYTORCH_XPU_VERSION | `2.1.0a0+cxx11.abi` | Torch Version |
-| TORCHVISION_XPU_VERSION | `0.16.0a0+cxx11.abi` | Torchvision Version |
-| IPEX_XPU_VERSION | `2.1.10+xpu` | IPEX Version |
-| ONECCL_VERSION | `2.1.100` | TorchCCL Version |
+| TORCHVISION_XPU_VERSION | `0.16.0.post0+cxx11.abi` | Torchvision Version |
+| TORCHAUDIO_XPU_VERSION | `2.1.0.post0+cxx11.abi` | Torchaudio Version |
+| IPEX_XPU_VERSION | `2.1.20+xpu` | IPEX Version |
+| ONECCL_VERSION | `2.1.200` | TorchCCL Version |
 
 ### XPU Jupyter
 

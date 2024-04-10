@@ -145,3 +145,51 @@ There are some additional steps that can be taken to prepare your service for yo
 - Set up [Monitoring](https://www.tensorflow.org/tfx/serving/serving_config#monitoring_configuration)
 - Set up a [Batching Configuration](https://www.tensorflow.org/tfx/serving/serving_config#batching_configuration)
 - Set up Model [Versioning](https://www.tensorflow.org/tfx/serving/serving_config#serving_multiple_versions_of_a_model) and [Canary Serving](https://www.tensorflow.org/tfx/serving/serving_config#assigning_string_labels_to_model_versions_to_simplify_canary_and_rollback).
+
+### KServe
+
+Apply Intel Optimizations to KServe by patching the serving runtimes to use Intel Optimized Serving Containers with `kubectl apply -f ../../pytorch/serving/patch.yaml`
+
+> [!NOTE]
+> You can modify this [`../../pytorch/serving/patch.yaml`](../../pytorch/serving/patch.yaml) file to change the serving runtime pod configuration.
+
+#### Create an Endpoint
+
+1. Create a volume with the follow file configuration:
+
+    ```text
+    my-volume
+    └── my-model
+        └── 1
+            ├── saved_model.pb
+            └── variables
+                ├── variables.index
+                └── variables.data-00000-of-00001
+    ```
+
+2. Create a new endpoint
+
+    ```yaml
+    apiVersion: "serving.kserve.io/v1beta1"
+    kind: "InferenceService"
+    metadata:
+      name: "itex-sample"
+    spec:
+      predictor:
+        model:
+          modelFormat:
+            name: tensorflow
+          storageUri: pvc://your-volume-name
+    ```
+
+3. Test the endpoint
+
+    ```bash
+    curl -v -H "Host: ${SERVICE_HOSTNAME}" http://${INGRESS_HOST}:${INGRESS_PORT}/v1/models/your-endpoint-name
+    ```
+
+> [!TIP]
+> You can find your `SERVICE_HOSTNAME` in the KubeFlow UI with the copy button and removing the `http://` from the url.
+
+> [!TIP]
+> You can find your ingress information with `kubectl get svc -n istio-system | grep istio-ingressgateway` and using the external IP and port mapped to `80`.

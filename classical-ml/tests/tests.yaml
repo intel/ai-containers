@@ -1,24 +1,26 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 ---
-classical-ml-base-idp-sklearn:
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.0.0}-xgboost-${XGBOOST_VERSION:-2.0.2}-base
+classical-ml-base-${PACKAGE_OPTION:-pip}-sklearn:
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.2.0}-xgboost-${XGBOOST_VERSION:-2.0.3}-base
   cmd: bash /tests/sklearn.sh
   volumes:
     - src: $PWD/classical-ml/tests
       dst: /tests
-classical-ml-base-idp-xgboost:
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.0.0}-xgboost-${XGBOOST_VERSION:-2.0.2}-base
-  cmd: bash /tests/xgboost.sh
-  volumes:
-    - src: $PWD/classical-ml/tests
-      dst: /tests
-classical-ml-base-pip-sklearn:
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.0.0}-xgboost-${XGBOOST_VERSION:-2.0.2}-base
-  cmd: bash /tests/sklearn.sh
-  volumes:
-    - src: $PWD/classical-ml/tests
-      dst: /tests
-classical-ml-base-pip-xgboost:
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.0.0}-xgboost-${XGBOOST_VERSION:-2.0.2}-base
+classical-ml-base-${PACKAGE_OPTION:-pip}-xgboost:
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.2.0}-xgboost-${XGBOOST_VERSION:-2.0.3}-base
   cmd: bash /tests/xgboost.sh
   volumes:
     - src: $PWD/classical-ml/tests

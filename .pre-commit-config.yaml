@@ -1,10 +1,20 @@
 ---
-# See https://pre-commit.com for more information
-# See https://pre-commit.com/hooks.html for more hooks
+ci:
+  autofix_commit_msg: "[pre-commit.ci] auto fixes from pre-commit.com hooks"
+  autofix_prs: true
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
+  autoupdate_schedule: "weekly"
+  skip:
+    [
+      pylint,
+      pytest-test-runner,
+      shellcheck,
+      markdownlint,
+      hadolint-docker,
+      shfmt
+    ]
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
-    hooks:
+  - hooks:
       - id: check-added-large-files
       - id: check-ast
       - id: check-merge-conflict
@@ -13,39 +23,59 @@ repos:
       - id: forbid-submodules
       - id: sort-simple-yaml
       - id: trailing-whitespace
-  - repo: https://github.com/hadolint/hadolint
+    repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+  - hooks:
+      - id: gitleaks
+    repo: https://github.com/gitleaks/gitleaks
+    rev: v8.16.3
+  - hooks:
+      - args:
+          [
+            --license-filepath=.github/license_template.txt,
+            --use-current-year,
+            --detect-license-in-X-top-lines=40,
+            --skip-license-insertion-comment=Copyright
+          ]
+        files: |
+          (?x)^(
+            .*(py|yaml|yml|sh|Dockerfile)|
+          )$
+        id: insert-license
+    repo: https://github.com/Lucas-C/pre-commit-hooks
+    rev: v1.5.5
+  - hooks:
+      - args: [ "--config", ".github/linters/.hadolint.yaml" ]
+        id: hadolint-docker
+    repo: https://github.com/hadolint/hadolint
     rev: v2.12.1-beta
-    hooks:
-      - id: hadolint-docker
-        args: ["--config", ".github/linters/.hadolint.yaml"]
-  - repo: https://github.com/igorshubovych/markdownlint-cli
+  - hooks:
+      - args: [ "--config", ".github/linters/.markdown-lint.yaml" ]
+        id: markdownlint
+    repo: https://github.com/igorshubovych/markdownlint-cli
     rev: v0.38.0
-    hooks:
-      - id: markdownlint
-        args: ["--config", ".github/linters/.markdown-lint.yaml"]
-  - repo: https://github.com/koalaman/shellcheck-precommit
-    rev: v0.9.0
-    hooks:
+  - hooks:
       - id: shellcheck
-  - repo: https://github.com/cisagov/pre-commit-shfmt
-    rev: v0.0.2
-    hooks:
+    repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.9.0
+  - hooks:
       - id: shfmt
-  - repo: https://github.com/ambv/black
-    rev: 23.12.1
-    hooks:
+    repo: https://github.com/cisagov/pre-commit-shfmt
+    rev: v0.0.2
+  - hooks:
       - id: black
-        exclude: ^preset
-  - repo: local
-    hooks:
-      - id: pylint
-        name: pylint
+    repo: https://github.com/ambv/black
+    rev: 23.12.1
+  - hooks:
+      - args: [ "--rcfile=.github/linters/.python-lint" ]
         entry: pylint
+        id: pylint
         language: system
-        types: [python]
-        args: ["--rcfile=.github/linters/.python-lint"]
-      - id: pytest-test-runner
+        name: pylint
+        types: [ python ]
+      - entry: bash -c 'cd test-runner && pytest tests/utest.py -W ignore::UserWarning'
+        id: pytest-test-runner
+        language: system
         name: pytest-test-runner
-        language: system
-        types: [python]
-        entry: bash -c 'cd test-runner && pytest tests/utest.py -W ignore::UserWarning'
+        types: [ python ]
+    repo: local

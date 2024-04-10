@@ -68,6 +68,7 @@ RUN apt-get update -y && \
     rsync \
     unzip \
     wget \
+    sudo \
     xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
@@ -77,35 +78,42 @@ ARG ICD_VER
 ARG LEVEL_ZERO_GPU_VER
 ARG LEVEL_ZERO_VER
 ARG LEVEL_ZERO_DEV_VER
-ARG DPCPP_VER
-ARG MKL_VER
 
-RUN wget --progress=dot:giga -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-      gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
-        tee /etc/apt/sources.list.d/intel-gpu-jammy.list &&\
-    wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
-        | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
-    echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
-        | tee /etc/apt/sources.list.d/oneAPI.list
+
+# Public Drivers link
+RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+    gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
+    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
-    intel-opencl-icd=${ICD_VER} \
-    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
-    level-zero=${LEVEL_ZERO_VER} \
-    level-zero-dev=${LEVEL_ZERO_DEV_VER} \
-    intel-oneapi-runtime-dpcpp-cpp=${DPCPP_VER} \
-    intel-oneapi-runtime-mkl=${MKL_VER} \
-    libgl1-mesa-glx \
-    libglib2.0-0  && \
-    apt-get clean && \
+    intel-opencl-icd="${ICD_VER}" \
+    intel-level-zero-gpu="${LEVEL_ZERO_GPU_VER}" \
+    level-zero="${LEVEL_ZERO_VER}"
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    intel-media-va-driver-non-free libmfx1 libmfxgen1 libvpl2 \
+    libegl-mesa0 libegl1-mesa libegl1-mesa-dev libgbm1 libgl1-mesa-dev libgl1-mesa-dri \
+    libglapi-mesa libgles2-mesa-dev libglx-mesa0 libigdgmm12 libxatracker2 mesa-va-drivers \
+    mesa-vdpau-drivers mesa-vulkan-drivers va-driver-all vainfo hwinfo clinfo
+
+RUN apt-get install -y --no-install-recommends --fix-missing \
+    libigc-dev intel-igc-cm libigdfcl-dev libigfxcmrt-dev level-zero-dev="${LEVEL_ZERO_DEV_VER}" && \
     rm -rf /var/lib/apt/lists/*
+
+RUN rm /etc/apt/sources.list.d/*list
 
 FROM dgpu-base as deep-learning-python
 
 # Setting up non-root directories
-RUN useradd --uid 1000 -d /home/dev -s /bin/bash -m dev
+RUN useradd --uid 1000 -d /home/dev -s /bin/bash dev
+RUN groupadd -g 109 render
+## Add the user to the required groups
+RUN usermod -aG root,sudo,video,render dev
+# Set a password for the user (Optional)
+RUN echo 'dev:password' | chpasswd
 USER dev
 WORKDIR /home/dev
 
@@ -115,171 +123,261 @@ ENV CONDA_ROOT=/home/dev/conda
 ARG MINICONDA_VERSION
 ARG PYTHON_VERSION
 ARG IDP_VERSION
+ARG INTEL_CHANNEL
 
 RUN wget --progress=dot:giga --no-check-certificate "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh" -O miniconda.sh && \
     chmod +x miniconda.sh && \
     ./miniconda.sh -b -p "${CONDA_ROOT}" && \
     rm ./miniconda.sh && \
-    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniconda3" && \
+    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniconda3"  && \
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda update -y conda && \
+    conda config --add channels conda-forge && \
     conda config --add channels intel && \
     conda init --all && \
-    python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy && \
+    conda install -c conda-forge \
+        jupyterlab \
+        notebook \
+        jupyterhub \
+        jupyter-server-proxy \
+        'mako>=1.2.2' \
+        'pyjwt>=2.4.0' \
+        'cryptography>=42.0.4' && \
+        jupyter labextension disable "@jupyterlab/apputils-extension:announcements" && \
     conda clean -y --all
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
-ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib:/opt/intel/oneapi/lib/intel64:${LD_LIBRARY_PATH}
+
+RUN conda config --set pip_interop_enabled True # Improve interoperabilty among conda an pypi packages
+
 
 # PyTorch Installation
+ARG IDP_VERSION
+ARG DPNP_VERSION
+ARG NUMPY_VERSION
+
 ARG TORCH_CPU_VERSION
 ARG ONECCL_CPU_VERSION
 ARG IPEX_CPU_VERSION
 ARG TORCHVISION_CPU_VERSION
-ARG TORCH_GPU_VERSION
-ARG ONECCL_GPU_VERSION
-ARG IPEX_GPU_VERSION
-ARG TORCHVISION_GPU_VERSION
-ARG INTEL_CHANNEL
-ARG NEURAL_COMPRESSOR_VERSION
+ARG TORCHAUDIO_CPU_VERSION
+ARG DEEPSPEED_VERSION
 
-# PyTorch CPU Env
-RUN conda create -yn pytorch-cpu -c ${INTEL_CHANNEL} -c conda-forge \
+# PyTorch CPU Env - conda packages
+RUN conda create -yn pytorch-cpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
+        dpnp="${DPNP_VERSION}" \
+        numpy="${NUMPY_VERSION}" \
+        python="${PYTHON_VERSION}" \
+        intel-openmp="${IDP_VERSION}" \
+        pytorch="${TORCH_CPU_VERSION}" \
+        oneccl_bind_pt="${ONECCL_CPU_VERSION}" \
+        intel-extension-for-pytorch="${IPEX_CPU_VERSION}" \
+        torchvision="${TORCHVISION_CPU_VERSION}" \
+        torchaudio="${TORCHAUDIO_CPU_VERSION}" \
+        onnx \
         matplotlib-base \
-        numba-dpex=0.21.4 \
-        numpy=1.24.3 \
-        ipp=2021.10 \
-        intelpython=${IDP_VERSION} \
-        python=${PYTHON_VERSION} \
-        intel-openmp=2024.0 \
-        pytorch=${TORCH_CPU_VERSION} \
-        oneccl_bind_pt=${ONECCL_CPU_VERSION} \
-        intel-extension-for-pytorch=${IPEX_CPU_VERSION} \
-        torchvision=${TORCHVISION_CPU_VERSION} \
-        onnx && \
-    conda install -yn pytorch-cpu ipython ipykernel kernda -c conda-forge && \
-    conda run -n pytorch-cpu python -m pip install --no-deps --no-cache-dir --ignore-installed \
+        ipykernel \
+        kernda  \
+        'pillow>=10.2.0' \
+        'aiohttp>=3.9.0' \
+        'tornado>=6.3.3' && \
+    conda clean -y --all
+
+# PyPI packages
+RUN conda run -n pytorch-cpu pip install --no-deps --no-cache-dir --ignore-installed \
+        ninja \
         python-dotenv \
         tqdm \
         cloud-data-connector \
         dataset-librarian && \
-    conda run -n pytorch-cpu python -m pip install --no-cache-dir \
+    conda run -n pytorch-cpu pip install --no-cache-dir --ignore-installed \
         transformers \
         datasets \
         evaluate && \
-    conda run -n pytorch-cpu python -m pip install -U accelerate && \
-    conda run -n pytorch-cpu python -m pip install git+https://github.com/huggingface/optimum-intel.git && \
-    conda clean -y --all && \
-    echo "unset OCL_ICD_VENDORS" >> ${CONDA_ROOT}/envs/pytorch-cpu/etc/conda/activate.d/activate-opencl-rt.sh
+    conda run -n pytorch-cpu pip install  --no-cache-dir -U accelerate && \
+    conda run -n pytorch-cpu pip install  --no-cache-dir "git+https://github.com/huggingface/optimum-intel.git" && \
+    conda clean -y --all
 
-# PyTorch GPU Env
-RUN conda create -yn pytorch-gpu -c ${INTEL_CHANNEL} -c conda-forge \
+
+
+RUN conda run -n pytorch-cpu conda install protobuf=4.24 -c conda-forge --override --force-reinstall -y
+
+# PyTorch Installation
+ARG IDP_VERSION
+ARG DPNP_VERSION
+ARG NUMPY_VERSION
+
+ARG TORCH_GPU_VERSION
+ARG ONECCL_GPU_VERSION
+ARG IPEX_GPU_VERSION
+ARG TORCHVISION_GPU_VERSION
+ARG TORCHAUDIO_GPU_VERSION
+ARG IDEX_VERSION
+ARG DEEPSPEED_VERSION
+
+# PyTorch GPU Env - conda packages
+RUN conda create -yn pytorch-gpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
+        dpnp="${DPNP_VERSION}" \
+        dpcpp-cpp-rt="${IDP_VERSION}" \
+        mkl-dpcpp="${IDP_VERSION}" \
+        dpcpp_impl_linux-64="${IDP_VERSION}" \
+        numpy="${NUMPY_VERSION}" \
+        python="${PYTHON_VERSION}" \
+        intel-openmp="${IDP_VERSION}" \
+        python="${PYTHON_VERSION}" \
+        pytorch="${TORCH_GPU_VERSION}" \
+        oneccl_bind_pt="${ONECCL_GPU_VERSION}" \
+        intel-extension-for-pytorch="${IPEX_GPU_VERSION}" \
+        torchvision="${TORCHVISION_GPU_VERSION}" \
+        torchaudio="${TORCHAUDIO_GPU_VERSION}" \
+        onnx \
+        tensorboardx \
         matplotlib-base \
-        numba-dpex=0.21.4 \
-        numpy=1.24.3 \
-        ipp=2021.10 \
-        intelpython=${IDP_VERSION} \
-        python=${PYTHON_VERSION} \
-        intel-openmp=2024.0 \
-        pytorch=${TORCH_GPU_VERSION} \
-        oneccl_bind_pt=${ONECCL_GPU_VERSION} \
-        intel-extension-for-pytorch=${IPEX_GPU_VERSION} \
-        torchvision=${TORCHVISION_GPU_VERSION} \
-        onnx  && \
-    conda install -yn pytorch-gpu ipython ipykernel kernda -c conda-forge  && \
-    conda run -n pytorch-gpu python -m pip install --no-deps --no-cache-dir --ignore-installed \
+        pandas \
+        ipython \
+        ipykernel \
+        kernda  \
+        'pillow>=10.2.0' \
+        'aiohttp>=3.9.0' \
+        'tornado>=6.3.3' && \
+    conda clean -y --all
+
+# PyPI packages
+RUN conda run -n pytorch-gpu pip install --no-deps --no-cache-dir --ignore-installed \
+        ninja \
         python-dotenv \
         tqdm \
         cloud-data-connector \
-        dataset-librarian  && \
-    conda run -n pytorch-gpu python -m pip install --no-cache-dir \
+        dataset-librarian && \
+    conda run -n pytorch-gpu pip install --no-cache-dir --ignore-installed \
         transformers \
         datasets \
-        evaluate  && \
-    conda run -n pytorch-gpu python -m pip install -U accelerate && \
-    conda run -n pytorch-gpu python -m pip install git+https://github.com/huggingface/optimum-intel.git && \
-    conda clean -y --all && \
-    echo "unset OCL_ICD_VENDORS" >> ${CONDA_ROOT}/envs/pytorch-gpu/etc/conda/activate.d/activate-opencl-rt.sh
+        evaluate && \
+    conda run -n pytorch-gpu pip install --no-cache-dir -U accelerate && \
+    conda run -n pytorch-gpu pip install --no-cache-dir "git+https://github.com/huggingface/optimum-intel.git" && \
+    conda clean -y --all
 
-# TensorFlow Installtion
-ARG TF_PACKAGE
+
+
+RUN conda run -n pytorch-gpu conda install protobuf=4.24 -c conda-forge --override --force-reinstall -y
+
+
+# TensorFlow Installation
+ARG IDP_VERSION
+ARG DPNP_VERSION
+ARG NUMPY_VERSION
+
 ARG TF_VERSION
 ARG ITEX_VERSION
-ARG INTEL_HOROVOD
-
-# Install Horovod
 ARG HOROVOD_VERSION
+ARG IMPI_VERSION
+
 ARG HOROVOD_WITH_TENSORFLOW=1
 ARG HOROVOD_WITHOUT_MXNET=1
 ARG HOROVOD_WITHOUT_GLOO=1
 ARG HOROVOD_WITH_MPI=1
 
-RUN conda create -yn tensorflow -c ${INTEL_CHANNEL} -c conda-forge \
+
+# Tensorflow Env - conda packages
+RUN conda create -yn tensorflow-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
+        dpnp="${DPNP_VERSION}" \
+        dpcpp-cpp-rt="${IDP_VERSION}" \
+        mkl-dpcpp="${IDP_VERSION}" \
+        numpy="${NUMPY_VERSION}" \
+        python="${PYTHON_VERSION}" \
+        intel-extension-for-tensorflow="${ITEX_VERSION}=*cpu*" \
+        intel-optimization-for-horovod="${INTEL_HOROVOD}" \
+        tensorflow="${TF_VERSION}" \
+        impi-devel="${IMPI_VERSION}" \
         matplotlib-base \
-        numba-dpex=0.21.4 \
-        numpy=1.24.3 \
-        ipp=2021.10 \
-        intelpython=${IDP_VERSION} \
-        python=${PYTHON_VERSION} \
-        intel-extension-for-tensorflow=${ITEX_VERSION} \
-        intel-optimization-for-horovod=${INTEL_HOROVOD} \
-        tensorflow=${TF_VERSION} \
-        numpy=1.24.3 \
-        impi-devel=2021.11 \
-        dpnp \
-        scipy \
-        onnx
-RUN conda install -yn tensorflow ipython ipykernel kernda -c conda-forge
-RUN conda run -n tensorflow python -m pip install --no-cache-dir \
-        tensorflow_hub \
+        dataset_librarian \
+        onnx \
+        mpich=4.2.0=external_0 \
+        ipython \
+        ipykernel \
+        kernda  \
+        'pillow>=10.2.0' \
+        'cryptography>=42.0.4' \
+        'werkzeug>=2.2.3' \
+        'aiohttp>=3.9.0' \
+        'tornado>=6.3.3' && \
+    conda clean -y --all
+
+# PyPI packages
+RUN conda run -n tensorflow-cpu pip install --no-cache-dir --ignore-installed \
         py-cpuinfo \
         requests \
         cryptography
-RUN conda run -n tensorflow python -m pip install --no-deps --no-cache-dir --ignore-installed \
-        python-dotenv \
+RUN conda run -n tensorflow-cpu pip install --no-deps --no-cache-dir --ignore-installed \
+        tensorflow_hub \
         tqdm \
-        cloud-data-connector \
-        dataset-librarian && \
-    conda clean -y --all && \
-    echo "unset OCL_ICD_VENDORS" >> ${CONDA_ROOT}/envs/tensorflow/etc/conda/activate.d/activate-opencl-rt.sh
+        cloud-data-connector && \
+    conda clean -y --all
+
+# Tensorflow Env - conda packages
+RUN conda create -yn tensorflow-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
+        dpnp="${DPNP_VERSION}" \
+        dpcpp-cpp-rt="${IDP_VERSION}" \
+        mkl-dpcpp="${IDP_VERSION}" \
+        numpy="${NUMPY_VERSION}" \
+        python="${PYTHON_VERSION}" \
+        intel-extension-for-tensorflow="${ITEX_VERSION}=*xpu*" \
+        intel-optimization-for-horovod="${INTEL_HOROVOD}" \
+        tensorflow="${TF_VERSION}" \
+        impi-devel="${IMPI_VERSION}" \
+        matplotlib-base \
+        dataset_librarian \
+        onnx \
+        mpich=4.2.0=external_0 \
+        ipython \
+        ipykernel \
+        kernda  \
+        'pillow>=10.2.0' \
+        'cryptography>=42.0.4' \
+        'werkzeug>=2.2.3' \
+        'aiohttp>=3.9.0' \
+        'tornado>=6.3.3' && \
+    conda clean -y --all
+
+# PyPI packages
+RUN conda run -n tensorflow-gpu pip install --no-cache-dir --ignore-installed \
+        py-cpuinfo \
+        requests \
+        cryptography
+RUN conda run -n tensorflow-gpu pip install --no-deps --no-cache-dir --ignore-installed \
+        tensorflow_hub \
+        tqdm \
+        cloud-data-connector  && \
+    conda clean -y --all
 
 FROM deep-learning-python as deep-learning-jupyter
 
-ARG KERNEL_NAME_PT="Intel PyTorch"
-ARG KERNEL_NAME_TF="Intel TensorFlow"
+ARG KERNEL_NAME_TF_CPU="Intel TensorFlow cpu"
+ARG KERNEL_NAME_TF_GPU="Intel TensorFlow gpu"
+ARG KERNEL_NAME_PT_CPU="Intel PyTorch cpu"
+ARG KERNEL_NAME_PT_GPU="Intel PyTorch gpu"
+
 EXPOSE 8888
 
 RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
     mkdir ~/.local && chmod a+rwx ~/.local
 
 RUN \
-    "${CONDA_ROOT}/envs/pytorch-cpu/bin/python" -m ipykernel install --user --name pytorch-cpu --display-name "${KERNEL_NAME_PT}" && \
+    "${CONDA_ROOT}/envs/pytorch-cpu/bin/python" -m ipykernel install --user --name pytorch-cpu --display-name "${KERNEL_NAME_PT_CPU}" && \
     "${CONDA_ROOT}/envs/pytorch-cpu/bin/kernda" -o -y "$HOME/.local/share/jupyter/kernels/$(echo pytorch-cpu | sed -e 's/\(.*\)/\L\1/')/kernel.json" && \
-    "${CONDA_ROOT}/envs/pytorch-gpu/bin/python" -m ipykernel install --user --name pytorch-gpu --display-name "${KERNEL_NAME_PT}" && \
+    "${CONDA_ROOT}/envs/pytorch-gpu/bin/python" -m ipykernel install --user --name pytorch-gpu --display-name "${KERNEL_NAME_PT_GPU}" && \
     "${CONDA_ROOT}/envs/pytorch-gpu/bin/kernda" -o -y "$HOME/.local/share/jupyter/kernels/$(echo pytorch-gpu | sed -e 's/\(.*\)/\L\1/')/kernel.json" && \
-    "${CONDA_ROOT}/envs/tensorflow/bin/python" -m ipykernel install --user --name tensorflow --display-name "${KERNEL_NAME_TF}" && \
-    "${CONDA_ROOT}/envs/tensorflow/bin/kernda" -o -y "$HOME/.local/share/jupyter/kernels/$(echo tensorflow | sed -e 's/\(.*\)/\L\1/')/kernel.json" && \
+    "${CONDA_ROOT}/envs/tensorflow-cpu/bin/python" -m ipykernel install --user --name tensorflow-cpu --display-name "${KERNEL_NAME_TF_CPU}" && \
+    "${CONDA_ROOT}/envs/tensorflow-cpu/bin/kernda" -o -y "$HOME/.local/share/jupyter/kernels/$(echo tensorflow-cpu | sed -e 's/\(.*\)/\L\1/')/kernel.json" && \
+    "${CONDA_ROOT}/envs/tensorflow-gpu/bin/python" -m ipykernel install --user --name tensorflow-gpu --display-name "${KERNEL_NAME_TF_GPU}" && \
+    "${CONDA_ROOT}/envs/tensorflow-gpu/bin/kernda" -o -y "$HOME/.local/share/jupyter/kernels/$(echo tensorflow-gpu | sed -e 's/\(.*\)/\L\1/')/kernel.json" && \
     python -m ipykernel.kernelspec --user
 
-CMD ["bash", "-c", "jupyter notebook --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
 FROM deep-learning-jupyter as distributed-deep-learning
 
 USER root
-
-# oneCCL installation
-ARG CCL_VER="N/A"
-RUN if [ ${CCL_VER} != "N/A" ]; then \
-        apt-get update && \
-        apt-get install -y --no-install-recommends --fix-missing \
-        intel-oneapi-runtime-ccl=${CCL_VER} && \
-        rm -rf /var/lib/apt/lists/*; \
-    fi
-
-# oneCCl specific flags
-ENV CCL_ROOT="/opt/intel/oneapi/lib/intel64"
-ENV CCL_ZE_IPC_EXCHANGE=sockets
-ENV LD_LIBRARY_PATH=/opt/intel/oneapi/lib/intel64/libfabric:${LD_LIBRARY_PATH}
 
 # Install OpenMPI
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
@@ -306,16 +404,13 @@ ENV UCX_TLS=ud,sm,self
 
 USER dev
 
-RUN conda run -n pytorch-cpu python -m pip install --no-cache-dir py-cpuinfo && \
-    conda run -n pytorch-cpu python -m pip install --no-cache-dir \
-        deepspeed \
-        intel-extension-for-deepspeed \
-        tensorboardX
-RUN conda run -n pytorch-gpu python -m pip install --no-cache-dir py-cpuinfo && \
-    conda run -n pytorch-gpu python -m pip install --no-cache-dir \
-        deepspeed \
-        intel-extension-for-deepspeed \
-        tensorboardX
+RUN conda install -n pytorch-cpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
+        deepspeed="${DEEPSPEED_VERSION}" \
+        tensorboardx
+
+RUN conda install -n pytorch-gpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
+        deepspeed="${DEEPSPEED_VERSION}" \
+        tensorboardx
 
 COPY --chown=dev notebooks /home/dev/jupyter
 COPY --chown=dev tests /home/dev/sample-tests

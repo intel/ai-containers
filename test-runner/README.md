@@ -190,14 +190,14 @@ test-containers:
     - uses: actions/checkout@v4
     - uses: docker/login-action@v3
       with:
-        registry: ${{ vars.REGISTRY }}
+        registry: ${{ secrets.REGISTRY }}
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Test Container Group
       uses: intel/ai-containers/test-runner@main
       with:
         mlops_repo: intel/ai-containers
-        registry: ${{ vars.REGISTRY }}
+        registry: ${{ secrets.REGISTRY }}
         test_dir: /path/to/test/dir
         token: ${{ github.token }}
 ```

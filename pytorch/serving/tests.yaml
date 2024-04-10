@@ -1,5 +1,19 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 ---
-ipex-serving-model-archive-${PACKAGE_OPTION:-pip}:
+ipex-serving-model-archive:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-torchserve
   cmd: bash /home/model-server/model-archive/mar-test.sh
   entrypoint: ''
@@ -10,7 +24,7 @@ ipex-serving-model-archive-${PACKAGE_OPTION:-pip}:
       dst: /home/model-server/model-store
   user: root
   workdir: /home/model-server/model-archive
-ipex-serving-workflow-archive-${PACKAGE_OPTION:-pip}:
+ipex-serving-workflow-archive:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-torchserve
   cmd: bash /home/model-server/model-archive/war-test.sh
   entrypoint: ''
@@ -21,7 +35,7 @@ ipex-serving-workflow-archive-${PACKAGE_OPTION:-pip}:
       dst: /home/model-server/wf-store
   user: root
   workdir: /home/model-server/model-archive
-ipex-serving-rest-workflow-${PACKAGE_OPTION:-pip}:
+ipex-serving-rest-workflow:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-torchserve
   cmd: bash /home/model-server/wf-store/rest-test.sh
   serving: True
@@ -34,7 +48,7 @@ ipex-serving-rest-workflow-${PACKAGE_OPTION:-pip}:
     ENABLE_TORCH_PROFILER: 'true'
   shm_size: 1g
   workdir: /home/model-server/wf-store
-ipex-serving-rest-inference-${PACKAGE_OPTION:-pip}:
+ipex-serving-rest-inference:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-torchserve
   cmd: bash /home/model-server/model-store/rest-test.sh
   serving: True
@@ -45,7 +59,7 @@ ipex-serving-rest-inference-${PACKAGE_OPTION:-pip}:
     ENABLE_TORCH_PROFILER: 'true'
   shm_size: 1g
   workdir: /home/model-server/model-store
-ipex-serving-grpc-inference-${PACKAGE_OPTION:-pip}:
+ipex-serving-grpc-inference:
   img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-torchserve
   cmd: bash /home/model-server/model-store/grpc-test.sh
   serving: True

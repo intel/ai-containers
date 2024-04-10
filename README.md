@@ -1,6 +1,10 @@
 # Intel® AI Containers
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8270/badge)](https://www.bestpractices.dev/projects/8270)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/intel/ai-containers/badge)](https://securityscorecards.dev/viewer/?uri=github.com/intel/ai-containers)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fintel%2Fai-containers.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fintel%2Fai-containers?ref=badge_shield&issueType=license)
+[![CodeQL](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql)
+[![Unit Tests](https://github.com/intel/ai-containers/actions/workflows/unit-test.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/unit-test.yaml)
 
 This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. used to scale out AI containers with versions of TensorFlow and PyTorch that have been optimized for Intel platforms. Scaling is done with python, Docker, kubernetes, kubeflow, cnvrg.io, Helm, and other container orchestration frameworks for use in the cloud and on-premise.
 
@@ -9,9 +13,13 @@ This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. use
 Define your project's registry and repository each time you use the project:
 
 ```bash
+# REGISTRY/REPO:TAG
 export REGISTRY=<registry_name>
 export REPO=<repo_name>
 ```
+
+> [!NOTE]
+> `REGISTRY` and `REPO` are used to authenticate with the private registry necessary to push completed container layers and saved them for testing and publication. For example: `REGISTRY=intel && REPO=intel-extension-for-pytorch` would become `intel/intel-extension-for-pytorch` as the name of the container image, followed by the tag generated from the service found in that project's compose file.
 
 ### Set Up Docker Engine
 
@@ -24,13 +32,13 @@ Ensure you have Docker Compose installed on your machine. If you don't have this
 ```bash
 DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
 mkdir -p $DOCKER_CONFIG/cli-plugins
-curl -SL https://github.com/docker/compose/releases/download/v2.24.5/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+curl -SL https://github.com/docker/compose/releases/download/v2.25.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
 chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 docker compose version
 ```
 
 > [!CAUTION]
-> Docker compose `v2.20.0` is the minimum required version for some container groups.
+> Docker compose `v2.25.0` is the minimum required version for some container groups.
 
 #### Development Container
 

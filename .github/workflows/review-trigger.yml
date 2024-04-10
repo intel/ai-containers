@@ -1,32 +1,39 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 ---
 name: Review Pipeline Validation
 on:
   pull_request_review:
     types: [submitted, edited]
-permissions:
-  actions: read
-  checks: read
-  contents: read
-  deployments: read
-  discussions: read
-  id-token: write
-  issues: read
-  packages: read
-  pages: read
-  pull-requests: write
-  repository-projects: read
-  security-events: read
-  statuses: read
+permissions: read-all
 jobs:
   check-review:
     runs-on: [ k8-runners ]
     if: contains(github.event.review.body, '/test-group') && !contains(github.event.pull_request.labels.*.name, 'validating')
+    permissions:
+      contents: read
+      pull-requests: write
     outputs:
       group_dir: ${{ steps.comment-inputs.outputs.group_dir }}
       env_overrides: ${{ steps.comment-inputs.outputs.env_overrides }}
       runner_label: ${{ steps.comment-inputs.outputs.runner_label }}
       no-build: ${{ steps.comment-inputs.outputs.no-build || false }}
     steps:
+      - uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
       - uses: actions/checkout@v4
       - name: Get Inputs
         id: comment-inputs
@@ -80,8 +87,14 @@ jobs:
   status-check:
     needs: [ check-review, container-pipeline-tester ]
     if: ${{ always() && needs.check-review.result != 'skipped' }}
+    permissions:
+      checks: write
+      pull-requests: write
     runs-on: [ k8-runners ]
     steps:
+      - uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
       - name: Unlock
         if: ${{ needs.check-review.result != 'skipped' }}
         uses: actions/github-script@v7

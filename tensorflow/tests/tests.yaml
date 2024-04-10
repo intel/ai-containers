@@ -1,9 +1,19 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 ---
-itex-xpu-jupyter-idp:
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.13}-itex-xpu-jupyter
-  cmd: python -m papermill --log-output  /jupyter/xpu.ipynb -k python3
-  notebook: True
-itex-xpu-jupyter-pip:
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.13}-itex-xpu-jupyter
-  cmd: python -m papermill --log-output  /jupyter/xpu.ipynb -k python3
+itex-xpu-jupyter-${PACKAGE_OPTION:-pip}:
+  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.0}-itex-xpu-jupyter
+  cmd: papermill --log-output  /jupyter/xpu.ipynb -k python3 -
   notebook: True
