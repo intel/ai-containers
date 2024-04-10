@@ -69,7 +69,7 @@ runs:
         REGISTRY=${{ inputs.registry }} \
         REPO=${{ inputs.repo }} \
         COMPOSE_PROJECT_NAME=${{ env.random-number }} \
-        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} images --format json | jq --arg registry "${{ secrets.registry }}" '.[] | select(.Repository | contains($registry)) | "\(.Repository):\(.Tag)"' | jq -s '.' >> $GITHUB_STEP_SUMMARY
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} images --format json | jq --arg registry "${{ inputs.registry }}" '.[] | select(.Repository | contains($registry)) | "\(.Tag)"' | jq -s '.' >> $GITHUB_STEP_SUMMARY
       working-directory: ${{ inputs.group_dir }}
     - name: Un-Tag Containers
       if: ${{ always() }}
