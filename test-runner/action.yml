@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Test Runner Action
+name: Integration Test
 description: 'https://github.com/intel/ai-containers/blob/main/test-runner/README.md'
 author: tyler.titsworth@intel.com
 inputs:
