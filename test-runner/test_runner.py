@@ -151,7 +151,7 @@ if __name__ == "__main__":
             tests_json = full_load(test_file)
         except YAMLError as yaml_exc:
             logging.error(yaml_exc)
-            sys.exit(0)
+            sys.exit(1)
     tests_list = get_test_list(args, tests_json)
     logging.debug("Creating Test Objects from: %s", tests_list)
     # For each test, create a Test Object with the test name is the key of the test in yaml

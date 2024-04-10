@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ---
-name: Build Container Group
+name: Build Container Group Action
 description: Given the inputs found below, build all containers found in a docker-compose.yaml file for a given configuration
 author: tyler.titsworth@intel.com
 inputs:
