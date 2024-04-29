@@ -9,6 +9,6 @@ torch-workflow-archiver
 torchaudio==2.2.0+cpu
 torchserve
 torchtext==0.17.0+cpu
-torchvision==0.17.0+cpu
+torchvision==0.18.0
 -f https://developer.intel.com/ipex-whl-stable-cpu
 intel_extension_for_pytorch==2.2.0+cpu
