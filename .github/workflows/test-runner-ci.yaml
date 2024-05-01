@@ -101,7 +101,7 @@ jobs:
       with:
         python-version: "3.8"
     - name: Test Container Group
-      uses: intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/test-runner@develop
+      uses: intel/ai-containers/test-runner@main
       with:
         mlops_repo: ${{ github.repository }}
         mlops_ref: ${{ github.ref }}

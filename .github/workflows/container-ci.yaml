@@ -93,7 +93,7 @@ jobs:
     - name: Build Container Group
       if: ${{ !inputs.no-build }}
       id: build-group
-      uses: intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/.github@develop
+      uses: intel/ai-containers/.github@main
       with:
         group_dir: ${{ inputs.group_dir }}
         env_overrides: ${{ inputs.env_overrides || env.env_overrides || '' }}
@@ -134,7 +134,7 @@ jobs:
     - name: Pull Image
       run: docker pull ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
     - name: Scan Container
-      uses: intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/.github/scan@develop
+      uses: intel/ai-containers/.github/scan@main
       with:
         image-ref: ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
         output: ${{ matrix.container }}-scan.sarif
@@ -184,7 +184,7 @@ jobs:
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Test Container Group
-      uses: intel-innersource/frameworks.ai.infrastructure.machine-learning-operations/test-runner@develop
+      uses: intel/ai-containers/test-runner@main
       with:
         mlops_repo: ${{ secrets.MLOPS_REPO || github.repository }}
         mlops_ref: ${{ secrets.MLOPS_REF || github.ref }}
