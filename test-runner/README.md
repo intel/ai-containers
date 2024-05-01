@@ -49,6 +49,27 @@ A test is defined as a set of commands to be executed along with their associate
 
 There are two more complex properties that can be enabled to provide additional functionality to your tests.
 
+#### Environment Variables
+
+Environment variables can be set for a test by providing a dictionary of key-value pairs in the `env` property of the test definition. These environment variables will be set when the test is executed using the [`expandvars`](https://pypi.org/project/expandvars/) library.
+
+Here's an example of a test definition with environment variables:
+
+```yaml
+test:
+  cmd: echo "${VAR1:-hello}"
+```
+
+```bash
+python test-runner/test_runner.py -f path/to/tests.yaml
+VAR=world python test-runner/test_runner.py -f path/to/tests.yaml
+```
+
+In the example above, the first output will be `hello`, and the second output will be `world`.
+
+> [!TIP]
+> It is a best practice to set a default value in the case where `VAR1` is not set with `:-<value>`, if the environment variable is not set for whatever reason, the test runner application will fail the test.
+
 #### Notebook Test
 
 A notebook test is a special type of test designed to run Jupyter notebooks. This is indicated by setting the notebook attribute to `True` in the test definition. When a test is marked as a notebook test, the command specified in the cmd attribute is expected to be [papermill](https://github.com/nteract/papermill) command. If papermill is not already installed in the provided `image` property, then it will be installed.
@@ -96,7 +117,7 @@ For more options, see the `--help` output below:
 
 ```text
 $ python test_runner.py --help
-usage: test_runner.py [-h] [-a ACTIONS_PATH] [-f FILE_PATH] [-v] [-l LOGS_PATH]
+usage: test_runner.py [-h] [-a ACTIONS_PATH] -f FILE_PATH [-v] [-l LOGS_PATH]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -154,7 +175,6 @@ This composite action clones this repository just as in the [quickstart](#quicks
 Inputs for the action:
 
 ```yaml
-inputs:
   mlops_repo:
     description: 'Test Runner org/repo'
     required: true
@@ -172,8 +192,12 @@ inputs:
     description: 'Container Registry URL'
     required: true
     type: string
+  repo:
+    description: 'Container Repository'
+    required: true
+    type: string
   test_dir:
-    description: 'Directory with tests.yaml to test'
+    description: 'Path to Test Dir'
     required: true
     type: string
   token:
@@ -181,23 +205,7 @@ inputs:
     type: string
 ```
 
-Example Implementation of the action:
+See an [Example](../.github/workflows/test-runner-ci.yaml#L94) Implementation of the action.
 
-```yaml
-test-containers:
-  runs-on: [ self-hosted, Linux, validation ]
-  steps:
-    - uses: actions/checkout@v4
-    - uses: docker/login-action@v3
-      with:
-        registry: ${{ secrets.REGISTRY }}
-        username: ${{ secrets.REGISTRY_USER }}
-        password: ${{ secrets.REGISTRY_TOKEN }}
-    - name: Test Container Group
-      uses: intel/ai-containers/test-runner@main
-      with:
-        mlops_repo: intel/ai-containers
-        registry: ${{ secrets.REGISTRY }}
-        test_dir: /path/to/test/dir
-        token: ${{ github.token }}
-```
+> [!TIP]
+> When writing Tests for use with a CI platform like GitHub Actions, write your tests in such a way that they would be executed from the root directory of your repository.

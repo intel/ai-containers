@@ -35,9 +35,6 @@ jobs:
       contents: read
       actions: read
     steps:
-      - uses: step-security/harden-runner@v2
-        with:
-          egress-policy: audit
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
@@ -52,6 +49,6 @@ jobs:
           name: SARIF file
           path: results.sarif
           retention-days: 5
-      - uses: github/codeql-action/upload-sarif@v3.24.10
+      - uses: github/codeql-action/upload-sarif@v3.25.3
         with:
           sarif_file: results.sarif

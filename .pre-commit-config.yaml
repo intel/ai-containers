@@ -7,11 +7,11 @@ ci:
   skip:
     [
       pylint,
-      pytest-test-runner,
       shellcheck,
       markdownlint,
       hadolint-docker,
-      shfmt
+      shfmt,
+      tox
     ]
 repos:
   - hooks:
@@ -24,11 +24,11 @@ repos:
       - id: sort-simple-yaml
       - id: trailing-whitespace
     repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v4.6.0
   - hooks:
       - id: gitleaks
     repo: https://github.com/gitleaks/gitleaks
-    rev: v8.16.3
+    rev: v8.18.2
   - hooks:
       - args:
           [
@@ -53,11 +53,16 @@ repos:
       - args: [ "--config", ".github/linters/.markdown-lint.yaml" ]
         id: markdownlint
     repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.38.0
+    rev: v0.39.0
   - hooks:
       - id: shellcheck
     repo: https://github.com/koalaman/shellcheck-precommit
-    rev: v0.9.0
+    rev: v0.10.0
+  - hooks:
+      - args: [ "--config-file", ".github/linters/actionlint.yml" ]
+        id: actionlint
+    repo: https://github.com/rhysd/actionlint
+    rev: v1.6.27
   - hooks:
       - id: shfmt
     repo: https://github.com/cisagov/pre-commit-shfmt
@@ -65,7 +70,12 @@ repos:
   - hooks:
       - id: black
     repo: https://github.com/ambv/black
-    rev: 23.12.1
+    rev: 24.4.0
+  - hooks:
+      - args: [ "--profile=black" ]
+        id: isort
+    repo: https://github.com/pycqa/isort
+    rev: 5.13.2
   - hooks:
       - args: [ "--rcfile=.github/linters/.python-lint" ]
         entry: pylint
@@ -73,9 +83,12 @@ repos:
         language: system
         name: pylint
         types: [ python ]
-      - entry: bash -c 'cd test-runner && pytest tests/utest.py -W ignore::UserWarning'
-        id: pytest-test-runner
+      - entry: bash -c "tox -e py310"
+        id: tox
+        files: |
+          (?x)^(
+            ./test-runner/.*
+          )$
         language: system
-        name: pytest-test-runner
-        types: [ python ]
+        name: tox
     repo: local

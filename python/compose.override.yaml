@@ -12,10 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-version: '3'
 services:
   idp-base:
     build:
       args:
         IDP_VERSION: ${IDP_VERSION:-core}
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-${IDP_VERSION:-core}-py${PYTHON_VERSION:-3.10}-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-${IDP_VERSION:-core}-py${PYTHON_VERSION:-3.10}-base

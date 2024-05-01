@@ -19,15 +19,55 @@
 
 version: 2
 updates:
-  - package-ecosystem: pip
-    directory: /test-runner
+  - directory: /test-runner
+    groups:
+      python-requirements:
+        patterns:
+          - "*"
+    package-ecosystem: pip
     schedule:
       interval: weekly
-  - package-ecosystem: github-actions
-    directory: /
+  - directory: /
+    package-ecosystem: github-actions
     schedule:
       interval: weekly
-  - package-ecosystem: pip
-    directory: /pytorch/serving
+  - directory: /pytorch/serving
+    groups:
+      python-requirements:
+        patterns:
+          - "*"
+    package-ecosystem: pip
+    schedule:
+      interval: weekly
+  - directory: /pytorch
+    groups:
+      python-requirements:
+        patterns:
+          - "*"
+    package-ecosystem: pip
+    schedule:
+      interval: weekly
+  - directory: /classical-ml
+    groups:
+      python-requirements:
+        patterns:
+          - "*"
+    package-ecosystem: pip
+    schedule:
+      interval: weekly
+  - directory: /tensorflow
+    groups:
+      python-requirements:
+        patterns:
+          - "*"
+    package-ecosystem: pip
+    schedule:
+      interval: weekly
+  - directory: /python
+    groups:
+      python-requirements:
+        patterns:
+          - "*"
+    package-ecosystem: pip
     schedule:
       interval: weekly

@@ -56,7 +56,9 @@ RUN wget --progress=dot:giga --no-check-certificate "https://repo.anaconda.com/m
     export PATH="/opt/conda/bin/:${PATH}" && \
     conda update -y conda && \
     conda config --add channels intel && \
-    conda create -yn idp "intelpython3_${IDP_VERSION}" "python=${PYTHON_VERSION}" && \
+    conda create -yn idp \
+    "intelpython3_${IDP_VERSION}" \
+    "python=${PYTHON_VERSION}" && \
     conda init --all && \
     apt-get clean && conda clean -y --all && \
     rm -rf /var/lib/apt/lists/*
@@ -67,7 +69,10 @@ ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64:/opt/conda/envs/idp/lib
 RUN echo "conda activate idp" >> ~/.bashrc
 SHELL ["conda", "run", "-n", "idp", "/bin/bash", "-c"]
 
-RUN conda run -n idp python -m pip install --no-cache-dir numpy==1.26.4
+WORKDIR /
+COPY idp-requirements.txt .
+
+RUN conda run -n idp python -m pip install --no-cache-dir -r idp-requirements.txt
 
 RUN ln -sf /opt/conda/envs/idp/bin/python /usr/local/bin/python && \
     ln -sf /opt/conda/envs/idp/bin/python /usr/local/bin/python3 && \
@@ -91,13 +96,9 @@ RUN ln -sf "$(which python${PYTHON_VERSION})" /usr/local/bin/python && \
     ln -sf "$(which python${PYTHON_VERSION})" /usr/local/bin/python3 && \
     ln -sf "$(which python${PYTHON_VERSION})" /usr/bin/python
 
-RUN python -m pip --no-cache-dir install --upgrade \
-    pip \
-    numpy \
-    setuptools \
-    psutil
+RUN python -m pip --no-cache-dir install --upgrade pip
 
-RUN python -m pip --no-cache-dir install \
-    mkl \
-    mkl-include \
-    intel-openmp
+WORKDIR /
+COPY requirements.txt .
+
+RUN python -m pip --no-cache-dir install -r requirements.txt

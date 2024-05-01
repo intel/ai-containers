@@ -5,7 +5,9 @@
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fintel%2Fai-containers.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fintel%2Fai-containers?ref=badge_shield&issueType=license)
 [![CodeQL](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql)
 [![Unit Tests](https://github.com/intel/ai-containers/actions/workflows/unit-test.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/unit-test.yaml)
-
+[![Integration Tests](https://github.com/intel/ai-containers/actions/workflows/integration-test.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/integration-test.yaml)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/intel/ai-containers/main.svg)](https://results.pre-commit.ci/latest/github/intel/ai-containers/main)
+[![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/tylertitsworth/48dea0fc9a908a6e5ba5c5e84123bc02/raw/coverage.json)](https://gist.github.com/tylertitsworth/48dea0fc9a908a6e5ba5c5e84123bc02)
 This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. used to scale out AI containers with versions of TensorFlow and PyTorch that have been optimized for Intel platforms. Scaling is done with python, Docker, kubernetes, kubeflow, cnvrg.io, Helm, and other container orchestration frameworks for use in the cloud and on-premise.
 
 ## Project Setup
@@ -40,18 +42,6 @@ docker compose version
 > [!CAUTION]
 > Docker compose `v2.25.0` is the minimum required version for some container groups.
 
-#### Development Container
-
-Alternatively, build and utilize the MLOps Development container rather than setting up docker compose. Docker Engine is still required and needs to be set up properly on the host system.
-
-```bash
-docker build -t intel/mlops:compose-devel \
-  -f .github/utils/Dockerfile.compose \
-  --pull .
-cd <framework>
-docker run --rm intel/mlops:compose-devel docker compose up --build
-```
-
 ## Build Ingredient Containers
 
 Select your framework and run the docker compose commands:
@@ -78,7 +68,7 @@ Create as many stages you want, but make sure to note your final target name. Th
 
 ```yaml
 service_name:
-  image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-1.12.1}-my-package-${MY_PACKAGE_VERSION:-<version>}
+  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-1.12.1}-my-package-${MY_PACKAGE_VERSION:-<version>}
   build:
     args:
       MY_PACKAGE_VERSION: ${MY_PACKAGE_VERSION:-<version>}
@@ -127,30 +117,8 @@ When using a container intended to launch a jupyter notebook server, start the J
 ```bash
 cd <framework>
 docker compose build jupyter
-docker compose run -d --rm <image-name> jupyter notebook --notebook-dir=/jupyter --ip 0.0.0.0 --no-browser --allow-root
+docker compose run -d --net=host --rm <image-name> jupyter notebook --notebook-dir=/jupyter --ip 0.0.0.0 --no-browser --allow-root
 ```
-
-## MLFlow
-
-Add an MLFLow Example:
-
-- [TensorFlow](https://github.com/mlflow/mlflow/blob/master/examples/tensorflow/train.py)
-- [PyTorch](https://github.com/mlflow/mlflow/blob/master/examples/pytorch/MNIST/mnist_autolog_example.py)
-- [SKLearn](https://github.com/mlflow/mlflow/blob/master/examples/docker/train.py)
-
-Start the MLFlow server as a detached container and then re-use the container by executing a command in it.
-
-```bash
-export PORT=<myport>
-cd <framework>
-docker compose build mlflow
-docker compose run -d --rm mlflow mlflow server -p $PORT -h 0.0.0.0
-docker compose exec mlflow python /mlflow/myscript.py
-```
-
->**Note:** If you need to install more python packages to run any of the examples add a requirements.txt file to your working directory and append `pip install -r /mlflow/requirements.txt` into the `docker compose exec` command.
-
-Access the results at `https://localhost:<port>`, the default port is 5000.
 
 ## Troubleshooting
 

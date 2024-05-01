@@ -1,0 +1,3 @@
+cython
+tf2onnx
+neural-compressor==2.5.1

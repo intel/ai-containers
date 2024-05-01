@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-version: '3'
 services:
   pip-base:
     build:
@@ -36,6 +35,6 @@ services:
       context: .
       target: idp
     command: >
-      bash -c "conda env list"
+      bash -c "conda env list && python -c 'import mkl'"
     extends: pip-base
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-base

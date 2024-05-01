@@ -26,15 +26,11 @@ permissions:
   contents: read
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 jobs:
   dependency-review:
-    runs-on: ubuntu-latest
+    runs-on: k8-runners # ubuntu-latest
     steps:
-      - uses: step-security/harden-runner@v2
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
         with:
-          egress-policy: audit
-      - name: 'Checkout Repository'
-        uses: actions/checkout@v4
-      - name: 'Dependency Review'
-        uses: actions/dependency-review-action@v4
+          comment-summary-in-pr: true

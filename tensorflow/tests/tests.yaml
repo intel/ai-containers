@@ -14,6 +14,6 @@
 
 ---
 itex-xpu-jupyter-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.0}-itex-xpu-jupyter
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.0}-itex-xpu-jupyter
   cmd: papermill --log-output  /jupyter/xpu.ipynb -k python3 -
   notebook: True

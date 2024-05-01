@@ -1,10 +1,12 @@
 .env
-**/.hypothesis
 .pytest*
 .secrets
+.tox
 .vscode
 **__pycache__**
 **.ipynb_checkpoints**
+**/.hypothesis
 logs/
 output/
+.coverage*
 venv/

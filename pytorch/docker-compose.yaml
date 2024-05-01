@@ -32,6 +32,7 @@ services:
         PYTORCH_VERSION: ${PYTORCH_VERSION:-2.2.0+cpu}
         REGISTRY: ${REGISTRY}
         REPO: ${REPO}
+        NO_PROXY: ''
         TORCHAUDIO_VERSION: ${TORCHAUDIO_VERSION:-2.2.0+cpu}
         TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.17.0+cpu}
       context: .
