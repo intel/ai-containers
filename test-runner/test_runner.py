@@ -122,8 +122,8 @@ def get_test_list(args: dict, tests_yaml: List[dict]):
             else:
                 if expandvars(test) not in tests_yaml.keys():
                     tests_list[expandvars(test)] = {
-                        key: expandvars(val) if isinstance(val, str) else {key: val}
-                        for key, val in tests_yaml[test].items()
+                        k: expandvars(v) if isinstance(v, str) else v
+                        for k, v in tests_yaml[test].items()
                     }
         else:
             tests_list[test] = dict(tests_yaml[test].items())
