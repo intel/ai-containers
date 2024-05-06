@@ -40,8 +40,13 @@ on:
         default: test-runner
         required: true
         type: string
-      no-build:
+      no_build:
         description: No build
+        default: false
+        required: true
+        type: boolean
+      no_start:
+        description: No Start
         default: false
         required: true
         type: boolean
@@ -83,15 +88,15 @@ jobs:
       group: ${{ steps.build-group.outputs.container-group }}
     steps:
     - uses: actions/checkout@v4
-      if: ${{ !inputs.no-build }}
+      if: ${{ !inputs.no_build }}
     - uses: docker/login-action@v3
       with:
         registry: ${{ secrets.REGISTRY }}
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
-      if: ${{ !inputs.no-build }}
+      if: ${{ !inputs.no_build }}
     - name: Build Container Group
-      if: ${{ !inputs.no-build }}
+      if: ${{ !inputs.no_build }}
       id: build-group
       uses: intel/ai-containers/.github@main
       with:
@@ -118,7 +123,7 @@ jobs:
       run: echo "matrix=$(cat matrix/*-${{ needs.build-containers.outputs.group }}/*.txt | jq -R '.' | jq -sc '. | unique')" >> $GITHUB_OUTPUT
   scan-containers:
     needs: [setup-scan]
-    if: ${{ !inputs.no-build }}
+    if: ${{ !inputs.no_build }}
     runs-on: k8-runners
     strategy:
       matrix:

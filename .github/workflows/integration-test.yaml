@@ -56,7 +56,7 @@ jobs:
           echo "FOLDERS=$DOCKER_COMPOSE_PATHS_JSON" >> $GITHUB_OUTPUT
   pipeline-ci:
     needs: group-diff
-    if: needs.group-diff.outputs.groups != '[]'
+    if: needs.group-diff.outputs.groups != '[""]'
     strategy:
       matrix:
         group: ${{ fromJson(needs.group-diff.outputs.groups) }}
@@ -77,4 +77,5 @@ jobs:
                contains(needs.*.result, 'failure')
             || contains(needs.*.result, 'cancelled')
             || contains(needs.*.result, 'skipped')
+            && needs.group-diff.outputs.groups != '[""]'
           }}
