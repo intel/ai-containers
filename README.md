@@ -8,6 +8,7 @@
 [![Integration Tests](https://github.com/intel/ai-containers/actions/workflows/integration-test.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/integration-test.yaml)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/intel/ai-containers/main.svg)](https://results.pre-commit.ci/latest/github/intel/ai-containers/main)
 [![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/tylertitsworth/48dea0fc9a908a6e5ba5c5e84123bc02/raw/coverage.json)](https://gist.github.com/tylertitsworth/48dea0fc9a908a6e5ba5c5e84123bc02)
+
 This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. used to scale out AI containers with versions of TensorFlow and PyTorch that have been optimized for Intel platforms. Scaling is done with python, Docker, kubernetes, kubeflow, cnvrg.io, Helm, and other container orchestration frameworks for use in the cloud and on-premise.
 
 ## Project Setup
