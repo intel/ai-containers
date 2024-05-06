@@ -16,6 +16,9 @@
 name: Test Runner Unit Tests
 on:
   push: null
+  pull_request:
+    branches:
+    - main
 permissions: read-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
