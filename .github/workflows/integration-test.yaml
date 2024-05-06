@@ -45,12 +45,14 @@ jobs:
               DIR_PATH=$(dirname "$path")
               if [ -n "$(find "$DIR_PATH" -name 'docker-compose.yaml' -print -quit)" ] && [ "$DIR_PATH" != "." ]; then
                 DOCKER_COMPOSE_PATHS+=("$DIR_PATH")
+                path="."
+              else
+                path="$DIR_PATH"
               fi
-              path="$DIR_PATH"
             done
           done
           # Convert the array to a JSON array
-          DOCKER_COMPOSE_PATHS_JSON=$(printf '%s\n' "${DOCKER_COMPOSE_PATHS[@]}" | uniq | jq -R '.' | jq -sc '.')
+          DOCKER_COMPOSE_PATHS_JSON=$(printf '%s\n' "${DOCKER_COMPOSE_PATHS[@]}" | jq -R '.' | jq -sc 'unique_by(.)')
           echo "FOLDERS=$DOCKER_COMPOSE_PATHS_JSON" >> $GITHUB_OUTPUT
   pipeline-ci:
     needs: group-diff
