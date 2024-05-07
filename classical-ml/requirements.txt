@@ -2,5 +2,5 @@ daal4py==2024.3.0
 matplotlib==3.8.4
 numpy==1.26.4
 scikit-learn-intelex==2024.3.0
-threadpoolctl==3.4.0
+threadpoolctl==3.5.0
 xgboost==2.0.3
