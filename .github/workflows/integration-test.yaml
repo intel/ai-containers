@@ -15,6 +15,7 @@
 ---
 name: Integration Tests
 on:
+  merge_group: null
   pull_request: null
 permissions: read-all
 concurrency:
