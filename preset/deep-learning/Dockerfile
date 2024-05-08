@@ -1,4 +1,4 @@
-# Copyright (c) 2022 Intel Corporation
+# Copyright (c) 2024 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,24 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# ============================================================================
-#
-# This file was assembled from multiple pieces, whose use is documented
-# throughout. Please refer to the TensorFlow dockerfiles documentation
-# for more information.
-
-# based on https://github.com/pytorch/pytorch/blob/master/Dockerfile
-#
-# NOTE: To build this you will need a docker version >= 19.03 and DOCKER_BUILDKIT=1
-#
-#       If you do not use buildkit you are not going to have a good time
-#
-#       For reference:
-#           https://docs.docker.com/develop/develop-images/build_enhancements/
-
-
-# This image provides a Python 3.9 environment you can use to run your Python
-# applications.
 
 ARG BASE_IMAGE=ubuntu
 ARG BASE_TAG=22.04
@@ -142,8 +124,12 @@ RUN wget --progress=dot:giga --no-check-certificate "https://repo.anaconda.com/m
         jupyter-server-proxy \
         'mako>=1.2.2' \
         'pyjwt>=2.4.0' \
-        'cryptography>=42.0.4' && \
-        jupyter labextension disable "@jupyterlab/apputils-extension:announcements" && \
+        'cryptography>=42.0.5' \
+        'nodejs>=20.12.2' \
+        'idna>=3.7' \
+        'tqdm>=4.66.2' \
+        && \
+    jupyter labextension disable "@jupyterlab/apputils-extension:announcements" && \
     conda clean -y --all
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
@@ -174,20 +160,23 @@ RUN conda create -yn pytorch-cpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c 
         intel-extension-for-pytorch="${IPEX_CPU_VERSION}" \
         torchvision="${TORCHVISION_CPU_VERSION}" \
         torchaudio="${TORCHAUDIO_CPU_VERSION}" \
-        onnx \
         matplotlib-base \
         ipykernel \
         kernda  \
         'pillow>=10.2.0' \
         'aiohttp>=3.9.0' \
-        'tornado>=6.3.3' && \
+        'tornado>=6.3.3' \
+        'jinja2>=3.1.3' \
+        'idna>=3.7' \
+        onnx \
+        && \
     conda clean -y --all
 
 # PyPI packages
 RUN conda run -n pytorch-cpu pip install --no-deps --no-cache-dir --ignore-installed \
         ninja \
         python-dotenv \
-        tqdm \
+        'tqdm>=4.66.2' \
         cloud-data-connector \
         dataset-librarian && \
     conda run -n pytorch-cpu pip install --no-cache-dir --ignore-installed \
@@ -230,7 +219,6 @@ RUN conda create -yn pytorch-gpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c 
         intel-extension-for-pytorch="${IPEX_GPU_VERSION}" \
         torchvision="${TORCHVISION_GPU_VERSION}" \
         torchaudio="${TORCHAUDIO_GPU_VERSION}" \
-        onnx \
         tensorboardx \
         matplotlib-base \
         pandas \
@@ -239,14 +227,18 @@ RUN conda create -yn pytorch-gpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c 
         kernda  \
         'pillow>=10.2.0' \
         'aiohttp>=3.9.0' \
-        'tornado>=6.3.3' && \
+        'tornado>=6.3.3' \
+        'jinja2>=3.1.3' \
+        'idna>=3.7' \
+        onnx \
+        && \
     conda clean -y --all
 
 # PyPI packages
 RUN conda run -n pytorch-gpu pip install --no-deps --no-cache-dir --ignore-installed \
         ninja \
         python-dotenv \
-        tqdm \
+        'tqdm>=4.66.2' \
         cloud-data-connector \
         dataset-librarian && \
     conda run -n pytorch-gpu pip install --no-cache-dir --ignore-installed \
@@ -291,7 +283,6 @@ RUN conda create -yn tensorflow-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
         impi-devel="${IMPI_VERSION}" \
         matplotlib-base \
         dataset_librarian \
-        onnx \
         mpich=4.2.0=external_0 \
         ipython \
         ipykernel \
@@ -300,7 +291,12 @@ RUN conda create -yn tensorflow-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
         'cryptography>=42.0.4' \
         'werkzeug>=2.2.3' \
         'aiohttp>=3.9.0' \
-        'tornado>=6.3.3' && \
+        'tornado>=6.3.3' \
+        'pyjwt>=2.8.0' \
+        'oauthlib>=3.2.2' \
+        'idna>=3.7' \
+        onnx \
+        && \
     conda clean -y --all
 
 # PyPI packages
@@ -310,7 +306,7 @@ RUN conda run -n tensorflow-cpu pip install --no-cache-dir --ignore-installed \
         cryptography
 RUN conda run -n tensorflow-cpu pip install --no-deps --no-cache-dir --ignore-installed \
         tensorflow_hub \
-        tqdm \
+        'tqdm>=4.66.2' \
         cloud-data-connector && \
     conda clean -y --all
 
@@ -327,7 +323,6 @@ RUN conda create -yn tensorflow-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
         impi-devel="${IMPI_VERSION}" \
         matplotlib-base \
         dataset_librarian \
-        onnx \
         mpich=4.2.0=external_0 \
         ipython \
         ipykernel \
@@ -336,7 +331,12 @@ RUN conda create -yn tensorflow-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
         'cryptography>=42.0.4' \
         'werkzeug>=2.2.3' \
         'aiohttp>=3.9.0' \
-        'tornado>=6.3.3' && \
+        'tornado>=6.3.3' \
+        'pyjwt>=2.8.0' \
+        'oauthlib>=3.2.2' \
+        'idna>=3.7' \
+        onnx \
+        && \
     conda clean -y --all
 
 # PyPI packages
@@ -346,7 +346,7 @@ RUN conda run -n tensorflow-gpu pip install --no-cache-dir --ignore-installed \
         cryptography
 RUN conda run -n tensorflow-gpu pip install --no-deps --no-cache-dir --ignore-installed \
         tensorflow_hub \
-        tqdm \
+        'tqdm>=4.66.2' \
         cloud-data-connector  && \
     conda clean -y --all
 
