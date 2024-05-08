@@ -16,6 +16,7 @@
 name: Lint
 permissions: read-all
 on:
+  merge_group: null
   pull_request: null
   push:
     branches:
