@@ -1,0 +1,17 @@
+name: Docker Info Page Publish
+on:
+  push:
+    branches: [ "main" ]
+#env:
+#  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  PublishDockerHubDescription:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: peter-evans/dockerhub-description@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: jitendra42/test1
+          readme-filepath: ./docs/dockerhub/test1.md
