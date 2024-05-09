@@ -13,5 +13,5 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          repository: jitendra42/test1
+          repository: jitendraintel/test1
           readme-filepath: ./docs/dockerhub/test1.md
