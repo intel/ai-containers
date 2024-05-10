@@ -34,45 +34,66 @@ These images additionally include [Jupiter Notebook](https://jupyter.org/) serve
 
 These images are built only with CPU optimizations (GPU acceleration support was deliberately excluded):
 
-| Tag(s)                     | Pytorch  | IPEX         | Dockerfile |
-| -------------------------- | -------- | ------------ | ---------- |
-| `2.1.0-pip-base`, `latest` | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]   |
-| `2.0.0-pip-base`           | [v2.0.0] | [v2.0.0+cpu] | [v0.1.0]   |
+| Tag(s)                     | Pytorch  | IPEX         | Dockerfile      |
+| -------------------------- | -------- | ------------ | --------------- |
+| `2.3.0-pip-base`, `latest` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
+| `2.2.0-pip-base`           | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
+| `2.1.0-pip-base`           | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]        |
+| `2.0.0-pip-base`           | [v2.0.0] | [v2.0.0+cpu] | [v0.1.0]        |
 
 These images additionally include [Jupiter Notebook](https://jupyter.org/) server:
 
-| Tag(s)              | Pytorch  | IPEX         | Jupiter Port | Dockerfile |
-| ------------------- | -------- | ------------ | ------------ | ---------- |
-| `2.1.0-pip-jupyter` | [v2.1.0] | [v2.1.0+cpu] | `8888`       | [v0.2.3]   |
+| Tag(s)              | Pytorch  | IPEX         | Jupiter Port | Dockerfile      |
+| ------------------- | -------- | ------------ | ------------ | --------------- |
+| `2.3.0-pip-jupyter` | [v2.3.0] | [v2.3.0+cpu] | `8888`       | [v0.4.0-Beta]   |
+| `2.2.0-pip-jupyter` | [v2.2.0] | [v2.2.0+cpu] | `8888`       | [v0.3.4]        |
+| `2.1.0-pip-jupyter` | [v2.1.0] | [v2.1.0+cpu] | `8888`       | [v0.2.3]        |
+| `2.0.0-pip-jupyter` | [v2.0.0] | [v2.0.0+cpu] | `8888`       | [v0.1.0]        |
 
 These images additionally include [Intel® oneAPI Collective Communications Library] (oneCCL):
 
-| Tag(s)                | Pytorch  | IPEX         | oneCCL               | Dockerfile |
-| --------------------- | -------- | ------------ | -------------------- | ---------- |
-| `2.1.0-pip-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v0.2.3]   |
-| `2.0.0-pip-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v0.1.0]   |
+| Tag(s)                | Pytorch  | IPEX         | oneCCL               | Dockerfile      |
+| --------------------- | -------- | ------------ | -------------------- | --------------- |
+| `2.3.0-pip-multinode` | [v2.3.0] | [v2.3.0+cpu] | [v2.3.0][ccl-v2.3.0] | [v0.4.0-Beta]   |
+| `2.2.0-pip-multinode` | [v2.2.0] | [v2.2.0+cpu] | [v2.2.0][ccl-v2.2.0] | [v0.3.4]        |
+| `2.1.0-pip-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v0.2.3]        |
+| `2.0.0-pip-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v0.1.0]        |
+
+These images are [TorchServe](https://github.com/pytorch/serve) with CPU Optimizations:
+
+| Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
+| ------------------- | -------- | ------------ | --------------- |
+| `2.3.0-serving-cpu` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
+| `2.2.0-serving-cpu` | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
 
 ## CPU only images with Intel® Distribution for Python*
 
 These images are built only with CPU optimizations (GPU acceleration support was deliberately excluded) and include [Intel® Distribution for Python*]:
 
-| Tag(s)           | Pytorch  | IPEX         | Dockerfile |
-| ---------------- | -------- | ------------ | ---------- |
-| `2.1.0-idp-base` | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]   |
-| `2.0.0-idp-base` | [v2.0.0] | [v2.0.0+cpu] | [v0.1.0]   |
+| Tag(s)                     | Pytorch  | IPEX         | Dockerfile      |
+| -------------------------- | -------- | ------------ | --------------- |
+| `2.3.0-idp-base`, `latest` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
+| `2.2.0-idp-base`           | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
+| `2.1.0-idp-base`           | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]        |
+| `2.0.0-idp-base`           | [v2.0.0] | [v2.0.0+cpu] | [v0.1.0]        |
 
 These images additionally include [Jupiter Notebook](https://jupyter.org/) server:
 
-| Tag(s)              | Pytorch  | IPEX         | Dockerfile |
-| ------------------- | -------- | ------------ | ---------- |
-| `2.1.0-idp-jupyter` | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]   |
+| Tag(s)              | Pytorch  | IPEX         | Jupiter Port | Dockerfile      |
+| ------------------- | -------- | ------------ | ------------ | --------------- |
+| `2.3.0-idp-jupyter` | [v2.3.0] | [v2.3.0+cpu] | `8888`       | [v0.4.0-Beta]   |
+| `2.2.0-idp-jupyter` | [v2.2.0] | [v2.2.0+cpu] | `8888`       | [v0.3.4]        |
+| `2.1.0-idp-jupyter` | [v2.1.0] | [v2.1.0+cpu] | `8888`       | [v0.2.3]        |
+| `2.0.0-idp-jupyter` | [v2.0.0] | [v2.0.0+cpu] | `8888`       | [v0.1.0]        |
 
 These images additionally include [Intel® oneAPI Collective Communications Library] (oneCCL):
 
-| Tag(s)                | Pytorch  | IPEX         | oneCCL               | Dockerfile |
-| --------------------- | -------- | ------------ | -------------------- | ---------- |
-| `2.1.0-idp-multinode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v0.2.3]   |
-| `2.0.0-idp-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v0.1.0]   |
+| Tag(s)                | Pytorch  | IPEX         | oneCCL               | Dockerfile      |
+| --------------------- | -------- | ------------ | -------------------- | --------------- |
+| `2.3.0-idp-multinode` | [v2.3.0] | [v2.3.0+cpu] | [v2.3.0][ccl-v2.3.0] | [v0.4.0-Beta]   |
+| `2.2.0-idp-multinode` | [v2.2.0] | [v2.2.0+cpu] | [v2.2.0][ccl-v2.2.0] | [v0.3.4]        |
+| `2.1.0-idp-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v0.2.3]        |
+| `2.0.0-idp-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v0.1.0]        |
 
 ## Older releases
 
@@ -109,19 +130,27 @@ It is the image user's responsibility to ensure that any use of these images com
 [Intel® oneAPI Collective Communications Library]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/oneccl.html
 [PyTorch*]: https://pytorch.org/
 
+[v0.4.0-Beta]: https://github.com/intel/ai-containers/blob/v0.4.0-Beta/pytorch/Dockerfile
+[v0.3.4]: https://github.com/intel/ai-containers/blob/v0.3.4/pytorch/Dockerfile
 [v0.2.3]: https://github.com/intel/ai-containers/blob/v0.2.3/pytorch/Dockerfile
 [v0.1.0]: https://github.com/intel/ai-containers/blob/v0.1.0/pytorch/Dockerfile
 
 [v2.1.10+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.10%2Bxpu
 [v2.0.110+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.0.110%2Bxpu
 
+[v2.3.0]: https://github.com/pytorch/pytorch/releases/tag/v2.3.0
+[v2.2.0]: https://github.com/pytorch/pytorch/releases/tag/v2.2.0
 [v2.1.0]: https://github.com/pytorch/pytorch/releases/tag/v2.1.0
 [v2.0.1]: https://github.com/pytorch/pytorch/releases/tag/v2.0.1
 [v2.0.0]: https://github.com/pytorch/pytorch/releases/tag/v2.0.0
 
+[v2.3.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.3.0%2Bcpu
+[v2.2.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.2.0%2Bcpu
 [v2.1.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.0%2Bcpu
 [v2.0.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.0.0%2Bcpu
 
+[ccl-v2.3.0]: https://github.com/intel/torch-ccl/releases/tag/v2.3.0%2Bcpu
+[ccl-v2.2.0]: https://github.com/intel/torch-ccl/releases/tag/v2.2.0%2Bcpu
 [ccl-v2.1.0]: https://github.com/intel/torch-ccl/releases/tag/v2.1.0%2Bcpu
 [ccl-v2.0.0]: https://github.com/intel/torch-ccl/releases/tag/v2.1.0%2Bcpu
 

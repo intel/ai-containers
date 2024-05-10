@@ -83,6 +83,7 @@ FROM base AS pip
 ARG PYTHON_VERSION
 
 RUN apt-get install -y --no-install-recommends --fix-missing \
+    libpython${PYTHON_VERSION} \
     python${PYTHON_VERSION} \
     python3-pip \
     python${PYTHON_VERSION}-distutils && \

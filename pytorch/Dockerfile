@@ -84,13 +84,10 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-ARG INC_VERSION
-ARG ONECCL_VERSION
-
 ENV SIGOPT_PROJECT=.
 
 WORKDIR /
-COPY multinode-requirements.txt . 
+COPY multinode-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
 
@@ -168,7 +165,7 @@ ARG WHL_URL
 WORKDIR /
 COPY xpu-requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r xpu-requirements.txt 
+RUN python -m pip install --no-cache-dir -r xpu-requirements.txt
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
 
@@ -222,7 +219,7 @@ ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
 FROM ipex-xpu-base-${PACKAGE_OPTION} AS ipex-xpu-jupyter
 
 WORKDIR /jupyter
-COPY jupyter-requirements.txt . 
+COPY jupyter-requirements.txt .
 RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
 
 RUN if [ ! -d "$(which conda)" ]; then \

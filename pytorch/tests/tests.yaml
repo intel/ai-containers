@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ipex-cpu-${PACKAGE_OPTION:-pip}:
-    img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.2.0}-base
+    img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-base
     cmd: python /tests/ipex-resnet50.py --ipex --device cpu
     volumes:
       - dst: /tests
