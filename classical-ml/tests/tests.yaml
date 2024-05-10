@@ -13,6 +13,12 @@
 # limitations under the License.
 
 ---
+classical-ml-import-${PACKAGE_OPTION:-pip}:
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.2.0}-xgboost-${XGBOOST_VERSION:-2.0.3}-base
+  cmd: python -c "from sklearnex import patch_sklearn; patch_sklearn();import xgboost as xgb; print(xgb.__version__)"
+classical-ml-import-${PACKAGE_OPTION:-pip}-jupyter:
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.2.0}-xgboost-${XGBOOST_VERSION:-2.0.3}-jupyter
+  cmd: sh -c "python -m jupyter --version"
 classical-ml-base-${PACKAGE_OPTION:-pip}-sklearn:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.2.0}-xgboost-${XGBOOST_VERSION:-2.0.3}-base
   cmd: bash /tests/sklearn.sh
@@ -22,6 +28,12 @@ classical-ml-base-${PACKAGE_OPTION:-pip}-sklearn:
 classical-ml-base-${PACKAGE_OPTION:-pip}-xgboost:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.2.0}-xgboost-${XGBOOST_VERSION:-2.0.3}-base
   cmd: bash /tests/xgboost.sh
+  volumes:
+    - src: $PWD/classical-ml/tests
+      dst: /tests
+classical-ml-performance-${PACKAGE_OPTION:-pip}:
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.2.0}-xgboost-${XGBOOST_VERSION:-2.0.3}-base
+  cmd: python /tests/performance.py
   volumes:
     - src: $PWD/classical-ml/tests
       dst: /tests
