@@ -19,7 +19,7 @@ on:
 permissions: read-all
 jobs:
   get-groups:
-    runs-on: k8-runners # ubuntu-latest
+    runs-on: ubuntu-latest
     outputs:
       groups: ${{ steps.group-list.outputs.FOLDERS }}
     steps:

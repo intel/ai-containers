@@ -23,7 +23,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   group-diff:
-    runs-on: k8-runners # ubuntu-latest
+    runs-on: ubuntu-latest
     outputs:
       groups: ${{ steps.group-list.outputs.FOLDERS }}
     steps:

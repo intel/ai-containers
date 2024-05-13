@@ -23,7 +23,7 @@ permissions: read-all
 jobs:
   scan:
     name: gitleaks
-    runs-on: k8-runners # ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:

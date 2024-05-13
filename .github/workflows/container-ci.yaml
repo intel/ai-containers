@@ -68,7 +68,7 @@ jobs:
   setup-build:
     outputs:
       matrix: ${{ steps.build-matrix.outputs.matrix }}
-    runs-on: k8-runners # ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - name: Set Matrix
@@ -161,7 +161,7 @@ jobs:
         ####################################################################################################
   setup-test:
     needs: [build-containers]
-    runs-on: k8-runners # ubuntu-latest
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.test-matrix.outputs.matrix }}
     steps:
