@@ -25,23 +25,23 @@ services:
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-22.04}
         GITHUB_RUN_NUMBER: ${GITHUB_RUN_NUMBER:-0}
-        IPEX_VERSION: ${IPEX_VERSION:-2.2.0}
+        IPEX_VERSION: ${IPEX_VERSION:-2.3.0}
         MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
-        PYTORCH_VERSION: ${PYTORCH_VERSION:-2.2.0+cpu}
+        PYTORCH_VERSION: ${PYTORCH_VERSION:-2.3.0+cpu}
         REGISTRY: ${REGISTRY}
         REPO: ${REPO}
         NO_PROXY: ''
-        TORCHAUDIO_VERSION: ${TORCHAUDIO_VERSION:-2.2.0+cpu}
-        TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.17.0+cpu}
+        TORCHAUDIO_VERSION: ${TORCHAUDIO_VERSION:-2.3.0+cpu}
+        TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.18.0+cpu}
       context: .
       target: ipex-base-${PACKAGE_OPTION:-pip}
     depends_on:
       - ${PACKAGE_OPTION:-pip}-base
     command: >
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)'"
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.2.0}-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-base
     pull_policy: always
   jupyter:
     build:
@@ -52,20 +52,17 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     extends: ipex-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.2.0}-jupyter
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-jupyter
     network_mode: host
     ports:
       - 8888:8888
   multinode:
     build:
-      args:
-        INC_VERSION: ${INC_VERSION:-2.4.1}
-        ONECCL_VERSION: ${IPEX_VERSION:-2.2.0+cpu}
       target: multinode-${PACKAGE_OPTION:-pip}
     command: >
       sh -c "python -c 'import neural_compressor;import oneccl_bindings_for_pytorch as oneccl; print(\"Neural Compressor Version:\", neural_compressor.__version__, \"\\nOneCCL:\", oneccl.__version__)'"
     extends: ipex-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.2.0}-oneccl-inc-${INC_VERSION:-2.4.1}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-oneccl-inc-${INC_VERSION:-2.5.1}
   ipex-xpu-base:
     build:
       args:
@@ -106,7 +103,7 @@ services:
     command: torchserve --version
     entrypoint: ""
     extends: ipex-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-torchserve
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-torchserve
     ports:
       - 8080:8080
       - 8081:8081

@@ -32,7 +32,7 @@ WORKDIR /
 COPY requirements.txt .
 
 RUN python -m pip install --no-cache-dir \
-    --ignore-installed -r requirements.txt 
+    --ignore-installed -r requirements.txt
 
 COPY base/.patch_sklearn.py ${HOME}/.patch_sklearn.py
 

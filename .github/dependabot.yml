@@ -31,14 +31,6 @@ updates:
     package-ecosystem: github-actions
     schedule:
       interval: weekly
-  - directory: /pytorch/serving
-    groups:
-      python-requirements:
-        patterns:
-          - "*"
-    package-ecosystem: pip
-    schedule:
-      interval: weekly
   - directory: /pytorch
     groups:
       python-requirements:
