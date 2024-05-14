@@ -1,13 +1,11 @@
-captum
-cython
-pynvml
-pyyaml
+captum>=0.7.0
+cython>=3.0.10
+pynvml>=11.5.0
+pyyaml>=6.0.1
 -f https://download.pytorch.org/whl/torch_stable.html
-torch==2.3.0
-torch-model-archiver
-torch-workflow-archiver
-torchaudio==2.3.0
-torchserve
+torch-model-archiver==0.10.0
+torch-workflow-archiver==0.2.12
+torchserve==0.10.0
 torchtext==0.18.0
 torchvision==0.18.0
 -f https://developer.intel.com/ipex-whl-stable-cpu

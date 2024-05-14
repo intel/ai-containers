@@ -13,8 +13,14 @@
 # limitations under the License.
 
 services:
-  idp-base:
+  idp:
     build:
       args:
         IDP_VERSION: ${IDP_VERSION:-core}
+      labels:
+        dependency.conda.intel-distribution-for-python: intelpython3_${IDP_VERSION:-core}
+        docs: python
+        org.opencontainers.image.name: "intel/python"
+        org.opencontainers.image.title: "Intel® Distribution for Python Base Image"
+        org.opencontainers.image.version: 3.10-${IDP_VERSION:-core}
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-${IDP_VERSION:-core}-py${PYTHON_VERSION:-3.10}-base
