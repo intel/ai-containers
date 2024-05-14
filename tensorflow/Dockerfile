@@ -94,6 +94,7 @@ FROM openmpi AS horovod
 ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64
 
 RUN apt-get install -y --no-install-recommends --fix-missing \
+    unzip \
     openssh-client \
     openssh-server && \
     rm  /etc/ssh/ssh_host_*_key \
@@ -174,12 +175,12 @@ ARG DPCPP_VER
 ARG MKL_VER
 ARG CCL_VER
 
-RUN wget --no-check-certificate -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+RUN no_proxy="" NO_PROXY="" wget --no-check-certificate -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
     gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
 RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 
-RUN apt-get update && \
+RUN no_proxy="" NO_PROXY="" apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
     intel-opencl-icd=${ICD_VER} \
     intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
@@ -188,7 +189,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
-RUN no_proxy="" wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+RUN no_proxy="" NO_PROXY="" wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
    | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
    echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
    | tee /etc/apt/sources.list.d/oneAPI.list
@@ -238,13 +239,12 @@ ARG LEVEL_ZERO_GPU_VER
 ARG LEVEL_ZERO_VER
 ARG LEVEL_ZERO_DEV_VER
 
-
-RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+RUN no_proxy="" NO_PROXY="" wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
     gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
 RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 
-RUN apt-get update && \
+RUN no_proxy="" NO_PROXY="" apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
     intel-opencl-icd=${ICD_VER} \
     intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
