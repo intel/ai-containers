@@ -1,130 +1,231 @@
-# PyTorch Ingredients
+# Intel® Extension for Pytorch\*
 
-## PyTorch
+[Intel® Extension for PyTorch*] extends [PyTorch*] with up-to-date feature optimizations for an extra performance boost on Intel hardware.
 
-### Base
+On Intel CPUs optimizations take advantage of the following instuction sets:
 
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| BASE_IMAGE_NAME | `ubuntu` | Base Operating System |
-| BASE_IMAGE_TAG | `22.04` | Base Operating System Version |
-| IDP_VERSION | `core` | Intel Distribution of Python version(either `full` or `core`) |
-| IPEX_VERSION | `2.2.0` | Intel Extension for PyTorch Version |
-| MINICONDA_VERSION | `latest-Linux-x86_64` | Miniconda Version from `https://repo.anaconda.com/miniconda` |
-| PACKAGE_OPTION | `pip` | Stock Python (pypi) or Intel Python (conda) (`pip` or `idp`) |
-| PYTHON_VERSION | `3.10` | Python Version |
-| PYTORCH_VERSION | `2.2.0+cpu` | PyTorch Version |
-| TORCHAUDIO_VERSION | `2.2.0+cpu` | TorchAudio Version |
-| TORCHVISION_VERSION | `0.17.0+cpu` | TorchVision Version |
+* Intel® Advanced Matrix Extensions (Intel® AMX)
+* Intel® Advanced Vector Extensions 512 (Intel® AVX-512)
+* Vector Neural Network Instructions (VNNI)
 
-### Jupyter
+On Intel GPUs Intel® Extension for PyTorch\* provides easy GPU acceleration through the PyTorch* `xpu` device. The following Intel GPUs are supported:
 
-### MultiNode
+* [Intel® Arc™ A-Series Graphics]
+* [Intel® Data Center GPU Flex Series]
+* [Intel® Data Center GPU Max Series]
 
-Built from Base
+Images available here start with the [Ubuntu* 22.04](https://hub.docker.com/_/ubuntu) base image with [Intel® Extension for PyTorch*] built for different use cases as well as some additional software. The [Python Dockerfile](https://github.com/intel/ai-containers/blob/main/python/Dockerfile) is used to generate The images below at https://github.com/intel/ai-containers.
 
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| INC_VERSION | `2.4.1` | Neural Compressor Version |
-| ONECCL_VERSION | `2.2.0+cpu` | TorchCCL Version |
+> **Note:** There are two dockerhub repositories (`intel/intel-extension-for-pytorch` and `intel/intel-optimized-pytorch`) that are routinely updated with the latest images, however, some legacy images have not be published to both repositories.
 
-### XPU Base
+## XPU images
 
-Built from Base
+The images below include support for both CPU and GPU optimizations:
 
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| ICD_VER | `23.43.27642.40-803~22.04` | OpenCL Version |
-| LEVEL_ZERO_GPU_VER | `1.3.27642.40-803~22.04` | Level Zero GPU Version |
-| LEVEL_ZERO_VER | `1.14.0-744~22.04` | Level Zero Version |
-| LEVEL_ZERO_DEV_VER | `1.14.0-744~22.04` | Level Zero Dev Version |
-| DPCPP_VER | `2024.1.0-963` | DPCPP Version |
-| MKL Version | `2024.1.0-691` | MKL Version |
-| CCL_VER | `2021.12.0-309` | CCL Version |
-| PYTORCH_XPU_VERSION | `2.1.0a0+cxx11.abi` | Torch Version |
-| TORCHVISION_XPU_VERSION | `0.16.0.post0+cxx11.abi` | Torchvision Version |
-| TORCHAUDIO_XPU_VERSION | `2.1.0.post0+cxx11.abi` | Torchaudio Version |
-| IPEX_XPU_VERSION | `2.1.20+xpu` | IPEX Version |
-| ONECCL_VERSION | `2.1.200` | TorchCCL Version |
+| Tag(s)                 | Pytorch  | IPEX           | Driver | Dockerfile      |
+| ---------------------- | -------- | -------------- | ------ | --------------- |
+| `2.1.30-xpu`           | [v2.1.0] | [v2.1.30+xpu]  | [803]  | [v0.4.0-Beta]   |
+| `2.1.20-xpu`           | [v2.1.0] | [v2.1.20+xpu]  | [803]  | [v0.3.4]        |
+| `2.1.10-xpu`           | [v2.1.0] | [v2.1.10+xpu]  | [736]  | [v0.2.3]        |
+| `xpu-flex-2.0.110-xpu` | [v2.0.1] | [v2.0.110+xpu] | [647]  | [v0.1.0]        |
 
-### XPU Jupyter
-
-## TorchServe
-
-## Distributed Training on k8s
-
-Use _N_-Nodes in your Training with PyTorchJobs and Kubeflow's Training Operator with an optimized production container.
-
-### Distributed Production Container
-
-Create a Distributed Production Container using Intel Optimized PyTorch MultiNode layers. For Example:
-
-```dockerfile
-# Add Some Multinode image layers
-FROM intel/intel-optimized-pytorch:2.1.0-pip-multinode as prod-base
-# Use an existing container target
-FROM base as prod
-
-# Copy in Intel Optimized PyTorch MultiNode python environment, this will overwrite any packages with the same name
-COPY --from=prod-base /usr/local/lib/python3.10/dist-packages /usr/local/lib/python3.10/dist-packages
-COPY --from=prod-base /usr/local/bin /usr/local/bin
-
-...
-```
-
-#### Build the Container with New Stage
+---
 
 ```bash
-docker build ... --target prod -t my_container:prod .
+docker run -it --rm \
+    --device /dev/dri \
+    -v /dev/dri/by-path:/dev/dri/by-path \
+    --ipc=host \
+    intel/intel-extension-for-pytorch:2.1.30-xpu
 ```
 
-### Configure Kubernetes
+---
 
-Using an existing Kubernetes Cluster of any flavor, install the standalone training operator from GitHub or use a pre-existing Kubeflow configuration.
+The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
+
+| Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
+| --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
+| `xpu-jupyter`         | [v2.1.0] | [v2.1.30+xpu] | [803]  | `8888`       | [v0.4.0-Beta]   |
+| `2.1.20-xpu-pip-base` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`       | [v0.3.4]        |
+| `2.1.10-xpu-pip-base` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`       | [v0.3.4]        |
+
+### Run the XPU Jupyter Container
 
 ```bash
-kubectl apply -k "github.com/kubeflow/training-operator/manifests/overlays/standalone"
+docker run -it --rm \
+    -p 8888:8888 \
+    --net=host \
+    --device /dev/dri \
+    -v /dev/dri/by-path:/dev/dri/by-path \
+    --ipc=host \
+    intel/intel-extension-for-pytorch:xpu-jupyter
 ```
 
-Ensure that the training operator deployment readiness status `1/1` before proceeding.
+After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
 
-### Deploy Distributed Job
+## CPU only images
 
-Install [Helm](https://helm.sh/docs/intro/install/)
+The images below are built only with CPU optimizations (GPU acceleration support was deliberately excluded):
+
+| Tag(s)                     | Pytorch  | IPEX         | Dockerfile      |
+| -------------------------- | -------- | ------------ | --------------- |
+| `2.3.0-pip-base`, `latest` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
+| `2.2.0-pip-base`           | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
+| `2.1.0-pip-base`           | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]        |
+| `2.0.0-pip-base`           | [v2.0.0] | [v2.0.0+cpu] | [v0.1.0]        |
+
+### Run the CPU Container
 
 ```bash
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && \
-chmod 700 get_helm.sh && \
-./get_helm.sh
+docker run -it --rm intel/intel-extension-for-pytorch:latest
 ```
 
-Configure the Helm Chart by changing [pytorchjob](chart/templates/pytorchjob.yaml#L18-L46), [pvc](chart/templates/pvc.yaml), and [values](chart/values.yaml) files.
+---
 
-Afterwards, deploy to the cluster with `helm install`. To see all of the options, see the [README](chart/README.md) for the chart.
+The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
+
+| Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
+| ------------------- | -------- | ------------ | --------------- |
+| `2.3.0-pip-jupyter` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
+| `2.2.0-pip-jupyter` | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
+| `2.1.0-pip-jupyter` | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]        |
+| `2.0.0-pip-jupyter` | [v2.0.0] | [v2.0.0+cpu] | [v0.1.0]        |
 
 ```bash
-export NAMESPACE=kubeflow
-helm install ---namespace ${NAMESPACE} \
-     --set metadata.name=<workflow-name> \
-     --set metadata.namespace=<namespace with training operator> \
-     --set imageName=<Docker Image repository/Name> \
-     --set imageTag=<Docker Image Tag> \
-     ...
-     ipex-distributed
-     charts/training
+docker run -it --rm \
+    -p 8888:8888 \
+    --net=host \
+    -v $PWD/workspace:/workspace \
+    -w /workspace \
+    intel/intel-extension-for-tensorflow:xpu-jupyter
 ```
 
-To see an existing configuration utilizing this method, check out [Intel® Extension for Transformers](https://github.com/intel/intel-extension-for-transformers/blob/main/docker/README.md#kubernetes)' implementation.
+After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
 
-### Troubleshooting
+---
 
-- [TorchCCL Reference](https://github.com/intel/torch-ccl)
-- [PyTorchJob Reference](https://www.kubeflow.org/docs/components/training/pytorch/)
-- [Training Operator Reference](https://github.com/kubeflow/training-operator)
-- When applying proxies specify all of your proxies in a configmap in the same namespace, and add the following to both your launcher and workers:
+The images below additionally include [Intel® oneAPI Collective Communications Library] (oneCCL) and Neural Compressor ([INC]):
 
-```yaml
-envFrom:
-  - configMapRef:
-      name: my-proxy-configmap-name
+| Tag(s)                | Pytorch  | IPEX         | oneCCL               | INC       | Dockerfile      |
+| --------------------- | -------- | ------------ | -------------------- | --------- | --------------- |
+| `2.3.0-pip-multinode` | [v2.3.0] | [v2.3.0+cpu] | [v2.3.0][ccl-v2.3.0] | [v2.5.1]  | [v0.4.0-Beta]   |
+| `2.2.0-pip-multinode` | [v2.2.0] | [v2.2.0+cpu] | [v2.2.0][ccl-v2.2.0] | [v2.4.1]  | [v0.3.4]        |
+| `2.1.0-pip-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v2.3.1]  | [v0.2.3]        |
+| `2.0.0-pip-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v2.1.1]  | [v0.1.0]        |
+
+---
+
+The images below are [TorchServe*] with CPU Optimizations:
+
+| Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
+| ------------------- | -------- | ------------ | --------------- |
+| `2.3.0-serving-cpu` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
+| `2.2.0-serving-cpu` | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
+
+For more details, follow the procedure in the [TorchServe](https://github.com/pytorch/serve/blob/master/examples/intel_extension_for_pytorch/README.md) instructions.
+
+## CPU only images with Intel® Distribution for Python*
+
+The images below are built only with CPU optimizations (GPU acceleration support was deliberately excluded) and include [Intel® Distribution for Python*]:
+
+| Tag(s)           | Pytorch  | IPEX         | Dockerfile      |
+| ---------------- | -------- | ------------ | --------------- |
+| `2.3.0-idp-base` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
+| `2.2.0-idp-base` | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
+| `2.1.0-idp-base` | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]        |
+| `2.0.0-idp-base` | [v2.0.0] | [v2.0.0+cpu] | [v0.1.0]        |
+
+The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
+
+| Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
+| ------------------- | -------- | ------------ | --------------- |
+| `2.3.0-idp-jupyter` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
+| `2.2.0-idp-jupyter` | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
+| `2.1.0-idp-jupyter` | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]        |
+| `2.0.0-idp-jupyter` | [v2.0.0] | [v2.0.0+cpu] | [v0.1.0]        |
+
+The images below additionally include [Intel® oneAPI Collective Communications Library] (oneCCL) and Neural Compressor ([INC]):
+
+| Tag(s)                | Pytorch  | IPEX         | oneCCL               | INC       | Dockerfile      |
+| --------------------- | -------- | ------------ | -------------------- | --------- | --------------- |
+| `2.3.0-idp-multinode` | [v2.3.0] | [v2.3.0+cpu] | [v2.3.0][ccl-v2.3.0] | [v2.5.1]  | [v0.4.0-Beta]   |
+| `2.2.0-idp-multinode` | [v2.2.0] | [v2.2.0+cpu] | [v2.2.0][ccl-v2.2.0] | [v2.4.1]  | [v0.3.4]        |
+| `2.1.0-idp-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v2.3.1]  | [v0.2.3]        |
+| `2.0.0-idp-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v2.1.1]  | [v0.1.0]        |
+
+## Build from Source
+
+To build the images from source, clone the [Intel® AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
+
+```bash
+cd pytorch
+docker compose build ipex-base
+docker compose run ipex-base
 ```
+
+You can find the list of services below for each container in the group:
+
+| Service Name  | Description                                                         |
+| ------------- | ------------------------------------------------------------------- |
+| `ipex-base`   | Base image with [Intel® Extension for PyTorch*]                     |
+| `jupyter`     | Adds Jupyter Notebook server                                        |
+| `multinode`   | Adds [Intel® oneAPI Collective Communications Library] and [INC]    |
+| `xpu`         | Adds Intel GPU Support                                              |
+| `xpu-jupyter` | Adds Jupyter notebook server to GPU image                           |
+| `serving`     | [TorchServe*]                                                       |
+
+## License
+
+View the [License](https://github.com/intel/intel-extension-for-pytorch/blob/main/LICENSE) for the [Intel® Extension for PyTorch*].
+
+The images below also contain other software which may be under other licenses (such as Pytorch*, Jupyter*, Bash, etc. from the base).
+
+It is the image user's responsibility to ensure that any use of The images below comply with any relevant licenses for all software contained within.
+
+\* Other names and brands may be claimed as the property of others.
+
+<!--Below are links used in these document. They are not rendered: -->
+
+[Intel® Arc™ A-Series Graphics]: https://ark.intel.com/content/www/us/en/ark/products/series/227957/intel-arc-a-series-graphics.html
+[Intel® Data Center GPU Flex Series]: https://ark.intel.com/content/www/us/en/ark/products/series/230021/intel-data-center-gpu-flex-series.html
+[Intel® Data Center GPU Max Series]: https://ark.intel.com/content/www/us/en/ark/products/series/232874/intel-data-center-gpu-max-series.html
+
+[Intel® Extension for PyTorch*]: https://intel.github.io/intel-extension-for-pytorch/
+[Intel® Distribution for Python*]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/distribution-for-python.html
+[Intel® oneAPI Collective Communications Library]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/oneccl.html
+[INC]: https://github.com/intel/neural-compressor
+[PyTorch*]: https://pytorch.org/
+[TorchServe*]: https://github.com/pytorch/serve
+
+[v0.4.0-Beta]: https://github.com/intel/ai-containers/blob/v0.4.0-Beta/pytorch/Dockerfile
+[v0.3.4]: https://github.com/intel/ai-containers/blob/v0.3.4/pytorch/Dockerfile
+[v0.2.3]: https://github.com/intel/ai-containers/blob/v0.2.3/pytorch/Dockerfile
+[v0.1.0]: https://github.com/intel/ai-containers/blob/v0.1.0/pytorch/Dockerfile
+
+[v2.1.10+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.10%2Bxpu
+[v2.0.110+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.0.110%2Bxpu
+
+[v2.3.0]: https://github.com/pytorch/pytorch/releases/tag/v2.3.0
+[v2.2.0]: https://github.com/pytorch/pytorch/releases/tag/v2.2.0
+[v2.1.0]: https://github.com/pytorch/pytorch/releases/tag/v2.1.0
+[v2.0.1]: https://github.com/pytorch/pytorch/releases/tag/v2.0.1
+[v2.0.0]: https://github.com/pytorch/pytorch/releases/tag/v2.0.0
+
+[v2.5.1]: https://github.com/intel/neural-compressor/releases/tag/v2.5.1
+[v2.4.1]: https://github.com/intel/neural-compressor/releases/tag/v2.4.1
+[v2.3.1]: https://github.com/intel/neural-compressor/releases/tag/v2.3.1
+[v2.1.1]: https://github.com/intel/neural-compressor/releases/tag/v2.1.1
+
+[v2.3.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.3.0%2Bcpu
+[v2.2.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.2.0%2Bcpu
+[v2.1.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.0%2Bcpu
+[v2.0.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.0.0%2Bcpu
+
+[ccl-v2.3.0]: https://github.com/intel/torch-ccl/releases/tag/v2.3.0%2Bcpu
+[ccl-v2.2.0]: https://github.com/intel/torch-ccl/releases/tag/v2.2.0%2Bcpu
+[ccl-v2.1.0]: https://github.com/intel/torch-ccl/releases/tag/v2.1.0%2Bcpu
+[ccl-v2.0.0]: https://github.com/intel/torch-ccl/releases/tag/v2.1.0%2Bcpu
+
+[803]: https://dgpu-docs.intel.com/releases/LTS_803.29_20240131.html
+[736]: https://dgpu-docs.intel.com/releases/stable_736_25_20231031.html
+[647]: https://dgpu-docs.intel.com/releases/stable_647_21_20230714.html
