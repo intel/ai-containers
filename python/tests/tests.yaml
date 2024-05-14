@@ -27,11 +27,11 @@ perf-stock:
     volumes:
       - dst: /tests
         src: $PWD/python/tests
-compare-perf-${IDP_VERSION:-core}:
-    img: python:3.11-slim-bullseye
-    cmd: bash /tests/compare-perf.sh ${IDP_VERSION:-core}
-    volumes:
-      - dst: /logs
-        src: $PWD/python/tests/logs
-      - dst: /tests
-        src: $PWD/python/tests
+# compare-perf-${IDP_VERSION:-core}:
+#     img: python:3.11-slim-bullseye
+#     cmd: bash /tests/compare-perf.sh ${IDP_VERSION:-core}
+#     volumes:
+#       - dst: /logs
+#         src: $PWD/python/tests/logs
+#       - dst: /tests
+#         src: $PWD/python/tests

@@ -35,7 +35,7 @@ Ensure you have Docker Compose installed on your machine. If you don't have this
 ```bash
 DOCKER_CONFIG=${DOCKER_CONFIG:-$HOME/.docker}
 mkdir -p $DOCKER_CONFIG/cli-plugins
-curl -SL https://github.com/docker/compose/releases/download/v2.25.0/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
+curl -SL https://github.com/docker/compose/releases/download/v2.26.1/docker-compose-linux-x86_64 -o $DOCKER_CONFIG/cli-plugins/docker-compose
 chmod +x $DOCKER_CONFIG/cli-plugins/docker-compose
 docker compose version
 ```
@@ -43,83 +43,41 @@ docker compose version
 > [!CAUTION]
 > Docker compose `v2.25.0` is the minimum required version for some container groups.
 
-## Build Ingredient Containers
+## Build Containers
 
-Select your framework and run the docker compose commands:
+Select your framework of choice (TensorFlow*, PyTorch*, Classical ML) and run the docker compose commands:
 
 ```bash
 cd <framework>
 docker compose up --build
 ```
 
-To configure ingredient containers differently, see the framework README for a table of options for each ingredient.
-
-## Recipe Integration
-
-To include a new recipe start by creating a new stage in a given framework's `Dockerfile`.
-
-```dockerfile
-FROM base_target AS my_recipe_target
-
-RUN pip install -r requirements.txt
-RUN ...
-```
-
-Create as many stages you want, but make sure to note your final target name. Then add a new service in the framework's `docker-compose.yaml` file.
-
-```yaml
-service_name:
-  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-1.12.1}-my-package-${MY_PACKAGE_VERSION:-<version>}
-  build:
-    args:
-      MY_PACKAGE_VERSION: ${MY_PACKAGE_VERSION:-<version>}
-    target: my_recipe_target
-  command: >
-    sh -c "python -c 'import my_package; print(\"My Package Version:\", my_package.__version__)'"
-  extends:
-    service: base_target
-```
-
-For more information on how to customize your recipe, see the [docker compose documentation](https://docs.docker.com/compose/compose-file/compose-file-v3/).
-
-### Partial Layer Integration
-
-When re-using the AI Ingredient Containers for Intel Architectures it is often more efficient to only use portions of the image rather than all of the layers. The provided examples copy only the python environment and command-line tools installed in the image.
-
-For Stock Python:
-
-```dockerfile
-COPY --from=intel/intel-optimized-tensorflow:<my_pip_tag> /usr/local/lib/python${PYTHON_VERSION}/dist-packages /usr/local/lib/python${PYTHON_VERSION}/dist-packages
-COPY --from=intel/intel-optimized-tensorflow:<my_pip_tag> /usr/local/bin /usr/local/bin
-```
-
-For Intel Distribution for Python:
-
-```dockerfile
-COPY --from=intel/intel-optimized-tensorflow:<my_idp_tag> /root/conda/envs/idp /root/conda/envs/<my_env>
-```
-
-### Alter Existing Recipe
-
-When changing a recipe, alter the framework's `Dockerfile` and then utilize [GitHub Actions](https://docs.github.com/en/actions/learn-github-actions) to build and test a framework. When changing a version, alter the framework's `docker-compose.yaml` file by modifying all instances of the version:
-
-```text
-${INC_VERSION:-2.1.0} -> ${INC_VERSION:-2.1.1}
-```
-
-And then build and test using GitHub Actions.
-
-## Notebooks and MLFlow
-
-### Jupyter
-
-When using a container intended to launch a jupyter notebook server, start the Jupyter Server via the docker run command and copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser, the port is 8888 by default.
+To configure these containers, simply append the relevant environment variable to the docker compose command based on the build arguments in the compose file. For example:
 
 ```bash
-cd <framework>
-docker compose build jupyter
-docker compose run -d --net=host --rm <image-name> jupyter notebook --notebook-dir=/jupyter --ip 0.0.0.0 --no-browser --allow-root
+# I want to build ipex-base with Intel® Distribution for Python
+cd pytorch
+PACKAGE_OPTION=idp docker compose up --build ipex-base
 ```
+
+## Test Containers
+
+To test the containers, use the [Test Runner Framework](https://github.com/intel/ai-containers/tree/main/test-runner):
+
+```bash
+# I want to test ipex-base with Intel® Distribution for Python
+# 1. build the container in the above section
+# 2. push it to a relevant registry
+PACKAGE_OPTION=idp docker compose push ipex-base
+cd ..
+# 3. install the test runner python requirements
+pip install -r test-runner/requirements.txt
+# 4. Run the test file
+PACKAGE_OPTION=idp python test-runner/test_runner.py -f pytorch/tests/tests.yaml
+```
+
+> [!TIP]
+> To test a container built by GitHub Actions CI/CD, find the `run number` associated with the workflow run and set the `GITHUB_RUN_NUMBER` environment variable during execution to pull the desired image.
 
 ## Troubleshooting
 

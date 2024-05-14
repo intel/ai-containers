@@ -105,7 +105,7 @@ RUN virtualenv --system-site-packages inc && echo "source /inc/bin/activate" > ~
 
 FROM multinode AS multinode-idp
 
-FROM ${PYTHON_BASE} AS ipex-xpu-base-pip
+FROM ${PYTHON_BASE} AS ipex-xpu-base
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
@@ -116,8 +116,7 @@ RUN apt-get update && \
     gnupg2 \
     gpg-agent \
     rsync \
-    unzip \
-    wget -q  && \
+    unzip && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
@@ -155,13 +154,6 @@ RUN apt-get update && \
     intel-oneapi-runtime-mkl=${MKL_VER} \
     intel-oneapi-runtime-ccl=${CCL_VER};
 
-ARG PYTORCH_XPU_VERSION
-ARG TORCHVISION_XPU_VERSION
-ARG IPEX_XPU_VERSION
-ARG ONECCL_VERSION
-ARG WHL_VERSION
-ARG WHL_URL
-
 WORKDIR /
 COPY xpu-requirements.txt .
 
@@ -169,54 +161,7 @@ RUN python -m pip install --no-cache-dir -r xpu-requirements.txt
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
 
-FROM ${PYTHON_BASE} AS ipex-xpu-base-idp
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    apt-utils \
-    build-essential \
-    clinfo \
-    git \
-    gnupg2 \
-    gpg-agent \
-    rsync \
-    unzip \
-    wget -q  && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-RUN wget --no-check-certificate -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-    gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
-    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
-
-ARG ICD_VER
-ARG LEVEL_ZERO_GPU_VER
-ARG LEVEL_ZERO_VER
-ARG LEVEL_ZERO_DEV_VER
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    intel-opencl-icd=${ICD_VER} \
-    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
-    level-zero=${LEVEL_ZERO_VER} \
-    level-zero-dev=${LEVEL_ZERO_DEV_VER} && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-ARG PYTORCH_XPU_VERSION
-ARG TORCHVISION_XPU_VERSION
-ARG IPEX_XPU_VERSION
-ARG ONECCL_VERSION
-
-RUN conda install intel-extension-for-pytorch=${IPEX_XPU_VERSION}=*xpu* \
-    torchvision=${TORCHVISION_XPU_VERSION} \
-    torchaudio=${PYTORCH_XPU_VERSION} \
-    oneccl_bind_pt=$ONECCL_VERSION -c intel/label/oneapi -c intel -c conda-forge
-
-ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
-
-FROM ipex-xpu-base-${PACKAGE_OPTION} AS ipex-xpu-jupyter
+FROM ipex-xpu-base AS ipex-xpu-jupyter
 
 WORKDIR /jupyter
 COPY jupyter-requirements.txt .
@@ -264,9 +209,11 @@ RUN python3 -m venv /home/venv
 ENV PATH="/home/venv/bin:$PATH"
 
 WORKDIR /home/model-server
-COPY serving/requirements.txt requirements.txt
+COPY torchserve-requirements.txt .
+COPY requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    python -m pip install --no-cache-dir -r torchserve-requirements.txt
 
 RUN echo -e "#!/bin/bash \n\
 set -e \n\

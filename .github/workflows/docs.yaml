@@ -12,37 +12,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
-name: Lint
-permissions: read-all
+name: Docs
 on:
   merge_group: null
   pull_request: null
   push:
     branches:
-      - develop
-      - main
+    - main
+permissions: read-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
+  mkdocs:
+    runs-on: k8-runners # ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
-          fetch-depth: 0
-      - uses: super-linter/super-linter/slim@v6.4.1
-        env:
-          # To report GitHub Actions status checks
-          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
-          GITHUB_ACTIONS_COMMAND_ARGS: '-ignore SC.*'
-          VALIDATE_BASH_EXEC: false
-          VALIDATE_CHECKOV: false
-          VALIDATE_HTML: false
-          VALIDATE_KUBERNETES_KUBECONFORM: false
-          VALIDATE_NATURAL_LANGUAGE: false
-          VALIDATE_PYTHON_FLAKE8: false
-          VALIDATE_PYTHON_MYPY: false
-          VALIDATE_PYTHON_RUFF: false
+          python-version: 3.8
+          cache: pip
+      - name: Install python requirements
+        run: python -m pip install -r docs/requirements.txt
+      - name: Build
+        run: mkdocs build --clean
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+        uses: actions/deploy-pages@v4

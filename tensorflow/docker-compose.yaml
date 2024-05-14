@@ -26,7 +26,6 @@ services:
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-22.04}
         GITHUB_RUN_NUMBER: ${GITHUB_RUN_NUMBER:-0}
-        IDP_VERSION: core
         MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
@@ -36,7 +35,7 @@ services:
       target: tf-base-${PACKAGE_OPTION:-pip}
       context: .
     depends_on:
-      - ${PACKAGE_OPTION:-pip}-base
+      - ${PACKAGE_OPTION:-pip}
     command: >
       python -c 'import tensorflow as tf; print("Tensorflow Version:", tf.__version__)'
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_VERSION:-2.15.0}-base
@@ -62,7 +61,7 @@ services:
       bash -c "horovodrun --check-build && mpirun --version && python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow;import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)'"
     extends: tf-base
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_VERSION:-2.15.0}-horovod-${HOROVOD_VERSION:-0.28.1}-inc-${INC_VERSION:-2.3.1}
-  itex-xpu-base:
+  xpu:
     build:
       args:
         ICD_VER: ${ICD_VER:-23.43.27642.40-803~22.04}
@@ -80,10 +79,21 @@ services:
       sh -c "python -c 'import tensorflow as tf;print(tf.__version__);from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'"
     extends: tf-base
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.0}-itex-xpu-base
-  itex-xpu-jupyter:
+  xpu-jupyter:
     build:
+      args:
+        ICD_VER: ${ICD_VER:-23.43.27642.40-803~22.04}
+        LEVEL_ZERO_GPU_VER: ${LEVEL_ZERO_GPU_VER:-1.3.27642.40-803~22.04}
+        LEVEL_ZERO_VER: ${LEVEL_ZERO_VER:-1.14.0-744~22.04}
+        LEVEL_ZERO_DEV_VER: ${LEVEL_ZERO_DEV_VER:-1.14.0-744~22.04}
+        DPCPP_VER: ${DPCPP_VER:-2024.1.0-963}
+        MKL_VER: ${MKL_VER:-2024.1.0-691}
+        CCL_VER: ${CCL_VER:-2021.12.0-309}
+        TF_VER: ${TF_VER:-2.15.0}
+        no_proxy: ''
+        NO_PROXY: ''
       target: itex-xpu-jupyter
-    extends: itex-xpu-base
+    extends: tf-base
     command: >
       bash -c "python -m jupyter --version"
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.0}-itex-xpu-jupyter

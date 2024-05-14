@@ -63,3 +63,11 @@ updates:
     package-ecosystem: pip
     schedule:
       interval: weekly
+  - directory: /docs
+    groups:
+      python-requirements:
+        patterns:
+          - "*"
+    package-ecosystem: pip
+    schedule:
+      interval: weekly
