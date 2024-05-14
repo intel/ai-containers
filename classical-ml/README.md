@@ -87,6 +87,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [Scikit-learn*]: https://scikit-learn.org/stable/
 [XGBoost*]: https://github.com/dmlc/xgboost
 
+[v2024.3.0]: https://github.com/intel/scikit-learn-intelex/releases/tag/2024.3.0
 [v2024.2.0]: https://github.com/intel/scikit-learn-intelex/releases/tag/2024.2.0
 [v2024.0.0]: https://github.com/intel/scikit-learn-intelex/releases/tag/2024.0.0
 
