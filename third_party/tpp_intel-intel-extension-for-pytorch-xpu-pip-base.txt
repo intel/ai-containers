@@ -1,0 +1,33 @@
+intel/intel-extension-for-pytorch:2.1.20-xpu-pip-base container Third Party Programs File
+
+This file contains the list of third party software (“third party programs”)
+contained in the Intel software and their required notices and/or license terms.
+This third party software, even if included with the distribution of the Intel
+software, may be governed by separate license terms, including without limitation,
+third party license terms, other Intel software license terms, and open source
+software license terms. These separate license terms govern your use of the third
+party programs as set forth in the “third-party-programs.txt” or other similarlynamed text file
+
+Third party programs and their corresponding required notices and/or license
+terms are listed below.
+
+-------------------------------------------------------------	
+
+
+
+The following third party programs have their own third party program files. These additional third party program files are as follows:
+<<Replace this with relevant components and its tpp url>>
+e.g 
+1. oneMKL Interfaces : https://github.com/oneapi-src/oneMKL/tree/develop/third-party-programs
+2. oneTBB : https://github.com/oneapi-src/oneTBB/blob/master/third-party-programs.txt
+
+
+
+The Dockerfile depends on the use of the following additional layers.
+<<Replace this with relevant components and its tpp url>>
+e.g 
+1. ubuntu:20.04 https://hub.docker.com/_/ubuntu tag 20.04
+2. centos:8 https://www.centos.org/legal/licensing-policy/ tag centos8
+
+Other names and brands may be claimed as the property of others. 
+
