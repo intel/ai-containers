@@ -14,6 +14,7 @@
 
 import logging
 import os
+import re
 import sys
 from shlex import split
 from signal import SIGKILL
@@ -39,6 +40,7 @@ class Test(BaseModel):
     img: Optional[str] = None
     volumes: Optional[List[Volume]] = None
     env: Optional[Dict[str, str]] = None
+    mask: Optional[List[str]] = []
     notebook: Optional[bool] = False
     serving: Optional[bool] = False
     cap_add: Optional[str] = "AUDIT_READ"
@@ -233,6 +235,12 @@ class Test(BaseModel):
             log = ""
             for _, stream_content in output_generator:
                 # All process logs will have the stream_type of stderr despite it being stdout
+                for item in self.mask:
+                    stream_content = re.sub(
+                        rf"({item}[:=-_\s])(.*)",
+                        r"\1***",
+                        stream_content.decode("utf-8"),
+                    ).encode("utf-8")
                 logging.info(stream_content.decode("utf-8").strip())
                 log += stream_content.decode("utf-8").strip()
 
@@ -263,6 +271,10 @@ class Test(BaseModel):
         )
         try:
             stdout, stderr = p.communicate()
+            for item in self.mask:
+                stdout = re.sub(
+                    rf"({item}[:=-_\s])(.*)", r"\1***", stdout.decode("utf-8")
+                ).encode("utf-8")
             if stderr:
                 logging.error(stderr.decode("utf-8"))
             if stdout:
