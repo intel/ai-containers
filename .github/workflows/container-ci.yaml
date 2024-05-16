@@ -45,6 +45,11 @@ on:
         default: false
         required: true
         type: boolean
+      no_push:
+        description: Do not push to Registry
+        required: true
+        default: false
+        type: boolean
       no_start:
         description: No Start
         default: false

@@ -37,3 +37,12 @@ test3:
 test${TEST:-4}:
   img: python:3.11-slim-bullseye
   cmd: echo "${TEST:-4}"
+test6:
+  img: python:3.11-slim-bullseye
+  cmd: "echo 'hello: world'"
+  mask:
+    - hello
+test7:
+  cmd: "echo 'world: hello'"
+  mask:
+    - world

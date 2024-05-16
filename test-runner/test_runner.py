@@ -64,6 +64,13 @@ def parse_args(args: list):
     parser.add_argument(
         "-l", "--logs", dest="logs_path", default="output", help="-l /path/to/logs"
     )
+    parser.add_argument(
+        "-m",
+        "--mask",
+        dest="mask",
+        action="store_true",
+        help="Enable mask parameter for sensitive information in logs",
+    )
 
     return parser.parse_args(args)
 
@@ -110,6 +117,8 @@ def get_test_list(args: dict, tests_yaml: List[dict]):
             if args.actions_path:
                 with open(args.actions_path, "r", encoding="utf-8") as actions_file:
                     for key, dval in json.load(actions_file).items():
+                        if key == "mask":
+                            [args.mask] = dval
                         if isinstance(dval, list) and key != "experimental":
                             for _, val in enumerate(dval):
                                 os.environ[key] = str(val)
@@ -172,6 +181,8 @@ if __name__ == "__main__":
     summary = []
     ERROR = False
     for idx, test in enumerate(tests):
+        if not args.mask:
+            test.mask = []
         # Set Context to test-runner.log
         set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
         logging.info("Running Test: %s", test.name)

@@ -87,7 +87,7 @@ def test_container_run_serving(test_class_input):
 def test_run(test_class_input):
     "test run() method."
     for test in test_class_input:
-        if test.img is None:
+        if test.img is None and test.mask == []:
             assert test.run() == "Hello World"
 
 
@@ -136,10 +136,25 @@ def test_get_test_list(test_args_input, test_json_input):
             "img": "python:3.11-slim-bullseye",
             "cmd": 'echo "5"',
         },
+        "test6": {
+            "img": "python:3.11-slim-bullseye",
+            "cmd": "echo 'hello: world'",
+            "mask": ["hello"],
+        },
+        "test7": {"cmd": "echo 'world: hello'", "mask": ["world"]},
     }
 
     test_fn = get_test_list(test_args_input, test_json_input)
     assert test_fn == test_val
+
+
+def test_masking(test_class_input):
+    "test masking."
+    for test in test_class_input:
+        if test.mask != [] and test.img:
+            assert ":***" in test.container_run()
+        if test.mask != [] and not test.img:
+            assert ":***" in test.run()
 
 
 @given(name=text(), arguments=dictionaries(text(), text()))

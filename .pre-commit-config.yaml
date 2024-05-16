@@ -3,7 +3,7 @@ ci:
   autofix_prs: true
   autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
   autoupdate_schedule: "weekly"
-  skip: [pylint, shellcheck, markdownlint, hadolint-docker, shfmt, tox]
+  skip: [pylint, shellcheck, markdownlint, hadolint-docker, shfmt, tox, mkdocs]
 repos:
 - hooks:
   - id: check-added-large-files
