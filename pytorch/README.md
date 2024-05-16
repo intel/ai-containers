@@ -202,6 +202,8 @@ It is the image user's responsibility to ensure that any use of The images below
 [v0.2.3]: https://github.com/intel/ai-containers/blob/v0.2.3/pytorch/Dockerfile
 [v0.1.0]: https://github.com/intel/ai-containers/blob/v0.1.0/pytorch/Dockerfile
 
+[v2.1.30+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.30%2Bxpu
+[v2.1.20+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.20%2Bxpu
 [v2.1.10+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.10%2Bxpu
 [v2.0.110+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.0.110%2Bxpu
 
