@@ -1,6 +1,6 @@
 {
     "readmes": [
-        {"fname": "docs/dockerhub/test1.md","repo-name": "test1"}, 
-        {"fname": "docs/dockerhub/test2.md", "repo-name": "test2"}
+        {"fname": "./docs/dockerhub/test1.md","repo-name": "test1"}, 
+        {"fname": "./docs/dockerhub/test2.md", "repo-name": "test2"}
     ]
 }
