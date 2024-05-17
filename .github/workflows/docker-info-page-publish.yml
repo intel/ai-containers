@@ -23,7 +23,9 @@ jobs:
     strategy:
       matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
     steps:
-     - run: echo "${{ matrix.fname }}} -> ${{ matrix.repo-name }}}"
+     - run: |
+         echo ${{ matrix}}
+         echo "${{ matrix.fname }} -> ${{ matrix.repo-name }}"
   PublishDockerHubDescription:
     runs-on: ubuntu-latest
     steps:
