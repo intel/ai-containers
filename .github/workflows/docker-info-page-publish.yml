@@ -6,6 +6,15 @@ on:
 #  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  setup-repos:
+    strategy:
+      matrix:
+        repo: [test1, test2]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: test
+        run: echo ${{ matrix.repo }}
   PublishDockerHubDescription:
     runs-on: ubuntu-latest
     steps:
