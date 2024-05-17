@@ -25,7 +25,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   mkdocs:
-    runs-on: k8-runners # ubuntu-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       pages: write
