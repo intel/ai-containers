@@ -9,12 +9,12 @@ jobs:
   setup-repos:
     strategy:
       matrix:
-        repo: [test1, test2]
+        dh: [{fname: test1.md, repo-name: test1}, {fname: test2.md, repo-name: test2}]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: test
-        run: echo ${{ matrix.repo }}
+        run: echo "${{ matrix.dh.fname }} --> ${{ matrix.dh.repo-name }}"
   PublishDockerHubDescription:
     runs-on: ubuntu-latest
     steps:
