@@ -1,0 +1,36 @@
+{
+    "readmes": [
+        {
+            "fname": "./classical-ml/README.md",
+            "repo-name": "intel/intel-optimized-ml"
+        },
+        {
+            "fname": "./python/README.md",
+            "repo-name": "intel/python"
+        },
+        {
+            "fname": "./pytorch/README.md",
+            "repo-name": "intel/intel-extension-for-pytorch"
+        },
+        {
+            "fname": "./tensorflow/README.md",
+            "repo-name": "intel/intel-extension-for-tensorflow"
+        },
+        {
+            "fname": "./preset/README.md",
+            "repo-name": "intel/data-analytics"
+        },
+        {
+            "fname": "./preset/README.md",
+            "repo-name": "intel/classical-ml"
+        },
+        {
+            "fname": "./preset/README.md",
+            "repo-name": "intel/deep-learning"
+        },
+        {
+            "fname": "./preset/README.md",
+            "repo-name": "intel/inference-optimization"
+        }
+    ]
+}
