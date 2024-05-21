@@ -21,7 +21,7 @@ version: 2
 updates:
   - directory: /test-runner
     groups:
-      python-requirements:
+      test-runner:
         patterns:
           - "*"
     package-ecosystem: pip
@@ -33,7 +33,7 @@ updates:
       interval: weekly
   - directory: /pytorch
     groups:
-      python-requirements:
+      pytorch:
         patterns:
           - "*"
     package-ecosystem: pip
@@ -41,7 +41,7 @@ updates:
       interval: weekly
   - directory: /classical-ml
     groups:
-      python-requirements:
+      classical-ml:
         patterns:
           - "*"
     package-ecosystem: pip
@@ -49,7 +49,7 @@ updates:
       interval: weekly
   - directory: /tensorflow
     groups:
-      python-requirements:
+      tensorflow:
         patterns:
           - "*"
     package-ecosystem: pip
@@ -57,7 +57,7 @@ updates:
       interval: weekly
   - directory: /python
     groups:
-      python-requirements:
+      python:
         patterns:
           - "*"
     package-ecosystem: pip
@@ -65,7 +65,7 @@ updates:
       interval: weekly
   - directory: /docs
     groups:
-      python-requirements:
+      docs:
         patterns:
           - "*"
     package-ecosystem: pip
