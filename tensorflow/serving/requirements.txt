@@ -1,6 +1,6 @@
 numpy==1.26.4
 pillow==10.3.0
-requests==2.31.0
+requests==2.32.0
 tensorflow==2.16.1
 tensorflow-serving-api==2.16.1
 setuptools==69.5.1
