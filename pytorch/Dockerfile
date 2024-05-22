@@ -91,19 +91,14 @@ COPY multinode-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
 
+ARG PYTHON_VERSION
+RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bashrc
+
 RUN mkdir -p /licensing
 
 RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
-
-FROM multinode AS multinode-pip
-
-RUN apt-get install -y --no-install-recommends --fix-missing virtualenv
-
-RUN virtualenv --system-site-packages inc && echo "source /inc/bin/activate" > ~/.bashrc
-
-FROM multinode AS multinode-idp
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 

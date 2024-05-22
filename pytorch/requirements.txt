@@ -4,5 +4,3 @@ torchaudio==2.3.0
 -f https://download.pytorch.org/whl/cpu/torch_stable.html
 intel_extension_for_pytorch==2.3.0+cpu
 --extra-index-url https://developer.intel.com/ipex-whl-stable-cpu
-setuptools==69.5.1
-psutil==5.9.8

@@ -81,7 +81,7 @@ services:
         org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-base"
         org.opencontainers.image.title: "Intel® Extension for PyTorch MultiNode Image"
         org.opencontainers.image.version: ${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-multinode
-      target: multinode-${PACKAGE_OPTION:-pip}
+      target: multinode
     command: >
       sh -c "python -c 'import neural_compressor;import
       oneccl_bindings_for_pytorch as oneccl; print(\"Neural Compressor
