@@ -22,12 +22,12 @@ import-itex-xpu-${PACKAGE_OPTION:-pip}:
   volumes:
     - src: ${PWD}/tensorflow/tests
       dst: /tests
-import-itex-xpu-jupyter-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.0}-itex-xpu-jupyter
-  cmd: sh -c "python -m jupyter --version"
 import-cpu-jupyter-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_VERSION:-2.15.0}-jupyter
-  cmd: sh -c "python -m jupyter --version"
+  cmd: python -m jupyter --version
+import-xpu-jupyter-${PACKAGE_OPTION:-pip}:
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.0}-itex-xpu-jupyter
+  cmd: python -m jupyter --version
 import-multinode-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_VERSION:-2.15.0}-horovod-${HOROVOD_VERSION:-0.28.1}-inc-${INC_VERSION:-2.3.1}
   cmd: horovodrun --check-build && mpirun --version && python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow'

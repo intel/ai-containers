@@ -16,7 +16,7 @@ services:
   idp:
     build:
       args:
-        MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
+        MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Linux-x86_64}
       context: .
       labels:
         dependency.apt.wget: true

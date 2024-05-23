@@ -51,16 +51,16 @@ USER dev
 WORKDIR /home/dev
 
 ENV CONDA_ROOT=/home/dev/conda
-ARG MINICONDA_VERSION
+ARG MINIFORGE_VERSION
 ARG PYTHON_VERSION
 ARG IDP_VERSION
 ARG INTEL_CHANNEL
 
-RUN wget --progress=dot:giga --no-check-certificate https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh -O miniconda.sh && \
-    chmod +x miniconda.sh && \
-    ./miniconda.sh -b -p "${CONDA_ROOT}" && \
-    rm ./miniconda.sh && \
-    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniconda3"  && \
+RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-${MINIFORGE_VERSION}.sh -O miniforge.sh && \
+    chmod +x miniforge.sh && \
+    ./miniforge.sh -b -p "${CONDA_ROOT}" && \
+    rm ./miniforge.sh && \
+    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge3"  && \
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda update -y conda && \
     conda config --add channels conda-forge && \
