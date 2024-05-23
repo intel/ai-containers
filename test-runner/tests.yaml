@@ -15,17 +15,17 @@
 test1:
   img: ${REGISTRY}/${REPO}:latest # substitute env from host
   cmd: head -n 1 /workspace/test-runner/requirements.txt # volume mounted file
-# device: /dev/dri
-# ipc: host
+  # device: /dev/dri
+  # ipc: host
   notebook: True
   env:
     REGISTRY: ${REGISTRY} # substitute env from host
     DEBUG: 'true' # single quotes
   volumes:
-    - src: /tf_dataset
-      dst: /tmp
-    - src: $PWD
-      dst: /workspace
+  - src: /tf_dataset
+    dst: /tmp
+  - src: $PWD
+    dst: /workspace
 test2:
   cmd: echo -n $TEST && python -c 'print(" World", end="")' # var substitution inline
   env:
@@ -41,8 +41,13 @@ test6:
   img: ${CACHE_REGISTRY}/cache/library/python:3.11-slim-bullseye
   cmd: "echo 'hello: world'"
   mask:
-    - hello
+  - hello
 test7:
   cmd: "echo 'world: hello'"
   mask:
-    - world
+  - world
+test8:
+  cmd: "echo 'test: 123 throughput'"
+  mask:
+  - test
+  performance: perf/test.yaml

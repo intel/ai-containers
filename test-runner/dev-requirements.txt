@@ -2,7 +2,12 @@ black>=24.4.1
 coverage>=7.5.0
 expandvars>=0.12.0
 hypothesis>=6.100.1
+<<<<<<< HEAD
 pydantic==2.7.2
+=======
+Pint>=0.21.1
+pydantic==2.7.0
+>>>>>>> a89c15e... add perf thresholds from internal
 pylint>=3.1.0
 pytest>=8.1.1
 python_on_whales>=0.70.1

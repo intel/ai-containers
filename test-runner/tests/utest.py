@@ -21,7 +21,7 @@ from expandvars import expandvars
 from hypothesis import given
 from hypothesis.strategies import dictionaries, text
 from test_runner import get_test_list, parse_args, set_log_filename
-from utils.test import Test
+from utils.test import PerfException, Test
 
 
 @pytest.fixture
@@ -143,6 +143,11 @@ def test_get_test_list(test_args_input, test_json_input):
             "mask": ["hello"],
         },
         "test7": {"cmd": "echo 'world: hello'", "mask": ["world"]},
+        "test8": {
+            "cmd": "echo 'test: 123 throughput'",
+            "mask": ["test"],
+            "performance": "perf/test.yaml",
+        },
     }
 
     test_fn = get_test_list(test_args_input, test_json_input)
@@ -153,9 +158,32 @@ def test_masking(test_class_input):
     "test masking."
     for test in test_class_input:
         if test.mask != [] and test.img:
-            assert ":***" in test.container_run()
+            assert ": ***" in test.container_run()
         if test.mask != [] and not test.img:
-            assert ":***" in test.run()
+            assert ": ***" in test.run()
+
+
+def test_perf_thresholds():
+    "test performance thresholds."
+    test_dict = {"cmd": "echo 'test: 123 throughput'", "performance": "perf/test.yaml"}
+    test = Test(name="test", **test_dict)
+    assert "test: 123 throughput" in test.run()
+
+    test_dict["cmd"] = "echo 'test: 121 throughput'"
+    test = Test(name="test", **test_dict)
+    try:
+        with pytest.raises(Exception, match="Failed") as exc_info:
+            test.run()
+    except:
+        assert isinstance(exc_info.value, PerfException)
+
+    test_dict["cmd"] = "echo 'test: 123 millithroughput'"
+    test = Test(name="test", **test_dict)
+    try:
+        with pytest.raises(Exception, match="Failed") as exc_info:
+            test.run()
+    except:
+        assert isinstance(exc_info.value, PerfException)
 
 
 @given(name=text(), arguments=dictionaries(text(), text()))
