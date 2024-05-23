@@ -45,14 +45,14 @@ RUN apt-get update -y && \
 FROM base AS idp
 
 ARG PYTHON_VERSION
-ARG MINICONDA_VERSION
+ARG MINIFORGE_VERSION
 ARG IDP_VERSION=core
 
-RUN wget --progress=dot:giga --no-check-certificate "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh" -O miniconda.sh && \
-    chmod +x miniconda.sh && \
-    ./miniconda.sh -b -p /opt/conda && \
-    rm ./miniconda.sh && \
-    ln -s /opt/conda ~/miniconda3 && \
+RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-${MINIFORGE_VERSION}.sh" -O miniforge.sh && \
+    chmod +x miniforge.sh && \
+    ./miniforge.sh -b -p /opt/conda && \
+    rm ./miniforge.sh && \
+    ln -s /opt/conda ~/miniforge3 && \
     export PATH="/opt/conda/bin/:${PATH}" && \
     conda update -y conda && \
     conda config --add channels intel && \
