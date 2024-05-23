@@ -11,7 +11,7 @@ party programs as set forth in the “third-party-programs.txt” or other simil
 Third party programs and their corresponding required notices and/or license
 terms are listed below.
 
--------------------------------------------------------------	
+-------------------------------------------------------------
 
 START LICENSE(S) FOR ---------- @jupyter-notebook/lab-extension -----------------------------
 
@@ -729,8 +729,8 @@ START LICENSE(S) FOR ---------- Mako -----------------------------
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-   
-   
+
+
 
 END LICENSE(S) FOR ---------- Mako -----------------------------
 
@@ -3436,7 +3436,7 @@ This project includes code from the autobrew project.
 The following files are based on code from the autobrew project:
 * r/tools/autobrew
 * dev/tasks/homebrew-formulae/autobrew/apache-arrow.rb
-* dev/tasks/homebrew-formulae/autobrew/apache-arrow-static.rb 
+* dev/tasks/homebrew-formulae/autobrew/apache-arrow-static.rb
 
 Copyright (c) 2019, Jeroen Ooms
 License: MIT
@@ -9744,9 +9744,9 @@ IBM
 IS
 -----------------------------------
 # Full Copyright Statement
-# 
+#
 #    Copyright (C) The Internet Society (1999).  All Rights Reserved.
-# 
+#
 #    This document and translations of it may be copied and furnished to
 #    others, and derivative works that comment on or otherwise explain it
 #    or assist in its implementation may be prepared, copied, published
@@ -9760,10 +9760,10 @@ IS
 #    copyrights defined in the Internet Standards process must be
 #    followed, or as required to translate it into languages other than
 #    English.
-# 
+#
 #    The limited permissions granted above are perpetual and will not be
 #    revoked by the Internet Society or its successors or assigns.
-# 
+#
 #    This document and the information contained herein is provided on an
 #    "AS IS" basis and THE INTERNET SOCIETY AND THE INTERNET ENGINEERING
 #    TASK FORCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING
@@ -9808,14 +9808,14 @@ ISC
 
 JC
 -----------------------------------
- * This software is not subject to any license of Silicon Graphics 
+ * This software is not subject to any license of Silicon Graphics
  * Inc. or Purdue University.
  *
  * Redistribution and use in source and binary forms are permitted
  * without restriction or fee of any kind as long as this notice
  * is preserved.
 
-The following is additional information from Juan C. Gomez on how 
+The following is additional information from Juan C. Gomez on how
 this license is to be interpreted:
 -----
 Local-Date: Fri, 06 Jun 2003 13:18:52 -0400
@@ -9833,7 +9833,7 @@ license. Please forward this email to Kurt so he does the appropriate
 changes to the files to reflect this.
 
 
-Regards, Juan                                                                                       
+Regards, Juan
 -----------------------------------
 
 
@@ -9842,7 +9842,7 @@ MA
  * Copyright (c) 2000, Mark Adamson, Carnegie Mellon.  All rights reserved.
  * This software is not subject to any license of Carnegie Mellon University.
  *
- * Redistribution and use in source and binary forms are permitted without 
+ * Redistribution and use in source and binary forms are permitted without
  * restriction or fee of any kind as long as this notice is preserved.
  *
  * The name "Carnegie Mellon" must not be used to endorse or promote
@@ -10088,7 +10088,7 @@ License: BSD
  EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
  PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+ OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
  OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
  ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
@@ -10771,10 +10771,10 @@ END LICENSE(S) FOR ---------- libpython3-stdlib -----------------------------
 
 START LICENSE(S) FOR ---------- libpython3.10-minimal -----------------------------
 
-This package was put together by Klee Dienes <klee@debian.org> from 
-sources from ftp.python.org:/pub/python, based on the Debianization by 
-the previous maintainers Bernd S. Brentrup <bsb@uni-muenster.de> and 
-Bruce Perens. Current maintainer is Matthias Klose <doko@debian.org>. 
+This package was put together by Klee Dienes <klee@debian.org> from
+sources from ftp.python.org:/pub/python, based on the Debianization by
+the previous maintainers Bernd S. Brentrup <bsb@uni-muenster.de> and
+Bruce Perens. Current maintainer is Matthias Klose <doko@debian.org>.
 
 It was downloaded from http://python.org/
 
@@ -11144,8 +11144,8 @@ Floating point exception control
 
 The source for the `fpectl' module includes the following notice:
 
-     ---------------------------------------------------------------------  
-    /                       Copyright (c) 1996.                           \ 
+     ---------------------------------------------------------------------
+    /                       Copyright (c) 1996.                           \
    |          The Regents of the University of California.                 |
    |                        All rights reserved.                           |
    |                                                                       |
@@ -11177,7 +11177,7 @@ The source for the `fpectl' module includes the following notice:
    |   opinions  of authors expressed herein do not necessarily state or   |
    |   reflect those of the United States Government or  the  University   |
    |   of  California,  and shall not be used for advertising or product   |
-    \  endorsement purposes.                                              / 
+    \  endorsement purposes.                                              /
      ---------------------------------------------------------------------
 
 
@@ -11351,13 +11351,13 @@ Copyright: (c) 2008-2009, Google Inc.
 License: Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are
   met:
- 
+
       * Redistributions of source code must retain the above copyright
   notice, this list of conditions and the following disclaimer.
       * Neither the name of Google Inc. nor the names of its
   contributors may be used to endorse or promote products derived from
   this software without specific prior written permission.
- 
+
   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -11377,7 +11377,7 @@ Copyright: (c) 1999 by Fredrik Lundh.
 License: By obtaining, using, and/or copying this software and/or its
   associated documentation, you agree that you have read, understood,
   and will comply with the following terms and conditions:
- 
+
   Permission to use, copy, modify, and distribute this software and its
   associated documentation for any purpose and without fee is hereby
   granted, provided that the above copyright notice appears in all
@@ -11386,7 +11386,7 @@ License: By obtaining, using, and/or copying this software and/or its
   AB or the author not be used in advertising or publicity pertaining to
   distribution of the software without specific, written prior
   permission.
- 
+
   SECRET LABS AB AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO
   THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
   FITNESS.  IN NO EVENT SHALL SECRET LABS AB OR THE AUTHOR BE LIABLE FOR
@@ -11417,7 +11417,7 @@ Copyright: (c) 2006-2008, R Oudkerk. All rights reserved.
 License: Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
  2. Redistributions in binary form must reproduce the above copyright
@@ -11426,7 +11426,7 @@ License: Redistribution and use in source and binary forms, with or without
  3. Neither the name of author nor the names of any contributors may be
     used to endorse or promote products derived from this software
     without specific prior written permission.
- 
+
  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -11445,11 +11445,11 @@ Copyright: (C) 2004-2005 Gerhard Häring <gh@ghaering.de>
 License: This software is provided 'as-is', without any express or implied
  warranty.  In no event will the authors be held liable for any damages
  arising from the use of this software.
- 
+
  Permission is granted to anyone to use this software for any purpose,
  including commercial applications, and to alter it and redistribute it
  freely, subject to the following restrictions:
- 
+
  1. The origin of this software must not be misrepresented; you must not
     claim that you wrote the original software. If you use this software
     in a product, an acknowledgment in the product documentation would be
@@ -11468,7 +11468,7 @@ License: Permission to use, copy, modify, and distribute this software and
  Rushing not be used in advertising or publicity pertaining to
  distribution of the software without specific, written prior
  permission.
- 
+
  SAM RUSHING DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
  INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN
  NO EVENT SHALL SAM RUSHING BE LIABLE FOR ANY SPECIAL, INDIRECT OR
@@ -11487,10 +11487,10 @@ License: Permission  is  hereby granted,  free  of charge,  to  any person
  copies  of  the  Software,  and to  permit  persons  to  whom the
  Software  is  furnished  to  do  so,  subject  to  the  following
  conditions:
- 
+
  The above copyright  notice and this  permission notice shall  be
  included in all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS  IS", WITHOUT WARRANTY OF ANY  KIND,
  EXPRESS OR IMPLIED, INCLUDING  BUT NOT LIMITED TO  THE WARRANTIES
  OF  MERCHANTABILITY,  FITNESS   FOR  A  PARTICULAR   PURPOSE  AND
@@ -11505,11 +11505,11 @@ Copyright: (C) 2006 - 2010  Gregor Lingl
 License: This software is provided 'as-is', without any express or implied
  warranty.  In no event will the authors be held liable for any damages
  arising from the use of this software.
- 
+
  Permission is granted to anyone to use this software for any purpose,
  including commercial applications, and to alter it and redistribute it
  freely, subject to the following restrictions:
- 
+
  1. The origin of this software must not be misrepresented; you must not
     claim that you wrote the original software. If you use this software
     in a product, an acknowledgment in the product documentation would be
@@ -11580,7 +11580,7 @@ License: Permission to use, copy, modify, and distribute this software and its
  supporting documentation, and that the names of Stichting Mathematisch
  Centrum or CWI not be used in advertising or publicity pertaining to
  distribution of the software without specific, written prior permission.
- 
+
  STICHTING MATHEMATISCH CENTRUM DISCLAIMS ALL WARRANTIES WITH REGARD TO
  THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
  FITNESS, IN NO EVENT SHALL STICHTING MATHEMATISCH CENTRUM BE LIABLE
@@ -11598,7 +11598,7 @@ License: Permission to use, copy, modify, and distribute this software and its
  supporting documentation, and that the name of Lance Ellinghouse
  not be used in advertising or publicity pertaining to distribution
  of the software without specific, written prior permission.
- 
+
  LANCE ELLINGHOUSE DISCLAIMS ALL WARRANTIES WITH REGARD TO
  THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
  FITNESS, IN NO EVENT SHALL LANCE ELLINGHOUSE BE LIABLE FOR ANY SPECIAL,
@@ -11644,10 +11644,10 @@ License: Permission is hereby granted, free of charge, to any person obtaining
   distribute, sublicense, and/or sell copies of the Software, and to
   permit persons to whom the Software is furnished to do so, subject to
   the following conditions:
- 
+
   The above copyright notice and this permission notice shall be included
   in all copies or substantial portions of the Software.
- 
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -11696,7 +11696,7 @@ License: Permission to use, copy, modify, and distribute this software for any
   is included in all copies of any software which is or includes a copy
   or modification of this software and in all copies of the supporting
   documentation for such software.
-  
+
   THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
   WARRANTY.  IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
   REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
@@ -11708,7 +11708,7 @@ License: Permission to use, copy, modify, and distribute this software and its
   documentation for any purpose and without fee is hereby granted,
   provided that the above copyright notice, this permission notice and
   the following disclaimer notice appear unmodified in all copies.
-  
+
   I DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL
   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS.  IN NO EVENT SHALL I
   BE LIABLE FOR ANY SPECIAL, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY
@@ -11758,7 +11758,7 @@ License: Permission to use, copy, modify, and distribute this software and its
   and that both that copyright notice and this permission notice appear
   in supporting documentation or portions thereof, including
   modifications, that you make.
-  
+
   THE AUTHOR MARC-ANDRE LEMBURG DISCLAIMS ALL WARRANTIES WITH REGARD TO
   THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
   FITNESS, IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL,
@@ -11772,10 +11772,10 @@ END LICENSE(S) FOR ---------- libpython3.10-minimal ----------------------------
 
 START LICENSE(S) FOR ---------- libpython3.10-stdlib -----------------------------
 
-This package was put together by Klee Dienes <klee@debian.org> from 
-sources from ftp.python.org:/pub/python, based on the Debianization by 
-the previous maintainers Bernd S. Brentrup <bsb@uni-muenster.de> and 
-Bruce Perens. Current maintainer is Matthias Klose <doko@debian.org>. 
+This package was put together by Klee Dienes <klee@debian.org> from
+sources from ftp.python.org:/pub/python, based on the Debianization by
+the previous maintainers Bernd S. Brentrup <bsb@uni-muenster.de> and
+Bruce Perens. Current maintainer is Matthias Klose <doko@debian.org>.
 
 It was downloaded from http://python.org/
 
@@ -12145,8 +12145,8 @@ Floating point exception control
 
 The source for the `fpectl' module includes the following notice:
 
-     ---------------------------------------------------------------------  
-    /                       Copyright (c) 1996.                           \ 
+     ---------------------------------------------------------------------
+    /                       Copyright (c) 1996.                           \
    |          The Regents of the University of California.                 |
    |                        All rights reserved.                           |
    |                                                                       |
@@ -12178,7 +12178,7 @@ The source for the `fpectl' module includes the following notice:
    |   opinions  of authors expressed herein do not necessarily state or   |
    |   reflect those of the United States Government or  the  University   |
    |   of  California,  and shall not be used for advertising or product   |
-    \  endorsement purposes.                                              / 
+    \  endorsement purposes.                                              /
      ---------------------------------------------------------------------
 
 
@@ -12352,13 +12352,13 @@ Copyright: (c) 2008-2009, Google Inc.
 License: Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are
   met:
- 
+
       * Redistributions of source code must retain the above copyright
   notice, this list of conditions and the following disclaimer.
       * Neither the name of Google Inc. nor the names of its
   contributors may be used to endorse or promote products derived from
   this software without specific prior written permission.
- 
+
   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -12378,7 +12378,7 @@ Copyright: (c) 1999 by Fredrik Lundh.
 License: By obtaining, using, and/or copying this software and/or its
   associated documentation, you agree that you have read, understood,
   and will comply with the following terms and conditions:
- 
+
   Permission to use, copy, modify, and distribute this software and its
   associated documentation for any purpose and without fee is hereby
   granted, provided that the above copyright notice appears in all
@@ -12387,7 +12387,7 @@ License: By obtaining, using, and/or copying this software and/or its
   AB or the author not be used in advertising or publicity pertaining to
   distribution of the software without specific, written prior
   permission.
- 
+
   SECRET LABS AB AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO
   THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
   FITNESS.  IN NO EVENT SHALL SECRET LABS AB OR THE AUTHOR BE LIABLE FOR
@@ -12418,7 +12418,7 @@ Copyright: (c) 2006-2008, R Oudkerk. All rights reserved.
 License: Redistribution and use in source and binary forms, with or without
  modification, are permitted provided that the following conditions
  are met:
- 
+
  1. Redistributions of source code must retain the above copyright
     notice, this list of conditions and the following disclaimer.
  2. Redistributions in binary form must reproduce the above copyright
@@ -12427,7 +12427,7 @@ License: Redistribution and use in source and binary forms, with or without
  3. Neither the name of author nor the names of any contributors may be
     used to endorse or promote products derived from this software
     without specific prior written permission.
- 
+
  THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -12446,11 +12446,11 @@ Copyright: (C) 2004-2005 Gerhard Häring <gh@ghaering.de>
 License: This software is provided 'as-is', without any express or implied
  warranty.  In no event will the authors be held liable for any damages
  arising from the use of this software.
- 
+
  Permission is granted to anyone to use this software for any purpose,
  including commercial applications, and to alter it and redistribute it
  freely, subject to the following restrictions:
- 
+
  1. The origin of this software must not be misrepresented; you must not
     claim that you wrote the original software. If you use this software
     in a product, an acknowledgment in the product documentation would be
@@ -12469,7 +12469,7 @@ License: Permission to use, copy, modify, and distribute this software and
  Rushing not be used in advertising or publicity pertaining to
  distribution of the software without specific, written prior
  permission.
- 
+
  SAM RUSHING DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
  INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN
  NO EVENT SHALL SAM RUSHING BE LIABLE FOR ANY SPECIAL, INDIRECT OR
@@ -12488,10 +12488,10 @@ License: Permission  is  hereby granted,  free  of charge,  to  any person
  copies  of  the  Software,  and to  permit  persons  to  whom the
  Software  is  furnished  to  do  so,  subject  to  the  following
  conditions:
- 
+
  The above copyright  notice and this  permission notice shall  be
  included in all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS  IS", WITHOUT WARRANTY OF ANY  KIND,
  EXPRESS OR IMPLIED, INCLUDING  BUT NOT LIMITED TO  THE WARRANTIES
  OF  MERCHANTABILITY,  FITNESS   FOR  A  PARTICULAR   PURPOSE  AND
@@ -12506,11 +12506,11 @@ Copyright: (C) 2006 - 2010  Gregor Lingl
 License: This software is provided 'as-is', without any express or implied
  warranty.  In no event will the authors be held liable for any damages
  arising from the use of this software.
- 
+
  Permission is granted to anyone to use this software for any purpose,
  including commercial applications, and to alter it and redistribute it
  freely, subject to the following restrictions:
- 
+
  1. The origin of this software must not be misrepresented; you must not
     claim that you wrote the original software. If you use this software
     in a product, an acknowledgment in the product documentation would be
@@ -12581,7 +12581,7 @@ License: Permission to use, copy, modify, and distribute this software and its
  supporting documentation, and that the names of Stichting Mathematisch
  Centrum or CWI not be used in advertising or publicity pertaining to
  distribution of the software without specific, written prior permission.
- 
+
  STICHTING MATHEMATISCH CENTRUM DISCLAIMS ALL WARRANTIES WITH REGARD TO
  THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
  FITNESS, IN NO EVENT SHALL STICHTING MATHEMATISCH CENTRUM BE LIABLE
@@ -12599,7 +12599,7 @@ License: Permission to use, copy, modify, and distribute this software and its
  supporting documentation, and that the name of Lance Ellinghouse
  not be used in advertising or publicity pertaining to distribution
  of the software without specific, written prior permission.
- 
+
  LANCE ELLINGHOUSE DISCLAIMS ALL WARRANTIES WITH REGARD TO
  THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
  FITNESS, IN NO EVENT SHALL LANCE ELLINGHOUSE BE LIABLE FOR ANY SPECIAL,
@@ -12645,10 +12645,10 @@ License: Permission is hereby granted, free of charge, to any person obtaining
   distribute, sublicense, and/or sell copies of the Software, and to
   permit persons to whom the Software is furnished to do so, subject to
   the following conditions:
- 
+
   The above copyright notice and this permission notice shall be included
   in all copies or substantial portions of the Software.
- 
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -12697,7 +12697,7 @@ License: Permission to use, copy, modify, and distribute this software for any
   is included in all copies of any software which is or includes a copy
   or modification of this software and in all copies of the supporting
   documentation for such software.
-  
+
   THIS SOFTWARE IS BEING PROVIDED "AS IS", WITHOUT ANY EXPRESS OR IMPLIED
   WARRANTY.  IN PARTICULAR, NEITHER THE AUTHOR NOR LUCENT MAKES ANY
   REPRESENTATION OR WARRANTY OF ANY KIND CONCERNING THE MERCHANTABILITY
@@ -12709,7 +12709,7 @@ License: Permission to use, copy, modify, and distribute this software and its
   documentation for any purpose and without fee is hereby granted,
   provided that the above copyright notice, this permission notice and
   the following disclaimer notice appear unmodified in all copies.
-  
+
   I DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL
   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS.  IN NO EVENT SHALL I
   BE LIABLE FOR ANY SPECIAL, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY
@@ -12759,7 +12759,7 @@ License: Permission to use, copy, modify, and distribute this software and its
   and that both that copyright notice and this permission notice appear
   in supporting documentation or portions thereof, including
   modifications, that you make.
-  
+
   THE AUTHOR MARC-ANDRE LEMBURG DISCLAIMS ALL WARRANTIES WITH REGARD TO
   THIS SOFTWARE, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
   FITNESS, IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL,
@@ -12831,7 +12831,7 @@ files are:
     Foundation; with no Invariant Sections, no Front-Cover Texts, and
     no Back-Cover Texts.  A copy of the license is included in the
     section entitled "GNU Free Documentation License".
-			      
+
 On Debian systems, the complete text of the GNU Free Documentation License
 can be found in `/usr/share/common-licenses/GFDL'.
 
@@ -12839,7 +12839,7 @@ The Debian packaging is:
 
     Copyright (C) 1999-2009 Matthias Klose <doko@debian.org>
 
-and is licensed under the GPL version 3, 
+and is licensed under the GPL version 3,
 see `/usr/share/common-licenses/GPL-3'.
 
 
@@ -15409,7 +15409,7 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-  * Redistributions of source code must retain the above copyright notice, 
+  * Redistributions of source code must retain the above copyright notice,
     this list of conditions and the following disclaimer.
 
   * Redistributions in binary form must reproduce the above copyright notice,
@@ -15417,8 +15417,8 @@ modification, are permitted provided that the following conditions are met:
     and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
 LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
 CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
@@ -15426,7 +15426,7 @@ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
 INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGE. 
+POSSIBILITY OF SUCH DAMAGE.
 
 
 END LICENSE(S) FOR ---------- pyasn1 -----------------------------
@@ -15439,7 +15439,7 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
 
-  * Redistributions of source code must retain the above copyright notice, 
+  * Redistributions of source code must retain the above copyright notice,
     this list of conditions and the following disclaimer.
 
   * Redistributions in binary form must reproduce the above copyright notice,
@@ -15447,8 +15447,8 @@ modification, are permitted provided that the following conditions are met:
     and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
 ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
 LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
 CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
@@ -15456,7 +15456,7 @@ SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
 INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGE. 
+POSSIBILITY OF SUCH DAMAGE.
 
 
 END LICENSE(S) FOR ---------- pyasn1-modules -----------------------------
@@ -15471,24 +15471,24 @@ All rights reserved.
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
-* Redistributions of source code must retain the above copyright notice, this 
+* Redistributions of source code must retain the above copyright notice, this
   list of conditions and the following disclaimer.
-* Redistributions in binary form must reproduce the above copyright notice, 
-  this list of conditions and the following disclaimer in the documentation 
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
   and/or other materials provided with the distribution.
-* Neither the name of the copyright holder nor the names of its contributors may 
-  be used to endorse or promote products derived from this software without 
+* Neither the name of the copyright holder nor the names of its contributors may
+  be used to endorse or promote products derived from this software without
   specific prior written permission.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE 
-LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE 
-GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
-HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT 
-LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
 OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
@@ -18160,7 +18160,7 @@ files are:
     Foundation; with no Invariant Sections, no Front-Cover Texts, and
     no Back-Cover Texts.  A copy of the license is included in the
     section entitled "GNU Free Documentation License".
-			      
+
 On Debian systems, the complete text of the GNU Free Documentation License
 can be found in `/usr/share/common-licenses/GFDL'.
 
@@ -18168,7 +18168,7 @@ The Debian packaging is:
 
     Copyright (C) 1999-2009 Matthias Klose <doko@debian.org>
 
-and is licensed under the GPL version 3, 
+and is licensed under the GPL version 3,
 see `/usr/share/common-licenses/GPL-3'.
 
 
@@ -21556,7 +21556,7 @@ END LICENSE(S) FOR ---------- yarl -----------------------------
 
 The following third party programs have their own third party program files. These additional third party program files are as follows:
 <<Replace this with relevant components and its tpp url>>
-e.g 
+e.g
 1. oneMKL Interfaces : https://github.com/oneapi-src/oneMKL/tree/develop/third-party-programs
 2. oneTBB : https://github.com/oneapi-src/oneTBB/blob/master/third-party-programs.txt
 
@@ -21564,9 +21564,8 @@ e.g
 
 The Dockerfile depends on the use of the following additional layers.
 <<Replace this with relevant components and its tpp url>>
-e.g 
+e.g
 1. ubuntu:20.04 https://hub.docker.com/_/ubuntu tag 20.04
 2. centos:8 https://www.centos.org/legal/licensing-policy/ tag centos8
 
-Other names and brands may be claimed as the property of others. 
-
+Other names and brands may be claimed as the property of others.
