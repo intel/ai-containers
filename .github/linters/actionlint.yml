@@ -15,7 +15,5 @@
 ---
 self-hosted-runner:
   labels:
-    - builder
     - k8-runners
-    - aia-devops
-    - test-runner
+    - kubectl
