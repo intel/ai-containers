@@ -151,14 +151,7 @@ jobs:
     - name: Cleanup
       if: always()
       run: docker rmi -f ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
-    - uses: actions/upload-artifact@v4
-      if: ${{ github.repository != 'intel/ai-containers' }}
-      with:
-        name: ${{ matrix.container }}-scan
-        path: '${{ matrix.container }}-scan.sarif'
-        overwrite: true
     - uses: github/codeql-action/upload-sarif@v3
-      if: ${{ github.repository == 'intel/ai-containers' }}
       with:
         sarif_file: '${{ matrix.container }}-scan.sarif'
         ####################################################################################################
