@@ -130,7 +130,10 @@ jobs:
     needs: [setup-scan]
     if: ${{ !inputs.no_build }}
     permissions:
+      actions: read
+      contents: read
       security-events: write
+      statuses: write
     runs-on: k8-runners
     strategy:
       matrix:
