@@ -104,8 +104,6 @@ jobs:
     - name: Test Container Group
       uses: intel/ai-containers/test-runner@main
       with:
-        mlops_repo: ${{ github.repository }}
-        mlops_ref: ${{ github.ref }}
         recipe_dir: test-runner
         registry: ${{ secrets.REGISTRY }}
         repo: ${{ secrets.REPO }}
