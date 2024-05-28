@@ -50,6 +50,7 @@ jobs:
     - name: Tox
       run: python -m tox
       env:
+        CACHE_REGISTRY: ${{ secrets.CACHE_REGISTRY }}
         FORCE_COLOR: 1
         REGISTRY: ${{ secrets.REGISTRY }}
         REPO: ${{ secrets.REPO }}
@@ -104,6 +105,7 @@ jobs:
     - name: Test Container Group
       uses: intel/ai-containers/test-runner@main
       with:
+        cache_registry: ${{ secrets.CACHE_REGISTRY }}
         recipe_dir: test-runner
         registry: ${{ secrets.REGISTRY }}
         repo: ${{ secrets.REPO }}
