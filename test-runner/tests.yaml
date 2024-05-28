@@ -31,14 +31,14 @@ test2:
   env:
     TEST: Hello
 test3:
-  img: python:3.10-slim-bullseye # python 3.10
+  img: ${CACHE_REGISTRY}/cache/library/python:3.10-slim-bullseye # python 3.10
   cmd: python --version # will return python 3.11
   serving: True
 test${TEST:-4}:
-  img: python:3.11-slim-bullseye
+  img: ${CACHE_REGISTRY}/cache/library/python:3.11-slim-bullseye
   cmd: echo "${TEST:-4}"
 test6:
-  img: python:3.11-slim-bullseye
+  img: ${CACHE_REGISTRY}/cache/library/python:3.11-slim-bullseye
   cmd: "echo 'hello: world'"
   mask:
     - hello
