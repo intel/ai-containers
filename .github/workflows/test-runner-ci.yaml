@@ -102,10 +102,10 @@ jobs:
       with:
         python-version: "3.8"
     - name: Test Container Group
-      uses: intel/ai-containers/test-runner@main
+      uses: intel/ai-containers/test-runner@tylertitsworth/remove-repo-arg
       with:
         recipe_dir: test-runner
         registry: ${{ secrets.REGISTRY }}
         repo: ${{ secrets.REPO }}
         test_dir: test-runner
-        token: ${{ secrets.ACTION_TOKEN || github.token }}
+        token: ${{ secrets.ACTION_TOKEN }}
