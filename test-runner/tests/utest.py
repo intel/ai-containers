@@ -17,6 +17,7 @@ import os
 
 import pytest
 import yaml
+from expandvars import expandvars
 from hypothesis import given
 from hypothesis.strategies import dictionaries, text
 from test_runner import get_test_list, parse_args, set_log_filename
@@ -124,20 +125,20 @@ def test_get_test_list(test_args_input, test_json_input):
             "env": {"TEST": "Hello"},
         },
         "test3": {
-            "img": "python:3.10-slim-bullseye",
+            "img": "${CACHE_REGISTRY}/cache/library/python:3.10-slim-bullseye",
             "cmd": "python --version",
             "serving": True,
         },
         "test4": {
-            "img": "python:3.11-slim-bullseye",
+            "img": f"{expandvars('${CACHE_REGISTRY}')}/cache/library/python:3.11-slim-bullseye",
             "cmd": 'echo "4"',
         },
         "test5": {
-            "img": "python:3.11-slim-bullseye",
+            "img": f"{expandvars('${CACHE_REGISTRY}')}/cache/library/python:3.11-slim-bullseye",
             "cmd": 'echo "5"',
         },
         "test6": {
-            "img": "python:3.11-slim-bullseye",
+            "img": "${CACHE_REGISTRY}/cache/library/python:3.11-slim-bullseye",
             "cmd": "echo 'hello: world'",
             "mask": ["hello"],
         },
