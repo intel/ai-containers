@@ -147,16 +147,14 @@ jobs:
       uses: intel/ai-containers/.github/scan@main
       with:
         image-ref: ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
-        format: 'template'
-        template: '@/contrib/sarif.tpl'
         output: ${{ matrix.container }}-scan.sarif
     - name: Cleanup
       if: always()
       run: docker rmi -f ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
     - uses: github/codeql-action/upload-sarif@v3
+      if: ${{ github.event_name != 'workflow_dispatch' }}
       with:
         sarif_file: '${{ matrix.container }}-scan.sarif'
-        token: ${{ secrets.ACTION_TOKEN }}
         ####################################################################################################
         # Generic Test Runner
         ####################################################################################################
