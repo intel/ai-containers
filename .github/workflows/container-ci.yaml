@@ -147,6 +147,8 @@ jobs:
       uses: intel/ai-containers/.github/scan@main
       with:
         image-ref: ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
+        format: 'template'
+        template: '@/contrib/sarif.tpl'
         output: ${{ matrix.container }}-scan.sarif
     - name: Cleanup
       if: always()
