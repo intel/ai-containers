@@ -17,6 +17,7 @@ Define your project's registry and repository each time you use the project:
 
 ```bash
 # REGISTRY/REPO:TAG
+export CACHE_REGISTRY=<cache_registry_name>
 export REGISTRY=<registry_name>
 export REPO=<repo_name>
 ```
