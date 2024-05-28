@@ -50,6 +50,7 @@ jobs:
     - name: Tox
       run: python -m tox
       env:
+        CACHE_REGISTRY: ${{ secrets.CACHE_REGISTRY }}
         FORCE_COLOR: 1
         REGISTRY: ${{ secrets.REGISTRY }}
         REPO: ${{ secrets.REPO }}
