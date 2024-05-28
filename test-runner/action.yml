@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Test Runner Action
+name: Integration Test
 description: 'https://github.com/intel/ai-containers/blob/main/test-runner/README.md'
 author: tyler.titsworth@intel.com
 inputs:
@@ -33,6 +33,10 @@ inputs:
     description: 'Container Registry URL'
     required: true
     type: string
+  repo:
+    description: 'Container Repository'
+    required: true
+    type: string
   test_dir:
     description: 'Path to Test Dir'
     required: true
@@ -49,16 +53,19 @@ runs:
         ref: ${{ inputs.mlops_ref }}
         repository: ${{ inputs.mlops_repo }}
         token: ${{ inputs.token }}
-    - name: Test
+    - name: Install Requirements
       shell: bash
       run: |
-        python -m venv venv
-        source venv/bin/activate
-        python -m pip install -r mlops/test-runner/requirements.txt
-        python mlops/test-runner/test_runner.py -f ${{ inputs.test_dir }}/tests.yaml -l ${{ inputs.test_dir }}/logs -a ${{ inputs.recipe_dir }}/.actions.json -v
+          python -m venv venv
+          source venv/bin/activate
+          python -m pip install -r mlops/test-runner/requirements.txt
+    - name: Test
+      shell: bash
+      run: venv/bin/python mlops/test-runner/test_runner.py -f ${{ inputs.test_dir }}/tests.yaml -l ${{ inputs.test_dir }}/logs -a ${{ inputs.recipe_dir }}/.actions.json -v
       env:
         PYTHONPATH: mlops/test-runner
         REGISTRY: ${{ inputs.registry }}
+        REPO: ${{ inputs.repo }}
         GITHUB_RUN_NUMBER: ${{ github.run_number }}
     - name: Print Log Summary
       shell: bash
@@ -67,13 +74,10 @@ runs:
     - name: Get Test Name
       shell: bash
       if: always()
-      run: echo "test=$(basename ${{ inputs.test_dir }})" >> $GITHUB_ENV
-    - uses: actions/upload-artifact@v3
+      run: echo "test=${{ inputs.recipe_dir }}-$(basename ${{ inputs.test_dir }})" | tr '/' '_' >> $GITHUB_ENV
+    - uses: actions/upload-artifact@v4
       if: always()
       with:
         name: ${{ env.test }} outputs
         path: ${{ inputs.test_dir }}/logs
-    - name: Cleanup
-      shell: bash
-      if: always()
-      run: rm -rf venv ${{ inputs.test_dir }}/logs
+        overwrite: true

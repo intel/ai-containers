@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ---
-name: Build Container Group Action
+name: Build Container Group
 description: Given the inputs found below, build all containers found in a docker-compose.yaml file for a given configuration
 author: tyler.titsworth@intel.com
 inputs:
@@ -40,19 +40,38 @@ inputs:
     required: false
     default: false
     type: boolean
+  no-start:
+    description: Do not start containers after building them
+    required: false
+    default: false
+    type: boolean
+outputs:
+  container-group:
+    description: "Container Group"
+    value: ${{ steps.container-output.outputs.group }}
 runs:
   using: composite
   steps:
-    - name: Random Number Generator
+    - name: Generate Project Number
       shell: bash
-      run: echo "random-number=$(shuf -i 0-1000 -n1)" >> $GITHUB_ENV
+      run: echo "project-number=$(shuf -i 0-10000 -n1)" >> $GITHUB_ENV
     - name: Build Containers
       shell: bash
+      if: ${{ !fromJson(inputs.no-start) }}
       run: |
         REGISTRY=${{ inputs.registry }} \
         REPO=${{ inputs.repo }} \
-        COMPOSE_PROJECT_NAME=${{ env.random-number }} \
-        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} up --build --force-recreate --always-recreate-deps
+        COMPOSE_PROJECT_NAME=${{ env.project-number }} \
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.project-number }} up --build --force-recreate --always-recreate-deps
+      working-directory: ${{ inputs.group_dir }}
+    - name: Build Containers
+      shell: bash
+      if: ${{ fromJson(inputs.no-start) }}
+      run: |
+        REGISTRY=${{ inputs.registry }} \
+        REPO=${{ inputs.repo }} \
+        COMPOSE_PROJECT_NAME=${{ env.project-number }} \
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.project-number }} up --build --force-recreate --always-recreate-deps --no-start
       working-directory: ${{ inputs.group_dir }}
     - name: Push Containers
       shell: bash
@@ -60,25 +79,37 @@ runs:
       run: |
         REGISTRY=${{ inputs.registry }} \
         REPO=${{ inputs.repo }} \
-        COMPOSE_PROJECT_NAME=${{ env.random-number }} \
-        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} push
+        COMPOSE_PROJECT_NAME=${{ env.project-number }} \
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.project-number }} push
       working-directory: ${{ inputs.group_dir }}
     - name: Print Containers
+      id: container-output
       shell: bash
       run: |
-        REGISTRY=${{ inputs.registry }} \
+        mkdir matrix
+        images=$(REGISTRY=${{ inputs.registry }} \
         REPO=${{ inputs.repo }} \
-        COMPOSE_PROJECT_NAME=${{ env.random-number }} \
-        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} images --format json | jq --arg registry "${{ secrets.registry }}" '.[] | select(.Repository | contains($registry)) | "\(.Repository):\(.Tag)"' | jq -s '.' >> $GITHUB_STEP_SUMMARY
+        COMPOSE_PROJECT_NAME=${{ env.project-number }} \
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.project-number }} images --format json)
+        for image in $(echo $images | jq -r --arg registry "$REGISTRY" '.[] | select(.Repository | contains($registry)) | .Tag'); do
+          echo "$image" > matrix/$image.txt
+        done
+        echo "group=${{ inputs.group_dir }}" | tr '/' '_' >> $GITHUB_OUTPUT
       working-directory: ${{ inputs.group_dir }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.project-number }}-${{ steps.container-output.outputs.group }}
+        path: ${{ inputs.group_dir }}/matrix/*
+        retention-days: 1
+        overwrite: true
     - name: Un-Tag Containers
       if: ${{ always() }}
       shell: bash
       run: |
         REGISTRY=${{ inputs.registry }} \
         REPO=${{ inputs.repo }} \
-        COMPOSE_PROJECT_NAME=${{ env.random-number }} \
-        ${{ inputs.env_overrides }} docker compose -p ${{ env.random-number }} down --rmi all
+        COMPOSE_PROJECT_NAME=${{ env.project-number }} \
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.project-number }} down --rmi all
       working-directory: ${{ inputs.group_dir }}
     - name: Remove Containers
       if: ${{ always() }}

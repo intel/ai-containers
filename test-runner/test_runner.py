@@ -42,8 +42,11 @@ from utils.test import Test
 from yaml import YAMLError, full_load
 
 
-def parse_args():
+def parse_args(args: list):
     """Parse command line arguments.
+
+    Args:
+        args (list(str)): user input parameters
 
     Returns:
         dict: command line arguments
@@ -61,8 +64,15 @@ def parse_args():
     parser.add_argument(
         "-l", "--logs", dest="logs_path", default="output", help="-l /path/to/logs"
     )
+    parser.add_argument(
+        "-m",
+        "--mask",
+        dest="mask",
+        action="store_true",
+        help="Enable mask parameter for sensitive information in logs",
+    )
 
-    return parser.parse_args()
+    return parser.parse_args(args)
 
 
 def set_log_filename(logger: logging.Logger, name: str, logs_path: str):
@@ -74,11 +84,20 @@ def set_log_filename(logger: logging.Logger, name: str, logs_path: str):
         logs_path (str): path to the new log filename
     """
     test_handler = logging.FileHandler(f"{logs_path}/{name}.log")
-    # Handler[0] is the stream output to stdout/stderr
-    # Handler[1] is always the file handler, see the logging declaration handlers parameter
-    test_handler.setFormatter(logger.handlers[1].formatter)
-    test_handler.setLevel(logger.handlers[1].level)
-    logger.removeHandler(logger.handlers[1])
+    try:
+        [prev_handler] = [
+            handler
+            for handler in logger.handlers
+            if isinstance(handler, logging.FileHandler)
+        ]
+        test_handler.setFormatter(prev_handler.formatter)
+        test_handler.setLevel(prev_handler.level)
+        logger.removeHandler(prev_handler)
+    except:
+        test_handler.setFormatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
+        test_handler.setLevel(logging.INFO)
     logger.addHandler(test_handler)
 
 
@@ -98,6 +117,8 @@ def get_test_list(args: dict, tests_yaml: List[dict]):
             if args.actions_path:
                 with open(args.actions_path, "r", encoding="utf-8") as actions_file:
                     for key, dval in json.load(actions_file).items():
+                        if key == "mask":
+                            [args.mask] = dval
                         if isinstance(dval, list) and key != "experimental":
                             for _, val in enumerate(dval):
                                 os.environ[key] = str(val)
@@ -110,8 +131,8 @@ def get_test_list(args: dict, tests_yaml: List[dict]):
             else:
                 if expandvars(test) not in tests_yaml.keys():
                     tests_list[expandvars(test)] = {
-                        key: expandvars(val) if isinstance(val, str) else {key: val}
-                        for key, val in tests_yaml[test].items()
+                        k: expandvars(v) if isinstance(v, str) else v
+                        for k, v in tests_yaml[test].items()
                     }
         else:
             tests_list[test] = dict(tests_yaml[test].items())
@@ -125,7 +146,7 @@ def get_test_list(args: dict, tests_yaml: List[dict]):
 
 if __name__ == "__main__":
     # Parse CLI Args
-    args = parse_args()
+    args = parse_args(sys.argv[1:])
     # Verify Logfile Handler Paths
     if not os.path.exists(args.logs_path):
         os.makedirs(args.logs_path)
@@ -160,6 +181,8 @@ if __name__ == "__main__":
     summary = []
     ERROR = False
     for idx, test in enumerate(tests):
+        if not args.mask:
+            test.mask = []
         # Set Context to test-runner.log
         set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
         logging.info("Running Test: %s", test.name)
@@ -190,5 +213,8 @@ if __name__ == "__main__":
     logging.info(
         "\n%s", tabulate(summary, headers=["#", "Test", "Status"], tablefmt="orgtbl")
     )
+    test_images = [expandvars(test.img) for test in tests if test.img]
+    docker.image.remove(test_images, force=True)
+    logging.info("%d Images Removed", len(test_images))
     if ERROR:
         sys.exit(1)

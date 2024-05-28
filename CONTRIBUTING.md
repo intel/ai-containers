@@ -16,7 +16,7 @@ This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.
 2. Create a new branch for your contribution: `git checkout -b feature/your-feature`.
 3. Install [pre-commit](https://pre-commit.com/), [Docker](https://docs.docker.com/engine/install/), and [Python 3.8+](https://www.python.org/downloads/).
 4. Follow the [Project Setup](README.md#project-setup) steps.
-5. Install the third-party python dependencies necessary for pre-commit with `pip install pytest pylint black shfmt-py`.
+5. Install the third-party python dependencies necessary for pre-commit with `pip install -r test-runner/dev-requirements.txt && pip install -r docs/requirements.txt`.
 6. Make your changes, commit, and sign your changes: `git commit -s -m 'Add your feature'`.
 7. Push to the branch: `git push origin feature/your-feature`.
 8. Submit a pull request.

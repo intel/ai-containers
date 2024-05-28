@@ -14,21 +14,44 @@
 
 # pylint: skip-file
 import argparse
+import os
 
 import intel_extension_for_pytorch as ipex
 import torch
+import torch.distributed as dist
 import torchvision.models as models
+from torch.nn.parallel import DistributedDataParallel as DDP
+
+os.environ["RANK"] = str(os.environ.get("PMI_RANK", 0))
+os.environ["WORLD_SIZE"] = str(os.environ.get("PMI_SIZE", 1))
+init_method = "tcp://127.0.0.1:29500"
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--device", default="cpu", choices=["cpu", "xpu"])
 parser.add_argument("--ipex", action="store_true")
+parser.add_argument("--backend", default="gloo", choices=["gloo", "ccl"])
 args = parser.parse_args()
 
+try:
+    import oneccl_bindings_for_pytorch
+except:
+    pass
+
+dist.init_process_group(
+    backend=args.backend,
+    init_method=init_method,
+    world_size=int(os.environ.get("WORLD_SIZE")),
+    rank=int(os.environ.get("RANK")),
+)
+
 model = models.resnet50(pretrained=False)
+
 model.eval()
 data = torch.rand(1, 3, 224, 224)
 
 model = model.to(args.device)
+if dist.get_world_size() > 1:
+    model = DDP(model, device_ids=[args.device] if (args.device != "cpu") else None)
 data = data.to(args.device)
 print("Choosing device: {}".format(args.device))
 

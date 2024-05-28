@@ -14,6 +14,7 @@
 
 import logging
 import os
+import re
 import sys
 from shlex import split
 from signal import SIGKILL
@@ -39,6 +40,7 @@ class Test(BaseModel):
     img: Optional[str] = None
     volumes: Optional[List[Volume]] = None
     env: Optional[Dict[str, str]] = None
+    mask: Optional[List[str]] = []
     notebook: Optional[bool] = False
     serving: Optional[bool] = False
     cap_add: Optional[str] = "AUDIT_READ"
@@ -94,8 +96,10 @@ class Test(BaseModel):
             networks=["host"],
             # Misc
             cap_add=[self.cap_add],
-            devices=[expandvars(self.device)],
-            entrypoint=(expandvars(self.entrypoint) if self.entrypoint else None),
+            devices=[expandvars(self.device, nounset=True)],
+            entrypoint=(
+                expandvars(self.entrypoint, nounset=True) if self.entrypoint else None
+            ),
             hostname=self.hostname,
             ipc=self.ipc,
             privileged=self.privileged,
@@ -106,7 +110,7 @@ class Test(BaseModel):
                 # Image
                 "python:3.11-slim-bullseye",
                 # Command
-                split(expandvars(self.cmd)),
+                split(expandvars(self.cmd, nounset=True)),
                 # Stream Logs
                 stream=True,
                 # Envs
@@ -117,7 +121,7 @@ class Test(BaseModel):
                 networks=["host"],
                 # Misc
                 cap_add=[self.cap_add],
-                devices=[expandvars(self.device)],
+                devices=[expandvars(self.device, nounset=True)],
                 hostname=self.hostname,
                 ipc=self.ipc,
                 privileged=self.privileged,
@@ -125,7 +129,9 @@ class Test(BaseModel):
                 remove=True,
                 user=self.user,
                 shm_size=self.shm_size,
-                workdir=(expandvars(self.workdir) if self.workdir else None),
+                workdir=(
+                    expandvars(self.workdir, nounset=True) if self.workdir else None
+                ),
             )
             # Log within the function to retain scope for debugging
             for _, stream_content in client_output:
@@ -161,6 +167,8 @@ class Test(BaseModel):
                 file=self.get_path("Dockerfile.notebook"),
                 # Output Tag = Input Tag
                 tags=[img],
+                # load into current images context
+                load=True,
             )
 
     def container_run(self):
@@ -186,7 +194,7 @@ class Test(BaseModel):
         }
         # Always add proxies to the envs list
         env.update(default_env)
-        img = expandvars(self.img)
+        img = expandvars(self.img, nounset=True)
         if self.serving:
             log = Test.serving_run(self, img, env, volumes)
         else:
@@ -196,7 +204,7 @@ class Test(BaseModel):
                 # Image
                 img,
                 # Command
-                split(expandvars(self.cmd)),
+                split(expandvars(self.cmd, nounset=True)),
                 # Stream Logs
                 stream=True,
                 # Envs
@@ -205,9 +213,13 @@ class Test(BaseModel):
                 volumes=volumes,
                 # Misc
                 cap_add=[self.cap_add],
-                devices=[expandvars(self.device)],
-                entrypoint=(expandvars(self.entrypoint) if self.entrypoint else ""),
-                groups_add=[expandvars(self.groups_add)],
+                devices=[expandvars(self.device, nounset=True)],
+                entrypoint=(
+                    expandvars(self.entrypoint, nounset=True)
+                    if self.entrypoint
+                    else None
+                ),
+                groups_add=[expandvars(self.groups_add, nounset=True)],
                 hostname=self.hostname,
                 ipc=self.ipc,
                 privileged=self.privileged,
@@ -215,12 +227,20 @@ class Test(BaseModel):
                 remove=True,
                 user=self.user,
                 shm_size=self.shm_size,
-                workdir=(expandvars(self.workdir) if self.workdir else None),
+                workdir=(
+                    expandvars(self.workdir, nounset=True) if self.workdir else None
+                ),
             )
             # Log within the function to retain scope for debugging
             log = ""
             for _, stream_content in output_generator:
                 # All process logs will have the stream_type of stderr despite it being stdout
+                for item in self.mask:
+                    stream_content = re.sub(
+                        rf"({item}[:=-_\s])(.*)",
+                        r"\1***",
+                        stream_content.decode("utf-8"),
+                    ).encode("utf-8")
                 logging.info(stream_content.decode("utf-8").strip())
                 log += stream_content.decode("utf-8").strip()
 
@@ -251,6 +271,10 @@ class Test(BaseModel):
         )
         try:
             stdout, stderr = p.communicate()
+            for item in self.mask:
+                stdout = re.sub(
+                    rf"({item}[:=-_\s])(.*)", r"\1***", stdout.decode("utf-8")
+                ).encode("utf-8")
             if stderr:
                 logging.error(stderr.decode("utf-8"))
             if stdout:

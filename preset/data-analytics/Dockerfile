@@ -1,4 +1,4 @@
-# Copyright (c) 2022 Intel Corporation
+# Copyright (c) 2024 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,20 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# ============================================================================
-#
-# This file was assembled from multiple pieces, whose use is documented
-# throughout. Please refer to the TensorFlow dockerfiles documentation
-# for more information.
-
-# based on https://github.com/pytorch/pytorch/blob/master/Dockerfile
-#
-# NOTE: To build this you will need a docker version >= 19.03 and DOCKER_BUILDKIT=1
-#
-#       If you do not use buildkit you are not going to have a good time
-#
-#       For reference:
-#           https://docs.docker.com/develop/develop-images/build_enhancements/
 
 ARG BASE_IMAGE="ubuntu"
 ARG BASE_TAG="22.04"
@@ -59,32 +45,41 @@ FROM data-analytics-base as data-analytics-python
 
 # Setting up non-root directories
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash -m dev
+# Set a password for the user (Optional)
+RUN echo 'dev:password' | chpasswd
 USER dev
 WORKDIR /home/dev
 
 ENV CONDA_ROOT=/home/dev/conda
 
-ARG MINICONDA_VERSION
+ARG MINIFORGE_VERSION
 ARG PYTHON_VERSION
 ARG IDP_VERSION
 ARG INTEL_CHANNEL
 
-RUN wget --progress=dot:giga --no-check-certificate "https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}.sh" -O miniconda.sh && \
-    chmod +x miniconda.sh && \
-    ./miniconda.sh -b -p "${CONDA_ROOT}" && \
-    rm ./miniconda.sh && \
-    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniconda3" && \
+RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-${MINIFORGE_VERSION}.sh" -O miniforge.sh && \
+    chmod +x miniforge.sh && \
+    ./miniforge.sh -b -p "${CONDA_ROOT}" && \
+    rm ./miniforge.sh && \
+    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge3" && \
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda update -y conda && \
     conda config --add channels conda-forge && \
     conda config --add channels intel && \
     conda init --all && \
-    conda install -c conda-forge \
+    conda install -y \
         jupyterlab \
         notebook \
         jupyterhub \
-        jupyter-server-proxy && \
-        jupyter labextension disable "@jupyterlab/apputils-extension:announcements" && \
+        jupyter-server-proxy \
+        'mako>=1.2.2' \
+        'pyjwt>=2.4.0' \
+        'cryptography>=42.0.5' \
+        'idna>=3.7' \
+        'tqdm>=4.66.2' \
+        'nodejs>=20.12.2' \
+        && \
+    jupyter labextension disable "@jupyterlab/apputils-extension:announcements" && \
     conda clean -y --all
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
@@ -110,6 +105,7 @@ RUN conda create -yn data-analytics -c "${INTEL_CHANNEL}" -c conda-forge \
         kernda  \
         protobuf=4.24 \
         'pillow>=10.2.0' \
+        'idna>=3.7' \
         'tornado>=6.3.3' && \
     conda clean -y --all
 

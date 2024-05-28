@@ -13,8 +13,8 @@
 # limitations under the License.
 
 test1:
-  img: ${REGISTRY}/aiops/compose-dev:latest # var substitution inline
-  cmd: bash -c "head -n 1 /workspace/requirements.txt" # volume mounted file
+  img: ${REGISTRY}/${REPO}:latest # substitute env from host
+  cmd: head -n 1 /workspace/test-runner/requirements.txt # volume mounted file
 # device: /dev/dri
 # ipc: host
   notebook: True
@@ -31,9 +31,18 @@ test2:
   env:
     TEST: Hello
 test3:
-  img: ${REGISTRY}/aiops/compose-dev:latest # python 3.10
+  img: python:3.10-slim-bullseye # python 3.10
   cmd: python --version # will return python 3.11
   serving: True
 test${TEST:-4}:
-  img: ${REGISTRY}/aiops/compose-dev:latest
+  img: python:3.11-slim-bullseye
   cmd: echo "${TEST:-4}"
+test6:
+  img: python:3.11-slim-bullseye
+  cmd: "echo 'hello: world'"
+  mask:
+    - hello
+test7:
+  cmd: "echo 'world: hello'"
+  mask:
+    - world

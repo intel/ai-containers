@@ -1,0 +1,87 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Bug Report
+description: Template for bug reports
+labels: ["Bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: Please provide a clear and concise description of what the bug is.
+      placeholder: Please provide a clear and concise description of what the bug is.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      description: >-
+        Paste the error logs that indicate the problem in the most readable
+        format possible.
+      placeholder: Error logs
+      render: Markdown
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction Instructions
+      description: Step-by-step instructions one needs to follow to get this error.
+      placeholder: git clone https://github.com/intel/ai-containers
+      render: Markdown
+    validations:
+      required: true
+  - type: checkboxes
+    id: section
+    attributes:
+      label: Affected Subfolder
+      description: Please identify which subfolder the the bug resides.
+      options:
+        - label: classical-ml
+          required: false
+        - label: enterprise
+          required: false
+        - label: preset
+          required: false
+        - label: python
+          required: false
+        - label: pytorch
+          required: false
+        - label: tensorflow
+          required: false
+        - label: test-runner
+          required: false
+  - type: textarea
+    id: versions
+    attributes:
+      label: Versions
+      description: >-
+        Provide the version number for any relevant packages, applications, or
+        systems.
+      value: |
+        lscpu
+        lspci
+        cat /etc/os-release
+        docker --version
+        docker compose version
+        python --version
+        pip freeze
+      render: Markdown
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: Thank you for Contributing!

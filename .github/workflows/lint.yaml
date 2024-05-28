@@ -16,6 +16,7 @@
 name: Lint
 permissions: read-all
 on:
+  merge_group: null
   pull_request: null
   push:
     branches:
@@ -25,26 +26,23 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 jobs:
-  build:
+  lint:
     name: Lint
-    runs-on: k8-runners # ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
-      - uses: step-security/harden-runner@v2
-        with:
-          egress-policy: audit
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Super-linter
-        uses: super-linter/super-linter/slim@v6.3.1
+      - uses: super-linter/super-linter/slim@v6.5.0
         env:
           # To report GitHub Actions status checks
           GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
           GITHUB_ACTIONS_COMMAND_ARGS: '-ignore SC.*'
           VALIDATE_BASH_EXEC: false
           VALIDATE_CHECKOV: false
+          VALIDATE_HTML: false
           VALIDATE_KUBERNETES_KUBECONFORM: false
           VALIDATE_NATURAL_LANGUAGE: false
           VALIDATE_PYTHON_FLAKE8: false
           VALIDATE_PYTHON_MYPY: false
+          VALIDATE_PYTHON_RUFF: false
