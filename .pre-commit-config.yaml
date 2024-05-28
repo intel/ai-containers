@@ -68,12 +68,12 @@ repos:
     language: system
     name: pylint
     types: [python]
-  - entry: bash -c "python -m tox -e py310"
+  - entry: bash -c "python -m tox -e py310 && rm -rf .coverage*"
     files: ^test-runner/
     id: tox
     language: system
     name: tox
-  - entry: bash -c "mkdocs build --clean"
+  - entry: bash -c "rm -rf site/ && mkdocs build --clean"
     # files: ^docs/
     id: mkdocs
     language: system
