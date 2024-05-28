@@ -1,0 +1,4 @@
+tensorflow==2.15.0
+intel-extension-for-tensorflow[cpu]==2.15.0.0
+tensorflow-hub==0.16.1
+pillow==10.3.0

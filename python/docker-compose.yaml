@@ -12,30 +12,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-version: '3'
 services:
-  pip-base:
+  idp:
     build:
       args:
-        http_proxy: ${http_proxy}
-        https_proxy: ${https_proxy}
-        no_proxy: ""
+        MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Linux-x86_64}
+      context: .
+      labels:
+        dependency.apt.wget: true
+        dependency.conda.intel-distribution-for-python: intelpython3_core
+        docs: false
+      target: idp
+    command: >
+      bash -c "conda env list && python -c 'import mkl'"
+    extends: pip
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-base
+  pip:
+    build:
+      args:
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-22.04}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ""
       context: .
+      labels:
+        dependency.apt.wget: true
+        dependency.python: ${PYTHON_VERSION:-3.10}
+        dependency.python.pip: requirements.txt
+        docs: false
+        org.opencontainers.base.name: "ubuntu:22.04"
       target: pip
     command: >
       bash -c 'python --version'
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-base
     pull_policy: always
-  idp-base:
-    build:
-      args:
-        MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
-      context: .
-      target: idp
-    command: >
-      bash -c "conda env list"
-    extends: pip-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-base

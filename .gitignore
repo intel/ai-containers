@@ -1,10 +1,15 @@
+.coverage*
 .env
-**/.hypothesis
 .pytest*
 .secrets
+.tox
 .vscode
 **__pycache__**
 **.ipynb_checkpoints**
+**/.hypothesis
+docs/assets
+docs/repos/
 logs/
 output/
+site
 venv/

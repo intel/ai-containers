@@ -18,20 +18,21 @@
 # throughout. Please refer to the TensorFlow dockerfiles documentation
 # for more information.
 
+ARG REGISTRY
+ARG REPO
+ARG GITHUB_RUN_NUMBER
+ARG BASE_IMAGE_NAME
+ARG BASE_IMAGE_TAG
 ARG PACKAGE_OPTION=pip
+ARG PYTHON_VERSION
+ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-base
+FROM ${PYTHON_BASE} AS ml-base-pip
 
-ARG COMPOSE_PROJECT_NAME
-FROM ${COMPOSE_PROJECT_NAME}-python AS ml-base-pip
-
-ARG SCIKIT_VERSION
-ARG XGBOOST_VERSION
+WORKDIR /
+COPY requirements.txt .
 
 RUN python -m pip install --no-cache-dir \
-    daal4py \
-    matplotlib \
-    scikit-learn-intelex${SCIKIT_VERSION:+==${SCIKIT_VERSION}} \
-    threadpoolctl \
-    xgboost${XGBOOST_VERSION:+==${XGBOOST_VERSION}}
+    --ignore-installed -r requirements.txt
 
 COPY base/.patch_sklearn.py ${HOME}/.patch_sklearn.py
 
@@ -42,21 +43,15 @@ RUN mkdir -p /licensing && \
 
 RUN wget --progress=dot:giga --no-check-certificate "https://raw.githubusercontent.com/intel/scikit-learn-intelex/main/LICENSE" -O /licensing/SCIKIT_LICENSE
 
-FROM ${COMPOSE_PROJECT_NAME}-python AS ml-base-idp
-
-ARG SCIKIT_VERSION
-ARG XGBOOST_VERSION
+FROM ${PYTHON_BASE} AS ml-base-idp
 
 ENV BASH_ENV /root/.bash_profile
 
-RUN python -m pip install --no-cache-dir --ignore-installed \
-    daal4py \
-    matplotlib \
-    # https://github.com/intel/scikit-learn-intelex/blob/master/requirements-test.txt
-    numpy==1.23.0 \
-    scikit-learn-intelex${SCIKIT_VERSION:+==${SCIKIT_VERSION}} \
-    threadpoolctl \
-    xgboost${XGBOOST_VERSION:+==${XGBOOST_VERSION}} && \
+WORKDIR /
+COPY requirements.txt .
+
+RUN python -m pip install --no-cache-dir \
+    --ignore-installed -r requirements.txt  && \
     apt-get clean && conda clean -y --all
 
 ENV PYTHONSTARTUP=${HOME}/.patch_sklearn.py
@@ -71,11 +66,13 @@ RUN wget --progress=dot:giga --no-check-certificate "https://raw.githubuserconte
 
 FROM ml-base-${PACKAGE_OPTION} AS jupyter
 
-RUN python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy
+WORKDIR /jupyter
+COPY jupyter-requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
 
 RUN mkdir -p /jupyter/ && chmod -R a+rwx /jupyter/
 RUN mkdir /.local && chmod a+rwx /.local
-WORKDIR /jupyter
 
 EXPOSE 8888
 

@@ -1,0 +1,76 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+copyright: Copyright &copy; 2024 Intel Corporation
+edit_uri: edit/main/docs/
+extra:
+  generator: false
+extra_javascript:
+- https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
+- javascripts/tablesort.js
+hooks:
+- docs/scripts/hook.py
+markdown_extensions:
+- nl2br
+- admonition
+- pymdownx.details
+- pymdownx.superfences
+- pymdownx.tabbed:
+    alternate_style: true
+- tables
+nav:
+- Getting Started: 'index.md'
+- Containers:
+  - AI Tools Selector: 'preset/README.md'
+  - Classical ML Base: 'classical-ml/README.md'
+  - Python Base: 'python/README.md'
+  - PyTorch Base: 'pytorch/README.md'
+  - TensorFlow Base: 'tensorflow/README.md'
+  - TorchServe: 'pytorch/serving/README.md'
+- Support Matrix: 'matrix.md'
+plugins:
+- callouts
+- git-authors
+- git-revision-date-localized:
+    enable_creation_date: true
+    type: date
+# - optimize
+- search
+- table-reader:
+    allow_missing_files: true
+    select_readers:
+    - read_csv
+repo_name: intel/ai-containers
+repo_url: https://github.com/intel/ai-containers
+site_name: Intel® AI Containers
+#TODO: Get previous container versions in an easy way
+# https://squidfunk.github.io/mkdocs-material/setup/setting-up-versioning/
+theme:
+  custom_dir: docs/overrides
+  features:
+  - search.suggest
+  - search.highlight
+  - search.share
+  - navigation.instant
+  - navigation.instant.prefetch
+  - navigation.tracking
+  - navigation.tabs
+  - navigation.tabs.sticky
+  - navigation.expand
+  - navigation.path
+  - navigation.prune
+  - toc.follow
+  - toc.integrate
+  - content.action.edit
+  name: material

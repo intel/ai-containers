@@ -35,10 +35,10 @@ ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
 
 ARG TF_VERSION
 
-RUN python -m pip install --no-cache-dir tensorflow==${TF_VERSION} \
-    intel-extension-for-tensorflow \
-    tensorflow_hub \
-    Pillow
+WORKDIR /
+COPY requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r requirements.txt
 
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/THIRD-PARTY-PROGRAMS.txt /licenses/
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-program-of-intel-extension-for-tensorflow.txt /licenses/
@@ -55,21 +55,23 @@ ENV PATH /usr/bin:/root/conda/envs/idp/bin:/root/conda/condabin:~/conda/bin/:${P
 ENV TF_ENABLE_ONEDNN_OPTS=1
 ARG TF_VERSION
 
-RUN python -m pip install --no-cache-dir tensorflow==${TF_VERSION} \
-    intel-extension-for-tensorflow \
-    tensorflow_hub \
-    Pillow
+WORKDIR /
+COPY requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r requirements.txt
 
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/THIRD-PARTY-PROGRAMS.txt /licenses/
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-program-of-intel-extension-for-tensorflow.txt /licenses/
 
 FROM tf-base-${PACKAGE_OPTION} AS jupyter
 
-RUN python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy
+WORKDIR /jupyter
+COPY jupyter-requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
 
 RUN mkdir -p /jupyter/ && chmod -R a+rwx /jupyter/
 RUN mkdir /.local && chmod a+rwx /.local
-WORKDIR /jupyter
 
 EXPOSE 8888
 
@@ -82,13 +84,17 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     openmpi-bin \
     openmpi-common
 
-RUN python -m pip install --no-cache-dir impi-rt
+WORKDIR /
+COPY ompi-requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r ompi-requirements.txt
 
 FROM openmpi AS horovod
 
 ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64
 
 RUN apt-get install -y --no-install-recommends --fix-missing \
+    unzip \
     openssh-client \
     openssh-server && \
     rm  /etc/ssh/ssh_host_*_key \
@@ -103,7 +109,6 @@ ENV OMPI_MCA_tl_tcp_if_exclude="lo,docker0"
 RUN mkdir -p /var/run/sshd
 
 # Install Horovod
-ARG HOROVOD_VERSION
 ARG HOROVOD_WITH_TENSORFLOW=1
 ARG HOROVOD_WITHOUT_MXNET=1
 ARG HOROVOD_WITHOUT_PYTORCH=1
@@ -122,9 +127,10 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN python -m pip install --no-cache-dir horovod==${HOROVOD_VERSION}
+WORKDIR /
+COPY hvd-requirements.txt .
 
-ARG INC_VER
+RUN python -m pip install --no-cache-dir -r hvd-requirements.txt
 
 ENV SIGOPT_PROJECT=.
 
@@ -133,14 +139,17 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/intel/neu
 
 FROM horovod AS multinode-pip
 
-RUN python -m pip install --no-cache-dir neural-compressor${INC_VER:+==${INC_VER}} \
-    tf2onnx
+WORKDIR /
+COPY multinode-requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
 
 FROM horovod AS multinode-idp
 
-RUN python -m pip install --no-cache-dir neural-compressor${INC_VER:+==${INC_VER}} \
-    cython \
-    tf2onnx
+WORKDIR /
+COPY multinode-requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
 
 FROM ${PYTHON_BASE} AS itex-xpu-base-pip
 
@@ -166,12 +175,12 @@ ARG DPCPP_VER
 ARG MKL_VER
 ARG CCL_VER
 
-RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+RUN no_proxy="" NO_PROXY="" wget --no-check-certificate -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
     gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
 RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 
-RUN apt-get update && \
+RUN no_proxy="" NO_PROXY="" apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
     intel-opencl-icd=${ICD_VER} \
     intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
@@ -180,7 +189,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
-RUN no_proxy="" wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+RUN no_proxy="" NO_PROXY="" wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
    | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
    echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
    | tee /etc/apt/sources.list.d/oneAPI.list
@@ -197,11 +206,10 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
-ARG TF_VER="2.15.0"
+WORKDIR /
+COPY xpu-requirements.txt .
 
-RUN python -m pip --no-cache-dir install tensorflow==${TF_VER}
-
-RUN  python -m pip --no-cache-dir install --upgrade intel-extension-for-tensorflow[xpu]
+RUN python -m pip --no-cache-dir install -r xpu-requirements.txt
 
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/THIRD-PARTY-PROGRAMS.txt /licenses/
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-program-of-intel-extension-for-tensorflow.txt /licenses/
@@ -231,13 +239,12 @@ ARG LEVEL_ZERO_GPU_VER
 ARG LEVEL_ZERO_VER
 ARG LEVEL_ZERO_DEV_VER
 
-
-RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+RUN no_proxy="" NO_PROXY="" wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
     gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
 RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 
-RUN apt-get update && \
+RUN no_proxy="" NO_PROXY="" apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
     intel-opencl-icd=${ICD_VER} \
     intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
@@ -260,11 +267,12 @@ ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/maste
 
 FROM itex-xpu-base-${PACKAGE_OPTION} AS itex-xpu-jupyter
 
-RUN python -m pip install --no-cache-dir jupyterlab jupyterhub notebook jupyter-server-proxy
+WORKDIR /jupyter
+COPY jupyter-requirements.txt .
+RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
 
 RUN mkdir -p /jupyter/ && chmod -R a+rwx /jupyter/
 RUN mkdir /.local && chmod a+rwx /.local
-WORKDIR /jupyter
 COPY notebooks/itex/itex-xpu.ipynb /jupyter/xpu.ipynb
 
 EXPOSE 8888

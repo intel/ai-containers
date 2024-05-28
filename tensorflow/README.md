@@ -1,179 +1,235 @@
-# TensorFlow Ingredients
+# Intel® Extension for TensorFlow\*
 
-## TensorFlow
+[Intel® Extension for TensorFlow*] extends [TensorFlow*] with up-to-date feature optimizations for an extra performance boost on Intel hardware.
 
-### Base
+[Intel® Extension for TensorFlow*] is based on the TensorFlow [PluggableDevice] interface to bring Intel XPU(GPU, CPU, etc.) devices into [TensorFlow*] with flexibility for on-demand performance on the following Intel GPUs:
 
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| BASE_IMAGE_NAME | `ubuntu` | Base Operating System |
-| BASE_IMAGE_TAG | `22.04` | Base Operating System Version |
-| IDP_VERSION | `core` | Intel Distribution of Python version(either `full` or `core`) |
-| MINICONDA_VERSION | `latest-Linux-x86_64` | Miniconda Version from `https://repo.anaconda.com/miniconda` |
-| PACKAGE_OPTION | `pip` | Stock Python (pypi) or Intel Python (conda) (`pip` or `idp`) |
-| PYTHON_VERSION | `3.10` | Python Version |
-| TF_PACKAGE | `intel-tensorflow` | TF Package (`tensorflow`, `intel-tensorflow`, `intel-tensorflow-avx512`) |
-| TF_PACKAGE_VERSION | `2.14.0` | TensorFlow Version |
+* [Intel® Arc™ A-Series Graphics]
+* [Intel® Data Center GPU Flex Series]
+* [Intel® Data Center GPU Max Series]
 
-### Jupyter
+> **Note:** There are two dockerhub repositories (`intel/intel-extension-for-tensorflow` and `intel/intel-optimized-tensorflow`) that are routinely updated with the latest images, however, some legacy images have not be published to both repositories.
 
-Built from Base
+## XPU images
 
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| PORT | `8888` | Server UI Port |
+The images below include support for both CPU and GPU optimizations:
 
-### MLFlow
+| Tag(s)                 | TensorFlow  | ITEX           | Driver | Dockerfile      |
+| ---------------------- | ----------- | -------------- | ------ | --------------- |
+| `2.15.0.0-xpu`, `xpu`  | [v2.15.0]   | [v2.15.0.0]    | [803]  | [v0.4.0-Beta]   |
+| `2.14.0.1-xpu`         | [v2.14.1]   | [v2.14.0.1]    | [736]  | [v0.3.4]        |
+| `2.13.0.0-xpu`         | [v2.13.0]   | [v2.13.0.0]    | [647]  | [v0.2.3]        |
 
-Built from Base
-
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| PORT | `5000` | Server UI Port |
-
-### MultiNode
-
-Built from Base
-
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| HOROVOD_VERSION | `0.28.0` | Horovod Version |
-| INC_VERSION | `2.1.1` | Neural Compressor Version |
-| MPI | `openmpi` | MPI Installation type (`openmpi` or `mpich`) |
-
-### ITEX XPU Base
-
-Built from Base
-
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| ICD_VER | `23.43.27642.40-803~22.04` | OpenCL Version |
-| LEVEL_ZERO_GPU_VER | `1.3.27642.40-803~22.04` | Level Zero GPU Version |
-| LEVEL_ZERO_VER | `1.14.0-744~22.04` | Level Zero Version |
-| LEVEL_ZERO_DEV_VER | `1.14.0-744~22.04` | Level Zero Dev Version |
-| DPCPP_VER | `2024.1.0-963` | DPCPP Version |
-| MKL Version | `2024.1.0-691` | MKL Version |
-| CCL_VER | `2021.12.0-309` | CCL Version |
-| TF_VERSION | `2.15.0` | TensorFlow Version |
-
-### ITEX XPU Jupyter
-
-Built from ITEX XPU Base
-
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| PORT | `8888` | Server UI Port |
-
-#### Distributed Training on k8s
-
-Use _N_-Nodes in your Training with MPI Operator and an optimized production container.
-
-##### Distributed Production Container
-
-Create a Distributed Production Container using Intel Optimized TensorFlow MultiNode layers. For Example:
-
-```dockerfile
-# Add Some Multinode image layers
-FROM intel/intel-optimized-tensorflow:2.12.0-pip-openmpi-multinode as prod-base
-# Use an existing container target
-FROM base as prod
-
-# Copy in Intel Optimized TensorFlow MultiNode python environment, this will overwrite any packages with the same name
-COPY --from=prod-base /usr/local/lib/python3.10/dist-packages /usr/local/lib/python3.10/dist-packages
-COPY --from=prod-base /usr/local/bin /usr/local/bin
-
-# Install MPI
-RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
-    libopenmpi-dev \
-    openmpi-bin \
-    openmpi-common \
-    openssh-client \
-    openssh-server
-...
-```
-
-##### Build the Container with New Stage
-
-For a BKM on how to install MPI see the [MLOps Best Known Method](Dockerfile#L128).
+### Run the XPU Container
 
 ```bash
-docker build ... --target prod -t my_container:prod .
+docker run -it --rm \
+    --device /dev/dri \
+    -v /dev/dri/by-path:/dev/dri/by-path \
+    --ipc=host \
+    intel/intel-extension-for-tensorflow:xpu
 ```
 
-##### Configure Kubernetes
+---
 
-Using an existing Kubernetes Cluster of any flavor, install the standalone training operator from GitHub or use a pre-existing Kubeflow configuration.
+The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
+
+| Tag(s)        | TensorFlow  | IPEX          | Driver | Dockerfile      |
+| ------------- | ----------- | ------------- | ------ | --------------- |
+| `xpu-jupyter` | [v2.14.1]   | [v2.14.0.1]   | [736]  | [v0.3.4]   |
+
+### Run the XPU Jupyter Container
 
 ```bash
-kubectl apply -k "github.com/kubeflow/training-operator/manifests/overlays/standalone"
+docker run -it --rm \
+    -p 8888:8888 \
+    --net=host \
+    --device /dev/dri \
+    -v /dev/dri/by-path:/dev/dri/by-path \
+    --ipc=host \
+    intel/intel-extension-for-tensorflow:xpu-jupyter
 ```
 
-Ensure that the training operator deployment readiness status `1/1` before proceeding.
+After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
 
-##### Deploy Distributed Job
+---
 
-Install [Helm](https://helm.sh/docs/intro/install/)
+The images below are [TensorFlow* Serving] with GPU Optimizations:
+
+| Tag(s)                                | TensorFlow  | IPEX         |
+| ------------------------------------- | ----------- | ------------ |
+| `2.14.0.1-serving-gpu`, `serving-gpu` | [v2.14.1]   | [v2.14.0.1]  |
+| `2.13.0.0-serving-gpu`,               | [v2.13.0]   | [v2.13.0.0]  |
+
+### Run the Serving GPU Container
 
 ```bash
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && \
-chmod 700 get_helm.sh && \
-./get_helm.sh
+docker run -it --rm \
+    -p 8500:8500 \
+    --device /dev/dri \
+    -v /dev/dri/by-path:/dev/dri/by-path \
+    -v $PWD/workspace:/workspace \
+    -w /workspace \
+    -e MODEL_NAME=<your-model-name> \
+    -e MODEL_DIR=<your-model-dir> \
+    intel/intel-extension-for-tensorflow:serving-gpu
 ```
 
-Configure the Helm Chart by changing [mpijob](chart/templates/mpijob.yaml#L28), [pvc](chart/templates/pvc.yaml), and [values](chart/values.yaml) files.
+For more details, follow the procedure in the [Intel® Extension for TensorFlow* Serving] instructions.
 
-Afterwards, deploy to the cluster with `helm install`. To see all of the options, see the [README](chart/README.md) for the chart.
+## CPU only images
+
+The images below are built only with CPU optimizations (GPU acceleration support was deliberately excluded):
+
+| Tag(s)                      | TensorFlow  | ITEX         | Dockerfile      |
+| --------------------------- | ----------- | ------------ | --------------- |
+| `2.15.0-pip-base`, `latest` | [v2.15.0]   | [v2.15.0.0]  | [v0.4.0-Beta]   |
+| `2.14.0-pip-base`           | [v2.14.1]   | [v2.14.0.1]  | [v0.3.4]        |
+| `2.13-pip-base`             | [v2.13.0]   | [v2.13.0.0]  | [v0.2.3]        |
+
+The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
+
+| Tag(s)               | TensorFlow  | ITEX          | Dockerfile      |
+| -------------------- | ----------- | ------------- | --------------- |
+| `2.15.0-pip-jupyter` | [v2.15.0]   | [v2.15.0.0]   | [v0.4.0-Beta]   |
+| `2.14.0-pip-jupyter` | [v2.14.1]   | [v2.14.0.1]   | [v0.3.4]        |
+| `2.13-pip-jupyter`   | [v2.13.0]   | [v2.13.0.0]   | [v0.2.3]        |
+
+### Run the CPU Jupyter Container
 
 ```bash
-export NAMESPACE=kubeflow
-helm install ---namespace ${NAMESPACE} \
-     --set metadata.name=<workflow-name> \
-     --set metadata.namespace=<namespace with training operator> \
-     --set imageName=<Docker Image repository/Name> \
-     --set imageTag=<Docker Image Tag> \
-     --set slotsPerWorker=1 \
-     ...
-     itex-distributed
-     charts/training
+docker run -it --rm \
+    -p 8888:8888 \
+    --net=host \
+    -v $PWD/workspace:/workspace \
+    -w /workspace \
+    intel/intel-extension-for-tensorflow:xpu-jupyter
 ```
 
-To see an existing configuration utilizing this method, check out [Intel® Transfer Learning Tool](https://github.com/IntelAI/transfer-learning/blob/main/docker/README.md#kubernetes)'s implementation.
+After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
 
-##### Troubleshooting
+---
 
-- [Common Horovod Issues](https://horovod.readthedocs.io/en/stable/troubleshooting_include.html)
-- [MPI Operator Reference](https://github.com/kubeflow/mpi-operator)
-- [Training Operator Reference](https://github.com/kubeflow/training-operator)
-- When applying proxies specify all of your proxies in a configmap in the same namespace, and add the following to both your launcher and workers:
+The images below additionally include [Horovod]:
 
-```yaml
-envFrom:
-  - configMapRef:
-      name: my-proxy-configmap-name
+| Tag(s)                         | Tensorflow  | ITEX         | Horovod   | Dockerfile      |
+| ------------------------------ | ---------   | ------------ | --------- | --------------- |
+| `2.15.0-pip-multinode`         | [v2.15.0]   | [v2.15.0.0]  | [v0.28.1] | [v0.4.0-Beta]   |
+| `2.14.0-pip-openmpi-multinode` | [v2.14.1]   | [v2.14.0.1]  | [v0.28.1] | [v0.3.4]        |
+| `2.13-pip-openmpi-mulitnode`   | [v2.13.0]   | [v2.13.0.0]  | [v0.28.0] | [v0.2.3]        |
+
+---
+
+The images below are [TensorFlow* Serving] with CPU Optimizations:
+
+| Tag(s)                                | TensorFlow | ITEX         |
+| ------------------------------------- | ---------- | ------------ |
+| `2.14.0.1-serving-cpu`, `serving-cpu` | [v2.14.1]  | [v2.14.0.1]  |
+| `2.13.0.0-serving-cpu`                | [v2.13.0]  | [v2.13.0.0]  |
+
+### Run the Serving CPU Container
+
+```bash
+docker run -it --rm \
+    -p 8500:8500 \
+    --device /dev/dri \
+    -v /dev/dri/by-path:/dev/dri/by-path \
+    -v $PWD/workspace:/workspace \
+    -w /workspace \
+    -e MODEL_NAME=<your-model-name> \
+    -e MODEL_DIR=<your-model-dir> \
+    intel/intel-extension-for-tensorflow:serving-cpu
 ```
 
-## TensorFlow Serving
+For more details, follow the procedure in the [Intel® Extension for TensorFlow* Serving] instructions.
 
-### TF Serving
+## CPU only images with Intel® Distribution for Python*
 
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| BASE_IMAGE_NAME | `ubuntu` | Base Operating System |
-| BASE_IMAGE_TAG | `22.04` | Base Operating System Version |
-| BAZEL_VERSION | `5.4.0` | Bazel Version |
-| TF_PACKAGE | `intel-tensorflow` | TF Package (`tensorflow`, `intel-tensorflow`, `intel-tensorflow-avx512`) |
-| TF_SERVING_BAZEL_OPTIONS | `'--local_ram_resources=HOST_RAM*0.8 --local_cpu_resources=HOST_CPUS-4'` | Bazel Options |
-| TF_SERVING_BUILD_OPTIONS | `'--config=mkl --config=release --define=build_with_openmp=false --copt=-march=native'` | Serving Build Options |
-| TF_SERVING_VERSION | `2.12.0` | TensorFlow Version |
-| TF_SERVING_VERSION_GIT_BRANCH | `${TF_SERVING_VERSION}` | Branch/Ref for TF Serving Repository |
+The images below are built only with CPU optimizations (GPU acceleration support was deliberately excluded) and include [Intel® Distribution for Python*]:
 
-### Serving MKL
+| Tag(s)                      | TensorFlow  | ITEX         | Dockerfile      |
+| --------------------------- | ----------- | ------------ | --------------- |
+| `2.15.0-idp-base`, `latest` | [v2.15.0]   | [v2.15.0.0]  | [v0.4.0-Beta]   |
+| `2.14.0-idp-base`           | [v2.14.1]   | [v2.14.0.1]  | [v0.3.4]        |
+| `2.13-idp-base`             | [v2.13.0]   | [v2.13.0.0]  | [v0.2.3]        |
 
-Built from TF Serving
+The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
 
-| Environment Variable Name | Default Value | Description |
-| --- | --- | --- |
-| BASE_IMAGE_NAME | `${TF_PACKAGE:-intel-tensorflow}-${BASE_IMAGE_NAME:-ubuntu}-${PACKAGE_OPTION:-pip}` | TF Serving Name |
-| BASE_IMAGE_TAG | `serving` | TF Serving Tag |
-| TF_SERVING_BUILD | `${BASE_IMAGE_NAME:-ubuntu}:${BASE_IMAGE_TAG:-22.04}` | Serving MKL OS `Base:Tag` |
-| TF_SERVING_VERSION_GIT_COMMIT | `${TF_SERVING_VERSION}` | Commit/Branch/Ref for TF Serving Repository |
+| Tag(s)               | TensorFlow  | ITEX          | Dockerfile      |
+| -------------------- | ----------- | ------------- | --------------- |
+| `2.15.0-idp-jupyter` | [v2.15.0]   | [v2.15.0.0]   | [v0.4.0-Beta]   |
+| `2.14.0-idp-jupyter` | [v2.14.1]   | [v2.14.0.1]   | [v0.3.4]        |
+| `2.13-idp-jupyter`   | [v2.13.0]   | [v2.13.0.0]   | [v0.2.3]        |
+
+The images below additionally include [Horovod]:
+
+| Tag(s)                         | Tensorflow  | ITEX         | Horovod   | Dockerfile      |
+| ------------------------------ | ---------   | ------------ | --------- | --------------- |
+| `2.15.0-idp-multinode`         | [v2.15.0]   | [v2.15.0.0]  | [v0.28.1] | [v0.4.0-Beta]   |
+| `2.14.0-idp-openmpi-multinode` | [v2.14.1]   | [v2.14.0.1]  | [v0.28.1] | [v0.3.4]        |
+| `2.13-idp-openmpi-mulitnode`   | [v2.13.0]   | [v2.13.0.0]  | [v0.28.0] | [v0.2.3]        |
+
+## Build from Source
+
+To build the images from source, clone the [Intel® AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
+
+```bash
+cd pytorch
+docker compose build tf-base
+docker compose run tf-base
+```
+
+You can find the list of services below for each container in the group:
+
+| Service Name  | Description                                                         |
+| ------------- | ------------------------------------------------------------------- |
+| `tf-base`     | Base image with [Intel® Extension for TensorFlow*]                  |
+| `jupyter`     | Adds Jupyter Notebook server                                        |
+| `multinode`   | Adds [Intel® MPI], [Horovod] and [INC]                              |
+| `xpu`         | Adds Intel GPU Support                                              |
+| `xpu-jupyter` | Adds Jupyter notebook server to GPU image                           |
+
+## License
+
+View the [License](https://github.com/intel/intel-extension-for-tensorflow/tree/main?tab=License-1-ov-file#readme) for the [Intel® Extension for TensorFlow*].
+
+The images below also contain other software which may be under other licenses (such as TensorFlow*, Jupyter*, Bash, etc. from the base).
+
+It is the image user's responsibility to ensure that any use of The images below comply with any relevant licenses for all software contained within.
+
+\* Other names and brands may be claimed as the property of others.
+
+<!--Below are links used in these document. They are not rendered: -->
+
+[Intel® Arc™ A-Series Graphics]: https://ark.intel.com/content/www/us/en/ark/products/series/227957/intel-arc-a-series-graphics.html
+[Intel® Data Center GPU Flex Series]: https://ark.intel.com/content/www/us/en/ark/products/series/230021/intel-data-center-gpu-flex-series.html
+[Intel® Data Center GPU Max Series]: https://ark.intel.com/content/www/us/en/ark/products/series/232874/intel-data-center-gpu-max-series.html
+
+[Intel® Extension for TensorFlow*]: https://github.com/intel/intel-extension-for-tensorflow
+[Intel® Extension for TensorFlow* Serving]: (https://intel.github.io/intel-extension-for-tensorflow/latest/docker/tensorflow-serving/README.html)
+[Intel® Distribution for Python*]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/distribution-for-python.html
+[INC]: https://github.com/intel/neural-compressor
+[TensorFlow*]: https://github.com/tensorflow/tensorflow
+[PluggableDevice]: https://github.com/tensorflow/community/blob/master/rfcs/20200624-pluggable-device-for-tensorflow.md
+[TensorFlow* Serving]: https://github.com/tensorflow/serving
+[Horovod]: https://github.com/horovod/horovod
+[Intel® MPI]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/mpi-library.html#gs.9bna9o
+
+[v0.4.0-Beta]: https://github.com/intel/ai-containers/blob/v0.4.0-Beta/tensorflow/Dockerfile
+[v0.3.4]: https://github.com/intel/ai-containers/blob/v0.3.4/tensorflow/Dockerfile
+[v0.2.3]: https://github.com/intel/ai-containers/blob/v0.2.3/tensorflow/Dockerfile
+
+[v2.15.0]: https://github.com/tensorflow/tensorflow/releases/tag/v2.15.0
+[v2.14.1]: https://github.com/tensorflow/tensorflow/releases/tag/v2.14.1
+[v2.13.0]: https://github.com/tensorflow/tensorflow/releases/tag/v2.13.0
+
+[v2.15.0.0]: https://github.com/intel/intel-extension-for-tensorflow/releases/tag/v2.15.0.0
+[v2.14.0.1]: https://github.com/intel/intel-extension-for-tensorflow/releases/tag/v2.14.0.1
+[v2.13.0.0]: https://github.com/intel/intel-extension-for-tensorflow/releases/tag/v2.13.0.0
+
+[v0.28.1]: https://github.com/horovod/horovod/releases/tag/v0.28.1
+[v0.28.0]: https://github.com/horovod/horovod/releases/tag/v0.28.0
+
+[803]: https://dgpu-docs.intel.com/releases/LTS_803.29_20240131.html
+[736]: https://dgpu-docs.intel.com/releases/stable_736_25_20231031.html
+[647]: https://dgpu-docs.intel.com/releases/stable_647_21_20230714.html

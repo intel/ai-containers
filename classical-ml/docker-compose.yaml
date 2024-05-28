@@ -13,41 +13,33 @@
 # limitations under the License.
 
 version: '3'
+include:
+  - path:
+      - ../python/docker-compose.yaml
 services:
-  python:
+  ml-base:
     build:
       args:
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
-        no_proxy: ""
+        no_proxy: ${no_proxy}
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-22.04}
+        GITHUB_RUN_NUMBER: ${GITHUB_RUN_NUMBER:-0}
         IDP_VERSION: core
-        MINICONDA_VERSION: ${MINICONDA_VERSION:-latest-Linux-x86_64}
+        MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Linux-x86_64}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
-      context: ../python
-      dockerfile: ../python/Dockerfile
-      target: ${PACKAGE_OPTION:-pip}
-    pull_policy: always
-  ml-base:
-    build:
-      args:
-        no_proxy: ${no_proxy}
-        COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME:-classical-ml}
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
-        SCIKIT_VERSION: ${SCIKIT_VERSION:-2024.2.0}
-        XGBOOST_VERSION: ${XGBOOST_VERSION:-2.0.3}
+        REGISTRY: ${REGISTRY}
+        REPO: ${REPO}
       context: .
-      dockerfile: Dockerfile
       target: ml-base-${PACKAGE_OPTION:-pip}
-    extends: python
-    depends_on:
-      - python
     command: >
       bash -c "python -c 'import sklearnex, sklearn; import xgboost as xgb; print(\"Scikit version:\", sklearn.__version__, \"\\nXGBoost version:\", xgb.__version__)'"
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.2.0}-xgboost-${XGBOOST_VERSION:-2.0.3}-base
+    depends_on:
+      - ${PACKAGE_OPTION:-pip}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.3.0}-xgboost-${XGBOOST_VERSION:-2.0.3}-base
     pull_policy: always
-
   jupyter:
     build:
       target: jupyter
@@ -57,5 +49,5 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     extends: ml-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.2.0}-xgboost-${XGBOOST_VERSION:-2.0.3}-jupyter
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.3.0}-xgboost-${XGBOOST_VERSION:-2.0.3}-jupyter
     network_mode: host

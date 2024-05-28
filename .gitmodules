@@ -1,3 +1,0 @@
-[submodule "tensorflow/serving"]
-	path = tensorflow/serving
-	url = https://github.com/ashahba/serving
