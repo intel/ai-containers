@@ -129,6 +129,8 @@ jobs:
   scan-containers:
     needs: [setup-scan]
     if: ${{ !inputs.no_build }}
+    permissions:
+      security-events: write
     runs-on: k8-runners
     strategy:
       matrix:
