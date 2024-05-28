@@ -20,15 +20,6 @@ inputs:
     description: 'Container Cache Registry URL'
     required: true
     type: string
-  mlops_repo:
-    description: 'Test Runner org/repo'
-    required: true
-    type: string
-  mlops_ref:
-    description: 'Test Runner Branch/Tag'
-    required: false
-    default: develop
-    type: string
   recipe_dir:
     description: 'Path to Recipe Directory'
     required: false
@@ -54,8 +45,8 @@ runs:
     - uses: actions/checkout@v4
       with:
         path: mlops
-        ref: ${{ inputs.mlops_ref }}
-        repository: ${{ inputs.mlops_repo }}
+        ref: ${{ github.ref }}
+        repository: intel/ai-containers
         token: ${{ inputs.token }}
     - name: Install Requirements
       shell: bash

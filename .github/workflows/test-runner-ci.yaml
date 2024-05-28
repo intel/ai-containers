@@ -106,10 +106,8 @@ jobs:
       uses: intel/ai-containers/test-runner@main
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
-        mlops_repo: ${{ github.repository }}
-        mlops_ref: ${{ github.ref }}
         recipe_dir: test-runner
         registry: ${{ secrets.REGISTRY }}
         repo: ${{ secrets.REPO }}
         test_dir: test-runner
-        token: ${{ secrets.ACTION_TOKEN || github.token }}
+        token: ${{ secrets.ACTION_TOKEN }}
