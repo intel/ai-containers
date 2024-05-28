@@ -14,7 +14,6 @@
 
 name: gitleaks
 on:
-  merge_group: null
   push:
     branches:
       - main
