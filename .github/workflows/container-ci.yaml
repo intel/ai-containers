@@ -23,7 +23,8 @@
 ## REPO
 ####################################################################################################
 name: Container CI
-permissions: read-all
+permissions:
+  contents: read
 on:
   workflow_dispatch:
     inputs:
