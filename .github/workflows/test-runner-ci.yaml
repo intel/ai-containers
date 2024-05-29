@@ -78,7 +78,7 @@ jobs:
     - name: Comment on PR
       uses: orgoro/coverage@v3.1
       with:
-        coverageFile: coverage/coverage.xml
+        coverageFile: coverage.xml
         token: ${{ secrets.ACTION_TOKEN }}
         treshholdAll: 80
   integration-test:
