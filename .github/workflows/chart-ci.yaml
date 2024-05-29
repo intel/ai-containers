@@ -14,7 +14,7 @@
 
 name: Helm Chart CI
 on:
-  pull_request_target: null
+  pull_request: null
   merge_group: null
 permissions: read-all
 concurrency:
