@@ -15,9 +15,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: "{{ include "huggingface-llm.fullname" . }}-test-connection"
+  name: "{{ include "chart-test.fullname" . }}-test-connection"
   labels:
-    {{- include "huggingface-llm.labels" . | nindent 4 }}
+    {{- include "chart-test.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
 spec:
@@ -25,5 +25,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "huggingface-llm.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "chart-test.fullname" . }}:{{ .Values.service.port }}']
   restartPolicy: Never

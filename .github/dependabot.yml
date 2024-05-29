@@ -71,3 +71,11 @@ updates:
     package-ecosystem: pip
     schedule:
       interval: weekly
+  - directory: /workflows
+    groups:
+      helm:
+        patterns:
+          - "*"
+    package-ecosystem: pip
+    schedule:
+      interval: weekly

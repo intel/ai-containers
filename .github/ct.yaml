@@ -13,9 +13,9 @@
 # limitations under the License.
 
 # See https://github.com/helm/chart-testing#configuration
+
 remote: origin
 target-branch: main
 chart-dirs:
   - workflows/charts
-chart-repos: null
-helm-extra-args: null
+helm-extra-args: --timeout 30s
