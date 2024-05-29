@@ -75,12 +75,16 @@ jobs:
         python -m coverage combine
         find . -name "*.pyc" -exec rm -f {} \;
         python -m coverage xml -i
-    - name: Comment on PR
-      uses: orgoro/coverage@v3.1
+    # - name: Comment on PR
+    #   uses: orgoro/coverage@v3.1
+    #   with:
+    #     coverageFile: coverage.xml
+    #     token: ${{ secrets.ACTION_TOKEN }}
+    #     treshholdAll: 80
+    - uses: actions/upload-artifact@v4
       with:
-        coverageFile: coverage.xml
-        token: ${{ secrets.ACTION_TOKEN }}
-        treshholdAll: 80
+        name: coverage.xml
+        path: coverage.xml
   integration-test:
     runs-on: k8-runners
     steps:
