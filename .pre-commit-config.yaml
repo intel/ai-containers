@@ -3,7 +3,7 @@ ci:
   autofix_prs: true
   autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
   autoupdate_schedule: "weekly"
-  skip: [pylint, shellcheck, markdownlint, hadolint-docker, shfmt, tox, mkdocs]
+  skip: [pylint, shellcheck, markdownlint, hadolint-docker, shfmt, tox, mkdocs, ct]
 repos:
 - hooks:
   - id: check-added-large-files
@@ -78,4 +78,9 @@ repos:
     id: mkdocs
     language: system
     name: mkdocs
+  - entry: ct lint --config .github/ct.yaml
+    files: ^workflows/charts/
+    id: ct
+    language: system
+    name: ct
   repo: local
