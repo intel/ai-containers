@@ -16,7 +16,7 @@
 name: Integration Tests
 on:
   merge_group: null
-  pull_request: null
+  pull_request_target: null
 permissions: read-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}

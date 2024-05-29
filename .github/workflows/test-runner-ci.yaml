@@ -15,7 +15,7 @@
 name: Test Runner CI
 on:
   merge_group: null
-  pull_request:
+  pull_request_target:
     paths:
     - 'test-runner/**'
   push:
