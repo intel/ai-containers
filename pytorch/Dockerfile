@@ -80,11 +80,15 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     gcc \
     libgl1-mesa-glx \
     libglib2.0-0 \
+    openssh-server \
+    net-tools \
     virtualenv && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 ENV SIGOPT_PROJECT=.
+ARG SSHD_PORT=2345
+ENV SSHD_PORT ${SSHD_PORT}
 
 WORKDIR /
 COPY multinode-requirements.txt .
@@ -108,6 +112,25 @@ RUN mkdir -p /licensing
 RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
+
+# Enable passwordless ssh for mpirun
+RUN mkdir /var/run/sshd
+RUN sed -i'' -e's/^#PermitRootLogin prohibit-password$/PermitRootLogin yes/' /etc/ssh/sshd_config \
+        && sed -i'' -e's/^#PasswordAuthentication yes$/PasswordAuthentication yes/' /etc/ssh/sshd_config \
+        && sed -i'' -e's/^#PermitEmptyPasswords no$/PermitEmptyPasswords yes/' /etc/ssh/sshd_config \
+        && sed -i'' -e's/^UsePAM yes/UsePAM no/' /etc/ssh/sshd_config \
+        && echo "Port "$SSHD_PORT"" >> /etc/ssh/sshd_config \
+        && echo "Host *" >> /etc/ssh/ssh_config \
+        && echo "  Port "$SSHD_PORT"" >> /etc/ssh/ssh_config \
+        && echo "  StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+
+EXPOSE ${SSHD_PORT}
+
+RUN /usr/bin/ssh-keygen -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa && \
+   chmod 600 ~/.ssh/id_rsa && \
+   cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
+
+
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 

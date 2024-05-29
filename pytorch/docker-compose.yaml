@@ -83,10 +83,7 @@ services:
         org.opencontainers.image.version: ${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-multinode
       target: multinode
     command: >
-      sh -c "python -c 'import neural_compressor;import
-      oneccl_bindings_for_pytorch as oneccl; print(\"Neural Compressor
-      Version:\", neural_compressor.__version__, \"\\nOneCCL:\",
-      oneccl.__version__)'"
+      bash -c "/usr/sbin/sshd -D"
     extends: ipex-base
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-oneccl-inc-${INC_VERSION:-2.5.1}
   xpu:
