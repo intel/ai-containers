@@ -74,7 +74,7 @@ jobs:
       run: |
         python -m pip install coverage
         python -m coverage combine
-        python -m coverage xml
+        python -m coverage xml -i
       working-directory: coverage
     - name: Comment on PR
       uses: orgoro/coverage@v3.1
