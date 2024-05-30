@@ -16,7 +16,7 @@
 extends: default
 ignore: |
   '.github/'
-  '**/templates/*.yaml'
+  'workflows/charts/*/templates/'
 rules:
   indentation:
     indent-sequences: whatever
