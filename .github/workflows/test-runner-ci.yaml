@@ -20,9 +20,6 @@ on:
     branches: [main]
     paths:
     - 'test-runner/**'
-  push:
-    branches:
-    - main
 permissions: read-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -39,10 +36,9 @@ jobs:
       uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
       with:
         egress-policy: audit
-
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
-        ref: ${{ github.event.pull_request.head.ref || github.ref }}
+        ref: "refs/pull/${{ github.event.number }}/merge"
     - uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3.3.0
       with:
         driver: docker
@@ -75,10 +71,9 @@ jobs:
       uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
       with:
         egress-policy: audit
-
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
-        ref: ${{ github.event.pull_request.head.ref || github.ref }}
+        ref: "refs/pull/${{ github.event.number }}/merge"
     - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
       with:
         python-version: "3.10"
@@ -108,10 +103,9 @@ jobs:
       uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
       with:
         egress-policy: audit
-
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
-        ref: ${{ github.event.pull_request.head.ref || github.ref }}
+        ref: "refs/pull/${{ github.event.number }}/merge"
     - uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3.3.0
       with:
         driver: docker
