@@ -50,7 +50,8 @@ jobs:
     - name: Helm Lint, Install, and Test
       if: steps.changed.outputs.changed == 'true'
       run: |
+        cp -r ${{ secrets.KUBECONFIG_PATH }} /tmp/config.yaml
         kubectl config use-context kubeflow
         ct lint-and-install --target-branch ${{ github.event.repository.default_branch }} --config .github/ct.yaml --debug --namespace helm-ci
       env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG_PATH }}
+        KUBECONFIG: /tmp/config.yaml
