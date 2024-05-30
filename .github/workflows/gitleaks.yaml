@@ -14,13 +14,10 @@
 
 name: gitleaks
 on:
-  push:
-    branches:
-    - main
+  merge_group: null
   pull_request_target:
     types: [opened, edited, reopened, synchronize]
     branches: [main]
-  workflow_dispatch: null
 permissions: read-all
 jobs:
   scan:
@@ -30,7 +27,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-        ref: ${{ github.event.pull_request.head.ref || github.ref }}
+        ref: "refs/pull/${{ github.event.number }}/merge"
     - uses: gitleaks/gitleaks-action@v2
       env:
         GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
