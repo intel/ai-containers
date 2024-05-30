@@ -75,49 +75,39 @@ updates:
   - package-ecosystem: docker
     directory: /classical-ml
     schedule:
-      interval: daily
+      interval: weekly
 
   - package-ecosystem: docker
     directory: /preset/classical-ml
     schedule:
-      interval: daily
+      interval: weekly
 
   - package-ecosystem: docker
     directory: /preset/data-analytics
     schedule:
-      interval: daily
+      interval: weekly
 
   - package-ecosystem: docker
     directory: /preset/deep-learning
     schedule:
-      interval: daily
+      interval: weekly
 
   - package-ecosystem: docker
     directory: /preset/inference-optimization
     schedule:
-      interval: daily
+      interval: weekly
 
   - package-ecosystem: docker
     directory: /python
     schedule:
-      interval: daily
+      interval: weekly
 
   - package-ecosystem: docker
     directory: /pytorch
     schedule:
-      interval: daily
-
-  - package-ecosystem: pip
-    directory: /pytorch/serving/model-store
-    schedule:
-      interval: daily
+      interval: weekly
 
   - package-ecosystem: docker
     directory: /tensorflow
     schedule:
-      interval: daily
-
-  - package-ecosystem: pip
-    directory: /tensorflow/serving
-    schedule:
-      interval: daily
+      interval: weekly
