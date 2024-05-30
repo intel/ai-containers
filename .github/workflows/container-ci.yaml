@@ -233,8 +233,8 @@ jobs:
       uses: intel/ai-containers/test-runner@5d9f53d02bdf065086dffa4ae6d99a412184710c # main
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
-        gh_repo: ${{ inputs.repo }}
-        gh_ref: ${{ inputs.ref }}
+        gh_repo: 'intel/ai-containers' # ${{ inputs.repo }}
+        gh_ref: ${{ github.ref }} # ${{ inputs.ref }}
         recipe_dir: ${{ inputs.group_dir }}
         registry: ${{ secrets.REGISTRY }}
         repo: ${{ secrets.REPO }}
