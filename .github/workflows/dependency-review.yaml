@@ -28,13 +28,12 @@ on:
     branches: [main]
 permissions:
   contents: read
+  pull-requests: write
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
 jobs:
   dependency-review:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
