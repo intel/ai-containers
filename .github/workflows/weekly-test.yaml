@@ -15,7 +15,7 @@
 name: Weekly Tests
 on:
   schedule:
-    - cron: "0 0 * * 0"
+  - cron: "0 0 * * 0"
   workflow_dispatch: null
 permissions: read-all
 jobs:
@@ -24,18 +24,18 @@ jobs:
     outputs:
       groups: ${{ steps.group-list.outputs.FOLDERS }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Output Group Directories
-        id: group-list
-        run: |
-          DOCKER_COMPOSE_PATHS=()
-          for path in $(find . -name 'docker-compose.yaml'); do
-            DIR_PATH=$(dirname "$path")
-            DOCKER_COMPOSE_PATHS+=("${DIR_PATH:2}")
-          done
-          # Convert the array to a JSON array
-          DOCKER_COMPOSE_PATHS_JSON=$(printf '%s\n' "${DOCKER_COMPOSE_PATHS[@]}" | uniq | jq -R '.' | jq -sc '.')
-          echo "FOLDERS=$DOCKER_COMPOSE_PATHS_JSON" >> $GITHUB_OUTPUT
+    - uses: actions/checkout@v4
+    - name: Output Group Directories
+      id: group-list
+      run: |
+        DOCKER_COMPOSE_PATHS=()
+        for path in $(find . -name 'docker-compose.yaml'); do
+          DIR_PATH=$(dirname "$path")
+          DOCKER_COMPOSE_PATHS+=("${DIR_PATH:2}")
+        done
+        # Convert the array to a JSON array
+        DOCKER_COMPOSE_PATHS_JSON=$(printf '%s\n' "${DOCKER_COMPOSE_PATHS[@]}" | uniq | jq -R '.' | jq -sc '.')
+        echo "FOLDERS=$DOCKER_COMPOSE_PATHS_JSON" >> $GITHUB_OUTPUT
   pipeline-ci:
     needs: [get-groups]
     strategy:
@@ -46,4 +46,5 @@ jobs:
     uses: ./.github/workflows/container-ci.yaml
     with:
       group_dir: ${{ matrix.group }}
+      ref: main
     secrets: inherit
