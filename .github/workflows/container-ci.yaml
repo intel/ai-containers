@@ -40,11 +40,6 @@ on:
         required: true
         default: 'main'
         type: string
-      repo:
-        description: 'Enter Git Repo:'
-        required: true
-        default: 'intel/ai-containers'
-        type: string
       runner_label:
         description: 'Enter Validation Runner Label:'
         default: test-runner
@@ -79,9 +74,6 @@ on:
       ref:
         required: true
         type: string
-      repo:
-        required: true
-        type: string
 jobs:
   ####################################################################################################
   # Compose Build
@@ -98,7 +90,6 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         ref: ${{ inputs.ref }}
-        repo: ${{ inputs.repo }}
     - name: Set Matrix
       id: build-matrix
       run: echo "matrix=$(jq -c . < ${{ inputs.group_dir }}/.actions.json)" >> $GITHUB_OUTPUT
@@ -118,7 +109,6 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         ref: ${{ inputs.ref }}
-        repo: ${{ inputs.repo }}
       if: ${{ !inputs.no_build }}
     - uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
       with:
@@ -168,7 +158,6 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         ref: ${{ inputs.ref }}
-        repo: ${{ inputs.repo }}
     - uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
       with:
         registry: ${{ secrets.REGISTRY }}
@@ -203,7 +192,6 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         ref: ${{ inputs.ref }}
-        repo: ${{ inputs.repo }}
     - name: Get Recipes
       id: test-matrix
       run: echo "matrix=$(find ${{ inputs.group_dir }} -type f -name 'tests.yaml' -exec dirname {} \; | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
@@ -223,7 +211,6 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         ref: ${{ inputs.ref }}
-        repo: ${{ inputs.repo }}
     - uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
       with:
         registry: ${{ secrets.REGISTRY }}
@@ -233,8 +220,6 @@ jobs:
       uses: intel/ai-containers/test-runner@5d9f53d02bdf065086dffa4ae6d99a412184710c # main
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
-        gh_repo: 'intel/ai-containers' # ${{ inputs.repo }}
-        gh_ref: ${{ github.ref }} # ${{ inputs.ref }}
         recipe_dir: ${{ inputs.group_dir }}
         registry: ${{ secrets.REGISTRY }}
         repo: ${{ secrets.REPO }}
