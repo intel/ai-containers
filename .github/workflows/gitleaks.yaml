@@ -16,8 +16,10 @@ name: gitleaks
 on:
   push:
     branches:
-      - main
-  pull_request_target: null
+    - main
+  pull_request_target:
+    types: [opened, edited, reopened, synchronize]
+    branches: [main]
   workflow_dispatch: null
 permissions: read-all
 jobs:
@@ -25,11 +27,11 @@ jobs:
     name: gitleaks
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ 'refs/pull/${{ github.event.number }}/merge' || 'main' }}
-      - uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
-          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}}
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        ref: ${{ 'refs/pull/${{ github.event.number }}/merge' || 'main' }}
+    - uses: gitleaks/gitleaks-action@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
+        GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}}

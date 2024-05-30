@@ -16,7 +16,9 @@ name: Lint
 permissions: read-all
 on:
   merge_group: null
-  pull_request_target: null
+  pull_request_target:
+    types: [opened, edited, reopened, synchronize]
+    branches: [main]
   push:
     branches:
     - main
