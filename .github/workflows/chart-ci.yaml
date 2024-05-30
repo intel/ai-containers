@@ -54,6 +54,7 @@ jobs:
     - name: Helm Lint, Install, and Test
       if: steps.changed.outputs.changed == 'true'
       run: |
+        mkdir -m 0644 /k8s
         install -m 0600 ${{ secrets.KUBECONFIG_PATH }} /k8s/config.yaml
         kubectl config use-context kubeflow
         ct lint-and-install --target-branch ${{ github.event.repository.default_branch }} --config .github/ct.yaml --debug --namespace helm-ci
