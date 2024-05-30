@@ -80,8 +80,6 @@ jobs:
         python -m pip install coverage
         python -m coverage combine --debug=pathmap
         python -m coverage xml --skip-empty
-      env:
-        COVERAGE_RCFILE: tox.ini
     - name: Comment on PR
       uses: orgoro/coverage@v3.1
       with:
