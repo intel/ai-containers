@@ -73,6 +73,7 @@ jobs:
     uses: ./.github/workflows/container-ci.yaml
     with:
       group_dir: ${{ matrix.group }}
+      ref: "refs/pull/${{ github.event.number }}/merge"
     secrets: inherit
   status-check:
     needs: [group-diff, pipeline-ci]
