@@ -19,7 +19,8 @@ ignore: |
   'enterprise/'
   'workflows/charts/'
 rules:
-  max: 80
-  level: warning
+  line-length:
+    max: 80
+    level: warning
   indentation:
     indent-sequences: whatever
