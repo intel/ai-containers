@@ -16,11 +16,10 @@
 extends: default
 ignore: |
   '.github/'
-  'enterprise/'
-  'workflows/charts/'
+  '**/templates/*.yaml'
 rules:
+  indentation:
+    indent-sequences: whatever
   line-length:
     max: 80
     level: warning
-  indentation:
-    indent-sequences: whatever
