@@ -27,17 +27,22 @@ jobs:
   helm-ci:
     runs-on: kubectl
     steps:
-    - uses: actions/checkout@v4
+    - name: Harden Runner
+      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      with:
+        egress-policy: audit
+
+    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         fetch-depth: 0
         # ref: ${{ github.event.pull_request.head.ref || github.ref }}
-    - uses: azure/setup-kubectl@v4
-    - uses: azure/setup-helm@v4.2.0
-    - uses: actions/setup-python@v5
+    - uses: azure/setup-kubectl@3e0aec4d80787158d308d7b364cb1b702e7feb7f # v4.0.0
+    - uses: azure/setup-helm@fe7b79cd5ee1e45176fcad797de68ecaf3ca4814 # v4.2.0
+    - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
       with:
         python-version: 3.x
     - name: Setup chart-testing
-      uses: helm/chart-testing-action@v2.6.1
+      uses: helm/chart-testing-action@e6669bcd63d7cb57cb4380c33043eebe5d111992 # v2.6.1
     - name: Get chart diff
       id: changed
       run: |

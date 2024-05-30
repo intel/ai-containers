@@ -35,18 +35,23 @@ jobs:
         python: ["3.8", "3.9", "3.10", "3.11", "3.12"]
       fail-fast: true
     steps:
-    - uses: actions/checkout@v4
+    - name: Harden Runner
+      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      with:
+        egress-policy: audit
+
+    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         ref: ${{ github.event.pull_request.head.ref || github.ref }}
-    - uses: docker/setup-buildx-action@v3
+    - uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3.3.0
       with:
         driver: docker
-    - uses: docker/login-action@v3
+    - uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
       with:
         registry: ${{ secrets.REGISTRY }}
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
       with:
         python-version: ${{ matrix.python }}
     - name: Install requirements
@@ -58,7 +63,7 @@ jobs:
         FORCE_COLOR: 1
         REGISTRY: ${{ secrets.REGISTRY }}
         REPO: ${{ secrets.REPO }}
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
       with:
         name: covdata-${{ matrix.python }}
         path: ${{ github.workspace }}/.coverage*
@@ -66,13 +71,18 @@ jobs:
     needs: [unit-test]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - name: Harden Runner
+      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      with:
+        egress-policy: audit
+
+    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         ref: ${{ github.event.pull_request.head.ref || github.ref }}
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
       with:
         python-version: "3.10"
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
       with:
         merge-multiple: true
     - name: Coverage
@@ -82,34 +92,39 @@ jobs:
         python -m coverage xml --skip-empty
     - name: Comment on PR
       if: ${{ github.event_name == 'pull_request_target' }}
-      uses: orgoro/coverage@v3.1
+      uses: orgoro/coverage@4e3bc9302f715595336a40f7dd4a3b15c687bdb4 # v3.1
       with:
         coverageFile: coverage.xml
         token: ${{ secrets.ACTION_TOKEN }}
         treshholdAll: 80
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
       with:
         name: coverage.xml
         path: coverage.xml
   integration-test:
     runs-on: k8-runners
     steps:
-    - uses: actions/checkout@v4
+    - name: Harden Runner
+      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      with:
+        egress-policy: audit
+
+    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         ref: ${{ github.event.pull_request.head.ref || github.ref }}
-    - uses: docker/setup-buildx-action@v3
+    - uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3.3.0
       with:
         driver: docker
-    - uses: docker/login-action@v3
+    - uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
       with:
         registry: ${{ secrets.REGISTRY }}
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
       with:
         python-version: "3.8"
     - name: Test Container Group
-      uses: intel/ai-containers/test-runner@main
+      uses: intel/ai-containers/test-runner@5d9f53d02bdf065086dffa4ae6d99a412184710c # main
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
         recipe_dir: test-runner

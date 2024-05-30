@@ -30,11 +30,16 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - name: Harden Runner
+      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      with:
+        egress-policy: audit
+
+    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         fetch-depth: 0
         ref: ${{ github.event.pull_request.head.ref || github.ref }}
-    - uses: super-linter/super-linter/slim@v6.5.1
+    - uses: super-linter/super-linter/slim@5b638caee6ba65e25e07143887b669a1233847a0 # v6.5.1
       env:
         # To report GitHub Actions status checks
         GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
