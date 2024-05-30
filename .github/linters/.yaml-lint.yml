@@ -13,13 +13,4 @@
 # limitations under the License.
 
 ---
-extends: default
-ignore: |
-  '.github/'
-  'workflows/charts/*/templates/'
-rules:
-  indentation:
-    indent-sequences: whatever
-  line-length:
-    max: 80
-    level: warning
+ignore: '**/templates/**.yaml'
