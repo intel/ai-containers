@@ -15,6 +15,9 @@
 name: Helm Chart CI
 on:
   pull_request: null
+  # pull_request_target:
+  #   types: [opened, edited, reopened, synchronize]
+  #   branches: [main]
   merge_group: null
 permissions: read-all
 concurrency:
@@ -24,27 +27,28 @@ jobs:
   helm-ci:
     runs-on: kubectl
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: azure/setup-kubectl@v4
-      - uses: azure/setup-helm@v4.2.0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: 3.x
-      - name: Setup chart-testing
-        uses: helm/chart-testing-action@v2.6.1
-      - name: Get chart diff
-        id: changed
-        run: |
-          changed=$(ct list-changed --target-branch ${{ github.event.repository.default_branch }} --config .github/ct.yaml)
-          if [[ -n "$changed" ]]; then
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          fi
-      - name: Helm Lint, Install, and Test
-        if: steps.changed.outputs.changed == 'true'
-        run: |
-          kubectl config use-context kubeflow
-          ct lint-and-install --target-branch ${{ github.event.repository.default_branch }} --config .github/ct.yaml --debug --namespace helm-ci
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG_PATH }}
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        # ref: ${{ 'refs/pull/${{ github.event.number }}/merge' || 'main' }}
+    - uses: azure/setup-kubectl@v4
+    - uses: azure/setup-helm@v4.2.0
+    - uses: actions/setup-python@v5
+      with:
+        python-version: 3.x
+    - name: Setup chart-testing
+      uses: helm/chart-testing-action@v2.6.1
+    - name: Get chart diff
+      id: changed
+      run: |
+        changed=$(ct list-changed --target-branch ${{ github.event.repository.default_branch }} --config .github/ct.yaml)
+        if [[ -n "$changed" ]]; then
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+        fi
+    - name: Helm Lint, Install, and Test
+      if: steps.changed.outputs.changed == 'true'
+      run: |
+        kubectl config use-context kubeflow
+        ct lint-and-install --target-branch ${{ github.event.repository.default_branch }} --config .github/ct.yaml --debug --namespace helm-ci
+      env:
+        KUBECONFIG: ${{ secrets.KUBECONFIG_PATH }}
