@@ -12,37 +12,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
 name: Lint
 permissions: read-all
 on:
   merge_group: null
-  pull_request: null
+  pull_request_target:
+    types: [opened, edited, reopened, synchronize]
+    branches: [main]
   push:
     branches:
-      - develop
-      - main
+    - main
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: super-linter/super-linter/slim@v6.5.1
-        env:
-          # To report GitHub Actions status checks
-          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
-          GITHUB_ACTIONS_COMMAND_ARGS: '-ignore SC.*'
-          VALIDATE_BASH_EXEC: false
-          VALIDATE_CHECKOV: false
-          VALIDATE_HTML: false
-          VALIDATE_KUBERNETES_KUBECONFORM: false
-          VALIDATE_NATURAL_LANGUAGE: false
-          VALIDATE_PYTHON_FLAKE8: false
-          VALIDATE_PYTHON_MYPY: false
-          VALIDATE_PYTHON_RUFF: false
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.pull_request.head.ref || github.ref }}
+    - uses: super-linter/super-linter/slim@v6.5.1
+      env:
+        # To report GitHub Actions status checks
+        GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
+        GITHUB_ACTIONS_COMMAND_ARGS: '-ignore SC.*'
+        VALIDATE_BASH_EXEC: false
+        VALIDATE_CHECKOV: false
+        VALIDATE_HTML: false
+        VALIDATE_KUBERNETES_KUBECONFORM: false
+        VALIDATE_NATURAL_LANGUAGE: false
+        VALIDATE_PYTHON_FLAKE8: false
+        VALIDATE_PYTHON_MYPY: false
+        VALIDATE_PYTHON_RUFF: false

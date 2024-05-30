@@ -25,14 +25,14 @@ on: [pull_request]
 permissions:
   contents: read
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
 jobs:
   dependency-review:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/dependency-review-action@v4
-        with:
-          comment-summary-in-pr: true
+    - uses: actions/checkout@v4
+    - uses: actions/dependency-review-action@v4
+      with:
+        comment-summary-in-pr: true

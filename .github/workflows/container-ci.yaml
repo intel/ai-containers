@@ -35,6 +35,10 @@ on:
         description: 'Enter Bash Env Variable Overrides in `KEY=VAL KEY2=VAL2` format:'
         required: false
         type: string
+      ref:
+        description: 'Enter Git Ref:'
+        required: true
+        type: string
       runner_label:
         description: 'Enter Validation Runner Label:'
         default: test-runner
@@ -66,6 +70,9 @@ on:
       no_start:
         required: false
         type: boolean
+      ref:
+        required: true
+        type: string
 jobs:
   ####################################################################################################
   # Compose Build
@@ -76,6 +83,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.ref }}
     - name: Set Matrix
       id: build-matrix
       run: echo "matrix=$(jq -c . < ${{ inputs.group_dir }}/.actions.json)" >> $GITHUB_OUTPUT
@@ -93,6 +102,8 @@ jobs:
       group: ${{ steps.build-group.outputs.container-group }}
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.ref }}
       if: ${{ !inputs.no_build }}
     - uses: docker/login-action@v3
       with:
@@ -136,6 +147,8 @@ jobs:
       fail-fast: false
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.ref }}
     - uses: docker/login-action@v3
       with:
         registry: ${{ secrets.REGISTRY }}
@@ -165,6 +178,8 @@ jobs:
       matrix: ${{ steps.test-matrix.outputs.matrix }}
     steps:
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.ref }}
     - name: Get Recipes
       id: test-matrix
       run: echo "matrix=$(find ${{ inputs.group_dir }} -type f -name 'tests.yaml' -exec dirname {} \; | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
@@ -182,6 +197,8 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@v4
+      with:
+        ref: ${{ inputs.ref }}
     - uses: docker/login-action@v3
       with:
         registry: ${{ secrets.REGISTRY }}
