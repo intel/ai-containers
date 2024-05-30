@@ -78,21 +78,18 @@ jobs:
     - name: Coverage
       run: |
         python -m pip install coverage
-        python -m coverage combine
-        echo -e "\`\`\`markdown\n$(python -m coverage report -i -m)\n\`\`\`" >> $GITHUB_STEP_SUMMARY
-        echo "total=$(python -m coverage report --format=total)" >> $GITHUB_ENV
-    - name: Update Badge
-      if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
-      uses: schneegans/dynamic-badges-action@v1.7.0
+        python -m coverage combine --debug=pathmap
+        python -m coverage xml --skip-empty
+    - name: Comment on PR
+      uses: orgoro/coverage@v3.1
       with:
-        auth: ${{ secrets.ACTIONS_TOKEN }}
-        gistID: 48dea0fc9a908a6e5ba5c5e84123bc02
-        filename: coverage.json
-        label: Coverage
-        message: ${{ env.total }}%
-        minColorRange: 40
-        maxColorRange: 80
-        valColorRange: ${{ env.total }}
+        coverageFile: coverage.xml
+        token: ${{ secrets.ACTION_TOKEN }}
+        treshholdAll: 80
+    - uses: actions/upload-artifact@v4
+      with:
+        name: coverage.xml
+        path: coverage.xml
   integration-test:
     runs-on: k8-runners
     steps:
