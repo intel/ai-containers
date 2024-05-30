@@ -38,6 +38,12 @@ on:
       ref:
         description: 'Enter Git Ref:'
         required: true
+        default: 'main'
+        type: string
+      repo:
+        description: 'Enter Git Repo:
+        required: true
+        default: 'intel/ai-containers'
         type: string
       runner_label:
         description: 'Enter Validation Runner Label:'
@@ -73,6 +79,9 @@ on:
       ref:
         required: true
         type: string
+      repo:
+        required: true
+        type: string
 jobs:
   ####################################################################################################
   # Compose Build
@@ -86,10 +95,10 @@ jobs:
       uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
       with:
         egress-policy: audit
-
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         ref: ${{ inputs.ref }}
+        repo: ${{ inputs.repo }}
     - name: Set Matrix
       id: build-matrix
       run: echo "matrix=$(jq -c . < ${{ inputs.group_dir }}/.actions.json)" >> $GITHUB_OUTPUT
@@ -114,6 +123,7 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         ref: ${{ inputs.ref }}
+        repo: ${{ inputs.repo }}
       if: ${{ !inputs.no_build }}
     - uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
       with:
@@ -169,6 +179,7 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         ref: ${{ inputs.ref }}
+        repo: ${{ inputs.repo }}
     - uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
       with:
         registry: ${{ secrets.REGISTRY }}
@@ -204,6 +215,7 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         ref: ${{ inputs.ref }}
+        repo: ${{ inputs.repo }}
     - name: Get Recipes
       id: test-matrix
       run: echo "matrix=$(find ${{ inputs.group_dir }} -type f -name 'tests.yaml' -exec dirname {} \; | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
@@ -223,6 +235,7 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         ref: ${{ inputs.ref }}
+        repo: ${{ inputs.repo }}
     - uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
       with:
         registry: ${{ secrets.REGISTRY }}
