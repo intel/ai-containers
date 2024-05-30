@@ -13,8 +13,16 @@
             "repo-name": "intel/intel-extension-for-pytorch"
         },
         {
+            "fname": "./pytorch/README.md",
+            "repo-name": "intel/intel-optimized-pytorch"
+        },
+        {
             "fname": "./tensorflow/README.md",
             "repo-name": "intel/intel-extension-for-tensorflow"
+        },
+        {
+            "fname": "./tensorflow/README.md",
+            "repo-name": "intel/intel-optimized-tensorflow"
         },
         {
             "fname": "./preset/README.md",
