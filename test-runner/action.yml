@@ -20,6 +20,14 @@ inputs:
     description: 'Container Cache Registry URL'
     required: true
     type: string
+  gh_repo:
+    description: 'GitHub Repo'
+    required: true
+    type: string
+  gh_ref:
+    description: 'GitHub Ref'
+    required: true
+    type: string
   recipe_dir:
     description: 'Path to Recipe Directory'
     required: false
@@ -45,8 +53,8 @@ runs:
     - uses: actions/checkout@v4
       with:
         path: mlops
-        ref: ${{ github.ref }}
-        repository: intel/ai-containers
+        ref: ${{ inputs.gh_ref }}
+        repository: ${{ inputs.gh_repo }}
         token: ${{ inputs.token }}
     - name: Install Requirements
       shell: bash
