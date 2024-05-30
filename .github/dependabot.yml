@@ -77,6 +77,8 @@ updates:
         patterns:
           - "*"
     package-ecosystem: pip
+    schedule:
+      interval: weekly
   - package-ecosystem: docker
     directory: /classical-ml
     schedule:
