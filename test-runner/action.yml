@@ -45,7 +45,7 @@ runs:
     - uses: actions/checkout@v4
       with:
         path: mlops
-        ref: ${{ github.ref }}
+        ref: main
         repository: intel/ai-containers
         token: ${{ inputs.token }}
     - name: Install Requirements
