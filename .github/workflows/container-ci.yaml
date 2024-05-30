@@ -41,7 +41,7 @@ on:
         default: 'main'
         type: string
       repo:
-        description: 'Enter Git Repo:
+        description: 'Enter Git Repo:'
         required: true
         default: 'intel/ai-containers'
         type: string
@@ -233,6 +233,8 @@ jobs:
       uses: intel/ai-containers/test-runner@5d9f53d02bdf065086dffa4ae6d99a412184710c # main
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
+        gh_repo: ${{ inputs.repo }}
+        gh_ref: ${{ inputs.ref }}
         recipe_dir: ${{ inputs.group_dir }}
         registry: ${{ secrets.REGISTRY }}
         repo: ${{ secrets.REPO }}
