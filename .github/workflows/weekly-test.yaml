@@ -46,4 +46,5 @@ jobs:
     uses: ./.github/workflows/container-ci.yaml
     with:
       group_dir: ${{ matrix.group }}
+      ref: main
     secrets: inherit
