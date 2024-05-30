@@ -82,6 +82,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     libglib2.0-0 \
     openssh-server \
     net-tools \
+    sudo \
     virtualenv && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -125,11 +126,18 @@ RUN sed -i'' -e's/^#PermitRootLogin prohibit-password$/PermitRootLogin yes/' /et
         && echo "  StrictHostKeyChecking no" >> /etc/ssh/ssh_config
 
 EXPOSE ${SSHD_PORT}
+CMD ["/usr/sbin/sshd", "-D"]
 
+RUN useradd -rm -d /home/intel -s /bin/bash intel && \
+    echo 'intel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
+USER intel
+WORKDIR /home/intel
 RUN /usr/bin/ssh-keygen -t rsa -b 4096 -N '' -f ~/.ssh/id_rsa && \
    chmod 600 ~/.ssh/id_rsa && \
+   sudo chown intel /etc/ssh/ssh_host_ecdsa_key && \
+   sudo chown intel /etc/ssh/ssh_host_rsa_key && \
+   sudo chown intel /etc/ssh/ssh_host_ed25519_key && \
    cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys
-
 
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
