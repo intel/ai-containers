@@ -81,6 +81,7 @@ jobs:
         python -m coverage combine --debug=pathmap
         python -m coverage xml --skip-empty
     - name: Comment on PR
+      if: ${{ github.event_name == 'pull_request_target' }}
       uses: orgoro/coverage@v3.1
       with:
         coverageFile: coverage.xml
