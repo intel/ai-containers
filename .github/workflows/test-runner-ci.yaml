@@ -78,15 +78,17 @@ jobs:
     - name: Coverage
       run: |
         python -m pip install coverage
-        python -m coverage combine
+        python -m coverage combine --debug=pathmap
         find . -name "*.pyc" -exec rm -f {} \;
-        python -m coverage xml -i
-    # - name: Comment on PR
-    #   uses: orgoro/coverage@v3.1
-    #   with:
-    #     coverageFile: coverage.xml
-    #     token: ${{ secrets.ACTION_TOKEN }}
-    #     treshholdAll: 80
+        python -m coverage xml --skip-empty
+      env:
+        COVERAGE_RCFILE: tox.ini
+    - name: Comment on PR
+      uses: orgoro/coverage@v3.1
+      with:
+        coverageFile: coverage.xml
+        token: ${{ secrets.ACTION_TOKEN }}
+        treshholdAll: 80
     - uses: actions/upload-artifact@v4
       with:
         name: coverage.xml
