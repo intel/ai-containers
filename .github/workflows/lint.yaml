@@ -33,7 +33,7 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-        ref: ${{ 'refs/pull/${{ github.event.number }}/merge' || 'main' }}
+        ref: ${{ github.event.pull_request.head.ref || github.ref }}
     - uses: super-linter/super-linter/slim@v6.5.1
       env:
         # To report GitHub Actions status checks
