@@ -35,7 +35,6 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         fetch-depth: 0
-        ref: ${{ github.event.pull_request.merge_commit_sha || github.ref }}
     - name: Output Modified Group Directories
       id: group-list
       run: |
@@ -72,7 +71,6 @@ jobs:
     uses: ./.github/workflows/container-ci.yaml
     with:
       group_dir: ${{ matrix.group }}
-      ref: ${{ github.event.pull_request.merge_commit_sha || github.ref }}
     secrets: inherit
   status-check:
     needs: [group-diff, pipeline-ci]
