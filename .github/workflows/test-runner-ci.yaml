@@ -18,6 +18,9 @@ on:
   pull_request:
     paths:
     - 'test-runner/**'
+  push:
+    branches:
+    - main
 permissions: read-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -82,16 +85,12 @@ jobs:
         python -m coverage combine --debug=pathmap
         python -m coverage xml --skip-empty
     - name: Comment on PR
-      if: ${{ github.event_name == 'pull_request_target' }}
+      if: ${{ github.event_name == 'pull_request' }}
       uses: orgoro/coverage@4e3bc9302f715595336a40f7dd4a3b15c687bdb4 # v3.1
       with:
         coverageFile: coverage.xml
         token: ${{ secrets.ACTION_TOKEN }}
         treshholdAll: 80
-    - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
-      with:
-        name: coverage.xml
-        path: coverage.xml
   integration-test:
     runs-on: k8-runners
     steps:

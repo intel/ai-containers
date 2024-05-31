@@ -174,6 +174,7 @@ jobs:
       if: always()
       run: docker rmi -f ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
     - uses: github/codeql-action/upload-sarif@9fdb3e49720b44c48891d036bb502feb25684276 # v3.25.6
+      if: ${{ github.event_name != 'workflow_dispatch' }}
       with:
         sarif_file: '${{ matrix.container }}-scan.sarif'
         ####################################################################################################
