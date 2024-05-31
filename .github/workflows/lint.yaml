@@ -19,6 +19,9 @@ on:
   pull_request_target:
     types: [opened, edited, reopened, synchronize]
     branches: [main]
+  push:
+    branches:
+    - main
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -32,9 +35,17 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+      if: ${{ github.event_name == 'push' }}
+    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+      if: ${{ github.event_name == 'pull_request_target' }}
       with:
         fetch-depth: 0
         ref: "refs/pull/${{ github.event.number }}/merge"
+    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+      if: ${{ github.event_name == 'merge_group' }}
+      with:
+        fetch-depth: 0
+        ref: ${{ github.event.merge_group.head_ref }}
     - uses: super-linter/super-linter/slim@5b638caee6ba65e25e07143887b669a1233847a0 # v6.5.1
       env:
         # To report GitHub Actions status checks
