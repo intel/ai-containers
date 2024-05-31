@@ -15,9 +15,7 @@
 name: Lint
 permissions: read-all
 on:
-  pull_request_target:
-    types: [opened, edited, reopened, synchronize]
-    branches: [main]
+  pull_request: null
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
