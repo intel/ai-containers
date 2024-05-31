@@ -23,7 +23,6 @@ on:
   - cron: '0 6 * * 0'
   push:
     branches: ["main"]
-  merge_group: null
   workflow_dispatch: null
 permissions: read-all
 jobs:
