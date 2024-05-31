@@ -3,7 +3,7 @@ ci:
   autofix_prs: true
   autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
   autoupdate_schedule: "weekly"
-  skip: [pylint, shellcheck, markdownlint, hadolint-docker, shfmt, tox, mkdocs]
+  skip: [pylint, shellcheck, markdownlint, hadolint-docker, helm-docs-container, shfmt, tox, mkdocs, ct]
 repos:
 - hooks:
   - id: check-added-large-files
@@ -47,7 +47,11 @@ repos:
   - args: ["--config-file", ".github/linters/actionlint.yml"]
     id: actionlint
   repo: https://github.com/rhysd/actionlint
-  rev: v1.6.27
+  rev: v1.7.0
+- hooks:
+  - id: helm-docs-container
+  repo: https://github.com/norwoodj/helm-docs
+  rev: v1.13.1
 - hooks:
   - id: shfmt
   repo: https://github.com/cisagov/pre-commit-shfmt
@@ -78,4 +82,9 @@ repos:
     id: mkdocs
     language: system
     name: mkdocs
+  - entry: ct lint --config .github/ct.yaml
+    files: ^workflows/charts/
+    id: ct
+    language: system
+    name: ct
   repo: local

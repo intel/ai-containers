@@ -16,14 +16,9 @@ name: Integration Test
 description: 'https://github.com/intel/ai-containers/blob/main/test-runner/README.md'
 author: tyler.titsworth@intel.com
 inputs:
-  mlops_repo:
-    description: 'Test Runner org/repo'
+  cache_registry:
+    description: 'Container Cache Registry URL'
     required: true
-    type: string
-  mlops_ref:
-    description: 'Test Runner Branch/Tag'
-    required: false
-    default: develop
     type: string
   recipe_dir:
     description: 'Path to Recipe Directory'
@@ -50,8 +45,8 @@ runs:
     - uses: actions/checkout@v4
       with:
         path: mlops
-        ref: ${{ inputs.mlops_ref }}
-        repository: ${{ inputs.mlops_repo }}
+        ref: main
+        repository: intel/ai-containers
         token: ${{ inputs.token }}
     - name: Install Requirements
       shell: bash
@@ -63,6 +58,7 @@ runs:
       shell: bash
       run: venv/bin/python mlops/test-runner/test_runner.py -f ${{ inputs.test_dir }}/tests.yaml -l ${{ inputs.test_dir }}/logs -a ${{ inputs.recipe_dir }}/.actions.json -v
       env:
+        CACHE_REGISTRY: ${{ inputs.cache_registry }}
         PYTHONPATH: mlops/test-runner
         REGISTRY: ${{ inputs.registry }}
         REPO: ${{ inputs.repo }}
