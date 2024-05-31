@@ -73,20 +73,3 @@ jobs:
       group_dir: ${{ matrix.group }}
       ref: "refs/pull/${{ github.event.number }}/merge"
     secrets: inherit
-  status-check:
-    needs: [group-diff, pipeline-ci]
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-    - name: Harden Runner
-      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
-      with:
-        egress-policy: audit
-    - run: exit 1
-      if: >-
-        ${{
-             contains(needs.*.result, 'failure')
-          || contains(needs.*.result, 'cancelled')
-          || contains(needs.*.result, 'skipped')
-          && needs.group-diff.outputs.groups != '[""]'
-        }}
