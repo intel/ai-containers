@@ -231,6 +231,8 @@ RUN conda create -yn pytorch-gpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c 
         'jinja2>=3.1.3' \
         'idna>=3.7' \
         onnx \
+        packaging=23.2 \
+        setuptools=69.1.0 \
         && \
     conda clean -y --all
 
@@ -283,7 +285,7 @@ RUN conda create -yn tensorflow-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
         impi-devel="${IMPI_VERSION}" \
         matplotlib-base \
         dataset_librarian \
-        mpich=4.2.0=external_0 \
+        mpich=4.2=external* \
         ipython \
         ipykernel \
         kernda  \
@@ -323,7 +325,7 @@ RUN conda create -yn tensorflow-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
         impi-devel="${IMPI_VERSION}" \
         matplotlib-base \
         dataset_librarian \
-        mpich=4.2.0=external_0 \
+        mpich=4.2=external* \
         ipython \
         ipykernel \
         kernda  \
@@ -336,6 +338,8 @@ RUN conda create -yn tensorflow-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
         'oauthlib>=3.2.2' \
         'idna>=3.7' \
         onnx \
+        packaging=23.2 \
+        setuptools=69.1.0 \
         && \
     conda clean -y --all
 
