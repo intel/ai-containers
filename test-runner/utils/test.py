@@ -108,7 +108,7 @@ class Test(BaseModel):
         ) as serving_container:
             client_output = docker.run(
                 # Image
-                "python:3.11-slim-bullseye",
+                expandvars("${CACHE_REGISTRY}/cache/library/python:3.11-slim-bullseye"),
                 # Command
                 split(expandvars(self.cmd, nounset=True)),
                 # Stream Logs
