@@ -20,21 +20,21 @@ jobs:
   status-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: lewagon/wait-on-check-action@ccfb013c15c8afb7bf2b7c028fb74dc5a068cccc
+      - uses: fountainhead/action-wait-for-check@5a908a24814494009c4bb27c242ea38c93c593be
         with:
+          checkName: helm-ci
           ref: ${{ github.event.merge_group.head_ref }}
-          check-name: helm-ci
-          repo-token: ${{ secrets.ACTION_TOKEN }}
-          wait-interval: 10
-      - uses: lewagon/wait-on-check-action@ccfb013c15c8afb7bf2b7c028fb74dc5a068cccc
+          timeoutSeconds: 1800
+          token: ${{ secrets.ACTION_TOKEN }}
+      - uses: fountainhead/action-wait-for-check@5a908a24814494009c4bb27c242ea38c93c593be
         with:
+          checkName: integration-test
           ref: ${{ github.event.merge_group.head_ref }}
-          check-name: integration-test
-          repo-token: ${{ secrets.ACTION_TOKEN }}
-          wait-interval: 10
-      - uses: lewagon/wait-on-check-action@ccfb013c15c8afb7bf2b7c028fb74dc5a068cccc
+          timeoutSeconds: 1800
+          token: ${{ secrets.ACTION_TOKEN }}
+      - uses: fountainhead/action-wait-for-check@5a908a24814494009c4bb27c242ea38c93c593be
         with:
+          checkName: coverage
           ref: ${{ github.event.merge_group.head_ref }}
-          check-name: coverage
-          repo-token: ${{ secrets.ACTION_TOKEN }}
-          wait-interval: 10
+          timeoutSeconds: 1800
+          token: ${{ secrets.ACTION_TOKEN }}
