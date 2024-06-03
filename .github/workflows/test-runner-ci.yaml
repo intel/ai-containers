@@ -20,9 +20,6 @@ on:
     branches: [main]
     paths:
     - 'test-runner/**'
-  push:
-    branches:
-    - main
 permissions: read-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -39,8 +36,6 @@ jobs:
       uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
       with:
         egress-policy: audit
-    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
-      if: ${{ github.event_name == 'push' }}
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       if: ${{ github.event_name == 'pull_request_target' }}
       with:
@@ -84,8 +79,6 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
-      if: ${{ github.event_name == 'push' }}
-    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       if: ${{ github.event_name == 'pull_request_target' }}
       with:
         fetch-depth: 0
@@ -103,7 +96,7 @@ jobs:
         merge-multiple: true
     - name: Coverage
       run: |
-        python -m pip install coverage
+        python -m pip install coverage --hash=sha256:c4c2872b3c91f9baa836147ca33650dc5c172e9273c808c3c3199c75490e709d
         python -m coverage combine --debug=pathmap
         python -m coverage xml --skip-empty
     - name: Comment on PR
@@ -120,8 +113,6 @@ jobs:
       uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
       with:
         egress-policy: audit
-    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
-      if: ${{ github.event_name == 'push' }}
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       if: ${{ github.event_name == 'pull_request_target' }}
       with:
