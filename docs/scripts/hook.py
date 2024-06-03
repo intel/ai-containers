@@ -33,7 +33,7 @@ def create_support_matrix():
     compose_to_csv("pytorch", None)
     compose_to_csv("pytorch", "serving")
     # compose_to_csv("tensorflow")
-    # compose_to_csv("classical-ml")
+    compose_to_csv("classical-ml", None)
     # get_repo(models)
     # compose_to_csv("preset/data-analytics", "data_analytics")
     # compose_to_csv("preset/classical-ml", "classical_ml")
