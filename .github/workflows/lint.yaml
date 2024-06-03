@@ -19,9 +19,6 @@ on:
   pull_request_target:
     types: [opened, edited, reopened, synchronize]
     branches: [main]
-  push:
-    branches:
-    - main
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
