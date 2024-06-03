@@ -285,7 +285,7 @@ RUN conda create -yn tensorflow-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
         impi-devel="${IMPI_VERSION}" \
         matplotlib-base \
         dataset_librarian \
-        mpich=4.2=external* \
+        mpich=4.2.*=external* \
         ipython \
         ipykernel \
         kernda  \
@@ -325,7 +325,7 @@ RUN conda create -yn tensorflow-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
         impi-devel="${IMPI_VERSION}" \
         matplotlib-base \
         dataset_librarian \
-        mpich=4.2=external* \
+        mpich=4.2.*=external* \
         ipython \
         ipykernel \
         kernda  \
