@@ -39,7 +39,7 @@ services:
         docs: classical-ml
         org.opencontainers.base.name: "intel/python:3.10-core"
         org.opencontainers.image.name: "intel/intel-optimized-ml"
-        org.opencontainers.image.title: "Intel® Extension for Scikit-learn, XGBoost Base Image"
+        org.opencontainers.image.title: "Intel® Optimized ML Base Image"
         org.opencontainers.image.version: ${SKLEARN_VERSION:-2024.4.0}-${PACKAGE_OPTION:-pip}-base
       target: ml-base-${PACKAGE_OPTION:-pip}
     command: >
@@ -53,7 +53,7 @@ services:
       labels:
         dependency.python.pip: jupyter-requirements.txt
         org.opencontainers.base.name: "intel/intel-optimized-ml:${SKLEARN_VERSION:-2024.4.0}-${PACKAGE_OPTION:-pip}-base"
-        org.opencontainers.image.title: "Intel® Extension for Scikit-learn, XGBoost Base Image"
+        org.opencontainers.image.title: "Intel® Optimized ML Jupyter Base Image"
         org.opencontainers.image.version: ${SKLEARN_VERSION:-2024.4.0}-${PACKAGE_OPTION:-pip}-jupyter
       target: jupyter
     command: >
