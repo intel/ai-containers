@@ -96,7 +96,7 @@ jobs:
         merge-multiple: true
     - name: Coverage
       run: |
-        python -m pip install coverage
+        python -m pip install coverage --hash=sha256:c4c2872b3c91f9baa836147ca33650dc5c172e9273c808c3c3199c75490e709d
         python -m coverage combine --debug=pathmap
         python -m coverage xml --skip-empty
     - name: Comment on PR
