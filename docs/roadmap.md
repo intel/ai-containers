@@ -8,7 +8,7 @@
 
 ## Q3'24
 
-- Granite Rapid Support
+- Granite Rapids Support
 - CLS Support
 - Intel Developer Cloud Support
 - AI Tools 2024.3/2025.0 Support
