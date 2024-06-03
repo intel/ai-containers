@@ -39,7 +39,7 @@ nav:
   - TensorFlow Base: 'tensorflow/README.md'
   - TorchServe: 'pytorch/serving/README.md'
 - Support Matrix: 'matrix.md'
-- Roadmap: 'Roadmap.md'
+- Roadmap: 'roadmap.md'
 plugins:
 - callouts
 - git-authors
