@@ -74,7 +74,7 @@ def extract_deps(deps: dict, version: str, service: str):
     for file in requirements_file:
         with open(file, "r", encoding="utf-8") as f:
             py_reqs = re.sub(r"\n-(.*)", "", f.read())
-            py_reqs = re.sub(r"(.*?)(\W=)(.*)", r"\1 \3", py_reqs)
+            py_reqs = re.sub(r"(.*]?)(\W=)(.*)", r"\1 \3", py_reqs)
             py_reqs = re.sub(r"#(.*)", "", py_reqs)
             py_deps = py_deps + "\n".join(py_reqs.split("\n"))
 
