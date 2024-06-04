@@ -20,6 +20,10 @@ inputs:
     description: 'Container Cache Registry URL'
     required: true
     type: string
+  perf_repo:
+    description: 'Performance Test Repo'
+    required: false
+    type: string
   recipe_dir:
     description: 'Path to Recipe Directory'
     required: false
@@ -47,6 +51,12 @@ runs:
         path: mlops
         ref: main
         repository: intel/ai-containers
+        token: ${{ inputs.token }}
+    - uses: actions/checkout@v4
+      with:
+        path: models-perf
+        ref: main
+        repository: ${{ secrets.PERF_REPO }}
         token: ${{ inputs.token }}
     - name: Install Requirements
       shell: bash

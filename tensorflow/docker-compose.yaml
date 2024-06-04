@@ -34,6 +34,14 @@ services:
         TF_VERSION: ${TF_VERSION:-2.15.0}
       target: tf-base-${PACKAGE_OPTION:-pip}
       context: .
+      labels:
+        dependency.python: ${PYTHON_VERSION:-3.10}
+        dependency.python.pip: requirements.txt
+        docs: tensorflow
+        org.opencontainers.base.name: "intel/python:3.10-core"
+        org.opencontainers.image.name: "intel/intel-optimized-tensorflow"
+        org.opencontainers.image.title: "Intel® Extension for TensorFlow Base Image"
+        org.opencontainers.image.version: ${TF_VERSION:-2.15.0}-${PACKAGE_OPTION:-pip}-base
     depends_on:
       - ${PACKAGE_OPTION:-pip}
     command: >
@@ -42,6 +50,11 @@ services:
     pull_policy: always
   jupyter:
     build:
+      labels:
+        dependency.python.pip: jupyter-requirements.txt
+        org.opencontainers.base.name: "intel/intel-optimized-tensorflow:${TF_VERSION:-2.15.0}-${PACKAGE_OPTION:-pip}-base"
+        org.opencontainers.image.title: "Intel® Extension for TensorFlow Jupyter Image"
+        org.opencontainers.image.version: ${TF_VERSION:-2.15.0}-${PACKAGE_OPTION:-pip}-jupyter
       target: jupyter
     command: >
       bash -c "python -m jupyter --version"
@@ -53,9 +66,23 @@ services:
     network_mode: host
     volumes:
       - /$PWD:/jupyter
-
   multinode:
     build:
+      labels:
+        dependency.apt.gcc: true
+        dependency.apt.libgl1-mesa-glx: true
+        dependency.apt.libglib2: true
+        dependency.apt.python3-dev: true
+        dependency.pip.apt.virtualenv: true
+        dependency.apt.libopenmpi-dev: true
+        dependency.apt.openmpi-bin: true
+        dependency.apt.unzip: true
+        dependency.apt.openssh-client: true
+        dependency.apt.openssh-server: true
+        dependency.python.pip: multinode-requirements.txt
+        org.opencontainers.base.name: "intel/intel-optimized-tensorflow:${TF_VERSION:-2.15.0}-${PACKAGE_OPTION:-pip}-base"
+        org.opencontainers.image.title: "Intel® Extension for TensorFlow MultiNode Image"
+        org.opencontainers.image.version: ${TF_VERSION:-2.15.0}-${PACKAGE_OPTION:-pip}-multinode
       target: multinode-${PACKAGE_OPTION:-pip}
     command: >
       bash -c "horovodrun --check-build && mpirun --version && python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow;import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)'"
@@ -74,6 +101,25 @@ services:
         TF_VER: ${TF_VER:-2.15.0}
         no_proxy: ''
         NO_PROXY: ''
+      labels:
+        dependency.apt.build-essential: true
+        dependency.apt.clinfo: true
+        dependency.apt.git: true
+        dependency.apt.gnupg2: true
+        dependency.apt.gpg-agent: true
+        dependency.apt.intel-level-zero-gpu: ${LEVEL_ZERO_GPU_VER:-1.3.27642.40-803~22.04}
+        dependency.apt.intel-oneapi-runtime-ccl: ${CCL_VER:-2021.12.0-309}
+        dependency.apt.intel-oneapi-runtime-dpcpp-cpp: ${DPCPP_VER:-2024.1.0-963}
+        dependency.apt.intel-oneapi-runtime-mkl: ${MKL_VER:-2024.1.0-691}
+        dependency.apt.intel-opencl-icd: ${ICD_VER:-23.43.27642.40-803~22.04}
+        dependency.apt.level-zero: ${LEVEL_ZERO_VER:-1.14.0-744~22.04}
+        dependency.apt.level-zero-dev: ${LEVEL_ZERO_DEV_VER:-1.14.0-744~22.04}
+        dependency.apt.rsync: true
+        dependency.apt.unzip: true
+        dependency.idp.pip: false
+        org.opencontainers.base.name: "intel/python:3.10-core"
+        org.opencontainers.image.title: "Intel® Extension for TensorFlow XPU Base Image"
+        org.opencontainers.image.version: ${TF_VER:-2.15.0}-xpu-${PACKAGE_OPTION:-pip}-base
       target: itex-xpu-base-${PACKAGE_OPTION:-pip}
     command: >
       sh -c "python -c 'import tensorflow as tf;print(tf.__version__);from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'"
@@ -92,6 +138,11 @@ services:
         TF_VER: ${TF_VER:-2.15.0}
         no_proxy: ''
         NO_PROXY: ''
+      labels:
+        dependency.python.pip: jupyter-requirements.txt
+        org.opencontainers.base.name: "intel/intel-optimized-tensorflow:${TF_VERSION:-2.15.0}-xpu-${PACKAGE_OPTION:-pip}-base"
+        org.opencontainers.image.title: "Intel® Extension for TensorFlow XPU Jupyter Image"
+        org.opencontainers.image.version: ${TF_VER:-2.15.0}-xpu-${PACKAGE_OPTION:-pip}-jupyter
       target: itex-xpu-jupyter
     extends: tf-base
     command: >
