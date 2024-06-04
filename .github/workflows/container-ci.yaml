@@ -221,6 +221,7 @@ jobs:
       uses: intel/ai-containers/test-runner@28ee014b2e4e9ffc4126d1b226691e5c72b75df5 # main
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
+        perf_repo: ${{ secrets.PERF_REPO }}
         recipe_dir: ${{ inputs.group_dir }}
         registry: ${{ secrets.REGISTRY }}
         repo: ${{ secrets.REPO }}
