@@ -36,9 +36,10 @@ class PerfException(Exception):
 
 class Threshold(BaseModel):
     "Constructs a Threshold class."
-    key: str
-    target: float
-    tolerance: float
+    name: str
+    modelName: str
+    boundary: float
+    lower_is_better: bool
     unit: str
 
 
@@ -212,12 +213,19 @@ class Test(BaseModel):
         Raises:
             PerfException: if the performance does not meet the target performance
         """
-        with open(f"models-perf/{self.performance}", "r", encoding="utf-8") as file:
+        with open(
+            f"models-perf/{self.performance.split(':')[0]}", "r", encoding="utf-8"
+        ) as file:
             try:
                 thresholds = full_load(file)
             except YAMLError as yaml_exc:
                 raise YAMLError(yaml_exc)
-        for threshold in thresholds:
+        model_thresholds = [
+            threshold
+            for threshold in thresholds
+            if self.performance.split(":")[1] == threshold["modelName"]
+        ]
+        for threshold in model_thresholds:
             perf = re.search(
                 rf"{threshold['key']}[:]?\s+(.\d+[\s]?.*)",
                 content,

@@ -50,4 +50,4 @@ test8:
   cmd: "echo 'test: 123 throughput'"
   mask:
   - test
-  performance: perf/test.yaml
+  performance: perf/test.yaml:test

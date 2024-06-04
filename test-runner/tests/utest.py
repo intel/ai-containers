@@ -146,7 +146,7 @@ def test_get_test_list(test_args_input, test_json_input):
         "test8": {
             "cmd": "echo 'test: 123 throughput'",
             "mask": ["test"],
-            "performance": "perf/test.yaml",
+            "performance": "perf/test.yaml:test",
         },
     }
 
@@ -165,25 +165,40 @@ def test_masking(test_class_input):
 
 def test_perf_thresholds():
     "test performance thresholds."
-    test_dict = {"cmd": "echo 'test: 123 throughput'", "performance": "perf/test.yaml"}
-    test = Test(name="test", **test_dict)
-    assert "test: 123 throughput" in test.run()
+    test_cases = [
+        {
+            "cmd": "echo 'test: 123 throughput'",
+            "performance": "perf/test.yaml:test",
+            "expected_output": "test: 123 throughput",
+            "should_raise_exception": False,
+        },
+        {
+            "cmd": "echo 'test: 121 throughput'",
+            "performance": "perf/test.yaml:test",
+            "should_raise_exception": True,
+        },
+        {
+            "cmd": "echo 'test: 123 millithroughput'",
+            "performance": "perf/test.yaml:test",
+            "should_raise_exception": True,
+        },
+        {
+            "cmd": "echo 'test: 125 throughput'",
+            "performance": "perf/test.yaml:not-test",
+            "should_raise_exception": True,
+        },
+    ]
 
-    test_dict["cmd"] = "echo 'test: 121 throughput'"
-    test = Test(name="test", **test_dict)
-    try:
-        with pytest.raises(Exception, match="Failed") as exc_info:
-            test.run()
-    except:
-        assert isinstance(exc_info.value, PerfException)
-
-    test_dict["cmd"] = "echo 'test: 123 millithroughput'"
-    test = Test(name="test", **test_dict)
-    try:
-        with pytest.raises(Exception, match="Failed") as exc_info:
-            test.run()
-    except:
-        assert isinstance(exc_info.value, PerfException)
+    for test_case in test_cases:
+        test = Test(name="test", **test_case)
+        if test_case["should_raise_exception"]:
+            try:
+                with pytest.raises(Exception, match="Failed") as exc_info:
+                    test.run()
+            except:
+                assert isinstance(exc_info.value, PerfException)
+        else:
+            assert test_case["expected_output"] in test.run()
 
 
 @given(name=text(), arguments=dictionaries(text(), text()))
