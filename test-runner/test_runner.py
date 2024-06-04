@@ -193,17 +193,7 @@ if __name__ == "__main__":
         # returns the stdout of the test and the RETURNCODE
         try:  # Try for Runtime Failure Conditions
             log = test.container_run() if test.img else test.run()
-        except DockerException as err:
-            logging.error(err)
-            summary.append([idx + 1, test.name, "FAIL"])
-            ERROR = True
-            continue
-        except PerfException as err:
-            logging.error(err)
-            summary.append([idx + 1, test.name, "FAIL"])
-            ERROR = True
-            continue
-        except YAMLError as err:
+        except (DockerException, PerfException, YAMLError) as err:
             logging.error(err)
             summary.append([idx + 1, test.name, "FAIL"])
             ERROR = True
