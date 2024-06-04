@@ -1,6 +1,7 @@
 black>=24.4.1
 coverage>=7.5.0
 expandvars>=0.12.0
+gitpython>=3.1.43
 hypothesis>=6.100.1
 Pint>=0.21.1
 pydantic==2.7.2

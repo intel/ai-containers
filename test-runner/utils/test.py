@@ -23,6 +23,7 @@ from typing import Dict, List, Optional
 
 import pint
 from expandvars import expandvars
+from git import Repo
 from pydantic import BaseModel
 from python_on_whales import DockerException, docker
 from yaml import YAMLError, full_load
@@ -77,18 +78,17 @@ class Test(BaseModel):
         super().__init__(**data)
         if self.performance:
             perf_repo = os.environ.get("PERF_REPO")
-            import time
-
-            time.sleep(600)
             if perf_repo:
-                os.system(
-                    f"git clone https://github.com/{perf_repo} models-perf > /dev/null 2>&1"
-                )
+                if not os.path.exists("models-perf"):
+                    Repo.clone_from(
+                        f"https://github.com/{perf_repo}", "models-perf", progress=None
+                    )
                 units.load_definitions("./models-perf/definitions.txt")
             else:
                 logging.error(
                     "Performance mode enabled, but PERF_REPO environment variable not set"
                 )
+                sys.exit(1)
 
     def get_path(self, name):
         """Given a filename, find that file from the users current working directory
