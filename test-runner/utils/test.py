@@ -81,11 +81,13 @@ class Test(BaseModel):
                 os.system(
                     f"git clone https://github.com/{perf_repo} models-perf > /dev/null 2>&1"
                 )
+                units.load_definitions("./models-perf/definitions.txt")
+                import time
+                time.sleep(600)
             else:
                 logging.error(
                     "Performance mode enabled, but PERF_REPO environment variable not set"
                 )
-            units.load_definitions("./models-perf/definitions.txt")
 
     def get_path(self, name):
         """Given a filename, find that file from the users current working directory
