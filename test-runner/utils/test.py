@@ -223,7 +223,7 @@ class Test(BaseModel):
         model_thresholds = [
             threshold
             for threshold in thresholds
-            if self.performance.split(":")[1] == threshold["modelName"]
+            if self.performance.split(":")[1] == threshold["test_id"]
         ]
         for threshold in model_thresholds:
             perf = re.search(
