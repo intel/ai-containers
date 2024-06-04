@@ -77,7 +77,7 @@ class Test(BaseModel):
     def __init__(self, **data):
         super().__init__(**data)
         import time
-        
+
         time.sleep(600)
         if self.performance:
             perf_repo = os.environ.get("PERF_REPO")
