@@ -56,6 +56,12 @@ runs:
         ref: main
         repository: intel/ai-containers
         token: ${{ inputs.token }}
+    - uses: actions/checkout@v4
+      with:
+        path: models-perf
+        ref: main
+        repository: ${{ secrets.PERF_REPO }}
+        token: ${{ inputs.token }}
     - name: Install Requirements
       shell: bash
       run: |
@@ -67,8 +73,6 @@ runs:
       run: venv/bin/python mlops/test-runner/test_runner.py -f ${{ inputs.test_dir }}/tests.yaml -l ${{ inputs.test_dir }}/logs -a ${{ inputs.recipe_dir }}/.actions.json -v
       env:
         CACHE_REGISTRY: ${{ inputs.cache_registry }}
-        GH_TOKEN: ${{ inputs.token }}
-        PERF_REPO: ${{ inputs.perf_repo }}
         PYTHONPATH: mlops/test-runner
         REGISTRY: ${{ inputs.registry }}
         REPO: ${{ inputs.repo }}
