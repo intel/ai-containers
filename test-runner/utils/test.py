@@ -88,7 +88,6 @@ class Test(BaseModel):
                 logging.error(
                     "Performance mode enabled, but PERF_REPO environment variable not set"
                 )
-                sys.exit(1)
 
     def get_path(self, name):
         """Given a filename, find that file from the users current working directory
