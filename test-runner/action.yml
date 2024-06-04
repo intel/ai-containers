@@ -60,7 +60,7 @@ runs:
       with:
         path: models-perf
         ref: main
-        repository: ${{ secrets.PERF_REPO }}
+        repository: ${{ inputs.perf_repo }}
         token: ${{ inputs.token }}
     - name: Install Requirements
       shell: bash
