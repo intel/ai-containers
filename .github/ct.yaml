@@ -12,20 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-metadata:
-  name: ipex-distributed
-  namespace: kubeflow
+# See https://github.com/helm/chart-testing#configuration
 
-imageName: intel/intel-optimized-pytorch
-imageTag: 2.0.0-pip-multinode
-masterResources:
-  cpu: 32
-  memory: 16Gi
-workerResources:
-  cpu: 32
-  memory: 16Gi
-workers: 4
-
-pvcName: ipex
-pvcScn: nil
-pvcResources: 2Gi
+remote: origin
+target-branch: main
+chart-dirs:
+  - workflows/charts
+helm-extra-args: --timeout 600s

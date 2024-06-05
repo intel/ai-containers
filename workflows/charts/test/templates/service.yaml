@@ -12,27 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.name }}
+  name: {{ include "chart-test.fullname" . }}
+  labels:
+    {{- include "chart-test.labels" . | nindent 4 }}
 spec:
-  ports:
-    - name: rest
-      {{- if eq .Values.service.type "NodePort" }}
-      nodePort: 30111
-      {{- else }}
-      targetPort: 30111
-      {{- end }}
-      port: 8501
-    - name: grpc
-      {{- if eq .Values.service.type "NodePort" }}
-      nodePort: 30110
-      {{- else }}
-      targetPort: 30110
-      {{- end }}
-      port: 8500
-  selector:
-    app: {{ .Values.name }}
   type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "chart-test.selectorLabels" . | nindent 4 }}

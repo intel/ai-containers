@@ -1,3 +1,4 @@
+# yamllint disable-file
 # Copyright (c) 2024 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
+apiVersion: v1
+kind: Pod
 metadata:
-  name: {{ .Values.name }}
+  name: "{{ include "chart-test.fullname" . }}-test-connection"
+  labels:
+    {{- include "chart-test.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
 spec:
-  maxReplicas: {{ .Values.hpa.maxReplicas }}
-  minReplicas: {{ .Values.hpa.minReplicas }}
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: {{ .Values.name }}
-  targetCPUUtilizationPercentage: {{ .Values.hpa.targetCPUUtilizationPercentage }}
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "chart-test.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
