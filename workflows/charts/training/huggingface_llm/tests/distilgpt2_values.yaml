@@ -102,6 +102,6 @@ resources:
 # Persistent volume claim storage resources
 storage:
   storageClassName: nfs-client
-  resources: 50Gi
+  resources: 10Gi
   pvcMountPath: /tmp/pvc-mount
 

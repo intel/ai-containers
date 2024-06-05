@@ -25,7 +25,7 @@ spec:
     - name: http-check
       image: {{ .Values.image.name }}:{{ .Values.image.tag }}
       command: ["/bin/bash"]
-      args: ["-c", "while [ ! -f /tmp/pvc-mount/output/saved_model/eval_results.json ]; do echo \"`date` - eval_results.json does not exist\"; sleep 10; done; cat /tmp/pvc-mount/output/saved_model/eval_results.json"]
+      args: ["-c", "TIMEOUT=900; while [ ! -f /tmp/pvc-mount/output/saved_model/eval_results.json ]; do echo \"`date` - ${TIMEOUT} - eval_results.json does not exist\"; TIMEOUT=$((${TIMEOUT} - 10)); if [[ ${TIMEOUT} -le 0 ]]; then echo \"Timed out waiting for eval_results.json\"; exit 1; fi; sleep 10; done; cat /tmp/pvc-mount/output/saved_model/eval_results.json"]
       volumeMounts:
       - name: pvc-volume
         mountPath: /tmp/pvc-mount
