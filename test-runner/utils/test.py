@@ -76,9 +76,6 @@ class Test(BaseModel):
 
     def __init__(self, **data):
         super().__init__(**data)
-        import time
-
-        time.sleep(600)
         if self.performance:
             perf_repo = os.environ.get("PERF_REPO")
             if perf_repo:
@@ -86,11 +83,11 @@ class Test(BaseModel):
                     Repo.clone_from(
                         f"https://github.com/{perf_repo}", "models-perf", progress=None
                     )
-                units.load_definitions("./models-perf/definitions.txt")
             else:
                 logging.error(
                     "Performance mode enabled, but PERF_REPO environment variable not set"
                 )
+            units.load_definitions("./models-perf/definitions.txt")
 
     def get_path(self, name):
         """Given a filename, find that file from the users current working directory
