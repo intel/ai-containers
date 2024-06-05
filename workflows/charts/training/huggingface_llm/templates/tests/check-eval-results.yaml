@@ -35,4 +35,3 @@ spec:
       claimName: {{ .Release.Name }}-pvc
 
   restartPolicy: Never
-

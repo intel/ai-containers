@@ -1,24 +1,38 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 metadata:
   namespace: kubeflow
 
 secret:
-  encodedToken: 
+  encodedToken:
 
 image:
-  name: 
-  tag: 
+  name:
+  tag:
   pullPolicy: Always
 
 securityContext:
-  runAsUser:  
-  runAsGroup: 
-  fsGroup: 
+  runAsUser:
+  runAsGroup:
+  fsGroup:
   allowPrivilegeEscalation: false
 
 elasticPolicy:
   rdzvBackend: c10d
   minReplicas: 1
-  maxReplicas: 2  
+  maxReplicas: 2
   maxRestarts: 30
 
 distributed:
@@ -34,7 +48,7 @@ distributed:
 
   train:
     datasetName: databricks/databricks-dolly-15k
-    dataFile: 
+    dataFile:
     inputColumnName: context
     outputColumnName: response
     datasetConcatenation: True
@@ -56,7 +70,7 @@ distributed:
     loraRank: 8
     loraAlpha: 16
     loraDropout: 0.1
-    loraTargetModules: c_attn 
+    loraTargetModules: c_attn
     noCuda: True
     overwriteOutputDir: True
     bf16: False
@@ -84,11 +98,11 @@ envVars:
   hfDatasetsCache: /tmp/pvc-mount/hf_dataset_cache
   hfHome: /tmp/home
   cclWorkerCount: 0
-  httpProxy: 
-  httpsProxy: 
-  noProxy: 
-  ftpProxy: 
-  socksProxy: 
+  httpProxy:
+  httpsProxy:
+  noProxy:
+  ftpProxy:
+  socksProxy:
 
 # Resources allocated to each worker
 resources:
@@ -104,4 +118,3 @@ storage:
   storageClassName: nfs-client
   resources: 10Gi
   pvcMountPath: /tmp/pvc-mount
-

@@ -18,14 +18,22 @@
 
 
 import math
+
 import numpy as np
 import torch
 from torch.nn.functional import pad
 
 
 class INCDataloader:
-    def __init__(self, dataset, tokenizer, batch_size=1, device='cpu',
-                 max_seq_length=512, for_calib=False):
+    def __init__(
+        self,
+        dataset,
+        tokenizer,
+        batch_size=1,
+        device="cpu",
+        max_seq_length=512,
+        for_calib=False,
+    ):
         self.dataset = dataset
         self.tokenizer = tokenizer
         self.device = device
@@ -35,10 +43,10 @@ class INCDataloader:
         self.length = math.ceil(len(dataset) / self.batch_size)
         self.pad_len = 196
 
-        self.dataset.set_format(type='torch', columns=['input_ids'])
+        self.dataset.set_format(type="torch", columns=["input_ids"])
 
     def pad_input(self, input):
-        input_id = input['input_ids'].unsqueeze(0)
+        input_id = input["input_ids"].unsqueeze(0)
         label = input_id[:, -1].to(self.device)
         pad_len = self.pad_len - input_id.shape[1]
         label_index = -2 - pad_len
@@ -92,7 +100,7 @@ def calculate_latency_and_throughput(results):
     :param batch_size: batch size
     :return: latency (ms) and throughput (images/sec)
     """
-    _, batch_size, result_list = results['performance']
+    _, batch_size, result_list = results["performance"]
     latency = np.array(result_list).mean() / batch_size
     latency_ms = latency * 1000
     throughput = 1.0 / latency

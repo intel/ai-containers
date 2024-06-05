@@ -188,7 +188,7 @@ fine tune the model.
    # Set a location for the dataset to download
    export DATASET_DIR=/tmp/dataset
 
-   # Run the download shell script 
+   # Run the download shell script
    bash scripts/download_financial_dataset.sh
 
    # Copy the local "dataset" folder to the PVC at /tmp/pvc-mount/dataset
