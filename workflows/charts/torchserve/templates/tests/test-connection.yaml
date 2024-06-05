@@ -1,0 +1,33 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "torchserve.fullname" . }}-test-connection"
+  labels:
+    {{- include "torchserve.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: ping
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "torchserve.fullname" . }}:8080/ping']
+    # - name: register-model
+    #   image: busybox
+    #   command: ['wget']
+    #   args: ['--method=POST', '{{ include "torchserve.fullname" . }}:30001/models?initial_workers=1&url=https://torchserve.s3.amazonaws.com/mar_files/densenet161.mar&model_name=squeezenet']
+  restartPolicy: Never
