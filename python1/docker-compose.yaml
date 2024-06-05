@@ -25,7 +25,7 @@ services:
       target: idp
     command: >
       bash -c "conda env list && python -c 'import mkl'"
-      bash -c 'echo world hello.'
+      bash -c 'echo world.'
     extends: pip
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-base
   pip:

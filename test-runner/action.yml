@@ -75,5 +75,5 @@ runs:
       if: always()
       with:
         name: ${{ env.test }} outputs
-        path: ${{ inputs.test_dir }}/logs
+        path: logs
         overwrite: true
