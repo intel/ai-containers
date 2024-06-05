@@ -30,6 +30,7 @@ A test is defined as a set of commands to be executed along with their associate
 | [volumes](https://github.com/compose-spec/compose-spec/blob/master/spec.md#volumes)    | Optional[List[[Volume](utils/test.py#L13)]] | A list of volumes to be mounted when running the test in a container. |
 | [env](https://github.com/compose-spec/compose-spec/blob/master/spec.md#environment)        | Optional[Dict[str, str]] | A list of environment variables to be set when the test is running. |
 | mask | Optional[List[str]] | A list of keys to [mask](#masking) in the test output. |
+| performance | Optional[str] | Check test performance thresholds in the format `perf/path/to/model.yaml:test-id` |
 | notebook   | Optional[str]  | A flag indicating whether the test utilizes a [jupyter notebook](#notebook-test). |
 | serving    | Optional[str]  | A flag indicating whether a [serving test](#serving-test) should be invoked. |
 | [cap_add](https://github.com/compose-spec/compose-spec/blob/master/spec.md#cap_add)    | Optional[str]  | Specifies additional container capabilities. |
