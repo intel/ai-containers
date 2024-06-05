@@ -65,4 +65,3 @@ RUN cat /workspace/generate_ssh_keys.sh >> "${HOME}/.bash_profile" && \
     cat /workspace/generate_ssh_keys.sh >> "${HOME}/.bashrc"
 
 ENV BASH_ENV=${HOME}/.bash_profile
-
