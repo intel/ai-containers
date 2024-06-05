@@ -117,6 +117,7 @@ The images below additionally include [Intel® oneAPI Collective Communications 
 > **Note:** Passwordless SSH connection is also enabled in the image.  
 > No SSH key in the image, so users need to generate one unique SSH key themselves.  
 > Please put SSH key including id_rsa and id_rsa.pub files under /mnt/ssh_key foler. You could also mount a network disk into /mnt/ssh_key.
+> Since the SSH key is not owned by default user account in docker, please also do "chmod 644 id_rsa.pub; chmod 644 id_rsa" to grant read access for default user account.  
 > Users could also use "/usr/bin/ssh-keygen -t rsa -b 4096 -N '' -f ~/mnt/ssh_key/id_rsa" to generate a new SSH Key.  
 ```bash
 docker run -it --rm \
