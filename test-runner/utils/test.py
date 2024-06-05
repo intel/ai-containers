@@ -238,6 +238,8 @@ class Test(BaseModel):
                     if units.Quantity(perf.group(1)) > units.Quantity(
                         f"{threshold['boundary']} {threshold['unit']}"
                     ):
+                        if not self.mask:
+                            logging.info("%s: %s", threshold["key"], perf.group(1))
                         raise PerfException(
                             f"Performance Threshold {threshold['name']} did not meet the target performance."
                         )
@@ -245,6 +247,8 @@ class Test(BaseModel):
                     if units.Quantity(perf.group(1)) < units.Quantity(
                         f"{threshold['boundary']} {threshold['unit']}"
                     ):
+                        if not self.mask:
+                            logging.info("%s: %s", threshold["key"], perf.group(1))
                         raise PerfException(
                             f"Performance Threshold {threshold['name']} did not meet the target performance."
                         )
