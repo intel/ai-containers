@@ -71,6 +71,8 @@ services:
       - 8888:8888
   multinode:
     build:
+      args:
+        SSH_KEY_PATH: ${SSH_KEY_PATH}
       labels:
         dependency.apt.gcc: true
         dependency.apt.libgl1-mesa-glx: true

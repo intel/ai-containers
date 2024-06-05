@@ -89,6 +89,8 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
 ENV SIGOPT_PROJECT=.
 ARG SSHD_PORT=2345
 ENV SSHD_PORT ${SSHD_PORT}
+ARG SSH_KEY_PATH=/tmp/ssh_key
+ENV SSH_KEY_PATH ${SSH_KEY_PATH}
 
 WORKDIR /
 COPY multinode-requirements.txt .
@@ -132,21 +134,22 @@ RUN useradd -rm -d /home/intel -s /bin/bash intel && \
 USER intel
 WORKDIR /home/intel
 RUN mkdir /home/intel/.ssh
-COPY id_rsa /home/intel/.ssh/
-COPY id_rsa.pub /home/intel/.ssh/
 
 USER root
-RUN chown intel /home/intel/.ssh/id_rsa && \
-   chown intel /home/intel/.ssh/id_rsa.pub && \
-   chown intel /etc/ssh/ssh_host_ecdsa_key && \
+RUN chown intel /etc/ssh/ssh_host_ecdsa_key && \
    chown intel /etc/ssh/ssh_host_rsa_key && \
    chown intel /etc/ssh/ssh_host_ed25519_key
 
 USER intel
 WORKDIR /home/intel
-RUN chmod 600 /home/intel/.ssh/id_rsa && \
-   cat /home/intel/.ssh/id_rsa.pub > /home/intel/.ssh/authorized_keys
-
+RUN echo "cp "$SSH_KEY_PATH"/id_rsa /home/intel/.ssh/" >> ~/.bashrc \
+    && echo "cp "$SSH_KEY_PATH"/id_rsa.pub /home/intel/.ssh/" >> ~/.bashrc \
+    && echo "chmod 600 /home/intel/.ssh/id_rsa" >> ~/.bashrc \
+    && echo "chown intel /home/intel/.ssh/id_rsa" >> ~/.bashrc \
+    && echo "chown intel /home/intel/.ssh/id_rsa.pub" >> ~/.bashrc \
+    && echo "if [ ! -f /home/intel/.ssh/authorized_keys ]; then" >> ~/.bashrc \
+    && echo "  cat /home/intel/.ssh/id_rsa.pub > /home/intel/.ssh/authorized_keys" >> ~/.bashrc \
+    && echo "fi" >> ~/.bashrc
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
