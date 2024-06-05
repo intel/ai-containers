@@ -94,6 +94,14 @@ RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
 ARG PYTHON_VERSION
 RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bashrc
 
+ENV I_MPI_ROOT=/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch
+ENV CCL_ROOT=/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch
+ENV FI_PROVIDER_PATH=/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib/prov:/usr/lib64/libfabric
+ENV LIBRARY_PATH=/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib
+ENV LD_LIBRARY_PATH=/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib
+ENV PATH=/usr/local/lib/python${PYTHON_VERSION}//dist-packages/oneccl_bindings_for_pytorch/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV CPATH=/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/include
+
 RUN mkdir -p /licensing
 
 RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \

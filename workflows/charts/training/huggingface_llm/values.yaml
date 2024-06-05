@@ -1,0 +1,205 @@
+# Copyright (c) 2023 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+
+metadata:
+  # -- The name of the Kubernetes namespace where the job will be deployed.
+  namespace: kubeflow
+
+secret:
+  # -- Hugging Face token encoded using base64.
+  encodedToken:
+
+image:
+  # -- Name of the image to use for the PyTorch job. The container should include the fine tuning script and all the dependencies required to run the job.
+  name: intel/ai-workflows
+  # -- The image tag for the container that will be used to run the PyTorch job. The container should include the fine tuning script and all the dependencies required to run the job.
+  tag: torch-2.2.0-huggingface-multinode-py3.10
+  # -- Determines when the kubelet will pull the image to the worker nodes. Choose from: `IfNotPresent`, `Always`, or `Never`. If updates to the image have been made, use `Always` to ensure the newest image is used.
+  pullPolicy: IfNotPresent
+
+securityContext:
+  # -- User ID to run as a non-root user
+  runAsUser:
+  # -- Group ID to run as a non-root user
+  runAsGroup:
+  # -- File system group ID to run as a non-root user
+  fsGroup:
+  # -- Boolean indicating if a process can gain more privileges than its parent process.
+  allowPrivilegeEscalation: false
+
+elasticPolicy:
+  # -- The rendezvous backend type (c10d, etcd, or etcd-v2).
+  rdzvBackend: c10d
+  # -- The lower limit for the number of replicas to which the job can scale down.
+  minReplicas: 1
+  # -- The upper limit for the number of pods that can be set by the autoscaler. Cannot be smaller than `elasticPolicy.minReplicas` or `distributed.workers`.
+  maxReplicas: 4
+  # -- The maximum number of restart times for pods in elastic mode.
+  maxRestarts: 10
+
+distributed:
+  # -- The number of worker pods to deploy.
+  workers: 4
+  # -- The script that will be executed using `torch.distributed.launch`.
+  script: /workspace/scripts/finetune.py
+  # -- The name or path of the pretrained model to pass to the Hugging Face transformers training arguments.
+  modelNameOrPath: meta-llama/Llama-2-7b-chat-hf
+  # -- The Hugging Face Transformers logging level (`debug`, `info`, `warning`, `error`, and `critical`).
+  logLevel: info
+
+  # -- If set to True, training will be run using the Hugging Face Transformers library.
+  doTrain: True
+  # -- If set to True, evaluation will be run with the validation split of the dataset, using the Hugging Face Transformers library.
+  doEval: True
+  # -- If set to True, the Intel Neural Compressor will be used to benchmark the trained model. If the model is being quantized, the quantized model will also be benchmarked.
+  doBenchmark: False
+  # -- If set to True, the Intel Neural Compressor will be used to quantize the trained model.
+  doQuantize: False
+  train:
+    # -- Name of a Hugging Face dataset to use. If no dataset name is provided, the dataFile path will be used instead.
+    datasetName: medalpaca/medical_meadow_medical_flashcards
+    # -- Path to a Llama formatted data file to use, if no dataset name is provided.
+    dataFile:
+    # -- Whether to concatenate the sentence for more efficient training.
+    datasetConcatenation: True
+    # -- Name of the column in the dataset that describes the task that the model should perform. If no column name is provided, the "instruction" column is used.
+    instructionColumnName:
+    # -- Name of the column in the dataset that optionally provides context or input for the task. If no column name is provided, the "input" column is used.
+    inputColumnName:
+    # -- Name of the column in the dataset with the answer to the instruction. If no column name is provided, the "output" column is used.
+    outputColumnName:
+    # -- Prompt string for an instruction with context
+    promptWithInput: Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+    # -- Prompt string for an instruction without context
+    promptWithoutInput: Below is an instruction that describes a task. Write a response that appropriately completes the request.
+    # -- The batch size per device.
+    perDeviceBatchSize: 8
+    # -- Number of training epochs to perform.
+    epochs: 1
+    # -- If set to a positive number, the total number of training steps to perform. Overrides the number of training epochs.
+    maxSteps: -1
+    # -- Number of updates steps to accumulate before performing a backward/update pass.
+    gradientAccumulationSteps: 1
+    # -- The initial learning rate.
+    learningRate: 2e-5
+    # -- The `find_used_parameters` flag to pass to DistributedDataParallel.
+    ddpFindUnusedParameters: False
+    # -- The backend to be used for distributed training. It is recommended to use `ccl` with the Intel Extension for PyTorch.
+    ddpBackend: ccl
+    # -- Whether to use one of the fast tokenizer (backed by the tokenizers library) or not.
+    useFastTokenizer: False
+    # -- The output directory where the model predictions and checkpoints will be written.
+    outputDir: /tmp/pvc-mount/output/saved_model
+    # -- Log every X updates steps. Should be an integer or a float in range `[0,1]`. If smaller than 1, will be interpreted as ratio of total training steps.
+    loggingSteps: 1
+    # -- If a value is passed, will limit the total amount of checkpoints. Deletes the older checkpoints in `output_dir`.
+    saveTotalLimit: 2
+    # -- The checkpoint save strategy to use (`no`, `steps`, or `epoch`).
+    saveStrategy: epoch
+    # -- Whether or not to use LoRA.
+    useLora: True
+    # -- Rank parameter in the LoRA method.
+    loraRank: 8
+    # -- Alpha parameter in the LoRA method.
+    loraAlpha: 16
+    # -- Dropout parameter in the LoRA method.
+    loraDropout: 0.1
+    # -- Target modules for the LoRA method.
+    loraTargetModules: q_proj vproj
+    # -- Use CPU when set to True.
+    noCuda: True
+    # -- Overwrite the content of the output directory. Use this to continue training if output_dir points to a checkpoint directory.
+    overwriteOutputDir: True
+    # -- Whether to use bf16 (mixed) precision instead of 32-bit. Requires hardware that supports bfloat16.
+    bf16: True
+    # -- Use Intel #xtension for PyTorch when it is available.
+    useIpex: True
+  eval:
+    # -- Batch size to use for evaluation for each device.
+    perDeviceBatchSize: 8
+    # -- The percentage of the train set used as validation set in case there's no validation split. Set to 0.20 for a 20% validation split.
+    validationSplitPercentage: 0.20
+  benchmark:
+    # -- When benchmarking is enabled, the number of iterations to warmup before running performance tests.
+    warmup: 30
+    # -- When benchmarking is enabled, the number of iterations to run performance tests
+    iterations: 300
+    # -- When benchmarking is enabled, the number of CPU cores to use per instance
+    coresPerInstance: -1
+    # -- When benchmarking is enabled, the number of instances to use for performance testing.
+    numInstances: 1
+  quantize:
+    # When quantization is enabled, the path the Peft model to load. If Peft was not used during training, leave this field blank and the `distributed.modelNameOrPath` will be loaded for quantization. If training with Peft, set this to the train.outputDir to quantize the trained model
+    peftModelDir: /tmp/pvc-mount/output/saved_model
+    # Location to save the quantized model, when quantization is enabled.
+    outputDir: /tmp/pvc-mount/output/quantized_model
+    # Bits for weight only quantization, 1-8 bits.
+    woqBits: 8
+    # Bits for weight only quantization, 1-8 bits.
+    woqGroupSize: -1
+    # Scheme for weight only quantization. Choose from 'sym' and 'asym'.
+    woqScheme: sym
+    # Algorithm for weight only quantization. Choose from: RTN, AWQ, GPTQ, or TEQ.
+    woqAlgo: RTN
+
+envVars:
+  # -- Paths set to the LD_PRELOAD environment variable.
+  ldPreload: /usr/lib/x86_64-linux-gnu/libtcmalloc.so.4.5.9:/usr/local/lib/libiomp5.so
+  # -- Value set to the LOG_LEVEL environment variable.
+  logLevel: INFO
+  # -- Location for the Transformers cache (using the TRANSFORMERS_CACHE environment variable).
+  transformersCache: /tmp/pvc-mount/transformers_cache
+  # -- Path to a directory used to cache Hugging Face datasets using the HF_DATASETS_CACHE environment variable.
+  hfDatasetsCache: /tmp/pvc-mount/hf_dataset_cache
+  # -- Sets the `HF_HOME` environment variable and is used as the volume mount location for your Hugging Face token.
+  hfHome: /tmp/home
+  # -- Value for the CCL_WORKER_COUNT environment variable. Must be >1 to use the CCL DDP backend.
+  cclWorkerCount: 1
+  # -- Set the http_proxy environment variable.
+  httpProxy:
+  # -- Set the https_proxy environment variable.
+  httpsProxy:
+  # -- Set the no_proxy environment variable.
+  noProxy:
+  # -- Set the ftp_proxy environment variable.
+  ftpProxy:
+  # -- Set the socks_proxy environment variable.
+  socksProxy:
+
+# Resources allocated to each worker
+resources:
+  # -- Optionally specify the amount of CPU resources requested for each worker, where 1 CPU unit is equivalent to 1 physical CPU core or 1 virtual core. For more information see the [Kubernetes documentation on CPU resource units](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu).
+  cpuRequest:
+  # -- Optionally specify the maximum amount of CPU resources for each worker, where 1 CPU unit is equivalent to 1 physical CPU core or 1 virtual core. For more information see the [Kubernetes documentation on CPU resource units](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-cpu).
+  cpuLimit:
+  # --  Optionally specify the amount of memory resources requested for each worker. For more information see the [Kubernetes documentation on memory resource units](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory).
+  memoryRequest:
+  # -- Optionally specify the maximum amount of memory resources for each worker. For more information see the [Kubernetes documentation on memory resource units](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#meaning-of-memory).
+  memoryLimit:
+  # -- Optionally specify a label for the type of node that will be used for the PyTorch job workers.
+  nodeSelectorLabel:
+  # -- If `resources.nodeSelectorLabel` is set, specify the value for the node selector label.
+  nodeSelectorValue:
+
+# Persistent volume claim storage resources
+storage:
+  # -- Name of the storage class to use for the persistent volume claim. To list the available storage classes use: `kubectl get storageclass`.
+  storageClassName: nfs-client
+  # -- Specify the [capacity](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#capacity) for the persistent volume claim.
+  resources: 50Gi
+  # -- The location where the persistent volume claim will be mounted in the worker pods.
+  pvcMountPath: /tmp/pvc-mount

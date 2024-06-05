@@ -1,0 +1,251 @@
+# Copyright (c) 2023 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+
+apiVersion: "kubeflow.org/v1"
+kind: PyTorchJob
+metadata:
+  name: {{ .Release.Name }}-pytorchjob
+  namespace: {{ .Values.metadata.namespace }}
+spec:
+  elasticPolicy:
+    rdzvBackend: {{ .Values.elasticPolicy.rdzvBackend }}
+    minReplicas: {{ .Values.elasticPolicy.minReplicas }}
+    maxReplicas: {{ .Values.elasticPolicy.maxReplicas }}
+    maxRestarts: {{ .Values.elasticPolicy.maxRestarts }}
+  pytorchReplicaSpecs:
+    Worker:
+      replicas: {{ .Values.distributed.workers }}
+      restartPolicy: OnFailure
+      template:
+        spec:
+          securityContext:
+            runAsUser: {{ .Values.securityContext.runAsUser }}
+            runAsGroup: {{ .Values.securityContext.runAsGroup }}
+            fsGroup: {{ .Values.securityContext.fsGroup }}
+          containers:
+            - name: pytorch
+              image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              command:
+                - torchrun
+                - {{ .Values.distributed.script }}
+                - --model_name_or_path
+                - "{{ .Values.distributed.modelNameOrPath }}"
+                {{- if .Values.distributed.train.datasetName }}
+                - --dataset_name
+                - "{{ .Values.distributed.train.datasetName }}"
+                {{- end }}
+                - --dataset_cache_directory
+                - "{{ .Values.envVars.hfDatasetsCache }}"
+                {{- if .Values.distributed.train.dataFile }}
+                - --train_file
+                - "{{ .Values.distributed.train.dataFile }}"
+                {{- end }}
+                - --dataset_concatenation
+                - "{{ .Values.distributed.train.datasetConcatenation }}"
+                - --prompt_with_input
+                - "{{ .Values.distributed.train.promptWithInput }}"
+                - --prompt_without_input
+                - "{{ .Values.distributed.train.promptWithoutInput }}"
+                - --per_device_train_batch_size
+                - "{{ .Values.distributed.train.perDeviceBatchSize }}"
+                - --per_device_eval_batch_size
+                - "{{ .Values.distributed.eval.perDeviceBatchSize }}"
+                - --gradient_accumulation_steps
+                - "{{ .Values.distributed.train.gradientAccumulationSteps }}"
+                - --learning_rate
+                - "{{ .Values.distributed.train.learningRate }}"
+                - --num_train_epochs
+                - "{{ .Values.distributed.train.epochs }}"
+                - --max_steps
+                - "{{ .Values.distributed.train.maxSteps }}"
+                - --logging_steps
+                - "{{ .Values.distributed.train.loggingSteps }}"
+                - --save_total_limit
+                - "{{ .Values.distributed.train.saveTotalLimit }}"
+                - --output_dir
+                - "{{ .Values.distributed.train.outputDir }}"
+                - --validation_split_percentage
+                - "{{ .Values.distributed.eval.validationSplitPercentage }}"
+                - --log_level
+                - "{{ .Values.distributed.logLevel }}"
+                - --save_strategy
+                - "{{ .Values.distributed.train.saveStrategy }}"
+                - --ddp_find_unused_parameters
+                - "{{ .Values.distributed.train.ddpFindUnusedParameters }}"
+                {{- if .Values.distributed.train.ddpBackend }}
+                - --ddp_backend
+                - "{{ .Values.distributed.train.ddpBackend }}"
+                {{- end }}
+                {{- if .Values.distributed.train.instructionColumnName }}
+                - --instruction_column_name
+                - "{{ .Values.distributed.train.instructionColumnName }}"
+                {{- end }}
+                {{- if .Values.distributed.train.inputColumnName }}
+                - --input_column_name
+                - "{{ .Values.distributed.train.inputColumnName }}"
+                {{- end }}
+                {{- if .Values.distributed.train.outputColumnName }}
+                - --output_column_name
+                - "{{ .Values.distributed.train.outputColumnName }}"
+                {{- end }}
+                - --use_fast_tokenizer
+                - "{{ .Values.distributed.train.useFastTokenizer }}"
+                - --use_lora
+                - "{{ .Values.distributed.train.useLora }}"
+                - --lora_rank
+                - "{{ .Values.distributed.train.loraRank }}"
+                - --lora_alpha
+                - "{{ .Values.distributed.train.loraAlpha }}"
+                - --lora_dropout
+                - "{{ .Values.distributed.train.loraDropout }}"
+                - --lora_target_modules
+                - "{{ .Values.distributed.train.loraTargetModules }}"
+                - --no_cuda
+                - "{{ .Values.distributed.train.noCuda }}"
+                - --overwrite_output_dir
+                - "{{ .Values.distributed.train.overwriteOutputDir }}"
+                - --do_train
+                - "{{ .Values.distributed.doTrain }}"
+                - --do_eval
+                - "{{ .Values.distributed.doEval }}"
+                - --bf16
+                - "{{ .Values.distributed.train.bf16 }}"
+                - --use_ipex
+                - "{{ .Values.distributed.train.useIpex }}"
+                - --do_benchmark
+                - "{{ .Values.distributed.doBenchmark }}"
+                - --benchmark_warmup
+                - "{{ .Values.distributed.benchmark.warmup }}"
+                - --benchmark_iterations
+                - "{{ .Values.distributed.benchmark.iterations }}"
+                - --benchmark_cores_per_instance
+                - "{{ .Values.distributed.benchmark.coresPerInstance }}"
+                - --benchmark_num_instances
+                - "{{ .Values.distributed.benchmark.numInstances }}"
+                - --do_quantize
+                - "{{ .Values.distributed.doQuantize }}"
+                - --peft_model_dir
+                - "{{ .Values.distributed.quantize.peftModelDir }}"
+                - --quantize_output_dir
+                - "{{ .Values.distributed.quantize.outputDir }}"
+                - --woq_bits
+                - "{{ .Values.distributed.quantize.woqBits }}"
+                - --woq_group_size
+                - "{{ .Values.distributed.quantize.woqGroupSize }}"
+                - --woq_scheme
+                - "{{ .Values.distributed.quantize.woqScheme }}"
+                - --woq_algo
+                - "{{ .Values.distributed.quantize.woqAlgo }}"
+              env:
+              - name: CCL_ATL_TRANSPORT
+                value: ofi
+              {{- if .Values.envVars.ldPreload }}
+              - name: LD_PRELOAD
+                value: "{{ .Values.envVars.ldPreload }}"
+              {{- end }}
+              {{- if .Values.envVars.httpProxy }}
+              - name: http_proxy
+                value: "{{ .Values.envVars.httpProxy }}"
+              {{- end }}
+              {{- if .Values.envVars.httpsProxy }}
+              - name: https_proxy
+                value: "{{ .Values.envVars.httpsProxy }}"
+              {{- end }}
+              {{- if .Values.envVars.noProxy }}
+              - name: no_proxy
+                value: "{{ .Values.envVars.noProxy }}"
+              {{- end }}
+              {{- if .Values.envVars.ftpProxy }}
+              - name: ftp_proxy
+                value: "{{ .Values.envVars.ftpProxy }}"
+              {{- end }}
+              {{- if .Values.envVars.socksProxy }}
+              - name: socks_proxy
+                value: "{{ .Values.envVars.socksProxy }}"
+              {{- end }}
+              {{- if .Values.envVars.transformersCache }}
+              - name: TRANSFORMERS_CACHE
+                value: "{{ .Values.envVars.transformersCache }}"
+              {{- end }}
+              {{- if .Values.envVars.hfDatasetsCache }}
+              - name: HF_DATASETS_CACHE
+                value: "{{ .Values.envVars.hfDatasetsCache }}"
+              {{- end }}
+              {{- if .Values.envVars.hfHome }}
+              - name: HF_HOME
+                value: "{{ .Values.envVars.hfHome }}"
+              {{- end }}
+              {{- if .Values.envVars.logLevel }}
+              - name: LOGLEVEL
+                value: "{{ .Values.envVars.logLevel }}"
+              {{- end }}
+              {{- if .Values.envVars.cclWorkerCount }}
+              - name: CCL_WORKER_COUNT
+                value: "{{ .Values.envVars.cclWorkerCount }}"
+              {{- end }}
+              resources:
+                {{- if or .Values.resources.cpuLimit .Values.resources.memoryLimit }}
+                limits:
+                  {{- if .Values.resources.cpuLimit }}
+                  cpu: {{ .Values.resources.cpuLimit }}
+                  {{- end }}
+                  {{- if .Values.resources.memoryLimit }}
+                  memory: {{ .Values.resources.memoryLimit }}
+                  {{- end }}
+                {{- end }}
+                {{- if or .Values.resources.cpuRequest .Values.resources.memoryRequest }}
+                requests:
+                  {{- if .Values.resources.cpuRequest }}
+                  cpu: {{ .Values.resources.cpuRequest }}
+                  {{- end }}
+                  {{- if .Values.resources.memoryRequest }}
+                  memory: {{ .Values.resources.memoryRequest }}
+                  {{- end }}
+                {{- end }}
+              volumeMounts:
+              - name: output-dir
+                mountPath: {{ .Values.storage.pvcMountPath }}
+              - mountPath: /dev/shm
+                name: dshm
+              {{- if .Values.secret.encodedToken}}
+              - name: secret-volume
+                mountPath: {{ .Values.envVars.hfHome }}
+                readOnly: true
+              {{- end }}
+              {{- if .Values.securityContext.allowPrivilegeEscalation }}
+              securityContext:
+                allowPrivilegeEscalation: {{ .Values.securityContext.allowPrivilegeEscalation }}
+              {{- end }}
+          restartPolicy: Never
+          {{- if .Values.resources.nodeSelectorLabel }}
+          nodeSelector:
+            {{ .Values.resources.nodeSelectorLabel }}: {{ .Values.resources.nodeSelectorValue }}
+          {{- end }}
+          volumes:
+          - name: output-dir
+            persistentVolumeClaim:
+              claimName: {{ .Release.Name }}-pvc
+          - name: dshm
+            emptyDir:
+              medium: Memory
+          {{- if .Values.secret.encodedToken}}
+          - name: secret-volume
+            secret:
+              secretName: {{ .Release.Name }}-secret
+          {{- end }}
+

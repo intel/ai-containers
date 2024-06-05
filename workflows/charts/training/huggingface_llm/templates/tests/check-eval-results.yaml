@@ -1,0 +1,38 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-eval-results"
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: http-check
+      image: {{ .Values.image.name }}:{{ .Values.image.tag }}
+      command: ["/bin/bash"]
+      args: ["-c", "while [ ! -f /tmp/pvc-mount/output/saved_model/eval_results.json ]; do echo \"`date` - eval_results.json does not exist\"; sleep 10; done; cat /tmp/pvc-mount/output/saved_model/eval_results.json"]
+      volumeMounts:
+      - name: pvc-volume
+        mountPath: /tmp/pvc-mount
+  volumes:
+  - name: pvc-volume
+    persistentVolumeClaim:
+      claimName: {{ .Release.Name }}-pvc
+
+  restartPolicy: Never
+

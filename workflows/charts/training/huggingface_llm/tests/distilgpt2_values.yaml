@@ -1,0 +1,107 @@
+metadata:
+  namespace: kubeflow
+
+secret:
+  encodedToken: 
+
+image:
+  name: 
+  tag: 
+  pullPolicy: Always
+
+securityContext:
+  runAsUser:  
+  runAsGroup: 
+  fsGroup: 
+  allowPrivilegeEscalation: false
+
+elasticPolicy:
+  rdzvBackend: c10d
+  minReplicas: 1
+  maxReplicas: 2  
+  maxRestarts: 30
+
+distributed:
+  workers: 1
+  script: /workspace/scripts/finetune.py
+  modelNameOrPath: distilbert/distilgpt2
+  logLevel: info
+
+  doTrain: True
+  doEval: True
+  doBenchmark: False
+  doQuantize: False
+
+  train:
+    datasetName: databricks/databricks-dolly-15k
+    dataFile: 
+    inputColumnName: context
+    outputColumnName: response
+    datasetConcatenation: True
+    promptWithInput: Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+    promptWithoutInput: Below is an instruction that describes a task. Write a response that appropriately completes the request.
+    perDeviceBatchSize: 8
+    epochs: 1
+    maxSteps: 5
+    gradientAccumulationSteps: 1
+    learningRate: 2e-5
+    ddpFindUnusedParameters: False
+    ddpBackend: gloo
+    useFastTokenizer: False
+    outputDir: /tmp/pvc-mount/output/saved_model
+    loggingSteps: 10
+    saveTotalLimit: 2
+    saveStrategy: epoch
+    useLora: True
+    loraRank: 8
+    loraAlpha: 16
+    loraDropout: 0.1
+    loraTargetModules: c_attn 
+    noCuda: True
+    overwriteOutputDir: True
+    bf16: False
+    useIpex: True
+  eval:
+    perDeviceBatchSize: 8
+    validationSplitPercentage: 0.01
+  benchmark:
+    warmup: 30
+    iterations: 300
+    coresPerInstance: -1
+    numInstances: 1
+  quantize:
+    peftModelDir: /tmp/pvc-mount/output/saved_model  # If training, set this to the train.outputDir to quantize the trained model
+    outputDir: /tmp/pvc-mount/output/quantized_model
+    woqBits: 8
+    woqGroupSize: -1
+    woqScheme: sym
+    woqAlgo: RTN
+
+envVars:
+  ldPreload:
+  logLevel: INFO
+  transformersCache: /tmp/pvc-mount/transformers_cache
+  hfDatasetsCache: /tmp/pvc-mount/hf_dataset_cache
+  hfHome: /tmp/home
+  cclWorkerCount: 0
+  httpProxy: 
+  httpsProxy: 
+  noProxy: 
+  ftpProxy: 
+  socksProxy: 
+
+# Resources allocated to each worker
+resources:
+  cpuRequest: 64
+  cpuLimit: 64
+  memoryRequest: 128Gi
+  memoryLimit: 128Gi
+  nodeSelectorLabel: node-type
+  nodeSelectorValue: clx
+
+# Persistent volume claim storage resources
+storage:
+  storageClassName: nfs-client
+  resources: 50Gi
+  pvcMountPath: /tmp/pvc-mount
+
