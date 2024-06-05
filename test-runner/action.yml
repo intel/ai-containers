@@ -24,10 +24,6 @@ inputs:
     description: 'Performance Test Repo'
     required: false
     type: string
-  perf_repo:
-    description: 'Performance Test Repo'
-    required: false
-    type: string
   recipe_dir:
     description: 'Path to Recipe Directory'
     required: false
