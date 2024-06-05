@@ -195,3 +195,30 @@ jobs:
         repo: ${{ secrets.REPO }}
         test_dir: ${{ matrix.tests }}
         token: ${{ secrets.ACTION_TOKEN || github.token }}
+        ####################################################################################################
+        # Merge Test Runner Logs 
+        ####################################################################################################
+  merge-logs: 
+    # download all artifacts across containers 
+    needs: [tests-containers]
+    runs-on: ubuntu-latest
+    steps: 
+    - uses: actions/download-artifact@v2 
+      with: 
+        path: logs
+    - name: merge logs 
+      run: |
+        # Create a new combined logs file
+        touch combined_logs.txt
+    
+        # Loop through all downloaded logs and append them to the combined file
+        for log_file in $(find . -type f); do
+          echo "Contents of $log_file" >> combined_logs.txt
+          cat $log_file >> combined_logs.txt
+          echo "-------------------" >> combined_logs.txt
+        done
+    - name: Upload Combined Logs
+      uses: actions/upload-artifact@v2
+      with:
+        name: combined-logs
+        path: combined_logs.txt    
