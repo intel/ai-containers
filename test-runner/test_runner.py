@@ -38,7 +38,7 @@ from typing import List
 from expandvars import expandvars
 from python_on_whales import DockerException, docker
 from tabulate import tabulate
-from utils.test import Test
+from utils.test import PerfException, Test
 from yaml import YAMLError, full_load
 
 
@@ -187,7 +187,7 @@ if __name__ == "__main__":
         # returns the stdout of the test and the RETURNCODE
         try:  # Try for Runtime Failure Conditions
             log = test.container_run() if test.img else test.run()
-        except DockerException as err:
+        except (DockerException, PerfException, YAMLError) as err:
             logging.error(err)
             summary.append([idx + 1, test.name, "FAIL"])
             ERROR = True
