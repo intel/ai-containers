@@ -33,6 +33,14 @@ services:
         REGISTRY: ${REGISTRY}
         REPO: ${REPO}
       context: .
+      labels:
+        dependency.python: ${PYTHON_VERSION:-3.10}
+        dependency.python.pip: requirements.txt
+        docs: classical-ml
+        org.opencontainers.base.name: "intel/python:3.10-core"
+        org.opencontainers.image.name: "intel/intel-optimized-ml"
+        org.opencontainers.image.title: "Intel® Optimized ML Base Image"
+        org.opencontainers.image.version: ${SKLEARN_VERSION:-2024.4.0}-${PACKAGE_OPTION:-pip}-base
       target: ml-base-${PACKAGE_OPTION:-pip}
     command: >
       bash -c "python -c 'import sklearnex, sklearn; import xgboost as xgb; print(\"Scikit version:\", sklearn.__version__, \"\\nXGBoost version:\", xgb.__version__)'"
@@ -42,6 +50,11 @@ services:
     pull_policy: always
   jupyter:
     build:
+      labels:
+        dependency.python.pip: jupyter-requirements.txt
+        org.opencontainers.base.name: "intel/intel-optimized-ml:${SKLEARN_VERSION:-2024.4.0}-${PACKAGE_OPTION:-pip}-base"
+        org.opencontainers.image.title: "Intel® Optimized ML Jupyter Base Image"
+        org.opencontainers.image.version: ${SKLEARN_VERSION:-2024.4.0}-${PACKAGE_OPTION:-pip}-jupyter
       target: jupyter
     command: >
       bash -c "python -m jupyter --version"

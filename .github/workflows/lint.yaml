@@ -41,7 +41,7 @@ jobs:
       with:
         fetch-depth: 0
         ref: ${{ github.event.merge_group.head_ref }}
-    - uses: super-linter/super-linter/slim@5b638caee6ba65e25e07143887b669a1233847a0 # v6.5.1
+    - uses: super-linter/super-linter/slim@88ea3923a7e1f89dd485d079f6eb5f5e8f937589 # v6.6.0
       env:
         # To report GitHub Actions status checks
         GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
