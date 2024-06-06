@@ -14,7 +14,7 @@
 
 apiVersion: v2
 name: intel-torchserve
-description: A Helm chart for Kubernetes
+description: Intel TorchServe is a performant, flexible and easy to use tool for serving PyTorch models in production.
 
 # A chart can be either an 'application' or a 'library' chart.
 #

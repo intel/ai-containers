@@ -37,9 +37,9 @@ spec:
             - '--ts-config'
             - {{ .Values.deploy.modelConfig }}
             - '--model-store'
-            - 'store'
+            - 'model-store'
             - '--workflow-store'
-            - 'store'
+            - 'model-store'
             - '--models'
             - {{ .Values.deploy.models }}
           {{- if eq .Values.deploy.env.enabled true }}
@@ -61,11 +61,11 @@ spec:
           volumeMounts:
           {{- if .Values.deploy.storage.nfs.enabled }}
             - name: model
-              mountPath: /home/model-server/store
+              mountPath: /home/model-server/model-store
               subPath: {{ .Values.deploy.storage.nfs.subPath }}
           {{- else }}
             - name: model
-              mountPath: /home/model-server/store
+              mountPath: /home/model-server/model-store
           {{- end }}
           resources:
             requests:
@@ -87,5 +87,6 @@ spec:
           emptyDir: {}
       {{- else }}
         - name: model
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: {{ include "torchserve.fullname" . }}-model-dir
       {{- end }}

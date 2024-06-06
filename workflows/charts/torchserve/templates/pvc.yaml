@@ -12,6 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ignore:
-- '**/templates/**.yaml'
-- '**/templates/tests/**.yaml'
+---
+{{- if not .Values.deploy.storage.nfs.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "torchserve.fullname" . }}-model-dir
+  labels:
+    {{- include "torchserve.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.pvc.size }}
+{{- end }}

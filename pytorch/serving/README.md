@@ -102,3 +102,105 @@ As demonstrated in the above example, models must be registered before they can 
       ]
     }
     ```
+
+### KServe
+
+Apply Intel Optimizations to KServe by patching the serving runtimes to use Intel Optimized Serving Containers with `kubectl apply -f patch.yaml`
+
+> [!NOTE]
+> You can modify this `patch.yaml` file to change the serving runtime pod configuration.
+
+#### Create an Endpoint
+
+1. Create a volume with the follow file configuration:
+
+    ```text
+    my-volume
+    ├── config
+    │   └── config.properties
+    └── model-store
+        └── my-model.mar
+    ```
+
+2. Modify your TorchServe Server Configuration with a model snapshot like the following:
+
+    ```text
+    ...
+    enable_metrics_api=true
+    metrics_mode=prometheus
+    model_store=/mnt/models/model-store
+    model_snapshot={"name":"startup.cfg","modelCount":1,"models":{"mnist":{"1.0":{"defaultVersion":true,"marName":"mnist.mar","minWorkers":1,"maxWorkers":5,"batchSize":1,"responseTimeout":120}}}}
+    ```
+
+   > The model snapshot **MUST** contain the keys `defaultVersion`, `marName`, `minWorkers`, `maxWorkers`, `batchSize`, and `responseTimeout`. Even if your model `.mar` includes those keys.
+
+3. Create a new endpoint
+
+    ```yaml
+    apiVersion: "serving.kserve.io/v1beta1"
+    kind: "InferenceService"
+    metadata:
+      name: "ipex-torchserve-sample"
+    spec:
+      predictor:
+        model:
+          modelFormat:
+            name: pytorch
+          protocolVersion: v2
+          storageUri: pvc://my-volume
+    ```
+
+4. Test the endpoint
+
+    ```bash
+    curl -v -H "Host: ${SERVICE_HOSTNAME}" http://${INGRESS_HOST}:${INGRESS_PORT}/v2/models
+    ```
+
+5. Make a Prediction
+   Use this python script to convert your input to a bytes format:
+
+   ```python
+   import base64
+   import json
+   import argparse
+   import uuid
+
+   parser = argparse.ArgumentParser()
+   parser.add_argument("filename", help="converts image to bytes array", type=str)
+   args = parser.parse_args()
+
+   image = open(args.filename, "rb")  # open binary file in read mode
+   image_read = image.read()
+   image_64_encode = base64.b64encode(image_read)
+   bytes_array = image_64_encode.decode("utf-8")
+   request = {
+       "inputs": [
+            {
+                "name": str(uuid.uuid4()),
+                "shape": [-1],
+                "datatype": "BYTES",
+                "data": [bytes_array],
+            }
+       ]
+    }
+
+    result_file = "{filename}.{ext}".format(
+        filename=str(args.filename).split(".")[0], ext="json"
+    )
+    with open(result_file, "w") as outfile:
+        json.dump(request, outfile, indent=4, sort_keys=True)
+    ```
+
+   Using the script will produce a json file to use as a prediction payload:
+
+   ```bash
+   curl -v -H "Host: ${SERVICE_HOSTNAME}" -X POST \
+   http://${INGRESS_HOST}:${INGRESS_PORT}/v2/models/${MODELNAME}/infer \
+   -d @./${PAYLOAD}.json
+   ```
+
+> [!TIP]
+> You can find your `SERVICE_HOSTNAME` in the KubeFlow UI with the copy button and removing the `http://` from the url.
+
+> [!TIP]
+> You can find your ingress information with `kubectl get svc -n istio-system | grep istio-ingressgateway` and using the external IP and port mapped to `80`.

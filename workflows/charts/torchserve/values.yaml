@@ -19,6 +19,7 @@ fullnameOverride: ""
 deploy:
   # -- Intel Optimized torchserve image
   image: intel/intel-optimized-pytorch:2.3.0-serving-cpu
+  # -- Add Environment mapping
   env:
     configMapName: intel-proxy-config
     enabled: true
@@ -48,3 +49,6 @@ deploy:
 service:
   # -- Type of service
   type: NodePort
+pvc:
+  # -- Size of the storage
+  size: 1Gi
