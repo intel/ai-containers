@@ -115,7 +115,7 @@ fine tune the model.
 
    For example:
 
-   ```
+   ```bash
    $ echo hf_ABCDEFG | base64
    aGZfQUJDREVGRwo=
    ```
@@ -123,7 +123,7 @@ fine tune the model.
    Copy and paste the encoded token value into your values yaml file `encodedToken` field in the `secret` section.
    For example:
 
-   ```
+   ```yaml
    secret:
      name: hf-token-secret
      encodedToken: aGZfQUJDREVGRwo=
@@ -157,7 +157,7 @@ fine tune the model.
 
 3. Deploy the helm chart to the cluster using the `kubeflow` namespace:
 
-   ```
+   ```bash
    # Navigate to the directory that contains the Hugging Face LLM fine tuning workflow
    cd workflows/charts/training/huggingface_llm
 
@@ -173,7 +173,7 @@ fine tune the model.
    The destination path for the dataset needs to match the `train.dataFile` path in your values yaml file.  Note that
    the worker pods would keep failing and restarting until you upload your dataset.
 
-   ```
+   ```bash
    # Copies a local "dataset" folder to the PVC at /tmp/pvc-mount/dataset
    kubectl cp dataset <dataaccess pod name>:/tmp/pvc-mount/dataset
 
@@ -187,7 +187,7 @@ fine tune the model.
    custom dataset to the cluster. Run the [`download_financial_dataset.sh`](scripts/download_financial_dataset.sh)
    script to create a custom dataset and copy it to the PVC, as mentioned below.
 
-   ```
+   ```bash
    # Set a location for the dataset to download
    export DATASET_DIR=/tmp/dataset
 
@@ -217,14 +217,14 @@ fine tune the model.
    As an example, the trained model from the Medical Meadows use case can be copied from the
    `/tmp/pvc-mount/output/bf16` path to the local system using the following command:
 
-   ```
+   ```bash
    kubectl cp --namespace kubeflow <dataaccess pod name>:/tmp/pvc-mount/output/saved_model .
    ```
 
 7. Finally, the resources can be deleted from the cluster using the
    [`helm uninstall`](https://helm.sh/docs/helm/helm_uninstall/) command. For example:
 
-   ```
+   ```bash
    helm uninstall --namespace kubeflow llama2-distributed
    ```
 
@@ -232,7 +232,7 @@ fine tune the model.
 
 ## Citations
 
-```
+```text
 @misc{touvron2023llama,
       title={Llama 2: Open Foundation and Fine-Tuned Chat Models},
       author={Hugo Touvron and Louis Martin and Kevin Stone and Peter Albert and Amjad Almahairi and Yasmine Babaei and Nikolay Bashlykov and Soumya Batra and Prajjwal Bhargava and Shruti Bhosale and Dan Bikel and Lukas Blecher and Cristian Canton Ferrer and Moya Chen and Guillem Cucurull and David Esiobu and Jude Fernandes and Jeremy Fu and Wenyin Fu and Brian Fuller and Cynthia Gao and Vedanuj Goswami and Naman Goyal and Anthony Hartshorn and Saghar Hosseini and Rui Hou and Hakan Inan and Marcin Kardas and Viktor Kerkez and Madian Khabsa and Isabel Kloumann and Artem Korenev and Punit Singh Koura and Marie-Anne Lachaux and Thibaut Lavril and Jenya Lee and Diana Liskovich and Yinghai Lu and Yuning Mao and Xavier Martinet and Todor Mihaylov and Pushkar Mishra and Igor Molybog and Yixin Nie and Andrew Poulton and Jeremy Reizenstein and Rashi Rungta and Kalyan Saladi and Alan Schelten and Ruan Silva and Eric Michael Smith and Ranjan Subramanian and Xiaoqing Ellen Tan and Binh Tang and Ross Taylor and Adina Williams and Jian Xiang Kuan and Puxin Xu and Zheng Yan and Iliyan Zarov and Yuchen Zhang and Angela Fan and Melanie Kambadur and Sharan Narang and Aurelien Rodriguez and Robert Stojnic and Sergey Edunov and Thomas Scialom},
