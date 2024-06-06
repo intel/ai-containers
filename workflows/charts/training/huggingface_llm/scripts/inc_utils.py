@@ -25,12 +25,20 @@ from torch.nn.functional import pad
 
 
 class INCDataloader:
-    """ Class to create data loaders to use with the Intel Neural Compressor """
+    """Class to create data loaders to use with the Intel Neural Compressor"""
+
     # pylint: disable=too-many-arguments
     # pylint: disable=too-many-instance-attributes
 
-    def __init__(self, dataset, tokenizer, batch_size=1, device='cpu',
-                 max_seq_length=512, for_calib=False):
+    def __init__(
+        self,
+        dataset,
+        tokenizer,
+        batch_size=1,
+        device="cpu",
+        max_seq_length=512,
+        for_calib=False,
+    ):
         self.dataset = dataset
         self.tokenizer = tokenizer
         self.device = device
@@ -43,7 +51,7 @@ class INCDataloader:
         self.dataset.set_format(type="torch", columns=["input_ids"])
 
     def pad_input(self, input_element):
-        """ Pad input based on the specified pad length """
+        """Pad input based on the specified pad length"""
         input_id = input_element["input_ids"].unsqueeze(0)
         label = input_id[:, -1].to(self.device)
         pad_len = self.pad_len - input_id.shape[1]
@@ -53,7 +61,7 @@ class INCDataloader:
         return (input_id, label, label_index)
 
     def __iter__(self):
-        """ Iterator """
+        """Iterator"""
         input_ids = None
         labels = None
         label_indices = None
@@ -89,7 +97,7 @@ class INCDataloader:
                 yield (input_ids, labels, label_indices)
 
     def __len__(self):
-        """ Return length """
+        """Return length"""
         return self.length
 
 
