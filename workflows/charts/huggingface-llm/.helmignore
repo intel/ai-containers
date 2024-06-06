@@ -24,6 +24,7 @@
 # ---
 *.py
 *.sh
+ci/tests.yaml
 docker-compose.yaml
 Dockerfile
 requirements.txt
