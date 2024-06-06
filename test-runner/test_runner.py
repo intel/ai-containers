@@ -200,15 +200,16 @@ if __name__ == "__main__":
     # Switch logging context back to the initial state
     set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
     # Remove remaining containers
-    remaining_containers = docker.container.list()
-    for container in remaining_containers:
-        docker.stop(container, time=None)
+    test_images = [expandvars(test.img) for test in tests if test.img]
+    if test_images:
+        remaining_containers = docker.container.list()
+        for container in remaining_containers:
+            docker.stop(container, time=None)
+        docker.image.remove(test_images, force=True)
+        logging.info("%d Images Removed", len(test_images))
     # Print Summary Table
     logging.info(
         "\n%s", tabulate(summary, headers=["#", "Test", "Status"], tablefmt="orgtbl")
     )
-    test_images = [expandvars(test.img) for test in tests if test.img]
-    docker.image.remove(test_images, force=True)
-    logging.info("%d Images Removed", len(test_images))
     if ERROR:
         sys.exit(1)
