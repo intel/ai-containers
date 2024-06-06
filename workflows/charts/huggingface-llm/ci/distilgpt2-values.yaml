@@ -1,0 +1,123 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+secret:
+  encodedToken:
+
+image:
+  name: intel/ai-workflows
+  tag: torch-2.3.0-huggingface-multinode-py3.10
+  pullPolicy: Always
+
+securityContext:
+  runAsUser:
+  runAsGroup:
+  fsGroup:
+  allowPrivilegeEscalation: false
+
+elasticPolicy:
+  rdzvBackend: c10d
+  minReplicas: 1
+  maxReplicas: 2
+  maxRestarts: 30
+
+distributed:
+  workers: 1
+  script: /workspace/scripts/finetune.py
+  modelNameOrPath: distilbert/distilgpt2
+  logLevel: info
+
+  doTrain: true
+  doEval: true
+  doBenchmark: false
+  doQuantize: false
+
+  train:
+    datasetName: databricks/databricks-dolly-15k
+    dataFile:
+    inputColumnName: context
+    outputColumnName: response
+    datasetConcatenation: true
+    promptWithInput: Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+    promptWithoutInput: Below is an instruction that describes a task. Write a response that appropriately completes the request.
+    perDeviceBatchSize: 8
+    epochs: 1
+    maxSteps: 5
+    gradientAccumulationSteps: 1
+    learningRate: 2e-5
+    ddpFindUnusedParameters: false
+    ddpBackend: gloo
+    useFastTokenizer: false
+    outputDir: /tmp/pvc-mount/output/saved_model
+    loggingSteps: 10
+    saveTotalLimit: 2
+    saveStrategy: epoch
+    useLora: true
+    loraRank: 8
+    loraAlpha: 16
+    loraDropout: 0.1
+    loraTargetModules: c_attn
+    noCuda: true
+    overwriteOutputDir: true
+    bf16: false
+    useIpex: true
+  eval:
+    perDeviceBatchSize: 8
+    validationSplitPercentage: 0.01
+  benchmark:
+    warmup: 30
+    iterations: 300
+    coresPerInstance: -1
+    numInstances: 1
+  quantize:
+    peftModelDir: /tmp/pvc-mount/output/saved_model  # If training, set this to the train.outputDir to quantize the trained model
+    outputDir: /tmp/pvc-mount/output/quantized_model
+    woqBits: 8
+    woqGroupSize: -1
+    woqScheme: sym
+    woqAlgo: RTN
+
+deploy:
+  env:
+    configMapName: intel-proxy-config
+    enabled: true
+
+envVars:
+  ldPreload:
+  logLevel: INFO
+  transformersCache: /tmp/pvc-mount/transformers_cache
+  hfDatasetsCache: /tmp/pvc-mount/hf_dataset_cache
+  hfHome: /tmp/home
+  cclWorkerCount: 0
+  httpProxy:
+  httpsProxy:
+  noProxy:
+  ftpProxy:
+  socksProxy:
+
+# Resources allocated to each worker
+resources:
+  cpuRequest: 64
+  cpuLimit: 64
+  memoryRequest: 128Gi
+  memoryLimit: 128Gi
+  nodeSelectorLabel: node-type
+  nodeSelectorValue: clx
+
+# Persistent volume claim storage resources
+storage:
+  storageClassName: nfs-client
+  resources: 10Gi
+  pvcMountPath: /tmp/pvc-mount
