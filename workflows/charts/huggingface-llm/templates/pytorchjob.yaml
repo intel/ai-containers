@@ -151,6 +151,11 @@ spec:
                 - "{{ .Values.distributed.quantize.woqScheme }}"
                 - --woq_algo
                 - "{{ .Values.distributed.quantize.woqAlgo }}"
+              {{- if .Values.deploy.env.enabled }}
+              envFrom:
+              - configMapRef:
+                  name: {{ .Values.deploy.env.configMapName }}
+              {{- end }}
               env:
               - name: CCL_ATL_TRANSPORT
                 value: ofi
