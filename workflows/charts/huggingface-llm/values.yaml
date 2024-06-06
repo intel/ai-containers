@@ -15,10 +15,6 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-metadata:
-  # -- The name of the Kubernetes namespace where the job will be deployed.
-  namespace: kubeflow
-
 secret:
   # -- Hugging Face token encoded using base64.
   encodedToken:

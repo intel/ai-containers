@@ -19,7 +19,6 @@ apiVersion: "kubeflow.org/v1"
 kind: PyTorchJob
 metadata:
   name: {{ .Release.Name }}-pytorchjob
-  namespace: {{ .Values.metadata.namespace }}
 spec:
   elasticPolicy:
     rdzvBackend: {{ .Values.elasticPolicy.rdzvBackend }}
