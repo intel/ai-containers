@@ -13,6 +13,6 @@
 # limitations under the License.
 
 ---
-ignore: 
+ignore:
   - '**/templates/**.yaml'
   - '**/templates/tests/**.yaml'
