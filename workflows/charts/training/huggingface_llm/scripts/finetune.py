@@ -16,6 +16,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+# pylint: disable=too-many-lines
 
 import copy
 import importlib
@@ -23,19 +24,24 @@ import logging
 import math
 import os
 import sys
+
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List, Optional
+from typing import Optional, List
 
 import datasets
 import torch
-
 # COMMENT OUT FOR SINGLE NODE
 import torch.distributed as dist  # noqa # pylint: disable=unused-import
 import transformers
+
 from datasets import load_dataset
-from inc_utils import INCDataloader, calculate_latency_and_throughput
-from peft import LoraConfig, PeftModel, TaskType, get_peft_model
+from peft import (
+    LoraConfig,
+    PeftModel,
+    TaskType,
+    get_peft_model
+)
 from transformers import (
     AutoConfig,
     AutoModelForCausalLM,
@@ -49,15 +55,17 @@ from transformers import (
 )
 from transformers.trainer_utils import is_main_process
 
+from inc_utils import INCDataloader, calculate_latency_and_throughput
+
 os.environ["WANDB_DISABLED"] = "true"
-
 logger = logging.getLogger(__name__)
-
-CNVRG_LINE_FORMAT = '"cnvrg_linechart_{} value: {}"\n'
+CNVRG_LINE_FORMAT = '\"cnvrg_linechart_{} value: {}\"\n'
 
 
 class CustomPrinterCallback(TrainerCallback):
+    """ Class to print custom callback messages """
     def on_log(self, args, state, control, logs=None, **kwargs):
+        """ Logs messages for loss, learning rate, and epoch """
         _ = logs.pop("total_flos", None)
         if state.is_local_process_zero:
             print(logs)
@@ -76,6 +84,7 @@ class ModelArguments:
     """
     Arguments pertaining to which model/config/tokenizer we are going to fine-tune, or train from scratch.
     """
+    # pylint: disable=too-many-instance-attributes
 
     model_name_or_path: Optional[str] = field(
         default=None,
@@ -216,6 +225,7 @@ class DataArguments:
     """
     Arguments pertaining to what data we are going to input our model for training and eval.
     """
+    # pylint: disable=too-many-instance-attributes
 
     dataset_name: Optional[str] = field(
         default=None,
@@ -378,7 +388,7 @@ class QuantizationArguments:
     """
     Arguments used to do weights only post training quantization using the Intel Neural Compressor.
     """
-
+    # pylint: disable=too-many-instance-attributes
     peft_model_dir: str = field(
         default=None,
         metadata={
@@ -494,6 +504,7 @@ STANDARD_PROMPT_DICT2 = {
 
 
 def create_prompts(examples, prompt_dict):
+    """ Use template to create prompt from examples """
     prompts = []
 
     for example in examples:
@@ -508,6 +519,7 @@ def create_prompts(examples, prompt_dict):
 
 
 def create_system_turn(examples, prompt_dict):
+    """ Use template to create prompt from examples """
     prompts = []
 
     for example in examples:
@@ -531,18 +543,20 @@ def is_optimum_habana_available():
 
 
 def main():
-    start_time = datetime.now()
+    """ Fine tunes a model using the specified arguments """
+    # pylint: disable=consider-using-f-string
+    # pylint: disable=logging-format-interpolation
+    # pylint: disable=logging-fstring-interpolation
+    # pylint: disable=too-many-branches
+    # pylint: disable=too-many-locals
+    # pylint: disable=too-many-statements
 
-    script_args = (
-        ModelArguments,
-        DataArguments,
-        FinetuneArguments,
-        QuantizationArguments,
-        BenchmarkArguments,
-    )
+    start_time = datetime.now()
+    script_args = (ModelArguments, DataArguments, FinetuneArguments, QuantizationArguments, BenchmarkArguments)
 
     # If optimum-habana is available, use GaudiTrainingArguments. Otherwise, use Transformers TrainingArguments
     if is_optimum_habana_available():
+        # pylint: disable=import-outside-toplevel
         from optimum.habana import GaudiTrainingArguments
 
         script_args += (GaudiTrainingArguments,)
@@ -567,15 +581,8 @@ def main():
         ) = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
     else:
         # model_args, data_args, training_args, finetune_args = parser.parse_args_into_dataclasses()
-        (
-            model_args,
-            data_args,
-            finetune_args,
-            quant_args,
-            benchmark_args,
-            training_args,
-            optim_args,
-        ) = parser.parse_args_into_dataclasses(return_remaining_strings=True)
+        model_args, data_args, finetune_args, quant_args, benchmark_args, training_args, _ = \
+            parser.parse_args_into_dataclasses(return_remaining_strings=True)
 
     # Setup logging
     logging.basicConfig(
@@ -753,19 +760,14 @@ def main():
         else STANDARD_PROMPT_DICT2
     )
     for prompt_template in [prompt_dict, prompt_dict2]:
-        for k, v in prompt_dict.items():
-            prompt_template[k] = prompt_template[k].replace(
-                "{prompt_with_input}", data_args.prompt_with_input
-            )
-            prompt_template[k] = prompt_template[k].replace(
-                "{prompt_without_input}", data_args.prompt_without_input
-            )
+        for k, _ in prompt_dict.items():
+            prompt_template[k] = prompt_template[k].replace("{prompt_with_input}", data_args.prompt_with_input)
+            prompt_template[k] = prompt_template[k].replace("{prompt_without_input}", data_args.prompt_without_input)
     logger.info(prompt_dict)
     logger.info(prompt_dict2)
 
     # Preprocessing the datasets.
     for key in raw_datasets:
-        print(key)
         prompts = create_prompts(raw_datasets[key], prompt_dict)
         system_prompts = create_system_turn(raw_datasets[key], prompt_dict2)
         columns_to_be_removed = list(raw_datasets[key].features.keys())
@@ -923,6 +925,7 @@ def main():
 
         # Initialize our Trainer
         if is_optimum_habana_available():
+            # pylint: disable=import-outside-toplevel
             from optimum.habana import GaudiConfig, GaudiTrainer
 
             gaudi_config = GaudiConfig()
@@ -1004,6 +1007,7 @@ def main():
     if rank == "0":
 
         # Initialize the data loader and configs used for benchmarking and quantization
+        calib_dataloader = None
         if benchmark_args.do_benchmark or quant_args.do_quantize:
             calib_dataloader = INCDataloader(
                 tokenized_datasets["train"],
@@ -1014,6 +1018,7 @@ def main():
             )
 
             if benchmark_args.do_benchmark:
+                # pylint: disable=import-outside-toplevel
                 from neural_compressor import benchmark
                 from neural_compressor.config import BenchmarkConfig
 
@@ -1047,6 +1052,7 @@ def main():
 
         # Post training quantization
         if quant_args.do_quantize:
+            # pylint: disable=import-outside-toplevel
             logger.info("Post training quantization")
             from neural_compressor import quantization
             from neural_compressor.config import PostTrainingQuantConfig
@@ -1082,12 +1088,9 @@ def main():
 
         # Benchmark the quantized model
         int8_latency = int8_throughput = None
-        if (
-            benchmark_args.do_benchmark
-            and quant_args.quantize_output_dir is not None
-            and os.path.exists(quant_args.quantize_output_dir)
-            and len(os.listdir(quant_args.quantize_output_dir)) > 0
-        ):
+        if benchmark_args.do_benchmark and quant_args.quantize_output_dir is not None and \
+                os.path.exists(quant_args.quantize_output_dir) and len(os.listdir(quant_args.quantize_output_dir)) > 0:
+            # pylint: disable=import-outside-toplevel
             from neural_compressor.utils.pytorch import load
 
             # Load the quantized model using INC
