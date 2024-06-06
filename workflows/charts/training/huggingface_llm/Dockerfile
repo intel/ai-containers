@@ -36,6 +36,7 @@ RUN apt-get update -y && \
     libomp-dev \
     numactl
 
+WORKDIR /workspace
 COPY requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r requirements.txt
@@ -51,6 +52,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
     rm -rf /var/lib/apt/lists/*
 
 # Allow OpenSSH to talk to containers without asking for confirmation
+# hadolint global ignore=SC2002
 RUN mkdir -p /var/run/sshd && \
     cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
     echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
