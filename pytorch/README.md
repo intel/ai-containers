@@ -197,7 +197,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [PyTorch*]: https://pytorch.org/
 [TorchServe*]: https://github.com/pytorch/serve
 
-[v0.4.0-Beta]: https://github.com/intel/ai-containers/blob/v0.4.0-Beta/pytorch/Dockerfile
+[v0.4.0-Beta]: https://github.com/intel/ai-containers/blob/main/pytorch/Dockerfile
 [v0.3.4]: https://github.com/intel/ai-containers/blob/v0.3.4/pytorch/Dockerfile
 [v0.2.3]: https://github.com/intel/ai-containers/blob/v0.2.3/pytorch/Dockerfile
 [v0.1.0]: https://github.com/intel/ai-containers/blob/v0.1.0/pytorch/Dockerfile
