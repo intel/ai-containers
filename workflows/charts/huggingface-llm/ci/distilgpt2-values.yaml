@@ -13,7 +13,7 @@
 # limitations under the License.
 
 metadata:
-  namespace: kubeflow
+  namespace: helm-ci
 
 secret:
   encodedToken:
