@@ -156,6 +156,11 @@ distributed:
     # Algorithm for weight only quantization. Choose from: RTN, AWQ, GPTQ, or TEQ.
     woqAlgo: RTN
 
+deploy:
+  env:
+    configMapName:
+    enabled: false
+
 envVars:
   # -- Paths set to the LD_PRELOAD environment variable.
   ldPreload: /usr/lib/x86_64-linux-gnu/libtcmalloc.so.4.5.9:/usr/local/lib/libiomp5.so

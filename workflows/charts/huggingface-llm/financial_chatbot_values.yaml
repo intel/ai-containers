@@ -92,6 +92,11 @@ distributed:
     woqScheme: sym
     woqAlgo: RTN
 
+deploy:
+  env:
+    configMapName:
+    enabled: false
+
 envVars:
   ldPreload: /usr/lib/x86_64-linux-gnu/libtcmalloc.so.4.5.9:/usr/local/lib/libiomp5.so
   logLevel: INFO
