@@ -9,7 +9,7 @@ The [PyTorch Training operator](https://www.kubeflow.org/docs/components/trainin
 [Kubeflow](https://www.kubeflow.org) is used to deploy the distributed training job to the Kubernetes cluster. To
 optimize the performance, [Intel® Extension for PyTorch](https://github.com/intel/intel-extension-for-pytorch) is used
 during training and the [Intel® oneAPI Collective Communications Library (oneCCL)](https://github.com/oneapi-src/oneCCL)
-is used as the DDP backend. The `intel/intel-optimized-pytorch:2.2.0-pip-multinode` base image already includes these
+is used as the DDP backend. The `intel/intel-optimized-pytorch:2.3.0-pip-multinode` base image already includes these
 components, so that base image is used and other libraries like Hugging Face Transformers are added on to fine tune the
 LLM.
 
@@ -76,15 +76,15 @@ The [Docker](https://www.docker.com) container used in this example includes all
 distributed PyTorch training using a Hugging Face model and a fine tuning script. This directory includes the
 [`Dockerfile`](Dockerfile) that was used to build the container.
 
-An image has been published to DockerHub (`intel/ai-workflows:torch-2.2.0-huggingface-multinode-py3.10`) with
+An image has been published to DockerHub (`intel/ai-workflows:torch-2.3.0-huggingface-multinode-py3.10`) with
 the following major packages included:
 
 | Package Name | Version | Purpose |
 |--------------|---------|---------|
-| [PyTorch](https://pytorch.org/) | 2.2.0+cpu | Base framework to train models |
-| [Intel® Extension for PyTorch](https://github.com/intel/intel-extension-for-pytorch) | 2.2.0+cpu | Utilizes Intel®'s optimization |
+| [PyTorch](https://pytorch.org/) | 2.3.0+cpu | Base framework to train models |
+| [Intel® Extension for PyTorch](https://github.com/intel/intel-extension-for-pytorch) | 2.3.0+cpu | Utilizes Intel®'s optimization |
 | [Intel® Neural Compressor](https://github.com/intel/neural-compressor) | 2.4.1 | Optimize model for inference post-training |
-| [Intel® oneAPI Collective Communications Library](https://github.com/oneapi-src/oneCCL) | 2.2.0+cpu | Deploy PyTorch jobs on multiple nodes |
+| [Intel® oneAPI Collective Communications Library](https://github.com/oneapi-src/oneCCL) | 2.3.0+cpu | Deploy PyTorch jobs on multiple nodes |
 
 See the [build from source instructions](../../../../tensorflow/README.md#build-from-source) to build a custom LLM fine
 tuning container.
@@ -132,7 +132,7 @@ fine tune the model.
 2. Edit your values file based on the parameters that you would like to use and your cluster. Key parameters to look
    at and edit are:
    * `image.name` if have built your own container, otherwise the default `intel/ai-workflows` image will be used
-   * `image.tag` if have built your own container, otherwise the default `torch-2.2.0-huggingface-multinode-py3.10` tag will be used
+   * `image.tag` if have built your own container, otherwise the default `torch-2.3.0-huggingface-multinode-py3.10` tag will be used
    * `elasticPolicy.minReplicas` and `elasticPolicy.maxReplicas` based on the number of workers being used
    * `distributed.workers` should be set to the number of worker that will be used for the job
    * If you are using `values.yaml` for your own workload, fill in either `train.datasetName` (the name of a

@@ -24,7 +24,7 @@ secret:
 
 image:
   name: intel/ai-workflows  # Specify the image name that was pushed to docker hub or copied to the nodes
-  tag: torch-2.2.0-huggingface-multinode-py3.10  # Specify the image tag that was pushed to docker hub or copied to the nodes
+  tag: torch-2.3.0-huggingface-multinode-py3.10  # Specify the image tag that was pushed to docker hub or copied to the nodes
   pullPolicy: IfNotPresent
 
 securityContext:

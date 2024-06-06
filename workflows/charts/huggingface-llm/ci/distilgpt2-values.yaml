@@ -19,8 +19,8 @@ secret:
   encodedToken:
 
 image:
-  name:
-  tag:
+  name: intel/ai-workflows
+  tag: torch-2.3.0-huggingface-multinode-py3.10
   pullPolicy: Always
 
 securityContext:

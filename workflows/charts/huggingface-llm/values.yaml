@@ -27,7 +27,7 @@ image:
   # -- Name of the image to use for the PyTorch job. The container should include the fine tuning script and all the dependencies required to run the job.
   name: intel/ai-workflows
   # -- The image tag for the container that will be used to run the PyTorch job. The container should include the fine tuning script and all the dependencies required to run the job.
-  tag: torch-2.2.0-huggingface-multinode-py3.10
+  tag: torch-2.3.0-huggingface-multinode-py3.10
   # -- Determines when the kubelet will pull the image to the worker nodes. Choose from: `IfNotPresent`, `Always`, or `Never`. If updates to the image have been made, use `Always` to ensure the newest image is used.
   pullPolicy: IfNotPresent
 
