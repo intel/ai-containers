@@ -73,29 +73,6 @@ jobs:
       group_dir: ${{ matrix.group }}
       ref: "refs/pull/${{ github.event.number }}/merge"
     secrets: inherit
-  merge-logs: 
-    needs: [tests-containers]
-    runs-on: ubuntu-latest
-    steps: 
-    - uses: actions/download-artifact@v2 
-      with: 
-        path: logs
-    - name: merge logs 
-      run: |
-        # Create a new combined logs file
-        touch combined_logs.txt
-    
-        # Loop through all downloaded logs and append them to the combined file
-        for log_file in $(find . -type f); do
-          echo "Contents of $log_file" >> combined_logs.txt
-          cat $log_file >> combined_logs.txt
-          echo "-------------------" >> combined_logs.txt
-        done
-    - name: Upload Combined Logs
-      uses: actions/upload-artifact@v2
-      with:
-        name: combined-logs
-        path: combined_logs.txt    
   status-check:
     needs: [group-diff, pipeline-ci]
     runs-on: ubuntu-latest
