@@ -16,15 +16,12 @@
 # SPDX-License-Identifier: Apache-2.0
 
 
-function gen_single_key()
-{
+function gen_single_key() {
     ALG_NAME=$1
-    if [[ ! -f /etc/ssh/ssh_host_${ALG_NAME}_key ]]
-    then
+    if [[ ! -f /etc/ssh/ssh_host_${ALG_NAME}_key ]]; then
         ssh-keygen -q -N "" -t ${ALG_NAME} -f /etc/ssh/ssh_host_${ALG_NAME}_key
     fi
 }
-
 
 gen_single_key dsa
 gen_single_key rsa

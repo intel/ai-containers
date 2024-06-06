@@ -22,7 +22,7 @@ metadata:
     "helm.sh/hook": test
 spec:
   containers:
-    - name: http-check
+    - name: eval-results-check
       image: {{ .Values.image.name }}:{{ .Values.image.tag }}
       command: ["/bin/bash"]
       args: ["-c", "TIMEOUT=900; while [ ! -f /tmp/pvc-mount/output/saved_model/eval_results.json ]; do echo \"`date` - ${TIMEOUT} - eval_results.json does not exist\"; TIMEOUT=$((${TIMEOUT} - 10)); if [[ ${TIMEOUT} -le 0 ]]; then echo \"Timed out waiting for eval_results.json\"; exit 1; fi; sleep 10; done; cat /tmp/pvc-mount/output/saved_model/eval_results.json"]
