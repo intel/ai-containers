@@ -21,6 +21,7 @@ VENV_DIR='hf_venv'
 python3 -m venv $VENV_DIR
 
 # Activate the venv and install datasets API
+# shellcheck source=/dev/null
 source $VENV_DIR/bin/activate && pip install --no-cache datasets
 
 # Run the following python code to download and save a subset of financial alpaca dataset

@@ -16,11 +16,13 @@ LLM.
 ## Requirements
 
 Cluster requirements:
+
 * Kubernetes cluster with Intel® Xeon® Scalable Processors
 * [Kubeflow](https://www.kubeflow.org/docs/started/installing-kubeflow/) PyTorch Training operator deployed to the cluster
 * NFS backed Kubernetes storage class
 
 Client requirements:
+
 * [kubectl command line tool](https://kubernetes.io/docs/tasks/tools/)
 * [Helm command line tool](https://helm.sh/docs/intro/install/)
 * Access to the [Llama 2 model in Hugging Face](https://huggingface.co/meta-llama/Llama-2-7b-chat-hf) and a
@@ -34,6 +36,7 @@ Client requirements:
 
 A Helm chart is used to package the resources needed to run the distributed training job. The Helm chart in this
 directory includes the following components:
+
 * [PyTorchJob](templates/pytorchjob.yaml), which launches a pod for each worker
 * [Kubernetes secret](templates/secret.yaml) with your Hugging Face token for authentication to access gated models
 * [Persistent volume claim (PVC)](templates/pvc.yaml) to provides a storage space for saving checkpoints,
@@ -89,7 +92,7 @@ tuning container.
 ## Running the distributed training job
 
 > Prior to running the examples, ensure that your Kubernetes cluster meets the
-> [cluster requirements](#cluster-requirements) mentioned above.
+> [cluster requirements](#requirements) mentioned above.
 
 Select a predefined use cases (such as fine tuning using the [Medical Meadow](https://github.com/kbressem/medAlpaca)
 dataset), or use the template and fill in parameters to use your own workload. There are separate
@@ -107,14 +110,11 @@ fine tune the model.
 
 ### Fine tuning Llama2 7b on a Kubernetes cluster
 
-> Before running the fine tuning job on the cluster, the Docker image must be built and pushed to a container
-> registry or loaded into Docker on the cluster nodes. See the [container build](#container-build) and
-> [container push](#container-push) sections for instructions.
-
 1. Get a [Hugging Face token](https://huggingface.co/docs/hub/security-tokens) with read access and use your terminal
    to get the base64 encoding for your token using a terminal using `echo <your token> | base64`.
 
    For example:
+
    ```
    $ echo hf_ABCDEFG | base64
    aGZfQUJDREVGRwo=
@@ -122,6 +122,7 @@ fine tune the model.
 
    Copy and paste the encoded token value into your values yaml file `encodedToken` field in the `secret` section.
    For example:
+
    ```
    secret:
      name: hf-token-secret
@@ -155,6 +156,7 @@ fine tune the model.
    See a complete list and descriptions of the available parameters in the [Helm chart values documentation](values.md).
 
 3. Deploy the helm chart to the cluster using the `kubeflow` namespace:
+
    ```
    # Navigate to the directory that contains the Hugging Face LLM fine tuning workflow
    cd workflows/charts/training/huggingface_llm
@@ -170,6 +172,7 @@ fine tune the model.
    The dataset can be uploaded to the PVC using the [`kubectl cp` command](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#cp).
    The destination path for the dataset needs to match the `train.dataFile` path in your values yaml file.  Note that
    the worker pods would keep failing and restarting until you upload your dataset.
+
    ```
    # Copies a local "dataset" folder to the PVC at /tmp/pvc-mount/dataset
    kubectl cp dataset <dataaccess pod name>:/tmp/pvc-mount/dataset
@@ -213,14 +216,18 @@ fine tune the model.
 
    As an example, the trained model from the Medical Meadows use case can be copied from the
    `/tmp/pvc-mount/output/bf16` path to the local system using the following command:
+
    ```
    kubectl cp --namespace kubeflow <dataaccess pod name>:/tmp/pvc-mount/output/saved_model .
    ```
+
 7. Finally, the resources can be deleted from the cluster using the
    [`helm uninstall`](https://helm.sh/docs/helm/helm_uninstall/) command. For example:
+
    ```
    helm uninstall --namespace kubeflow llama2-distributed
    ```
+
    A list of all the deployed helm releases can be seen using `helm list`.
 
 ## Citations
