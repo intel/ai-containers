@@ -61,21 +61,21 @@ distributed:
   # -- The Hugging Face Transformers logging level (`debug`, `info`, `warning`, `error`, and `critical`).
   logLevel: info
 
-  # -- If set to True, training will be run using the Hugging Face Transformers library.
-  doTrain: True
-  # -- If set to True, evaluation will be run with the validation split of the dataset, using the Hugging Face Transformers library.
-  doEval: True
-  # -- If set to True, the Intel Neural Compressor will be used to benchmark the trained model. If the model is being quantized, the quantized model will also be benchmarked.
-  doBenchmark: False
-  # -- If set to True, the Intel Neural Compressor will be used to quantize the trained model.
-  doQuantize: False
+  # -- If set to true, training will be run using the Hugging Face Transformers library.
+  doTrain: true
+  # -- If set to true, evaluation will be run with the validation split of the dataset, using the Hugging Face Transformers library.
+  doEval: true
+  # -- If set to true, the Intel Neural Compressor will be used to benchmark the trained model. If the model is being quantized, the quantized model will also be benchmarked.
+  doBenchmark: false
+  # -- If set to true, the Intel Neural Compressor will be used to quantize the trained model.
+  doQuantize: false
   train:
     # -- Name of a Hugging Face dataset to use. If no dataset name is provided, the dataFile path will be used instead.
     datasetName: medalpaca/medical_meadow_medical_flashcards
     # -- Path to a Llama formatted data file to use, if no dataset name is provided.
     dataFile:
     # -- Whether to concatenate the sentence for more efficient training.
-    datasetConcatenation: True
+    datasetConcatenation: true
     # -- Name of the column in the dataset that describes the task that the model should perform. If no column name is provided, the "instruction" column is used.
     instructionColumnName:
     # -- Name of the column in the dataset that optionally provides context or input for the task. If no column name is provided, the "input" column is used.
@@ -97,11 +97,11 @@ distributed:
     # -- The initial learning rate.
     learningRate: 2e-5
     # -- The `find_used_parameters` flag to pass to DistributedDataParallel.
-    ddpFindUnusedParameters: False
+    ddpFindUnusedParameters: false
     # -- The backend to be used for distributed training. It is recommended to use `ccl` with the Intel Extension for PyTorch.
     ddpBackend: ccl
     # -- Whether to use one of the fast tokenizer (backed by the tokenizers library) or not.
-    useFastTokenizer: False
+    useFastTokenizer: false
     # -- The output directory where the model predictions and checkpoints will be written.
     outputDir: /tmp/pvc-mount/output/saved_model
     # -- Log every X updates steps. Should be an integer or a float in range `[0,1]`. If smaller than 1, will be interpreted as ratio of total training steps.
@@ -111,7 +111,7 @@ distributed:
     # -- The checkpoint save strategy to use (`no`, `steps`, or `epoch`).
     saveStrategy: epoch
     # -- Whether or not to use LoRA.
-    useLora: True
+    useLora: true
     # -- Rank parameter in the LoRA method.
     loraRank: 8
     # -- Alpha parameter in the LoRA method.
@@ -120,14 +120,14 @@ distributed:
     loraDropout: 0.1
     # -- Target modules for the LoRA method.
     loraTargetModules: q_proj vproj
-    # -- Use CPU when set to True.
-    noCuda: True
+    # -- Use CPU when set to true.
+    noCuda: true
     # -- Overwrite the content of the output directory. Use this to continue training if output_dir points to a checkpoint directory.
-    overwriteOutputDir: True
+    overwriteOutputDir: true
     # -- Whether to use bf16 (mixed) precision instead of 32-bit. Requires hardware that supports bfloat16.
-    bf16: True
+    bf16: true
     # -- Use Intel #xtension for PyTorch when it is available.
-    useIpex: True
+    useIpex: true
   eval:
     # -- Batch size to use for evaluation for each device.
     perDeviceBatchSize: 8

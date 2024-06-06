@@ -19,6 +19,11 @@ apiVersion: v2
 name: Hugging Face PyTorch Distributed Training
 description: This Helm chart deploys a distributed training job using the Kubeflow PyTorchJob training operator.
 
+maintainers:
+  - name: Dina Jones
+    email: dina.s.jones@intel.com
+    url: https://github.com/dmsuehir
+
 # A chart can be either an 'application' or a 'library' chart.
 #
 # Application charts are a collection of templates that can be packaged into versioned archives

@@ -44,15 +44,15 @@ distributed:
   modelNameOrPath: meta-llama/Llama-2-7b-chat-hf
   logLevel: info
 
-  doTrain: True
-  doEval: True
-  doBenchmark: False
-  doQuantize: False
+  doTrain: true
+  doEval: true
+  doBenchmark: false
+  doQuantize: false
 
   train:
     datasetName: # Name of the Hugging Face dataset to use. Leave blank if using a data file
     dataFile: /tmp/pvc-mount/dataset/financial-alpaca.json # Path to a dataset file. Leave blank if using a Hugging Face dataset.
-    datasetConcatenation: True
+    datasetConcatenation: true
     promptWithInput: You are a helpful, respectful and honest finance assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature. If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.
     promptWithoutInput: You are a helpful, respectful and honest finance assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature. If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.
     perDeviceBatchSize: 8
@@ -60,22 +60,22 @@ distributed:
     maxSteps: -1
     gradientAccumulationSteps: 1
     learningRate: 2e-4
-    ddpFindUnusedParameters: False
+    ddpFindUnusedParameters: false
     ddpBackend: ccl
-    useFastTokenizer: False
+    useFastTokenizer: false
     outputDir: /tmp/pvc-mount/output/saved_model
     loggingSteps: 10
     saveTotalLimit: 2
     saveStrategy: epoch
-    useLora: True
+    useLora: true
     loraRank: 8
     loraAlpha: 16
     loraDropout: 0.1
     loraTargetModules: q_proj vproj
-    noCuda: True
-    overwriteOutputDir: True
-    bf16: True
-    useIpex: True
+    noCuda: true
+    overwriteOutputDir: true
+    bf16: true
+    useIpex: true
   eval:
     perDeviceBatchSize: 8
     validationSplitPercentage: 0.2
