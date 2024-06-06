@@ -150,8 +150,9 @@ def test_get_test_list(test_args_input, test_json_input):
         },
     }
 
-    test_fn = get_test_list(test_args_input, test_json_input)
+    test_fn, disable_masking = get_test_list(test_args_input, test_json_input)
     assert test_fn == test_val
+    assert disable_masking is False
 
 
 def test_masking(test_class_input):
