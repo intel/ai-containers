@@ -91,9 +91,10 @@ distributed:
     woqScheme: sym
     woqAlgo: RTN
 
-env:
-  configMapName: intel-proxy-config
-  enabled: true
+deploy:
+  env:
+    configMapName: intel-proxy-config
+    enabled: true
 
 envVars:
   ldPreload:
