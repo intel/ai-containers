@@ -21,7 +21,7 @@ services:
         no_proxy: ""
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-intel/intel-optimized-pytorch}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-2.3.0-pip-multinode}
-      context: charts/training/huggingface_llm
+      context: charts/huggingface_llm
       labels:
         dependency.python.pip: requirements.txt
         docs: pytorch

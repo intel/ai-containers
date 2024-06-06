@@ -159,7 +159,7 @@ fine tune the model.
 
    ```bash
    # Navigate to the directory that contains the Hugging Face LLM fine tuning workflow
-   cd workflows/charts/training/huggingface_llm
+   cd workflows/charts/huggingface_llm
 
    # Deploy the job using the helm chart, specifying the values file with the -f parameter
    helm install --namespace kubeflow -f <values file>.yaml llama2-distributed .
