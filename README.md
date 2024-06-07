@@ -6,8 +6,8 @@
 [![CodeQL](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/intel/ai-containers/main.svg)](https://results.pre-commit.ci/latest/github/intel/ai-containers/main)
 [![Test Runner CI](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml)
-[![Weekly Tests](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml)
 [![Helm Chart CI](https://github.com/intel/ai-containers/actions/workflows/chart-ci.yaml/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/chart-ci.yaml)
+[![Weekly Tests](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml)
 
 This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. used to scale out AI containers with versions of TensorFlow and PyTorch that have been optimized for Intel platforms. Scaling is done with python, Docker, kubernetes, kubeflow, cnvrg.io, Helm, and other container orchestration frameworks for use in the cloud and on-premise.
 
@@ -105,7 +105,7 @@ helm install <name> \
 
 ### Test a Helm Chart
 
-Install [Chart Testing](https://github.com/helm/chart-testing)/
+Install [Chart Testing](https://github.com/helm/chart-testing).
 
 ```bash
 pip install -r workflows/charts/dev-requirements.txt
