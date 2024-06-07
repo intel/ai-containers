@@ -72,7 +72,7 @@ services:
   multinode:
     build:
       args:
-        SSH_KEY_PATH: ${SSH_KEY_PATH}
+        SSH_KEY_PATH: ${SSH_KEY_PATH:-/mnt/ssh_key}
       labels:
         dependency.apt.gcc: true
         dependency.apt.libgl1-mesa-glx: true

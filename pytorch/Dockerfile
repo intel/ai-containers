@@ -83,6 +83,8 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     openssh-server \
     net-tools \
     virtualenv && \
+    rm  /etc/ssh/ssh_host_*_key \
+    /etc/ssh/ssh_host_*_key.pub && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -118,7 +120,7 @@ RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src
 # Enable passwordless ssh for mpirun
 RUN mkdir /var/run/sshd
 RUN sed -i'' -e's/^#PermitRootLogin prohibit-password$/PermitRootLogin yes/' /etc/ssh/sshd_config \
-        && sed -i'' -e's/^#PasswordAuthentication yes$/PasswordAuthentication yes/' /etc/ssh/sshd_config \
+        && sed -i'' -e's/^#PasswordAuthentication yes$/PasswordAuthentication no/' /etc/ssh/sshd_config \
         && sed -i'' -e's/^#PermitEmptyPasswords no$/PermitEmptyPasswords yes/' /etc/ssh/sshd_config \
         && sed -i'' -e's/^UsePAM yes/UsePAM no/' /etc/ssh/sshd_config \
         && echo "Port "$SSHD_PORT"" >> /etc/ssh/sshd_config \
@@ -127,28 +129,25 @@ RUN sed -i'' -e's/^#PermitRootLogin prohibit-password$/PermitRootLogin yes/' /et
         && echo "  StrictHostKeyChecking no" >> /etc/ssh/ssh_config
 
 EXPOSE ${SSHD_PORT}
-CMD ["/usr/sbin/sshd", "-D"]
+RUN mkdir ~/.ssh
 
-RUN useradd -rm -d /home/intel -s /bin/bash intel && \
-    echo 'intel ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-USER intel
-WORKDIR /home/intel
-RUN mkdir /home/intel/.ssh
-
-USER root
-RUN chown intel /etc/ssh/ssh_host_ecdsa_key && \
-   chown intel /etc/ssh/ssh_host_rsa_key && \
-   chown intel /etc/ssh/ssh_host_ed25519_key
-
-USER intel
-WORKDIR /home/intel
-RUN echo "cp "$SSH_KEY_PATH"/id_rsa /home/intel/.ssh/" >> ~/.bashrc \
-    && echo "cp "$SSH_KEY_PATH"/id_rsa.pub /home/intel/.ssh/" >> ~/.bashrc \
-    && echo "chmod 600 /home/intel/.ssh/id_rsa" >> ~/.bashrc \
-    && echo "chown intel /home/intel/.ssh/id_rsa" >> ~/.bashrc \
-    && echo "chown intel /home/intel/.ssh/id_rsa.pub" >> ~/.bashrc \
-    && echo "if [ ! -f /home/intel/.ssh/authorized_keys ]; then" >> ~/.bashrc \
-    && echo "  cat /home/intel/.ssh/id_rsa.pub > /home/intel/.ssh/authorized_keys" >> ~/.bashrc \
+RUN echo "if [ ! -f ~/.ssh/id_rsa ]; then" >> ~/.bashrc \
+    && echo "  cp "$SSH_KEY_PATH"/id_rsa ~/.ssh/" >> ~/.bashrc \
+    && echo "  cp "$SSH_KEY_PATH"/id_rsa.pub ~/.ssh/" >> ~/.bashrc \
+    && echo "  chmod 600 ~/.ssh/id_rsa" >> ~/.bashrc \
+    && echo "fi" >> ~/.bashrc \
+    && echo "if [ ! -f ~/.ssh/authorized_keys ]; then" >> ~/.bashrc \
+    && echo "  cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys" >> ~/.bashrc \
+    && echo "fi" >> ~/.bashrc \
+    && echo "if [ ! -f /etc/ssh/ssh_host_rsa_key ]; then" >> ~/.bashrc \
+    && echo "  ssh-keygen -q -N '' -t rsa -f /etc/ssh/ssh_host_rsa_key" >> ~/.bashrc \
+    && echo "fi" >> ~/.bashrc \
+    && echo "if [ ! -f /etc/ssh/ssh_host_ecdsa_key ]; then" >> ~/.bashrc \
+    && echo "  ssh-keygen -q -N '' -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key" >> ~/.bashrc \
+    && echo "fi" >> ~/.bashrc \
+    && echo "if [ ! -f /etc/ssh/ssh_host_ed25519_key ]; then" >> ~/.bashrc \
+    && echo "  ssh-keygen -q -N '' -t ed25519 -f /etc/ssh/ssh_host_ed25519_key" >> ~/.bashrc \
+    && echo "  service ssh start" >> ~/.bashrc \
     && echo "fi" >> ~/.bashrc
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
