@@ -6,9 +6,13 @@ Test Runner is a simple automated testing framework for replicating and validati
 
 These steps assume you are using a modern Linux OS like [Ubuntu 22.04](https://www.releases.ubuntu.com/jammy/) with [Python 3.10+](https://www.python.org/downloads/release/python-3100/).
 
+#### Install Test Runner
 ```bash
 git clone https://github.com/intel/ai-containers
 pip install -r ai-containers/test-runner/requirements.txt
+```
+#### Create Tests Definition File
+```bash
 touch tests.yaml
 python ai-containers/test-runner/test_runner.py -f tests.yaml
 ```
