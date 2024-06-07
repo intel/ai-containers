@@ -150,6 +150,11 @@ jobs:
     needs: [setup-scan]
     if: ${{ !inputs.no_build }}
     runs-on: k8-runners
+    permissions:
+      actions: read
+      packages: read
+      security-events: write
+      pull-requests: write
     strategy:
       matrix:
         container: ${{ fromJSON(needs.setup-scan.outputs.matrix) }}
