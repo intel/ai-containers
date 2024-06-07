@@ -178,7 +178,6 @@ jobs:
       with:
         sarif_file: '${{ matrix.container }}-scan.sarif'
         category: 'Trivy'
-        ref: ${{ inputs.ref }}
       continue-on-error: true
 ####################################################################################################
 # Generic Test Runner
