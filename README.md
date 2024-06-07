@@ -80,6 +80,44 @@ PACKAGE_OPTION=idp python test-runner/test_runner.py -f pytorch/tests/tests.yaml
 > [!TIP]
 > To test a container built by GitHub Actions CI/CD, find the `run number` associated with the workflow run and set the `GITHUB_RUN_NUMBER` environment variable during execution to pull the desired image.
 
+## Deploy Containers
+
+### Install [Helm](https://helm.sh/docs/intro/install/)
+
+This assumes you've setup [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl) and have a `KUBECONFIG`.
+
+```bash
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 && \
+chmod 700 get_helm.sh && \
+./get_helm.sh
+```
+
+### Deploy a Helm Chart
+
+```bash
+cd workflows/charts
+# Select a Chart and check its README for a list of customization options and other steps required.
+helm install <name> \
+  --namespace=<namespace> \
+  --set <key>=<value> \
+  <chart-folder>
+```
+
+### Test a Helm Chart
+
+Install [Chart Testing](https://github.com/helm/chart-testing)/
+
+```bash
+pip install -r workflows/charts/dev-requirements.txt
+brew install chart-testing
+```
+
+Utilize the `ct` CLI to run `helm lint`, `helm install`, and `helm test`.
+
+```bash
+ct lint-and-install --namespace=<namespace> --config .github/ct.yaml --charts workflow/charts/<chart>
+```
+
 ## Troubleshooting
 
 - See the [Docker Troubleshooting Article](https://docs.docker.com/engine/install/troubleshoot/).
