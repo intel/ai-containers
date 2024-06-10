@@ -66,6 +66,6 @@ runs:
       run: |
         install -m 0600 ${{ inputs.kubeconfig_path }} /tmp/config.yaml
         kubectl config use-context ${{ inputs.cluster_context }}
-        ct lint-and-install ${{ inputs.config_path }} ${{ inputs.config }}
+        ct lint-and-install --config ${{ inputs.config_path }} ${{ inputs.config }}
       env:
         KUBECONFIG: /tmp/config.yaml
