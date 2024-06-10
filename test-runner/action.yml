@@ -49,7 +49,7 @@ runs:
     - uses: actions/checkout@v4
       with:
         path: mlops
-        ref: main
+        ref: tylertitsworth/investigation
         repository: intel/ai-containers
         token: ${{ inputs.token }}
     - uses: actions/checkout@v4
