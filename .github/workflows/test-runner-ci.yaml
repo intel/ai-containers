@@ -33,7 +33,7 @@ jobs:
       fail-fast: true
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
         egress-policy: audit
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
@@ -82,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
         egress-policy: audit
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
@@ -117,7 +117,7 @@ jobs:
     runs-on: k8-runners
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
         egress-policy: audit
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
@@ -142,7 +142,7 @@ jobs:
       with:
         python-version: "3.8"
     - name: Test Container Group
-      uses: intel/ai-containers/test-runner@056f1f1954facd1da8480a0822bac396eef8f16c # main
+      uses: intel/ai-containers/test-runner@5d4ed87b68fef1bcf15a89c5a608b15b59f9bbf3 # main
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
         perf_repo: ${{ secrets.PERF_REPO }}
