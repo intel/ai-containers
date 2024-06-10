@@ -29,4 +29,4 @@ jobs:
       with:
         config: '--all --namespace helm-ci'
         list_changed: false
-        kubeconfig_path: ${{ secrets.KUBECONFIG }}
+        kubeconfig_path: ${{ secrets.KUBECONFIG_PATH }}
