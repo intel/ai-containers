@@ -53,7 +53,7 @@ runs:
       uses: helm/chart-testing-action@v2.6.1
     - name: Get chart diff
       id: changed
-      if: {{ fromJson(inputs.list_changed) }}
+      if: ${{ fromJson(inputs.list_changed) }}
       shell: bash
       run: |
         changed=$(ct list-changed --config {{ inputs.config_path }})
@@ -61,7 +61,7 @@ runs:
           echo "changed=true" >> "$GITHUB_OUTPUT"
         fi
     - name: Helm Lint, Install, and Test
-      if: {{ steps.changed.outputs.changed == 'true' || !fromJson(inputs.list_changed) }}
+      if: ${{ steps.changed.outputs.changed == 'true' || !fromJson(inputs.list_changed) }}
       shell: bash
       run: |
         install -m 0600 ${{ inputs.kubeconfig_path }} /tmp/config.yaml
