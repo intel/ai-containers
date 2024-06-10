@@ -44,4 +44,4 @@ jobs:
         ref: ${{ github.event.merge_group.head_ref }}
     - uses: ./workflows/charts@main
       with:
-        kubeconfig_path: ${{ secrets.KUBECONFIG }}
+        kubeconfig_path: ${{ secrets.KUBECONFIG_PATH }}
