@@ -27,6 +27,5 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
     - uses: ./workflows/charts
       with:
-        config: '--all --namespace helm-ci'
-        list_changed: false
+        config: '--namespace helm-ci'
         kubeconfig_path: ${{ secrets.KUBECONFIG_PATH }}
