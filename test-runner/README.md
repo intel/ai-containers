@@ -143,16 +143,6 @@ In this example, `client_rest_test.sh` is a bash script that executes `cURL` com
 
 This application is designed to run a series of tests defined in a YAML configuration file. These tests can be run either directly on the host system (baremetal) or within a Docker container. The application can execute one test file using the command line interface.
 
-To run the CLI, use the following command:
-
-```bash
-python main.py -f /path/to/tests.yaml
-```
-
-The -f option is used to specify the path to the YAML file containing the test definitions.
-
-For more options, see the `--help` output below:
-
 ```text
 $ python test_runner.py --help
 usage: test_runner.py [-h] [-a ACTIONS_PATH] -f FILE_PATH [-v] [-l LOGS_PATH]
