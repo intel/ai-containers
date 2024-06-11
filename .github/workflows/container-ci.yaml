@@ -150,11 +150,11 @@ jobs:
     needs: [setup-scan]
     if: ${{ !inputs.no_build }}
     runs-on: k8-runners
-    permissions:
-      actions: read
-      packages: read
-      pull-requests: write
-      security-events: write
+    # permissions:
+    #   actions: read
+    #   packages: read
+    #   pull-requests: write
+    #   security-events: write
     strategy:
       matrix:
         container: ${{ fromJSON(needs.setup-scan.outputs.matrix) }}
@@ -178,11 +178,15 @@ jobs:
     - name: Cleanup
       if: always()
       run: docker rmi -f ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
-    - uses: github/codeql-action/upload-sarif@2e230e8fe0ad3a14a340ad0815ddb96d599d2aff # v3.25.8
+    - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
       with:
-        sarif_file: '${{ matrix.container }}-scan.sarif'
-        category: '${{ matrix.container }}'
-      continue-on-error: true
+        name: ${{ matrix.container }}-scan
+        path: ${{ matrix.container }}-scan.sarif
+    # - uses: github/codeql-action/upload-sarif@2e230e8fe0ad3a14a340ad0815ddb96d599d2aff # v3.25.8
+    #   with:
+    #     sarif_file: '${{ matrix.container }}-scan.sarif'
+    #     category: '${{ matrix.container }}'
+    #   continue-on-error: true
 ####################################################################################################
 # Generic Test Runner
 ####################################################################################################
