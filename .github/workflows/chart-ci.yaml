@@ -42,6 +42,6 @@ jobs:
       with:
         fetch-depth: 0
         ref: ${{ github.event.merge_group.head_ref }}
-    - uses: ./workflows/charts@main
+    - uses: ./workflows/charts@3dd3db546b10d1a29f17a4fc45d4c5b7ca950c90
       with:
         kubeconfig_path: ${{ secrets.KUBECONFIG_PATH }}
