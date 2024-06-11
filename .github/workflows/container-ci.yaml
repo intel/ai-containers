@@ -182,7 +182,7 @@ jobs:
       # if: ${{ inputs.ref == 'main' }}
       with:
         sarif_file: '${{ matrix.container }}-scan.sarif'
-        token: ${{ secrets.ACTION_TOKEN }}
+        # token: ${{ secrets.ACTION_TOKEN }}
         category: 'Trivy'
       continue-on-error: true
 ####################################################################################################
