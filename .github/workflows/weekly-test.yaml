@@ -62,7 +62,7 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         fetch-depth: 0
-    - uses: ./workflows/charts@3dd3db546b10d1a29f17a4fc45d4c5b7ca950c90
+    - uses: intel/ai-containers/workflows/charts@3dd3db546b10d1a29f17a4fc45d4c5b7ca950c90 # main
       with:
         config: '--all --namespace helm-ci'
         list_changed: false
