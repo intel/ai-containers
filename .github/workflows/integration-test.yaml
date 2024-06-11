@@ -49,7 +49,7 @@ jobs:
         for path in $(echo $DIFF | jq -r '.[]'); do
           while [[ "$path" != "." ]]; do
             DIR_PATH=$(dirname "$path")
-            if [ -n "$(find "$DIR_PATH" -name 'docker-compose.yaml' -print -quit)" ] && [ "$DIR_PATH" != "." ]; then
+            if [ -n "$(find "$DIR_PATH" -maxdepth 1 -name 'docker-compose.yaml' -print -quit)" ] && [ "$DIR_PATH" != "." ]; then
               DOCKER_COMPOSE_PATHS+=("$DIR_PATH")
               path="."
             else
