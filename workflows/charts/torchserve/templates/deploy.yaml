@@ -1,0 +1,92 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "torchserve.fullname" . }}
+  labels:
+    {{- include "torchserve.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deploy.replicas }}
+  selector:
+    matchLabels:
+      {{- include "torchserve.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "torchserve.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: torchserve
+          image: {{ .Values.deploy.image }}
+          args:
+            - 'torchserve'
+            - '--start'
+            - '--ts-config'
+            - {{ .Values.deploy.modelConfig }}
+            - '--model-store'
+            - 'model-store'
+            - '--workflow-store'
+            - 'model-store'
+            - '--models'
+            - {{ .Values.deploy.models }}
+          {{- if eq .Values.deploy.env.enabled true }}
+          envFrom:
+          - configMapRef:
+              name: {{ .Values.deploy.env.configMapName }}
+          {{- end }}
+          ports:
+            - name: rest-1
+              containerPort: 8080
+            - name: rest-2
+              containerPort: 8081
+            - name: rest-3
+              containerPort: 8082
+            - name: grpc-1
+              containerPort: 7070
+            - name: grpc-2
+              containerPort: 7071
+          volumeMounts:
+          {{- if .Values.deploy.storage.nfs.enabled }}
+            - name: model
+              mountPath: /home/model-server/model-store
+              subPath: {{ .Values.deploy.storage.nfs.subPath }}
+          {{- else }}
+            - name: model
+              mountPath: /home/model-server/model-store
+          {{- end }}
+          resources:
+            requests:
+              cpu: {{ .Values.deploy.resources.requests.cpu }}
+              memory: {{ .Values.deploy.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.deploy.resources.limits.cpu }}
+              memory: {{ .Values.deploy.resources.limits.memory }}
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      volumes:
+      {{- if .Values.deploy.storage.nfs.enabled }}
+        - name: model
+          nfs:
+            server: {{ .Values.deploy.storage.nfs.server }}
+            path: {{ .Values.deploy.storage.nfs.path }}
+            readOnly: {{ .Values.deploy.storage.nfs.readOnly }}
+          emptyDir: {}
+      {{- else }}
+        - name: model
+          persistentVolumeClaim:
+            claimName: {{ include "torchserve.fullname" . }}-model-dir
+      {{- end }}
