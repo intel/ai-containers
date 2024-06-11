@@ -153,8 +153,8 @@ jobs:
     permissions:
       actions: read
       packages: read
-      security-events: write
       pull-requests: write
+      security-events: write
     strategy:
       matrix:
         container: ${{ fromJSON(needs.setup-scan.outputs.matrix) }}
