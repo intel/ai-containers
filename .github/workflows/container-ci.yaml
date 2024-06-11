@@ -127,9 +127,9 @@ jobs:
         repo: ${{ secrets.REPO }}
         no-push: ${{ inputs.no_push }}
         no-start: ${{ inputs.no_start }}
-        ####################################################################################################
-        # Trivy Scan
-        ####################################################################################################
+####################################################################################################
+# Trivy Scan
+####################################################################################################
   setup-scan:
     needs: [build-containers]
     runs-on: ubuntu-latest
@@ -150,6 +150,11 @@ jobs:
     needs: [setup-scan]
     if: ${{ !inputs.no_build }}
     runs-on: k8-runners
+    permissions:
+      actions: read
+      packages: read
+      pull-requests: write
+      security-events: write
     strategy:
       matrix:
         container: ${{ fromJSON(needs.setup-scan.outputs.matrix) }}
@@ -174,12 +179,13 @@ jobs:
       if: always()
       run: docker rmi -f ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
     - uses: github/codeql-action/upload-sarif@2e230e8fe0ad3a14a340ad0815ddb96d599d2aff # v3.25.8
-      if: ${{ github.event_name == 'schedule' }}
       with:
         sarif_file: '${{ matrix.container }}-scan.sarif'
-        ####################################################################################################
-        # Generic Test Runner
-        ####################################################################################################
+        category: '${{ matrix.container }}'
+      continue-on-error: true
+####################################################################################################
+# Generic Test Runner
+####################################################################################################
   setup-test:
     needs: [build-containers]
     runs-on: ubuntu-latest
