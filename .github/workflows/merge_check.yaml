@@ -21,20 +21,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: fountainhead/action-wait-for-check@5a908a24814494009c4bb27c242ea38c93c593be
+        id: helm-ci
         with:
           checkName: helm-ci
           ref: ${{ github.event.merge_group.head_ref }}
           timeoutSeconds: 1800
           token: ${{ secrets.ACTION_TOKEN }}
       - uses: fountainhead/action-wait-for-check@5a908a24814494009c4bb27c242ea38c93c593be
+        if: ${{ steps.helm-ci.outputs.conclusion == 'success' }}
+        id: integration-test
         with:
           checkName: integration-test
           ref: ${{ github.event.merge_group.head_ref }}
           timeoutSeconds: 1800
           token: ${{ secrets.ACTION_TOKEN }}
       - uses: fountainhead/action-wait-for-check@5a908a24814494009c4bb27c242ea38c93c593be
+        if: ${{ steps.integration-test.outputs.conclusion == 'success' }}
+        id: coverage
         with:
           checkName: coverage
           ref: ${{ github.event.merge_group.head_ref }}
           timeoutSeconds: 1800
           token: ${{ secrets.ACTION_TOKEN }}
+      - if: ${{ steps.coverage.outputs.conclusion != 'success' }}
+        run: exit 1
