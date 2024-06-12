@@ -11,7 +11,8 @@ These steps assume you are using a modern Linux OS like [Ubuntu 22.04](https://w
 git clone https://github.com/intel/ai-containers
 pip install -r ai-containers/test-runner/requirements.txt
 ```
-#### Create Tests Definition File
+### Create Tests Definition File
+
 ```bash
 touch tests.yaml
 python ai-containers/test-runner/test_runner.py -f tests.yaml
