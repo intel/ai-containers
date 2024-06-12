@@ -84,7 +84,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
         egress-policy: audit
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
@@ -119,7 +119,7 @@ jobs:
     - name: Build Container Group
       if: ${{ !inputs.no_build }}
       id: build-group
-      uses: intel/ai-containers/.github@056f1f1954facd1da8480a0822bac396eef8f16c # main
+      uses: intel/ai-containers/.github@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
       with:
         group_dir: ${{ inputs.group_dir }}
         env_overrides: ${{ inputs.env_overrides || env.env_overrides || '' }}
@@ -127,9 +127,9 @@ jobs:
         repo: ${{ secrets.REPO }}
         no-push: ${{ inputs.no_push }}
         no-start: ${{ inputs.no_start }}
-        ####################################################################################################
-        # Trivy Scan
-        ####################################################################################################
+####################################################################################################
+# Trivy Scan
+####################################################################################################
   setup-scan:
     needs: [build-containers]
     runs-on: ubuntu-latest
@@ -137,7 +137,7 @@ jobs:
       matrix: ${{ steps.scan-matrix.outputs.matrix }}
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
         egress-policy: audit
     - uses: actions/download-artifact@65a9edc5881444af0b9093a5e628f2fe47ea3b2e # v4.1.7
@@ -150,6 +150,11 @@ jobs:
     needs: [setup-scan]
     if: ${{ !inputs.no_build }}
     runs-on: k8-runners
+    # permissions:
+    #   actions: read
+    #   packages: read
+    #   pull-requests: write
+    #   security-events: write
     strategy:
       matrix:
         container: ${{ fromJSON(needs.setup-scan.outputs.matrix) }}
@@ -166,20 +171,25 @@ jobs:
     - name: Pull Image
       run: docker pull ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
     - name: Scan Container
-      uses: intel/ai-containers/.github/scan@056f1f1954facd1da8480a0822bac396eef8f16c # main
+      uses: intel/ai-containers/.github/scan@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
       with:
         image-ref: ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
         output: ${{ matrix.container }}-scan.sarif
     - name: Cleanup
       if: always()
       run: docker rmi -f ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
-    - uses: github/codeql-action/upload-sarif@2e230e8fe0ad3a14a340ad0815ddb96d599d2aff # v3.25.8
-      if: ${{ github.event_name == 'schedule' }}
+    - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
       with:
-        sarif_file: '${{ matrix.container }}-scan.sarif'
-        ####################################################################################################
-        # Generic Test Runner
-        ####################################################################################################
+        name: ${{ matrix.container }}-scan
+        path: ${{ matrix.container }}-scan.sarif
+    # - uses: github/codeql-action/upload-sarif@2e230e8fe0ad3a14a340ad0815ddb96d599d2aff # v3.25.8
+    #   with:
+    #     sarif_file: '${{ matrix.container }}-scan.sarif'
+    #     category: '${{ matrix.container }}'
+    #   continue-on-error: true
+####################################################################################################
+# Generic Test Runner
+####################################################################################################
   setup-test:
     needs: [build-containers]
     runs-on: ubuntu-latest
@@ -187,7 +197,7 @@ jobs:
       matrix: ${{ steps.test-matrix.outputs.matrix }}
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
         egress-policy: audit
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
@@ -206,7 +216,7 @@ jobs:
         experimental: [true]
       fail-fast: false
     steps:
-    - uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+    - uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
         egress-policy: audit
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
@@ -218,7 +228,7 @@ jobs:
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Test Container Group
-      uses: intel/ai-containers/test-runner@056f1f1954facd1da8480a0822bac396eef8f16c # main
+      uses: intel/ai-containers/test-runner@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
         perf_repo: ${{ secrets.PERF_REPO }}

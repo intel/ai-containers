@@ -149,16 +149,6 @@ In this example, `client_rest_test.sh` is a bash script that executes `cURL` com
 
 This application is designed to run a series of tests defined in a YAML configuration file. These tests can be run either directly on the host system (baremetal) or within a Docker container. The application can execute one test file using the command line interface.
 
-To run the CLI, use the following command:
-
-```bash
-python main.py -f /path/to/tests.yaml
-```
-
-The -f option is used to specify the path to the YAML file containing the test definitions.
-
-For more options, see the `--help` output below:
-
 ```text
 $ python test_runner.py --help
 usage: test_runner.py [-h] [-a ACTIONS_PATH] -f FILE_PATH [-v] [-l LOGS_PATH]
@@ -219,22 +209,21 @@ This composite action clones this repository just as in the [quickstart](#quicks
 Inputs for the action:
 
 ```yaml
-  mlops_repo:
-    description: 'Test Runner org/repo'
-    required: true
-    type: string
-  mlops_ref:
-    description: 'Test Runner Branch/Tag'
+  cache_registry:
+    description: 'Container Cache Registry URL'
     required: false
-    default: develop
+    type: string
+  perf_repo:
+    description: 'Performance Test Repo'
+    required: false
     type: string
   recipe_dir:
     description: 'Path to Recipe Directory'
-    required: false
+    required: true
     type: string
   registry:
     description: 'Container Registry URL'
-    required: true
+    required: false
     type: string
   repo:
     description: 'Container Repository'

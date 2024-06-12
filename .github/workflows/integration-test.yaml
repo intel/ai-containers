@@ -28,7 +28,7 @@ jobs:
       groups: ${{ steps.group-list.outputs.FOLDERS }}
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
         egress-policy: audit
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
@@ -49,7 +49,7 @@ jobs:
         for path in $(echo $DIFF | jq -r '.[]'); do
           while [[ "$path" != "." ]]; do
             DIR_PATH=$(dirname "$path")
-            if [ -n "$(find "$DIR_PATH" -name 'docker-compose.yaml' -print -quit)" ] && [ "$DIR_PATH" != "." ]; then
+            if [ -n "$(find "$DIR_PATH" -maxdepth 1 -name 'docker-compose.yaml' -print -quit)" ] && [ "$DIR_PATH" != "." ]; then
               DOCKER_COMPOSE_PATHS+=("$DIR_PATH")
               path="."
             else
@@ -68,7 +68,7 @@ jobs:
         group: ${{ fromJson(needs.group-diff.outputs.groups) }}
         experimental: [true]
       fail-fast: false
-    uses: ./.github/workflows/container-ci.yaml
+    uses: intel/ai-containers/.github/workflows/container-ci.yaml@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
     with:
       group_dir: ${{ matrix.group }}
       ref: "refs/pull/${{ github.event.number }}/merge"
@@ -79,7 +79,7 @@ jobs:
     if: always()
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
         egress-policy: audit
     - run: exit 1
