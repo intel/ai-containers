@@ -18,7 +18,7 @@ author: tyler.titsworth@intel.com
 inputs:
   cache_registry:
     description: 'Container Cache Registry URL'
-    required: true
+    required: false
     type: string
   perf_repo:
     description: 'Performance Test Repo'
@@ -26,11 +26,11 @@ inputs:
     type: string
   recipe_dir:
     description: 'Path to Recipe Directory'
-    required: false
+    required: true
     type: string
   registry:
     description: 'Container Registry URL'
-    required: true
+    required: false
     type: string
   repo:
     description: 'Container Repository'

@@ -25,7 +25,7 @@ jobs:
       groups: ${{ steps.group-list.outputs.FOLDERS }}
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@f086349bfa2bd1361f7909c78558e816508cdc10 # v2.8.0
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
         egress-policy: audit
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
@@ -47,8 +47,38 @@ jobs:
         group: ${{ fromJson(needs.get-groups.outputs.groups) }}
         experimental: [true]
       fail-fast: false
-    uses: ./.github/workflows/container-ci.yaml
+    uses: intel/ai-containers/.github/workflows/container-ci.yaml@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
     with:
       group_dir: ${{ matrix.group }}
       ref: main
     secrets: inherit
+  helm-ci:
+    runs-on: kubectl
+    steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
+      with:
+        egress-policy: audit
+    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+      with:
+        fetch-depth: 0
+    - uses: intel/ai-containers/workflows/charts@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
+      with:
+        config: '--all --namespace helm-ci'
+        list_changed: false
+        kubeconfig_path: ${{ secrets.KUBECONFIG_PATH }}
+  scan:
+    name: gitleaks
+    runs-on: ubuntu-latest
+    steps:
+    - name: Harden Runner
+      uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
+      with:
+        egress-policy: audit
+    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+      with:
+        fetch-depth: 0
+    - uses: gitleaks/gitleaks-action@44c470ffc35caa8b1eb3e8012ca53c2f9bea4eb5 # v2.3.6
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
+        GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE}}
