@@ -16,7 +16,7 @@ pip install -r ai-containers/test-runner/requirements.txt
 
 ```bash
 touch tests.yaml
-python ai-containers/test-runner/test_runner.py -f tests.yaml
+python ai-containers/test-runner/test_runner.py -f /path/to/tests.yaml
 ```
 
 1. Install the python requirements file
