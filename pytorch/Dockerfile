@@ -80,11 +80,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     gcc \
     libgl1-mesa-glx \
     libglib2.0-0 \
-    openssh-client \
-    openssh-server \
     virtualenv && \
-    rm /etc/ssh/ssh_host_*_key \
-    /etc/ssh/ssh_host_*_key.pub && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -103,17 +99,26 @@ COPY generate_ssh_keys.sh .
 
 RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
 
-RUN cat /workspace/generate_ssh_keys.sh >> ~/.bashrc && \
-    rm -rf /generate_ssh_keys.sh
+ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
+
+RUN apt-get install -y --no-install-recommends --fix-missing \
+    openssh-client \
+    openssh-server \
+    rm /etc/ssh/ssh_host_*_key \
+    /etc/ssh/ssh_host_*_key.pub && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 ARG PYTHON_VERSION
-RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bashrc
+
+RUN cat /generate_ssh_keys.sh >> ~/.bashrc && \
+    rm -rf /generate_ssh_keys.sh && \
+    echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bashrc
 
 ENV I_MPI_ROOT="${I_MPI_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"
 ENV CCL_ROOT="${CCL_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"
 ENV FI_PROVIDER_PATH="${FI_PROVIDER_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib/prov"
 ENV LIBRARY_PATH="${LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
-ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
 ENV PATH="${PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/bin"
 ENV CPATH="${CPATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/include"
 
@@ -123,7 +128,7 @@ RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
 
-ENTRYPOINT service ssh start && bash
+ENTRYPOINT ["service", "ssh", "start", "&&", "bash"]
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
