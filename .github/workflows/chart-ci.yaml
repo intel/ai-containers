@@ -42,6 +42,6 @@ jobs:
       with:
         fetch-depth: 0
         ref: ${{ github.event.merge_group.head_ref }}
-    - uses: intel/ai-containers/workflows/charts@3dd3db546b10d1a29f17a4fc45d4c5b7ca950c90 # main
+    - uses: intel/ai-containers/workflows/charts@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
       with:
         kubeconfig_path: ${{ secrets.KUBECONFIG_PATH }}
