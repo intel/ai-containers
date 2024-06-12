@@ -84,13 +84,6 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Allow OpenSSH to talk to containers without asking for confirmation
-# hadolint global ignore=SC2002
-RUN mkdir -p /var/run/sshd && \
-    cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
-    echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
-    mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
-
 ENV SIGOPT_PROJECT=.
 
 WORKDIR /
@@ -108,6 +101,13 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
     /etc/ssh/ssh_host_*_key.pub && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Allow OpenSSH to talk to containers without asking for confirmation
+# hadolint global ignore=SC2002
+RUN mkdir -p /var/run/sshd && \
+    cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
+    echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
+    mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
 
 ARG PYTHON_VERSION
 
@@ -127,6 +127,8 @@ RUN mkdir -p /licensing
 RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
+
+EXPOSE 22:22
 
 ENTRYPOINT ["service", "ssh", "start", "&&", "bash"]
 
