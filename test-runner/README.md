@@ -203,22 +203,21 @@ This composite action clones this repository just as in the [quickstart](#quicks
 Inputs for the action:
 
 ```yaml
-  mlops_repo:
-    description: 'Test Runner org/repo'
-    required: true
-    type: string
-  mlops_ref:
-    description: 'Test Runner Branch/Tag'
+  cache_registry:
+    description: 'Container Cache Registry URL'
     required: false
-    default: develop
+    type: string
+  perf_repo:
+    description: 'Performance Test Repo'
+    required: false
     type: string
   recipe_dir:
     description: 'Path to Recipe Directory'
-    required: false
+    required: true
     type: string
   registry:
     description: 'Container Registry URL'
-    required: true
+    required: false
     type: string
   repo:
     description: 'Container Repository'
