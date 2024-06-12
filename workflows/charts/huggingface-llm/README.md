@@ -111,7 +111,7 @@ fine tune the model.
 ### Helm chart values table
 
 <details>
-  <summary> Expand this section to see the Helm chart values table </summary>
+  <summary> Expand to see the values table </summary>
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
