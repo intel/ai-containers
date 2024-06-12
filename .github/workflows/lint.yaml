@@ -21,8 +21,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
-  lint:
-    name: Lint
+  lint-test:
     runs-on: harden-runners
     steps:
     - name: Harden Runner
