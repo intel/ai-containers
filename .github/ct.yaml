@@ -18,4 +18,4 @@ remote: origin
 target-branch: main
 chart-dirs:
   - workflows/charts
-helm-extra-args: --timeout 600s
+helm-extra-args: --timeout 1800s
