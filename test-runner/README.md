@@ -83,6 +83,8 @@ test:
   cmd: echo "${VAR1:-hello}"
 ```
 
+Execution:
+
 ```bash
 python test-runner/test_runner.py -f path/to/tests.yaml
 VAR1=world python test-runner/test_runner.py -f path/to/tests.yaml
@@ -99,10 +101,13 @@ test:
     VAR1: "Yo!"
 ```
 
+Execution:
+
 ```bash
 python test-runner/test_runner.py -f path/to/tests.yaml
 VAR1=world python test-runner/test_runner.py -f path/to/tests.yaml
 ```
+
 In this instance, the default value of `hello` is overridden first by the value in the `env` variable dictionary, and then by the value passed on the test command line. Thus, the first output will be `Yo!`, and the second output will be `world`.
 
 > [!TIP]
