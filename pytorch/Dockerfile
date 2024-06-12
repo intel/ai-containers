@@ -88,11 +88,12 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Allow OpenSSH to talk to containers without asking for confirmation
+# hadolint global ignore=SC2002
 RUN mkdir -p /var/run/sshd && \
     cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
     echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
     mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
-
 
 ENV SIGOPT_PROJECT=.
 
@@ -102,8 +103,8 @@ COPY generate_ssh_keys.sh .
 
 RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
 
-RUN cat /workspace/generate_ssh_keys.sh >> ${HOME}/.bashrc && \
-    /generate_ssh_keys.sh
+RUN cat /workspace/generate_ssh_keys.sh >> ~/.bashrc && \
+    rm -rf /generate_ssh_keys.sh
 
 ARG PYTHON_VERSION
 RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bashrc
