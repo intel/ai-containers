@@ -80,9 +80,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     gcc \
     libgl1-mesa-glx \
     libglib2.0-0 \
-    virtualenv && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    virtualenv
 
 ENV SIGOPT_PROJECT=.
 
