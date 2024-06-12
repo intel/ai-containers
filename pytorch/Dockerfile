@@ -96,7 +96,7 @@ ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/d
 
 RUN apt-get install -y --no-install-recommends --fix-missing \
     openssh-client \
-    openssh-server \
+    openssh-server && \
     rm /etc/ssh/ssh_host_*_key \
     /etc/ssh/ssh_host_*_key.pub && \
     apt-get clean && \
@@ -128,7 +128,7 @@ RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
 
-EXPOSE 22:22
+EXPOSE 22
 
 ENTRYPOINT ["service", "ssh", "start", "&&", "bash"]
 
