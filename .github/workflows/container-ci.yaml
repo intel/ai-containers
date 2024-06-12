@@ -150,11 +150,6 @@ jobs:
     needs: [setup-scan]
     if: ${{ !inputs.no_build }}
     runs-on: k8-runners
-    # permissions:
-    #   actions: read
-    #   packages: read
-    #   pull-requests: write
-    #   security-events: write
     strategy:
       matrix:
         container: ${{ fromJSON(needs.setup-scan.outputs.matrix) }}
@@ -182,11 +177,6 @@ jobs:
       with:
         name: ${{ matrix.container }}-scan
         path: ${{ matrix.container }}-scan.sarif
-    # - uses: github/codeql-action/upload-sarif@2e230e8fe0ad3a14a340ad0815ddb96d599d2aff # v3.25.8
-    #   with:
-    #     sarif_file: '${{ matrix.container }}-scan.sarif'
-    #     category: '${{ matrix.container }}'
-    #   continue-on-error: true
 ####################################################################################################
 # Generic Test Runner
 ####################################################################################################
