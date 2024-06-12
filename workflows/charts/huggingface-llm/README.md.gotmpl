@@ -108,6 +108,8 @@ usages:
 Pick one of the value files to use depending on your desired use case, and then follow the instructions below to
 fine tune the model.
 
+### Helm chart values table
+
 <details>
   <summary> Expand this section to see the Helm chart values table </summary>
 
@@ -160,7 +162,8 @@ fine tune the model.
    * `securityContext.runAsGroup` should be set to your group ID
    * `securityContext.fsGroup` should be set to your file system group ID
 
-   See a complete list and descriptions of the available parameters in the [Helm chart values documentation](values.md).
+   See a complete list and descriptions of the available parameters the
+   [Helm chart values table](#helm-chart-values-table) above.
 
 3. Deploy the helm chart to the cluster using the `kubeflow` namespace:
 
