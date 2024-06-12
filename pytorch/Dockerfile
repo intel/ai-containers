@@ -86,7 +86,6 @@ ENV SIGOPT_PROJECT=.
 
 WORKDIR /
 COPY multinode-requirements.txt .
-COPY generate_ssh_keys.sh .
 
 RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
 
@@ -105,13 +104,18 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
 RUN mkdir -p /var/run/sshd && \
     cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
     echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
+    sed -i'' -e's/^#PermitRootLogin prohibit-password$/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i'' -e's/^#PasswordAuthentication yes$/PasswordAuthentication no/' /etc/ssh/sshd_config && \
+    sed -i'' -e's/^#PermitEmptyPasswords no$/PermitEmptyPasswords yes/' /etc/ssh/sshd_config && \
     mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
 
 ARG PYTHON_VERSION
 
+COPY generate_ssh_keys.sh .
+
 RUN cat /generate_ssh_keys.sh >> ~/.bashrc && \
-    rm -rf /generate_ssh_keys.sh && \
-    echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bashrc
+    echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bashrc && \
+    rm -rf /generate_ssh_keys.sh
 
 ENV I_MPI_ROOT="${I_MPI_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"
 ENV CCL_ROOT="${CCL_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"
@@ -127,8 +131,6 @@ RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
 
 EXPOSE 22
-
-ENTRYPOINT ["service", "ssh", "start", "&&", "bash"]
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
