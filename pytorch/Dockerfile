@@ -80,20 +80,33 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     gcc \
     libgl1-mesa-glx \
     libglib2.0-0 \
+    openssh-client \
+    openssh-server \
     virtualenv && \
+    rm /etc/ssh/ssh_host_*_key \
+    /etc/ssh/ssh_host_*_key.pub && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /var/run/sshd && \
+    cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
+    echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
+    mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
+
 
 ENV SIGOPT_PROJECT=.
 
 WORKDIR /
 COPY multinode-requirements.txt .
+COPY generate_ssh_keys.sh .
 
 RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
 
+RUN cat /workspace/generate_ssh_keys.sh >> ${HOME}/.bashrc && \
+    /generate_ssh_keys.sh
+
 ARG PYTHON_VERSION
 RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bashrc
-
 
 ENV I_MPI_ROOT="${I_MPI_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"
 ENV CCL_ROOT="${CCL_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"
@@ -108,6 +121,8 @@ RUN mkdir -p /licensing
 RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
+
+ENTRYPOINT service ssh start && bash
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
