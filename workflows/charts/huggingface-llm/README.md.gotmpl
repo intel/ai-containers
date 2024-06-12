@@ -1,4 +1,6 @@
-# Fine Tune a Hugging Face LLM using a Kubernetes Cluster
+# {{ template "chart.name" . }}
+
+{{ template "chart.badgesSection" . }}
 
 In order to speed up the amount of time it takes to train a model using Intel® Xeon® Scalable Processors, multiple
 machines can be used to distribute the workload. This guide will focus on using multiple nodes from a
@@ -259,3 +261,5 @@ fine tune the model.
   year={2023}
 }
 ```
+
+{{ template "helm-docs.versionFooter" . }}
