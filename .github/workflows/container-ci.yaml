@@ -119,7 +119,7 @@ jobs:
     - name: Build Container Group
       if: ${{ !inputs.no_build }}
       id: build-group
-      uses: intel/ai-containers/.github@5d4ed87b68fef1bcf15a89c5a608b15b59f9bbf3 # main
+      uses: intel/ai-containers/.github@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
       with:
         group_dir: ${{ inputs.group_dir }}
         env_overrides: ${{ inputs.env_overrides || env.env_overrides || '' }}
@@ -171,7 +171,7 @@ jobs:
     - name: Pull Image
       run: docker pull ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
     - name: Scan Container
-      uses: intel/ai-containers/.github/scan@5d4ed87b68fef1bcf15a89c5a608b15b59f9bbf3 # main
+      uses: intel/ai-containers/.github/scan@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
       with:
         image-ref: ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
         output: ${{ matrix.container }}-scan.sarif
@@ -228,7 +228,7 @@ jobs:
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Test Container Group
-      uses: intel/ai-containers/test-runner@5d4ed87b68fef1bcf15a89c5a608b15b59f9bbf3 # main
+      uses: intel/ai-containers/test-runner@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
         perf_repo: ${{ secrets.PERF_REPO }}
