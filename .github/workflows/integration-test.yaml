@@ -72,8 +72,7 @@ jobs:
     uses: tylertitsworth/ai-containers-test/.github/workflows/container-ci.yaml@tylertitsworth/test-pr
     with:
       group_dir: ${{ matrix.group }}
-      # ref: "refs/pull/${{ github.event.number }}/merge"
-      ref: refs/pull/${{ github.event.number }}/merge
+      ref: "refs/pull/${{ github.event.number }}/merge"
     secrets: inherit
   status-check:
     needs: [group-diff, pipeline-ci]
