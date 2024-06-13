@@ -75,6 +75,8 @@ CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/
 
 FROM ipex-base-${PACKAGE_OPTION} AS multinode
 
+ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
+
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
     python3-dev \
     gcc \
