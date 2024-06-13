@@ -68,7 +68,7 @@ jobs:
         group: ${{ fromJson(needs.group-diff.outputs.groups) }}
         experimental: [true]
       fail-fast: false
-    uses: intel/ai-containers/.github/workflows/container-ci.yaml@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
+    uses: intel/ai-containers/.github/workflows/container-ci.yaml@e72c10dda994e96038c1ff46b1cf218c4d9929a4 # main
     with:
       group_dir: ${{ matrix.group }}
       ref: "refs/pull/${{ github.event.number }}/merge"
