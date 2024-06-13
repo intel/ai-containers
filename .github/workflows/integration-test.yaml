@@ -14,9 +14,10 @@
 
 name: Integration Tests
 on:
-  pull_request_target:
-    types: [opened, edited, reopened, synchronize]
-    branches: [main]
+  pull_request: null
+  # pull_request_target:
+  #   types: [opened, edited, reopened, synchronize]
+  #   branches: [main]
 permissions: read-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -34,7 +35,7 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         fetch-depth: 0
-        ref: "refs/pull/${{ github.event.number }}/merge"
+        # ref: "refs/pull/${{ github.event.number }}/merge"
     - name: Output Modified Group Directories
       id: group-list
       run: |
@@ -68,10 +69,11 @@ jobs:
         group: ${{ fromJson(needs.group-diff.outputs.groups) }}
         experimental: [true]
       fail-fast: false
-    uses: intel/ai-containers/.github/workflows/container-ci.yaml@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
+    uses: tylertitsworth/ai-containers-test/.github/workflows/container-ci.yaml@tylertitsworth/test-pr
     with:
       group_dir: ${{ matrix.group }}
-      ref: "refs/pull/${{ github.event.number }}/merge"
+      # ref: "refs/pull/${{ github.event.number }}/merge"
+      ref: refs/pull/${{ github.event.number }}/merge
     secrets: inherit
   status-check:
     needs: [group-diff, pipeline-ci]
