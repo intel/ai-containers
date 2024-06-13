@@ -47,7 +47,7 @@ jobs:
         group: ${{ fromJson(needs.get-groups.outputs.groups) }}
         experimental: [true]
       fail-fast: false
-    uses: intel/ai-containers/.github/workflows/container-ci.yaml@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
+    uses: intel/ai-containers/.github/workflows/container-ci.yaml@9d5e358def9f45e5a8b32026054715171a0e8710 # main
     with:
       group_dir: ${{ matrix.group }}
       ref: main
@@ -62,7 +62,7 @@ jobs:
     - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       with:
         fetch-depth: 0
-    - uses: intel/ai-containers/workflows/charts@5c68c9c8ff7f634fff3abcc17c46970e0b9b0dde # main
+    - uses: intel/ai-containers/workflows/charts@9d5e358def9f45e5a8b32026054715171a0e8710 # main
       with:
         config: '--all --namespace helm-ci'
         list_changed: false
