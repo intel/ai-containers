@@ -130,8 +130,6 @@ RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
 
-EXPOSE 22
-
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
 RUN apt-get update && \
