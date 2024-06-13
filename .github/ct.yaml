@@ -20,4 +20,3 @@ chart-dirs:
   - workflows/charts
 helm-extra-args: --timeout 600s
 check-version-increment: false
-
