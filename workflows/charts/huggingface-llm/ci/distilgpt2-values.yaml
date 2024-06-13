@@ -109,10 +109,10 @@ envVars:
 
 # Resources allocated to each worker
 resources:
-  cpuRequest: 64
-  cpuLimit: 64
-  memoryRequest: 128Gi
-  memoryLimit: 128Gi
+  cpuRequest: 32
+  cpuLimit: 32
+  memoryRequest: 64Gi
+  memoryLimit: 64Gi
   nodeSelectorLabel: node-type
   nodeSelectorValue: clx
 
