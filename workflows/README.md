@@ -1,6 +1,6 @@
 # Intel® AI Workflows
 
-Demonstrating showing how the Intel® AI Containers can be used for different use cases:
+Demonstrating showing how the [Intel® AI Containers] can be used for different use cases:
 
 ## PyTorch Workflows
 
@@ -11,7 +11,7 @@ Demonstrating showing how the Intel® AI Containers can be used for different us
 
 ## Build from Source
 
-To build the images from source, clone the [Intel® AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
+To build the images from source, clone the [Intel® AI Containers] repository, follow the main `README.md` file to setup your environment, and run the following command:
 
 ```bash
 cd workflows/charts/huggingface-llm
@@ -31,5 +31,6 @@ It is the image user's responsibility to ensure that any use of The images below
 
 <!--Below are links used in these document. They are not rendered: -->
 
+[Intel® AI Containers]: https://github.com/intel/ai-containers
 [Distributed LLM Fine Tuning with Kubernetes]: https://github.com/intel/ai-containers/tree/main/workflows/charts/huggingface-llm
 [TorchServe* with Kubernetes]: https://github.com/intel/ai-containers/tree/main/workflows/charts/torchserve
