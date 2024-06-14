@@ -13,7 +13,6 @@
 # limitations under the License.
 
 copyright: Copyright &copy; 2024 Intel Corporation
-edit_uri: edit/main/docs/
 extra:
   generator: false
 extra_javascript:
@@ -73,5 +72,4 @@ theme:
   - navigation.prune
   - toc.follow
   - toc.integrate
-  - content.action.edit
   name: material
