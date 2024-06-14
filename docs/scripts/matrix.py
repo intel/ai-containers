@@ -75,7 +75,7 @@ def extract_deps(deps: dict, version: str, service: str):
             py_reqs = re.sub(r"\n-(.*)", "", f.read())
             py_reqs = re.sub(r"(.*]?)(\W=)(.*)", r"\1 \3", py_reqs)
             py_reqs = re.sub(r"#(.*)", "", py_reqs)
-            py_deps = py_deps + "\n".join(py_reqs.split("\n")).strip()
+            py_deps = py_deps + "\n".join(py_reqs.split("\n"))
 
     return os_deps, py_deps, conda_deps
 
