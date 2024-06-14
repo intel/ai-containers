@@ -142,7 +142,7 @@ jobs:
       with:
         python-version: "3.8"
     - name: Test Container Group
-      uses: intel/ai-containers/test-runner@e72c10dda994e96038c1ff46b1cf218c4d9929a4 # main
+      uses: intel/ai-containers/test-runner@main
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
         perf_repo: ${{ secrets.PERF_REPO }}
