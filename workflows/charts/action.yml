@@ -1,0 +1,71 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+name: Test Helm Charts
+description: Given the inputs found below lint, install, and test all (or modified) helm Charts
+author: tyler.titsworth@intel.com
+inputs:
+  cluster_context:
+    description: k8s cluster context
+    default: 'kubeflow'
+    required: false
+    type: string
+  config:
+    description: extra configuration for chart-testing
+    default: '--debug --namespace helm-ci'
+    required: false
+    type: string
+  config_path:
+    description: path to chart-testing configuration file
+    required: false
+    default: '.github/ct.yaml'
+    type: string
+  list_changed:
+    description: Only test charts that have been modified
+    required: false
+    default: true
+    type: boolean
+  kubeconfig_path:
+    description: Path to config.yaml for a k8s cluster
+    required: true
+    type: string
+runs:
+  using: composite
+  steps:
+    - uses: azure/setup-kubectl@v4
+    - uses: azure/setup-helm@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: 3.x
+    - name: Setup chart-testing
+      uses: helm/chart-testing-action@v2.6.1
+    - name: Get chart diff
+      id: changed
+      if: ${{ fromJson(inputs.list_changed) }}
+      shell: bash
+      run: |
+        changed=$(ct list-changed --config ${{ inputs.config_path }})
+        if [[ -n "$changed" ]]; then
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+        fi
+    - name: Helm Lint, Install, and Test
+      if: ${{ steps.changed.outputs.changed == 'true' || !fromJson(inputs.list_changed) }}
+      shell: bash
+      run: |
+        install -m 0600 ${{ inputs.kubeconfig_path }} /tmp/config.yaml
+        kubectl config use-context ${{ inputs.cluster_context }}
+        ct lint-and-install --config ${{ inputs.config_path }} ${{ inputs.config }}
+      env:
+        KUBECONFIG: /tmp/config.yaml

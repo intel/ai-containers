@@ -31,7 +31,7 @@ jobs:
       uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
         egress-policy: audit
-    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       with:
         fetch-depth: 0
         ref: "refs/pull/${{ github.event.number }}/merge"
@@ -49,7 +49,7 @@ jobs:
         for path in $(echo $DIFF | jq -r '.[]'); do
           while [[ "$path" != "." ]]; do
             DIR_PATH=$(dirname "$path")
-            if [ -n "$(find "$DIR_PATH" -name 'docker-compose.yaml' -print -quit)" ] && [ "$DIR_PATH" != "." ]; then
+            if [ -n "$(find "$DIR_PATH" -maxdepth 1 -name 'docker-compose.yaml' -print -quit)" ] && [ "$DIR_PATH" != "." ]; then
               DOCKER_COMPOSE_PATHS+=("$DIR_PATH")
               path="."
             else
@@ -68,7 +68,7 @@ jobs:
         group: ${{ fromJson(needs.group-diff.outputs.groups) }}
         experimental: [true]
       fail-fast: false
-    uses: ./.github/workflows/container-ci.yaml
+    uses: intel/ai-containers/.github/workflows/container-ci.yaml@main
     with:
       group_dir: ${{ matrix.group }}
       ref: "refs/pull/${{ github.event.number }}/merge"
