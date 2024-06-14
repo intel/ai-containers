@@ -66,6 +66,7 @@ def extract_deps(deps: dict, version: str, service: str):
         return os_deps, " ", conda_deps
 
     py_deps = get_dependency_string("pip") if version != "conda" else " "
+
     service = deps.get("dependency.name", service)
     requirements_file = [
         dep for key, dep in deps.items() if "dependency.python." in key
