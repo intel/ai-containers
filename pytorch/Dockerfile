@@ -159,7 +159,7 @@ RUN cat generate_ssh_keys.sh >> ${HOME}/.bash_profile && \
 
 ENV BASH_ENV=${HOME}/.bash_profile
 
-    
+
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
 RUN apt-get update && \
