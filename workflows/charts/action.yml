@@ -46,6 +46,8 @@ runs:
   steps:
     - uses: azure/setup-kubectl@v4
     - uses: azure/setup-helm@v4
+      with:
+        version: stable
     - uses: actions/setup-python@v5
       with:
         python-version: 3.x
