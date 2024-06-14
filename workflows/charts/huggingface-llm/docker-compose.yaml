@@ -23,8 +23,13 @@ services:
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-2.3.0-pip-multinode}
       context: .
       labels:
+        dependency.apt.google-perftools: true
+        dependency.apt.libjemalloc: true
+        dependency.apt.libomp-dev: true
+        dependency.apt.numactl: true
+        docs: genai
+        dependency.python: ${PYTHON_VERSION:-3.10}
         dependency.python.pip: requirements.txt
-        docs: pytorch
         org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.3.0}-pip-multinode"
         org.opencontainers.image.name: "intel/ai-workflows"
         org.opencontainers.image.title: "Intel® Extension for PyTorch with Hugging Face LLM fine tuning"

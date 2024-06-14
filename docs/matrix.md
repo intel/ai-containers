@@ -1,13 +1,13 @@
 # Support Matrix
 
 === "Framework Containers"
-    === "Python"
+    === "[Python](https://hub.docker.com/r/intel/python)"
         {{ read_csv('assets/python.csv') }}
-    === "Classical ML"
+    === "[Classical ML](https://hub.docker.com/r/intel/intel-optimized-ml)"
         {{ read_csv('assets/classical-ml.csv') }}
-    === "PyTorch"
+    === "[PyTorch](https://hub.docker.com/r/intel/intel-optimized-pytorch)"
         {{ read_csv('assets/pytorch.csv') }}
-    === "TensorFlow"
+    === "[TensorFlow](https://hub.docker.com/r/intel/intel-optimized-tensorflow)"
         {{ read_csv('assets/tensorflow.csv') }}
 
 === "Model Containers"
@@ -22,7 +22,7 @@
         === "Max"
             {{ read_csv('assets/max-pvc.csv') }}
 
-=== "Preset Containers"
+=== "[Preset Containers](https://github.com/intel/ai-containers/blob/main/preset/README.md)"
     === "Data Analytics"
         {{ read_csv('assets/data_analytics.csv') }}
     === "Classical ML"
@@ -32,10 +32,8 @@
     === "Inference Optimization"
         {{ read_csv('assets/inference_optimization.csv') }}
 
-=== "Other"
-    === "Serving"
+=== "[Workflows](https://hub.docker.com/r/intel/ai-workflows)"
+    === "[Serving](https://github.com/intel/ai-containers/tree/main/workflows/charts/torchserve)"
         {{ read_csv('assets/serving.csv') }}
-    === "Transformers"
-        {{ read_csv('assets/transformers.csv') }}
-    === "GenAI"
+    === "[GenAI Huggingface](https://github.com/intel/ai-containers/tree/main/workflows/charts/huggingface-llm)"
         {{ read_csv('assets/genai.csv') }}

@@ -66,7 +66,6 @@ def extract_deps(deps: dict, version: str, service: str):
         return os_deps, " ", conda_deps
 
     py_deps = get_dependency_string("pip") if version != "conda" else " "
-
     service = deps.get("dependency.name", service)
     requirements_file = [
         dep for key, dep in deps.items() if "dependency.python." in key
@@ -76,7 +75,7 @@ def extract_deps(deps: dict, version: str, service: str):
             py_reqs = re.sub(r"\n-(.*)", "", f.read())
             py_reqs = re.sub(r"(.*]?)(\W=)(.*)", r"\1 \3", py_reqs)
             py_reqs = re.sub(r"#(.*)", "", py_reqs)
-            py_deps = py_deps + "\n".join(py_reqs.split("\n"))
+            py_deps = py_deps + "\n".join(py_reqs.split("\n")).strip()
 
     return os_deps, py_deps, conda_deps
 
@@ -174,7 +173,8 @@ def compose_to_csv(path: str, name: str):
             metadata = extract_labels(setting)
             df = pd.concat([df, make_table(setting, metadata)], axis=1)
     else:
-        df = make_table()
+        metadata = docker.compose.config(return_json=True)
+        df = make_table("Name=Version", metadata)
 
     os.chdir(root)
     df.loc[:, ~df.columns.duplicated()].to_csv(f"docs/assets/{path}.csv", index=False)
