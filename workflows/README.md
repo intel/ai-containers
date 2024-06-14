@@ -9,6 +9,16 @@ Demonstrating showing how the Intel® AI Containers can be used for different us
 | `intel/intel-optimized-pytorch:2.3.0-pip-multinode` | CPU | [Distributed LLM Fine Tuning with Kubernetes] | Demonstrates using Hugging Face Transformers with Intel® Xeon® Scalable Processors to fine tune LLMs with multiple nodes from a Kubernetes cluster. The example includes a LLM fine tuning script, Dockerfile, and Helm chart. |
 | `intel/intel-optimized-pytorch:2.3.0-serving-cpu` | CPU | [TorchServe* with Kubernetes] | Demonstrates using TorchServe* with Intel® Xeon® Scalable Processors to serve models on multinodes nodes from a Kubernetes cluster. The example includes a Helm chart. |
 
+## Build from Source
+
+To build the images from source, clone the [Intel® AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
+
+```bash
+cd workflows/charts/huggingface-llm
+docker compose build huggingface-llm
+docker compose run huggingface-llm sh -c "python /workspace/scripts/finetune.py --help"
+```
+
 ## License
 
 View the [License](https://github.com/intel/ai-containers/blob/main/LICENSE) for the [Intel® AI Containers].
