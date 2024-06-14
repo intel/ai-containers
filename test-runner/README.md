@@ -42,7 +42,7 @@ A test is defined as a set of commands to be executed along with their associate
 | [volumes](https://github.com/compose-spec/compose-spec/blob/master/spec.md#volumes)    | Optional[List[[Volume](utils/test.py#L13)]] | A list of volumes to be mounted when running the test in a container. |
 | [env](https://github.com/compose-spec/compose-spec/blob/master/spec.md#environment)        | Optional[Dict[str, str]] | A list of environment variables to be set when the test is running. |
 | mask | Optional[List[str]] | A list of keys to [mask](#masking) in the test output. |
-| performance | Optional[str] | Check test performance thresholds in the format `perf/path/to/model.yaml:test-id` |
+| [performance](#performance-thresholds) | Optional[str] | Test performance thresholds specified at `perf/path/to/model.yaml:test-id` |
 | notebook   | Optional[str]  | A flag indicating whether the test utilizes a [jupyter notebook](#notebook-test). |
 | serving    | Optional[str]  | A flag indicating whether a [serving test](#serving-test) should be invoked. |
 | [cap_add](https://github.com/compose-spec/compose-spec/blob/master/spec.md#cap_add)    | Optional[str]  | Specifies additional container capabilities. |
@@ -136,16 +136,22 @@ In the example above, the output will be `hello:***`
 
 #### Performance Thresholds
 
-You can utilize performance thresholds stored in another github repository by providing the `PERF_REPO` environment variable in GitHub's `org-name/repo-name` format.
+Performance thresholds are specified by using a `performance` key in a test block in a `tests.yaml` file. The actual performance thresholds are posted in a separate file, the path to which is the value of the `performance` key. This path is then relative to a GitHub `PERF_REPO` environment variable that is specified in the format: `org-name/repo-name`. The GitHub runner that executes the peformance test must have authorization to access the `PERF_REPO`.
+
+In the example below, the test runner will execute a performance test with an ID `my-test-id` in the `tests.yaml` file located at `https://github.com/my-org/my-repo/tree/main/perf/my-model/tests.yaml` (the filename `tests.yaml` is implied):
 
 ```yaml
 test:
   cmd: "echo 'my-key: 100'"
+  env:
+    PERF_REPO: my-org/my-repo # https://github.com/ is implied
   performance: perf/my-model:my-test-id
 ```
 
+Validating the performance thresholds on a local machine, involves exporting a blank `PERF_REPO` value:
+
 ```bash
-export PERF_REPO=...
+export PERF_REPO=""
 python test-runner/test_runner.py -f path/to/tests.yaml
 ```
 
