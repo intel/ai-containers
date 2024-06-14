@@ -33,7 +33,7 @@
         {{ read_csv('assets/inference_optimization.csv') }}
 
 === "[Workflows](https://hub.docker.com/r/intel/ai-workflows)"
-    === "[Serving](https://github.com/intel/ai-containers/tree/main/workflows/charts/torchserve)"
+    === "[TorchServe](https://github.com/intel/ai-containers/tree/main/workflows/charts/torchserve)"
         {{ read_csv('assets/serving.csv') }}
-    === "[GenAI Huggingface](https://github.com/intel/ai-containers/tree/main/workflows/charts/huggingface-llm)"
+    === "[Huggingface LLM](https://github.com/intel/ai-containers/tree/main/workflows/charts/huggingface-llm)"
         {{ read_csv('assets/genai.csv') }}
