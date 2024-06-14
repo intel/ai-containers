@@ -24,6 +24,9 @@ mkdocs serve --no-livereload
 
 The documentation will be available at [http://localhost:8000](http://localhost:8000).
 
+> [!CAUTION]
+> Docker compose `v2.26.1` is the minimum required version.
+
 ## Labelling Containers
 
 To customize the tables in the [Support Matrix](./matrix.md), you can add labels to the services found in each container group's `docker-compose.yaml` file. The command `docker compose config` is run to get all of the metadata from the container group. Labels are used to specify the public metadata for each container, and then the tables are generated based on the `.actions.json` file found in the same directory.
