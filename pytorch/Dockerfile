@@ -106,16 +106,15 @@ RUN mkdir -p /var/run/sshd && \
     echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
     sed -i'' -e's/^#PermitRootLogin prohibit-password$/PermitRootLogin yes/' /etc/ssh/sshd_config && \
     sed -i'' -e's/^#PasswordAuthentication yes$/PasswordAuthentication no/' /etc/ssh/sshd_config && \
-    sed -i'' -e's/^#PermitEmptyPasswords no$/PermitEmptyPasswords yes/' /etc/ssh/sshd_config && \
     mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
 
 ARG PYTHON_VERSION
 
 COPY generate_ssh_keys.sh .
 
-RUN cat /generate_ssh_keys.sh >> ~/.bashrc && \
-    echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bashrc && \
-    rm -rf /generate_ssh_keys.sh
+# modify generate_ssh_keys to be a helper script
+# print how to use helper script on bash startup
+RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bashrc
 
 ENV I_MPI_ROOT="${I_MPI_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"
 ENV CCL_ROOT="${CCL_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"

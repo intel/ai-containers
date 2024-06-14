@@ -26,4 +26,3 @@ gen_single_key dsa
 gen_single_key rsa
 gen_single_key ecdsa
 gen_single_key ed25519
-service ssh start >/dev/null
