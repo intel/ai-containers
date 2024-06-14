@@ -19,7 +19,14 @@ import modin.pandas as pd
 import pandas
 import ray
 
-ray.init()
+runtime_env = {
+    'env_vars': {
+        "RAY_memory_monitor_refresh_ms": "0",
+        "RAY_memory_usage_threshold": "3"
+     }
+}
+
+ray.init(runtime_env=runtime_env)
 
 # Link to raw dataset: https://modin-datasets.s3.amazonaws.com/testing/yellow_tripdata_2015-01.csv (**Size: ~200MB**)
 import urllib.request
