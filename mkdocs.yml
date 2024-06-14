@@ -41,10 +41,6 @@ nav:
 - Roadmap: 'roadmap.md'
 plugins:
 - callouts
-- git-authors
-- git-revision-date-localized:
-    enable_creation_date: true
-    type: date
 # - optimize
 - search
 - table-reader:
