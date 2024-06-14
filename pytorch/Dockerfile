@@ -104,8 +104,6 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
 RUN mkdir -p /var/run/sshd && \
     cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
     echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
-    sed -i'' -e's/^#PermitRootLogin prohibit-password$/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed -i'' -e's/^#PasswordAuthentication yes$/PasswordAuthentication no/' /etc/ssh/sshd_config && \
     mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
 
 ARG PYTHON_VERSION
