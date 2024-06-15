@@ -20,10 +20,10 @@ import pandas
 import ray
 
 runtime_env = {
-    'env_vars': {
+    "env_vars": {
         "RAY_memory_monitor_refresh_ms": "0",
-        "RAY_memory_usage_threshold": "3"
-     }
+        "RAY_memory_usage_threshold": "3",
+    }
 }
 
 ray.init(runtime_env=runtime_env)
