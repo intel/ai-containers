@@ -62,7 +62,7 @@ print(
 # # Faster Append with Modin's ``concat``
 
 
-N_copies = 20 # duplicate the same taxi dataset
+N_copies = 20  # duplicate the same taxi dataset
 start = time.time()
 
 big_pandas_df = pandas.concat([pandas_df for _ in range(N_copies)])
