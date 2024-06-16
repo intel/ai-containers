@@ -19,14 +19,7 @@ import modin.pandas as pd
 import pandas
 import ray
 
-runtime_env = {
-    "env_vars": {
-        "RAY_memory_monitor_refresh_ms": "0",
-        "RAY_memory_usage_threshold": "3",
-    }
-}
-
-ray.init(runtime_env=runtime_env)
+ray.init()
 
 # Link to raw dataset: https://modin-datasets.s3.amazonaws.com/testing/yellow_tripdata_2015-01.csv (**Size: ~200MB**)
 import urllib.request
@@ -69,7 +62,7 @@ print(
 # # Faster Append with Modin's ``concat``
 
 
-N_copies = 100
+N_copies = 20 # duplicate the same taxi dataset
 start = time.time()
 
 big_pandas_df = pandas.concat([pandas_df for _ in range(N_copies)])
