@@ -108,7 +108,7 @@ RUN mkdir -p /var/run/sshd && \
 
 ARG PYTHON_VERSION
 
-COPY generate_ssh_keys.sh
+COPY generate_ssh_keys.sh .
 
 # modify generate_ssh_keys to be a helper script
 # print how to use helper script on bash startup
