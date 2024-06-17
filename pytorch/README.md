@@ -113,6 +113,79 @@ The images below additionally include [Intel® oneAPI Collective Communications 
 | `2.1.0-pip-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v2.3.1]  | [v0.2.3]        |
 | `2.0.0-pip-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v2.1.1]  | [v0.1.0]        |
 
+> **Note:** Passwordless SSH connection is also enabled in the image.
+> The container does not contain the SSH ID keys. The user needs to mount those keys at `/root/.ssh/id_rsa` and `/root/.ssh/id_rsa.pub`.
+> User also need to append content of id_rsa.pub in `/etc/ssh/authorized_keys` in the SSH server container.
+> Since the SSH key is not owned by default user account in docker, please also do "chmod 644 id_rsa.pub; chmod 644 id_rsa" to grant read access for default user account.
+> Users could also use "/usr/bin/ssh-keygen -t rsa -b 4096 -N '' -f ~/mnt/ssh_key/id_rsa" to generate a new SSH Key inside the container.
+> Users need to mount a config file to list all hostnames at location `/root/.ssh/config` on the SSH client container.
+> Once all files are added
+
+#### Setup and Run IPEX Multi-Node Container
+
+To run the IPEX multi-node container with OpenSSH the user needs to to setup SSH container correctly.
+
+There will be a SSH server and a SSH client connecting to the SSH server. We will setup some files to be used by each of them.
+    - SSH Server
+        1. *Authorized Keys* : `/etc/ssh/authorized_keys`
+    - SSH Client
+        1. *Config File with Host IPs* : `/root/.ssh/config`
+        2. *Private User Key* : `/root/.ssh/id_rsa`
+
+To add these files correctly please follow the steps described below.
+
+* **Step-1** : Setup ID Keys
+    **Note: Please skip this step if you already have a public private key-pair available.**<\br>
+    You can use the commands provided below to [generate the Identity keys](https://www.ssh.com/academy/ssh/keygen#creating-an-ssh-key-pair-for-user-authentication) for OpenSSH. After this, you should have a public and private key which will be used for passwordless authentication. If you already have identity keys beforehand you can skip the ssh-keygen command and replace the public and private keys paths with your own in the copy commands.
+
+    ```bash
+    ssh-keygen -q -N "" -t rsa -b 4096 -f ./id_rsa
+    cp id_keys/id_rsa.pub ssh_worker/authorized_keys #Adding public key to authorized key
+    ```
+
+* **Step-2** : Add hosts to config
+    The client container needs to have the a config file with all hostnames specified. An example of a hostfile is provided below.
+
+    ```txt
+    Host host1
+        HostName <Hostname of host1>
+        IdentitiesOnly yes
+    Host host2
+        HostName <Hostname of host2>
+        IdentitiesOnly yes
+    ...
+    ```
+
+* **Step-3** : You also need to make sure the file permission are setup correctly. All files need to be owned by root and should have permission as `600`. Please use the chown and chmod commands to set the permissions correctly.
+
+* **Step-4** : Example Run commands. Below is an example command to run SSH server and client respectively
+    - Step 3.1: Example SSH server command
+
+        ```bash
+        export SSH_PORT=<SSH port to run on server>
+        docker run -it --rm \
+            --net=host \
+            -v $PWD/authorized_keys:/root/.ssh/authorized_keys \
+            -w /workspace \
+            -e SSH_PORT=${SSH_PORT} \
+            intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
+            bash -c '/usr/sbin/sshd -D -p ${SSH_PORT} -f /var/run/sshd_config'
+        ```
+
+    - Step 3.2: Example SSH client command
+
+        ```bash
+        docker run -it --rm \
+            --net=host \
+            -v $PWD/id_rsa:/root/.ssh/id_rsa \
+            -v $PWD/config:/root/.ssh/config \
+            -w /workspace \
+            -e SSH_PORT=${SSH_PORT} \
+            amr-registry.caas.intel.com/aiops/mlops-ci:b-0-ubuntu-22.04-pip-py3.10-ipex-2.3.0-oneccl-inc-2.5.1 \
+            bash -c 'ssh -p ${SSH_PORT}'
+        ```
+
+
 ---
 
 The images below are [TorchServe*] with CPU Optimizations:

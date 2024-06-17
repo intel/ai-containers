@@ -108,17 +108,16 @@ RUN mkdir -p /var/run/sshd && \
 
 ARG PYTHON_VERSION
 
-COPY generate_ssh_keys.sh
+COPY generate_ssh_keys.sh .
 
 # modify generate_ssh_keys to be a helper script
 # print how to use helper script on bash startup
 # Avoids loop for further execution of the startup file
 RUN echo 'unset BASH_ENV' >> ~/.bash_startup && \
     echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bash_startup && \
-    echo '/generate_ssh_keys.sh' >> ~/.bash_startup && \
-    rm -rf /generate_ssh_keys.sh
-
-ENV BASH_ENV='$HOME/.bash_startup'
+    cat '/generate_ssh_keys.sh' >> ~/.bash_startup && \
+    rm -rf /generate_ssh_keys.sh && \
+    echo 'source ~/.bash_startup' >> ~/.bashrc
 
 RUN echo 'HostKey /etc/ssh/ssh_host_dsa_key' > /var/run/sshd_config && \
     echo 'HostKey /etc/ssh/ssh_host_rsa_key' > /var/run/sshd_config && \
@@ -143,6 +142,8 @@ RUN mkdir -p /licensing
 RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
+
+ENV BASH_ENV='$HOME/.bash_startup'
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
