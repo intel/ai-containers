@@ -62,7 +62,7 @@ print(
 # # Faster Append with Modin's ``concat``
 
 
-N_copies = 100
+N_copies = 20
 start = time.time()
 
 big_pandas_df = pandas.concat([pandas_df for _ in range(N_copies)])
