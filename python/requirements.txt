@@ -1,4 +1,4 @@
-numpy==2.0.0
+numpy==1.26.4
 setuptools==69.5.1
 psutil==5.9.8
 mkl==2024.1.0
