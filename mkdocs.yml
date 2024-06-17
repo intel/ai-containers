@@ -13,7 +13,6 @@
 # limitations under the License.
 
 copyright: Copyright &copy; 2024 Intel Corporation
-edit_uri: edit/main/docs/
 extra:
   generator: false
 extra_javascript:
@@ -37,15 +36,11 @@ nav:
   - Python Base: 'python/README.md'
   - PyTorch Base: 'pytorch/README.md'
   - TensorFlow Base: 'tensorflow/README.md'
-  - TorchServe: 'pytorch/serving/README.md'
+  - Workflows: 'workflows/README.md'
 - Support Matrix: 'matrix.md'
 - Roadmap: 'roadmap.md'
 plugins:
 - callouts
-- git-authors
-- git-revision-date-localized:
-    enable_creation_date: true
-    type: date
 # - optimize
 - search
 - table-reader:
@@ -73,5 +68,4 @@ theme:
   - navigation.prune
   - toc.follow
   - toc.integrate
-  - content.action.edit
   name: material
