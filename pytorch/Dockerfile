@@ -108,11 +108,27 @@ RUN mkdir -p /var/run/sshd && \
 
 ARG PYTHON_VERSION
 
-COPY generate_ssh_keys.sh .
+COPY generate_ssh_keys.sh /root/generate_ssh_keys.sh
 
 # modify generate_ssh_keys to be a helper script
 # print how to use helper script on bash startup
-RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bashrc
+# Avoids loop for further execution of the startup file
+RUN echo 'unset BASH_ENV' >> ~/.bash_startup && \
+    echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bash_startup && \
+    echo '~/generate_ssh_keys.sh' >> ~/.bash_startup
+
+ENV BASH_ENV='~/.bash_startup'
+
+RUN echo 'HostKey /etc/ssh/ssh_host_dsa_key' > /var/run/sshd_config && \
+    echo 'HostKey /etc/ssh/ssh_host_rsa_key' > /var/run/sshd_config && \
+    echo 'HostKey /etc/ssh/ssh_host_ecdsa_key' > /var/run/sshd_config && \
+    echo 'HostKey /etc/ssh/ssh_host_ed25519_key' > /var/run/sshd_config && \
+    echo 'AuthorizedKeysFile /etc/ssh/authorized_keys' > /var/run/sshd_config && \
+    echo '## Enable DEBUG log. You can ignore this but this may help you debug any issue while enabling SSHD for the first time' > /var/run/sshd_config && \
+    echo 'LogLevel DEBUG3' > /var/run/sshd_config && \
+    echo 'UsePAM yes' > /var/run/sshd_config && \
+    echo 'Subsystem       sftp    /usr/lib/openssh/sftp-server' > /var/run/sshd_config
+
 
 ENV I_MPI_ROOT="${I_MPI_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"
 ENV CCL_ROOT="${CCL_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"
