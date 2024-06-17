@@ -36,6 +36,8 @@ updates:
       pytorch:
         patterns:
           - "*"
+        exclude-patterns:
+          - "xpu-requirements.txt"
     package-ecosystem: pip
     schedule:
       interval: weekly
@@ -52,6 +54,8 @@ updates:
       tensorflow:
         patterns:
           - "*"
+        exclude-patterns:
+          - "xpu-requirements.txt"
     package-ecosystem: pip
     schedule:
       interval: weekly
