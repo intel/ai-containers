@@ -71,3 +71,8 @@ runs:
         ct lint-and-install --config ${{ inputs.config_path }} ${{ inputs.config }}
       env:
         KUBECONFIG: /tmp/config.yaml
+    - name: Cleanup
+      if: always()
+      bash: shell
+      run: |
+        helm ls
