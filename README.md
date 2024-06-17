@@ -2,9 +2,9 @@
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8270/badge)](https://www.bestpractices.dev/projects/8270)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/intel/ai-containers/badge)](https://securityscorecards.dev/viewer/?uri=github.com/intel/ai-containers)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fintel%2Fai-containers.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2Fintel%2Fai-containers?ref=badge_shield&issueType=license)
-[![CodeQL](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/intel/ai-containers/main.svg)](https://results.pre-commit.ci/latest/github/intel/ai-containers/main)
+[![CodeQL](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql)
+[![Lint](https://github.com/intel/ai-containers/actions/workflows/lint.yaml/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/lint.yaml)
 [![Test Runner CI](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml)
 [![Helm Chart CI](https://github.com/intel/ai-containers/actions/workflows/chart-ci.yaml/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/chart-ci.yaml)
 [![Weekly Tests](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml)
@@ -17,13 +17,17 @@ Define your project's registry and repository each time you use the project:
 
 ```bash
 # REGISTRY/REPO:TAG
-export CACHE_REGISTRY=<cache_registry_name>
 export REGISTRY=<registry_name>
 export REPO=<repo_name>
 ```
 
+The maintainers of Intel® AI Containers use [harbor](https://github.com/goharbor/harbor) to store containers.
+
 > [!NOTE]
 > `REGISTRY` and `REPO` are used to authenticate with the private registry necessary to push completed container layers and saved them for testing and publication. For example: `REGISTRY=intel && REPO=intel-extension-for-pytorch` would become `intel/intel-extension-for-pytorch` as the name of the container image, followed by the tag generated from the service found in that project's compose file.
+
+> [!WARNING]
+> You can optionally skip this step and use some placeholder values, however some container groups depend on other images and will pull from a registry that you have not defined and result in an error.
 
 ### Set Up Docker Engine
 
@@ -60,6 +64,9 @@ To configure these containers, simply append the relevant environment variable t
 cd pytorch
 PACKAGE_OPTION=idp docker compose up --build ipex-base
 ```
+
+> [!NOTE]
+> If you didn't specify `REGISTRY` or `REPO`, you also need to add the `idp` service to the list to build the dependent python image.
 
 ## Test Containers
 
