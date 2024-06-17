@@ -195,6 +195,9 @@ To add these files correctly please follow the steps described below.
             bash -c 'ipexrun cpu /workspace/tests/ipex-resnet50.py --ipex --device cpu --backend ccl'
         ```
 
+> [!NOTE]
+> [Intel MPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/mpi-library.html) can be configured based on your machine settings. If the above commands do not work for you, see the documentation for how to configure based on your network.
+
 ---
 
 The images below are [TorchServe*] with CPU Optimizations:
