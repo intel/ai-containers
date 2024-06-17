@@ -34,10 +34,9 @@ updates:
   - directory: /pytorch
     groups:
       pytorch:
-        patterns:
-          - "*"
+        dependency-type: "development"
         exclude-patterns:
-          - "pytorch/xpu-requirements.txt"
+          - "xpu*"
     package-ecosystem: pip
     schedule:
       interval: weekly
@@ -52,10 +51,9 @@ updates:
   - directory: /tensorflow
     groups:
       tensorflow:
-        patterns:
-          - "*"
+        dependency-type: "development"
         exclude-patterns:
-          - "tensorflow/xpu-requirements.txt"
+          - "xpu*"
     package-ecosystem: pip
     schedule:
       interval: weekly
