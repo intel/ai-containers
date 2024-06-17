@@ -39,6 +39,10 @@
         {
             "fname": "./preset/README.md",
             "repo-name": "intel/inference-optimization"
+        },
+        {
+            "fname": "./workflows/README.md",
+            "repo-name": "intel/ai-workflows"
         }
     ]
 }
