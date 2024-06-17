@@ -159,32 +159,31 @@ To add these files correctly please follow the steps described below.
 * **Step-3** : You also need to make sure the file permission are setup correctly. All files need to be owned by root and should have permission as `600`. Please use the chown and chmod commands to set the permissions correctly.
 
 * **Step-4** : Example Run commands. Below is an example command to run SSH server and client respectively
-    - Step 3.1: Example SSH server command
+    * Step 4.1: Example SSH server command
 
-        ```bash
-        export SSH_PORT=<SSH port to run on server>
-        docker run -it --rm \
-            --net=host \
-            -v $PWD/authorized_keys:/root/.ssh/authorized_keys \
-            -w /workspace \
-            -e SSH_PORT=${SSH_PORT} \
-            intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
-            bash -c '/usr/sbin/sshd -D -p ${SSH_PORT} -f /var/run/sshd_config'
-        ```
+    ```bash
+    export SSH_PORT=<SSH port to run on server>
+    docker run -it --rm \
+        --net=host \
+        -v $PWD/authorized_keys:/root/.ssh/authorized_keys \
+        -w /workspace \
+        -e SSH_PORT=${SSH_PORT} \
+        intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
+        bash -c '/usr/sbin/sshd -D -p ${SSH_PORT} -f /var/run/sshd_config'
+    ```
 
-    - Step 3.2: Example SSH client command
+    * Step 4.2: Example SSH client command
 
-        ```bash
-        docker run -it --rm \
-            --net=host \
-            -v $PWD/id_rsa:/root/.ssh/id_rsa \
-            -v $PWD/config:/root/.ssh/config \
-            -w /workspace \
-            -e SSH_PORT=${SSH_PORT} \
-            amr-registry.caas.intel.com/aiops/mlops-ci:b-0-ubuntu-22.04-pip-py3.10-ipex-2.3.0-oneccl-inc-2.5.1 \
-            bash -c 'ssh -p ${SSH_PORT}'
-        ```
-
+    ```bash
+    docker run -it --rm \
+        --net=host \
+        -v $PWD/id_rsa:/root/.ssh/id_rsa \
+        -v $PWD/config:/root/.ssh/config \
+        -w /workspace \
+        -e SSH_PORT=${SSH_PORT} \
+        amr-registry.caas.intel.com/aiops/mlops-ci:b-0-ubuntu-22.04-pip-py3.10-ipex-2.3.0-oneccl-inc-2.5.1 \
+        bash -c 'ssh -p ${SSH_PORT}'
+    ```
 
 ---
 
