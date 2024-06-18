@@ -38,7 +38,21 @@ jobs:
     - name: Harden Runner
       uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
-        egress-policy: audit
+        disable-sudo: true
+        egress-policy: block
+        allowed-endpoints: >
+          api.github.com:443
+          api.osv.dev:443
+          api.scorecard.dev:443
+          api.securityscorecards.dev:443
+          auth.docker.io:443
+          fulcio.sigstore.dev:443
+          github.com:443
+          index.docker.io:443
+          oss-fuzz-build-logs.storage.googleapis.com:443
+          rekor.sigstore.dev:443
+          tuf-repo-cdn.sigstore.dev:443
+          www.bestpractices.dev:443
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       with:
         persist-credentials: false
