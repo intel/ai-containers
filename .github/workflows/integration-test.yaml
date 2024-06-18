@@ -14,9 +14,10 @@
 
 name: Integration Tests
 on:
-  pull_request_target:
-    types: [opened, edited, reopened, synchronize]
-    branches: [main]
+  # pull_request_target:
+  #   types: [opened, edited, reopened, synchronize]
+  #   branches: [main]
+  pull_request: null
 permissions: read-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -34,7 +35,7 @@ jobs:
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       with:
         fetch-depth: 0
-        ref: "refs/pull/${{ github.event.number }}/merge"
+        # ref: "refs/pull/${{ github.event.number }}/merge"
     - name: Output Modified Group Directories
       id: group-list
       run: |
@@ -71,7 +72,8 @@ jobs:
     uses: intel/ai-containers/.github/workflows/container-ci.yaml@main
     with:
       group_dir: ${{ matrix.group }}
-      ref: "refs/pull/${{ github.event.number }}/merge"
+      # ref: "refs/pull/${{ github.event.number }}/merge"
+      ref: leminh/test-runner
     secrets: inherit
   status-check:
     needs: [group-diff, pipeline-ci]

@@ -76,7 +76,8 @@ def set_log_filename(logger: logging.Logger, name: str, logs_path: str):
         name (str): name of the new log filename
         logs_path (str): path to the new log filename
     """
-    test_handler = logging.FileHandler(f"{logs_path}/{name}.log")
+    unique_identifier = logs_path.split('/')[0] #name of the tests directory (ie. python, python1 )
+    test_handler = logging.FileHandler(f"{logs_path}/{unique_identifier}-{name}.log")
     try:
         [prev_handler] = [
             handler
