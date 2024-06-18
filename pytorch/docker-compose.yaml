@@ -189,6 +189,8 @@ services:
       - 7071:7071
   hf-genai:
     build:
+      args:
+        HF_VERSION: ${HF_VERSION:-4.41.2}
       target: hf-genai
     extends: multinode
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-oneccl-inc-${INC_VERSION:-2.5.1}-hf-genai
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-oneccl-inc-${INC_VERSION:-2.5.1}-hf-${HF_VERSION:-4.41.2}

@@ -111,54 +111,9 @@ RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src
 
 FROM multinode AS hf-genai
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get clean autoclean && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    google-perftools \
-    libjemalloc2 \
-    libomp-dev \
-    numactl \
-    git
-
 COPY hf-genai-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r hf-genai-requirements.txt
-
-# Install transformers from source to provide support for transformers example scripts
-RUN git clone https://github.com/huggingface/transformers.git && \
-    python -m pip install --no-cache-dir /transformers && \
-    python -m pip install --no-cache-dir -r /transformers/examples/pytorch/language-modeling/requirements.txt && \
-    rm -rf transformers
-
-# Install OpenSSH for MPI to communicate between containers
-RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
-    openssh-client \
-    openssh-server && \
-    rm  /etc/ssh/ssh_host_*_key \
-    /etc/ssh/ssh_host_*_key.pub && \
-    apt-get clean autoclean && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
-
-# Allow OpenSSH to talk to containers without asking for confirmation
-RUN mkdir -p /var/run/sshd && \
-    cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
-    echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
-    mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
-
-COPY generate_ssh_keys.sh .
-
-RUN cat generate_ssh_keys.sh >> ${HOME}/.bash_profile && \
-    sed -i 's#source /inc/bin/activate##g' ${HOME}/.bashrc && \
-    cat generate_ssh_keys.sh >> ${HOME}/.bashrc
-
-ENV BASH_ENV=${HOME}/.bash_profile
-
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
