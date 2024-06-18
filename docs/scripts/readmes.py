@@ -20,8 +20,8 @@ readmes = [
     "preset/README.md",
     "python/README.md",
     "pytorch/README.md",
-    "pytorch/serving/README.md",
     "tensorflow/README.md",
+    "workflows/README.md",
 ]
 
 

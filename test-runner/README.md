@@ -277,3 +277,16 @@ See an [Example](../.github/workflows/test-runner-ci.yaml#L94) Implementation of
 
 > [!TIP]
 > When writing Tests for use with a CI platform like GitHub Actions, write your tests in such a way that they would be executed from the root directory of your repository.
+
+## Testing
+
+For testing [tests.yaml](tests.yaml) file, some variables need to be set
+
+```bash
+export CACHE_REGISTRY=<harbor cache_registry_name>
+export REGISTRY=<harbor registry>
+export REPO=<harbor project/repo>
+# optional
+export PERF_REPO=<internal perf repo>
+python test-runner/test_runner.py -f test-runner/tests.yaml -a test-runner/.actions.json
+```

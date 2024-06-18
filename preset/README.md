@@ -137,7 +137,7 @@ docker run -it --rm \
 
 1. After running this command the terminal should display an output similar to displayed below in the image ![image](https://github.com/intel/ai-containers/assets/18349036/0a8a2d05-f7b0-4a9f-994e-bcc4e4b703a0) The server address together with the port set can be used to connect to the jupyter server in a web browser. For example `http://127.0.0.1:8888`. The token displayed after the `token=` can be used as a password to login into the server. For example in the image displayed above the token is `b66e74a85bc2570bf15782e5124c933c3a4ddabd2cf2d7d3`.
 
-2. Select a notebook sample from the Overview notebook found in directory you launched the server with. In this example, the `intel/deep-learning` container has a notebook titled [`Deep_Learning_Samples_Overview.ipynb`](./deep-learning/notebooks/deep-learning/Deep_Learning_Samples_Overview.ipynb) when launched in jupyter mode.
+2. Select a notebook sample from the Overview notebook found in directory you launched the server with. In this example, the `intel/deep-learning` container has a notebook titled [`Deep_Learning_Samples_Overview.ipynb`](https://github.com/intel/ai-containers/blob/main/preset/deep-learning/notebooks/Deep_Learning_Samples_Overview.ipynb) when launched in jupyter mode.
 
 3. After selecting a notebook sample, select the preset kernel found in the dropdown menu presented when loading the notebook. For Deep Learning and Inference Optimization containers there will be multiple kernels, one for each framework: `pytorch`, `pytorch-gpu`, and `tensorflow`.
 
@@ -156,7 +156,7 @@ docker run ... intel/deep-learning:latest-py3.9 \
 
 ## Run in Multi-Node Distributed Mode [Advanced]
 
-You can follow the instructions provided for [Tensorflow](./deep-learning/demo/tensorflow-distributed/README.md) and [PyTorch](./deep-learning/demo/pytorch-distributed/README.md) along with the Deep Learning or Inference Optimization presets using your preferred framework.
+You can follow the instructions provided for [Tensorflow](https://github.com/intel/ai-containers/tree/main/preset/deep-learning/demo/tensorflow-distributed/README.md) and [PyTorch](https://github.com/intel/ai-containers/tree/main/preset/deep-learning/demo/pytorch-distributed/README.md) along with the Deep Learning or Inference Optimization presets using your preferred framework.
 
 ## Troubleshooting and Support
 

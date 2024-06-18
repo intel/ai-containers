@@ -174,7 +174,8 @@ def compose_to_csv(path: str, name: str):
             metadata = extract_labels(setting)
             df = pd.concat([df, make_table(setting, metadata)], axis=1)
     else:
-        df = make_table()
+        metadata = docker.compose.config(return_json=True)
+        df = make_table("Name=Version", metadata)
 
     os.chdir(root)
     df.loc[:, ~df.columns.duplicated()].to_csv(f"docs/assets/{path}.csv", index=False)

@@ -206,7 +206,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [Intel® Data Center GPU Max Series]: https://ark.intel.com/content/www/us/en/ark/products/series/232874/intel-data-center-gpu-max-series.html
 
 [Intel® Extension for TensorFlow*]: https://github.com/intel/intel-extension-for-tensorflow
-[Intel® Extension for TensorFlow* Serving]: (https://intel.github.io/intel-extension-for-tensorflow/latest/docker/tensorflow-serving/README.html)
+[Intel® Extension for TensorFlow* Serving]: https://intel.github.io/intel-extension-for-tensorflow/latest/docker/tensorflow-serving/README.html
 [Intel® Distribution for Python*]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/distribution-for-python.html
 [INC]: https://github.com/intel/neural-compressor
 [TensorFlow*]: https://github.com/tensorflow/tensorflow

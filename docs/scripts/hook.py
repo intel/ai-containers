@@ -40,8 +40,7 @@ def create_support_matrix():
     # compose_to_csv("preset/classical-ml", "classical_ml")
     # compose_to_csv("preset/deep-learning", "deep_learning")
     # compose_to_csv("preset/inference-optimization", "inference_optimization")
-    # get_repo(transformers)
-    # get_repo(genai)
+    compose_to_csv("workflows/charts/huggingface-llm", "genai")
 
 
 def on_pre_build(*args, **kwargs):
