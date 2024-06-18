@@ -71,43 +71,11 @@ updates:
     package-ecosystem: pip
     schedule:
       interval: weekly
-  - directory: /workflows
+  - directory: /workflows/charts/huggingface-llm
     groups:
-      helm:
+      genai-workflow:
         patterns:
           - "*"
     package-ecosystem: pip
-    schedule:
-      interval: weekly
-  - package-ecosystem: docker
-    directory: /classical-ml
-    schedule:
-      interval: weekly
-  - package-ecosystem: docker
-    directory: /preset/classical-ml
-    schedule:
-      interval: weekly
-  - package-ecosystem: docker
-    directory: /preset/data-analytics
-    schedule:
-      interval: weekly
-  - package-ecosystem: docker
-    directory: /preset/deep-learning
-    schedule:
-      interval: weekly
-  - package-ecosystem: docker
-    directory: /preset/inference-optimization
-    schedule:
-      interval: weekly
-  - package-ecosystem: docker
-    directory: /python
-    schedule:
-      interval: weekly
-  - package-ecosystem: docker
-    directory: /pytorch
-    schedule:
-      interval: weekly
-  - package-ecosystem: docker
-    directory: /tensorflow
     schedule:
       interval: weekly
