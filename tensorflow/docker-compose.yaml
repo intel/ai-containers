@@ -87,7 +87,7 @@ services:
     command: >
       bash -c "horovodrun --check-build && mpirun --version && python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow;import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)'"
     extends: tf-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_VERSION:-2.15.0}-horovod-${HOROVOD_VERSION:-0.28.1}-inc-${INC_VERSION:-2.3.1}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_VERSION:-2.15.0}-horovod-${HOROVOD_VERSION:-0.28.1}-inc-${INC_VERSION:-2.6}
   xpu:
     build:
       args:
