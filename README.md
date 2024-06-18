@@ -3,11 +3,12 @@
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8270/badge)](https://www.bestpractices.dev/projects/8270)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/intel/ai-containers/badge)](https://securityscorecards.dev/viewer/?uri=github.com/intel/ai-containers)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/intel/ai-containers/main.svg)](https://results.pre-commit.ci/latest/github/intel/ai-containers/main)
-[![CodeQL](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql)
-[![Lint](https://github.com/intel/ai-containers/actions/workflows/lint.yaml/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/lint.yaml)
-[![Test Runner CI](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml)
-[![Helm Chart CI](https://github.com/intel/ai-containers/actions/workflows/chart-ci.yaml/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/chart-ci.yaml)
-[![Weekly Tests](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml/badge.svg)](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml)
+[![CodeQL](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql)
+[![Docs](https://github.com/intel/ai-containers/actions/workflows/docs.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/docs.yaml)
+[![Lint](https://github.com/intel/ai-containers/actions/workflows/lint.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/lint.yaml)
+[![Test Runner CI](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml/badge.svg?event=merge_group)](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml)
+[![Helm Chart CI](https://github.com/intel/ai-containers/actions/workflows/chart-ci.yaml/badge.svg?event=merge_group)](https://github.com/intel/ai-containers/actions/workflows/chart-ci.yaml)
+[![Weekly Tests](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml)
 
 This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. used to scale out AI containers with versions of TensorFlow and PyTorch that have been optimized for Intel platforms. Scaling is done with python, Docker, kubernetes, kubeflow, cnvrg.io, Helm, and other container orchestration frameworks for use in the cloud and on-premise.
 
