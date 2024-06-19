@@ -37,6 +37,13 @@ services:
         https_proxy: ${https_proxy}
         no_proxy: ''
       context: .
+      labels:
+        docs: classical-ml
+        dependency.python: ${PYTHON_VERSION:-3.10}
+        org.opencontainers.image.title: "Intel® AI Tools Selector Preset Containers - Classical ML"
+        org.opencontainers.base.name: "ubuntu:22.04"
+        org.opencontainers.image.name: "intel/classical-ml"
+        org.opencontainers.image.version: ${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
       target: classical-ml-jupyter
     command: |
       bash -c "conda run -n classical-ml python -c 'import sklearn; import xgboost; print(\"SciKit:\", sklearn.__version__, \" XGBoost:\",xgboost.__version__)' && \

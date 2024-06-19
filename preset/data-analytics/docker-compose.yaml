@@ -17,7 +17,7 @@
 
 version: '3'
 services:
-  classical-ml:
+  data-analytics:
     build:
       args:
         BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
@@ -35,6 +35,13 @@ services:
         https_proxy: ${https_proxy}
         no_proxy: ''
       context: .
+      labels:
+        docs: data-analytics
+        dependency.python: ${PYTHON_VERSION:-3.10}
+        org.opencontainers.image.title: "Intel® AI Tools Selector Preset Containers - Data Analytics"
+        org.opencontainers.base.name: "ubuntu:22.04"
+        org.opencontainers.image.name: "intel/data-analytics"
+        org.opencontainers.image.version: ${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
       target: data-analytics-jupyter
     command: >
         bash -c "conda run -n data-analytics python -c 'import modin.pandas as pd, modin.config as cfg; cfg.Engine.put(\"Ray\"); df = pd.DataFrame([1]);print(df+1)'"
