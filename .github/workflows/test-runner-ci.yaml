@@ -20,11 +20,11 @@ on:
   #   branches: [main]
   #   paths:
   #   - 'test-runner/**'
-  pull_request: null
+  push: null
 permissions: read-all
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+#   cancel-in-progress: true
 jobs:
   unit-test:
     runs-on: k8-runners
@@ -38,7 +38,7 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      if: ${{ github.event_name == 'pull_request' }}
+      if: ${{ github.event_name == 'push' }}
       with:
         fetch-depth: 0
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
