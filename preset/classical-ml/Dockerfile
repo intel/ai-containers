@@ -67,10 +67,10 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
     conda config --add channels intel && \
     conda init --all && \
     conda install -y \
-        jupyterlab \
-        notebook \
-        jupyterhub \
-        jupyter-server-proxy \
+        'jupyterlab>=4.1.8' \
+        'notebook>=7.1.3' \
+        'jupyterhub>=4.1.5' \
+        'jupyter-server-proxy>=4.1.2' \
         'mako>=1.2.2' \
         'pyjwt>=2.4.0' \
         'cryptography>=42.0.5' \
@@ -99,15 +99,15 @@ RUN conda create -yn classical-ml -c ${INTEL_CHANNEL} -c conda-forge \
         scikit-learn-intelex==${SKLEARNEX_VERSION} \
         xgboost=${XGBOOST_VERSION} \
         modin-ray=${MODIN_VERSION} \
-        python-dotenv \
-        tqdm \
-        matplotlib-base \
-        dataset_librarian \
-        threadpoolctl \
-        ipython \
-        ipykernel \
-        kernda \
-        protobuf=4.24 \
+        'python-dotenv>=1.0.1' \
+        'tqdm>=4.66.2' \
+        'matplotlib-base>=3.4.3' \
+        'dataset_librarian>=1.0.4' \
+        'threadpoolctl>=3.3.0' \
+        'ipython>=8.18.1' \
+        'ipykernel>=6.29.3' \
+        'kernda>=0.3.0' \
+        'protobuf>=4.24' \
         'pillow>=10.2.0' \
         'tornado>=6.3.3' && \
     conda clean -y --all
@@ -116,7 +116,7 @@ RUN conda create -yn classical-ml -c ${INTEL_CHANNEL} -c conda-forge \
 
 # PyPI packages
 RUN conda run -n classical-ml python -m pip install --no-deps --no-cache-dir \
-    cloud-data-connector
+    'cloud-data-connector=1.0.3'
 
 
 ENV PYTHONSTARTUP=~/.patch_sklearn.py

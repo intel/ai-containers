@@ -68,16 +68,16 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     conda config --add channels intel && \
     conda init --all && \
     conda install -y \
-        jupyterlab \
-        notebook \
-        jupyterhub \
-        jupyter-server-proxy \
+        'jupyterlab>=4.1.8' \
+        'notebook>=7.1.3' \
+        'jupyterhub>=4.1.5' \
+        'jupyter-server-proxy>=4.1.2' \
         'mako>=1.2.2' \
         'pyjwt>=2.4.0' \
         'cryptography>=42.0.5' \
+        'nodejs>=20.12.2' \
         'idna>=3.7' \
         'tqdm>=4.66.2' \
-        'nodejs>=20.12.2' \
         && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" && \
     conda clean -y --all
@@ -95,22 +95,22 @@ RUN conda create -yn data-analytics -c "${INTEL_CHANNEL}" -c conda-forge \
         numpy="${NUMPY_VERSION}" \
         python="${PYTHON_VERSION}" \
         modin-ray="${MODIN_VERSION}" \
-        python-dotenv \
-        tqdm \
-        matplotlib-base \
-        dataset_librarian \
-        threadpoolctl \
-        ipython \
-        ipykernel \
-        kernda  \
-        protobuf=4.24 \
+        'python-dotenv>=1.0.1' \
+        'tqdm>=4.66.2' \
+        'matplotlib-base>=3.4.3' \
+        'dataset_librarian>=1.0.4' \
+        'threadpoolctl>=3.3.0' \
+        'ipython>=8.18.1' \
+        'ipykernel>=6.29.3' \
+        'kernda>=0.3.0'  \
+        'protobuf>=4.24.4' \
         'pillow>=10.2.0' \
         'idna>=3.7' \
         'tornado>=6.3.3' && \
     conda clean -y --all
 
 RUN conda run -n data-analytics python -m pip install --no-deps --no-cache-dir \
-    cloud-data-connector
+    'cloud-data-connector=1.0.3'
 
 FROM data-analytics-python as data-analytics-jupyter
 
