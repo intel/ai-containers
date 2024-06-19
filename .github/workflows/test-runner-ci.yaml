@@ -38,6 +38,10 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      if: ${{ github.event_name == 'pull_request' }}
+      with:
+        fetch-depth: 0
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       if: ${{ github.event_name == 'pull_request_target' }}
       with:
         fetch-depth: 0
