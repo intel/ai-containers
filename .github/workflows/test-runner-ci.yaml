@@ -50,7 +50,7 @@ jobs:
       with:
         path: models-perf
         repository: ${{ secrets.PERF_REPO }}
-        token: ${{ secrets.ACTION_TOKEN }}
+        token: ${{ secrets.PERF_TOKEN }}
     - uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3.3.0
       with:
         driver: docker
@@ -150,4 +150,4 @@ jobs:
         registry: ${{ secrets.REGISTRY }}
         repo: ${{ secrets.REPO }}
         test_dir: test-runner
-        token: ${{ secrets.ACTION_TOKEN }}
+        token: ${{ secrets.PERF_TOKEN }}
