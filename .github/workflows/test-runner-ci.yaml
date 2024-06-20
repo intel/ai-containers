@@ -81,7 +81,7 @@ jobs:
     - name: Upload Coveralls
       run: coveralls
       env:
-        GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         COVERALLS_FLAG_NAME: ${{ matrix.python }}
         COVERALLS_PARALLEL: true
   coverage:
@@ -100,7 +100,7 @@ jobs:
     - name: Finish Coveralls
       run: coveralls --finish
       env:
-          GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   integration-test:
     runs-on: k8-runners
     steps:
