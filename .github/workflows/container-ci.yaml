@@ -113,6 +113,7 @@ jobs:
 ####################################################################################################
   setup-scan:
     needs: [build-containers]
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.scan-matrix.outputs.matrix }}
@@ -129,13 +130,8 @@ jobs:
       run: echo "matrix=$(cat matrix/*-${{ needs.build-containers.outputs.group }}/*.txt | jq -R '.' | jq -sc '. | unique')" >> $GITHUB_OUTPUT
   scan-containers:
     needs: [setup-scan]
-    if: ${{ !inputs.no_build }}
+    if: ${{ !inputs.no_build && github.event_name == 'pull_request' }}
     runs-on: k8-runners
-    permissions:
-      actions: read
-      packages: read
-      pull-requests: write
-      security-events: write
     strategy:
       matrix:
         container: ${{ fromJSON(needs.setup-scan.outputs.matrix) }}
