@@ -164,4 +164,4 @@ jobs:
         registry: ${{ secrets.REGISTRY }}
         repo: ${{ secrets.REPO }}
         test_dir: ${{ matrix.tests }}
-        token: ${{ secrets.ACTION_TOKEN || github.token }}
+        token: ${{ secrets.PERF_TOKEN }}
