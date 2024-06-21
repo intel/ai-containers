@@ -17,7 +17,7 @@ import shutil
 
 from matrix import compose_to_csv
 from readmes import copy_readmes, remove_readmes
-
+from import_utils import get_repo, models
 
 def create_support_matrix():
     """
@@ -35,7 +35,7 @@ def create_support_matrix():
     compose_to_csv("tensorflow", None)
     compose_to_csv("classical-ml", None)
 
-    # get_repo(models)
+    get_repo(models)
     # compose_to_csv("preset/data-analytics", "data_analytics")
     # compose_to_csv("preset/classical-ml", "classical_ml")
     # compose_to_csv("preset/deep-learning", "deep_learning")

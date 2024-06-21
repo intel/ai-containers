@@ -60,10 +60,12 @@ def extract_deps(deps: dict, version: str, service: str):
     for os_type in os_types:
         os_deps = os_deps + get_dependency_string(os_type)
 
+    source_deps = get_dependency_string("source")
+
     conda_deps = get_dependency_string("conda") if version != "pip" else " "
 
     if deps.get(f"dependency.{version}.pip") == "false":
-        return os_deps, " ", conda_deps
+        return os_deps, " ", conda_deps, source_deps
 
     py_deps = get_dependency_string("pip") if version != "conda" else " "
 
@@ -78,7 +80,7 @@ def extract_deps(deps: dict, version: str, service: str):
             py_reqs = re.sub(r"#(.*)", "", py_reqs)
             py_deps = py_deps + "\n".join(py_reqs.split("\n"))
 
-    return os_deps, py_deps, conda_deps
+    return os_deps, py_deps, conda_deps, source_deps
 
 
 def compose_to_csv(path: str, name: str):
@@ -113,6 +115,8 @@ def compose_to_csv(path: str, name: str):
     def make_table(setting: str = None, compose_metadata: dict = None):
         df = pd.DataFrame(data={})
         for svc in compose_metadata["services"]:
+            if not ("labels" in compose_metadata["services"][svc]["build"]):
+                continue
             if compose_metadata["services"][svc]["build"]["labels"]["docs"] != path:
                 continue
 
@@ -120,7 +124,7 @@ def compose_to_csv(path: str, name: str):
             if labels.get(f"dependency.{setting.split('=')[1]}") == "false":
                 return pd.DataFrame(data={})
 
-            os_deps, py_deps, conda_deps = extract_deps(
+            os_deps, py_deps, conda_deps, source_deps = extract_deps(
                 labels, setting.split("=")[1], svc
             )
             try:
@@ -138,6 +142,7 @@ def compose_to_csv(path: str, name: str):
                         ["OS Dependencies", os_deps],
                         ["Python Dependencies", py_deps],
                         ["Conda Dependencies", conda_deps],
+                        ["Source Dependencies", source_deps],
                     ],
                     columns=[
                         setting.split("=")[0].lower().replace("_", " ").title(),
