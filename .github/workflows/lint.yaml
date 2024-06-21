@@ -16,9 +16,7 @@ name: Lint
 permissions: read-all
 on:
   merge_group: null
-  pull_request_target:
-    types: [opened, edited, reopened, synchronize]
-    branches: [main]
+  pull_request: null
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -36,19 +34,12 @@ jobs:
           api.github.com:443
           github.com:443
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      if: ${{ github.event_name == 'pull_request_target' }}
       with:
         fetch-depth: 0
-        ref: "refs/pull/${{ github.event.number }}/merge"
-    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      if: ${{ github.event_name == 'merge_group' }}
-      with:
-        fetch-depth: 0
-        ref: ${{ github.event.merge_group.head_ref }}
     - uses: super-linter/super-linter/slim@88ea3923a7e1f89dd485d079f6eb5f5e8f937589 # v6.6.0
       env:
         # To report GitHub Actions status checks
-        GITHUB_TOKEN: ${{ secrets.ACTION_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_ACTIONS_COMMAND_ARGS: '-ignore SC.*'
         VALIDATE_BASH_EXEC: false
         VALIDATE_CHECKOV: false

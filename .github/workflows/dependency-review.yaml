@@ -22,9 +22,7 @@
 # Source repository: https://github.com/actions/dependency-review-action
 name: 'Dependency Review'
 on:
-  pull_request_target:
-    types: [opened, edited, reopened, synchronize]
-    branches: [main]
+  pull_request: null
 permissions:
   contents: read
 concurrency:

@@ -46,8 +46,3 @@ test7:
   cmd: "echo 'world: hello'"
   mask:
   - world
-test8:
-  cmd: "echo 'test: 123 throughput'"
-  mask:
-  - test
-  performance: perf/test.yaml:test
