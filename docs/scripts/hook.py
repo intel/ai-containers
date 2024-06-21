@@ -15,9 +15,10 @@
 import os
 import shutil
 
+from import_utils import get_repo, models
 from matrix import compose_to_csv
 from readmes import copy_readmes, remove_readmes
-from import_utils import get_repo, models
+
 
 def create_support_matrix():
     """
