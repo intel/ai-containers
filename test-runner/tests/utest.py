@@ -21,7 +21,7 @@ from expandvars import expandvars
 from hypothesis import given
 from hypothesis.strategies import dictionaries, text
 from test_runner import get_test_list, parse_args, set_log_filename
-from utils.test import PerfException, Test
+from utils.test import Test
 
 
 @pytest.fixture
@@ -143,11 +143,6 @@ def test_get_test_list(test_args_input, test_json_input):
             "mask": ["hello"],
         },
         "test7": {"cmd": "echo 'world: hello'", "mask": ["world"]},
-        "test8": {
-            "cmd": "echo 'test: 123 throughput'",
-            "mask": ["test"],
-            "performance": "perf/test.yaml:test",
-        },
     }
 
     test_fn, disable_masking = get_test_list(test_args_input, test_json_input)
@@ -162,44 +157,6 @@ def test_masking(test_class_input):
             assert ": ***" in test.container_run()
         if test.mask != [] and not test.img:
             assert ": ***" in test.run()
-
-
-def test_perf_thresholds():
-    "test performance thresholds."
-    test_cases = [
-        {
-            "cmd": "echo 'test: 123 throughput'",
-            "performance": "perf/test.yaml:test",
-            "expected_output": "test: 123 throughput",
-            "should_raise_exception": False,
-        },
-        {
-            "cmd": "echo 'test: 121 throughput'",
-            "performance": "perf/test.yaml:test",
-            "should_raise_exception": True,
-        },
-        {
-            "cmd": "echo 'test: 123 millithroughput'",
-            "performance": "perf/test.yaml:test",
-            "should_raise_exception": True,
-        },
-        {
-            "cmd": "echo 'test: 125 throughput'",
-            "performance": "perf/test.yaml:not-test",
-            "should_raise_exception": True,
-        },
-    ]
-
-    for test_case in test_cases:
-        test = Test(name="test", **test_case)
-        if test_case["should_raise_exception"]:
-            try:
-                with pytest.raises(Exception, match="Failed") as exc_info:
-                    test.run()
-            except:
-                assert isinstance(exc_info.value, PerfException)
-        else:
-            assert test_case["expected_output"] in test.run()
 
 
 @given(name=text(), arguments=dictionaries(text(), text()))

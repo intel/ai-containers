@@ -14,9 +14,7 @@
 
 name: Integration Tests
 on:
-  pull_request_target:
-    types: [opened, edited, reopened, synchronize]
-    branches: [main]
+  pull_request: null
 permissions: read-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -32,15 +30,12 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      with:
-        fetch-depth: 0
-        ref: "refs/pull/${{ github.event.number }}/merge"
     - name: Output Modified Group Directories
       id: group-list
       run: |
         # Get diff array filtered by specific filetypes
         DIFF=$(git diff --diff-filter=d \
-            --name-only ${{ github.event.merge_group.base_sha || github.event.pull_request.base.sha }}...${{ github.event.merge_group.head_sha || github.event.pull_request.head.sha }} \
+            --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }} \
             -- '*/*Dockerfile' '*.py' '*.yaml' '*.yml' '*.sh' '*/*requirements.txt' '*.json' | \
             jq -R '.' | jq -sc '.' \
         )
@@ -71,7 +66,6 @@ jobs:
     uses: intel/ai-containers/.github/workflows/container-ci.yaml@main
     with:
       group_dir: ${{ matrix.group }}
-      ref: "refs/pull/${{ github.event.number }}/merge"
     secrets: inherit
   status-check:
     needs: [group-diff, pipeline-ci]
