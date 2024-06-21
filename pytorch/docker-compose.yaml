@@ -189,6 +189,11 @@ services:
       - 7071:7071
   hf-genai:
     build:
+      labels:
+        dependency.python.pip: hf-genai-requirements.txt
+        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-multinode"
+        org.opencontainers.image.title: "Intel® Extension for PyTorch MultiNode Huggingface Generative AI Image"
+        org.opencontainers.image.version: ${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-hf-genai
       args:
         HF_VERSION: ${HF_VERSION:-4.41.2}
       target: hf-genai
