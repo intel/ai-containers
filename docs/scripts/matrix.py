@@ -115,7 +115,7 @@ def compose_to_csv(path: str, name: str):
     def make_table(setting: str = None, compose_metadata: dict = None):
         df = pd.DataFrame(data={})
         for svc in compose_metadata["services"]:
-            if not ("labels" in compose_metadata["services"][svc]["build"]):
+            if not "labels" in compose_metadata["services"][svc]["build"]:
                 continue
             if compose_metadata["services"][svc]["build"]["labels"]["docs"] != path:
                 continue
