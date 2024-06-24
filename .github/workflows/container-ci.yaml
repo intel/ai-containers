@@ -138,7 +138,7 @@ jobs:
       uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
         egress-policy: audit
-    - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
     - uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
       with:
         registry: ${{ secrets.REGISTRY }}
@@ -154,7 +154,7 @@ jobs:
     - name: Cleanup
       if: always()
       run: docker rmi -f ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
-    - uses: github/codeql-action/upload-sarif@2e230e8fe0ad3a14a340ad0815ddb96d599d2aff # v3.25.8
+    - uses: github/codeql-action/upload-sarif@23acc5c183826b7a8a97bce3cecc52db901f8251 # v3.25.10
       with:
         sarif_file: '${{ matrix.container }}-scan.sarif'
         category: '${{ matrix.container }}'
