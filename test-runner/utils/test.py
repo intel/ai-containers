@@ -21,14 +21,9 @@ from signal import SIGKILL
 from subprocess import PIPE, Popen
 from typing import Dict, List, Optional
 
-import pint
 from expandvars import expandvars
-from git import Repo
 from pydantic import BaseModel
 from python_on_whales import DockerException, docker
-from yaml import YAMLError, full_load
-
-units = pint.UnitRegistry()
 
 
 class PerfException(Exception):
@@ -67,27 +62,11 @@ class Test(BaseModel):
     groups_add: Optional[List[str]] = ["109", "44"]
     hostname: Optional[str] = None
     ipc: Optional[str] = None
-    performance: Optional[str] = None
     privileged: Optional[bool] = False
     pull: Optional[str] = "missing"
     user: Optional[str] = None
     shm_size: Optional[str] = None
     workdir: Optional[str] = None
-
-    def __init__(self, **data):
-        super().__init__(**data)
-        if self.performance:
-            perf_repo = os.environ.get("PERF_REPO")
-            if perf_repo:
-                if not os.path.exists("models-perf"):
-                    Repo.clone_from(
-                        f"https://github.com/{perf_repo}", "models-perf", progress=None
-                    )
-            else:
-                logging.error(
-                    "Performance mode enabled, but PERF_REPO environment variable not set"
-                )
-            units.load_definitions("./models-perf/definitions.txt")
 
     def get_path(self, name):
         """Given a filename, find that file from the users current working directory
@@ -205,54 +184,6 @@ class Test(BaseModel):
                 load=True,
             )
 
-    def check_perf(self, content):
-        """
-        Check the performance of the test against the thresholds.
-
-        Args:
-            content (str): test output log
-
-        Raises:
-            PerfException: if the performance does not meet the target performance
-        """
-        with open(
-            f"models-perf/{self.performance.split(':')[0]}", "r", encoding="utf-8"
-        ) as file:
-            try:
-                thresholds = full_load(file)
-            except YAMLError as yaml_exc:
-                raise YAMLError(yaml_exc)
-        model_thresholds = [
-            threshold
-            for threshold in thresholds
-            if self.performance.split(":")[1] == threshold["test_id"]
-        ]
-        for threshold in model_thresholds:
-            perf = re.search(
-                rf"{threshold['key']}[:]?\s+(.\d+[\s]?.*)",
-                content,
-                re.IGNORECASE,
-            )
-            if perf:
-                if threshold["lower_is_better"]:
-                    if units.Quantity(perf.group(1)) > units.Quantity(
-                        f"{threshold['boundary']} {threshold['unit']}"
-                    ):
-                        if not self.mask:
-                            logging.info("%s: %s", threshold["key"], perf.group(1))
-                        raise PerfException(
-                            f"Performance Threshold {threshold['name']} did not meet the target performance."
-                        )
-                else:
-                    if units.Quantity(perf.group(1)) < units.Quantity(
-                        f"{threshold['boundary']} {threshold['unit']}"
-                    ):
-                        if not self.mask:
-                            logging.info("%s: %s", threshold["key"], perf.group(1))
-                        raise PerfException(
-                            f"Performance Threshold {threshold['name']} did not meet the target performance."
-                        )
-
     def container_run(self):
         """Runs the docker container.
 
@@ -317,8 +248,6 @@ class Test(BaseModel):
             log = ""
             for _, stream_content in output_generator:
                 # All process logs will have the stream_type of stderr despite it being stdout
-                if self.performance:
-                    self.check_perf(stream_content.decode("utf-8"))
                 for item in self.mask:
                     stream_content = re.sub(
                         rf"({item}[:]?\s+)(.*)",
@@ -355,8 +284,6 @@ class Test(BaseModel):
         )
         try:
             stdout, stderr = p.communicate()
-            if self.performance:
-                self.check_perf(stdout.decode("utf-8"))
             for item in self.mask:
                 stdout = re.sub(
                     rf"({item}[:]?\s+)(.*)", r"\1***", stdout.decode("utf-8")
