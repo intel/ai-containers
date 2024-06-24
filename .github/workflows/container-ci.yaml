@@ -143,7 +143,7 @@ jobs:
     - name: Pull Image
       run: docker pull ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
     - name: Scan Container
-      uses: intel/ai-containers/.github/scan@80abd85265623c7dcda2b837f6c43c7011780288 # main
+      uses: intel/ai-containers/.github/scan@main
       with:
         image-ref: ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
         output: ${{ matrix.container }}-scan.sarif
