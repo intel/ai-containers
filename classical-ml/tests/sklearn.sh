@@ -26,7 +26,7 @@
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
 
-wget https://raw.githubusercontent.com/intel/ai-containers/main/preset/classical-ml/tests/scikit/kmeans.py
-python kmeans.py true
+wget https://raw.githubusercontent.com/intel/scikit-learn-intelex/main/examples/sklearnex/patch_sklearn.py
+python patch_sklearn.py
 
-rm -rf kmeans.py
+rm -rf patch_sklearn.py
