@@ -3,6 +3,7 @@
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8270/badge)](https://www.bestpractices.dev/projects/8270)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/intel/ai-containers/badge)](https://securityscorecards.dev/viewer/?uri=github.com/intel/ai-containers)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/intel/ai-containers/main.svg)](https://results.pre-commit.ci/latest/github/intel/ai-containers/main)
+[![Coverage Status](https://coveralls.io/repos/github/intel/ai-containers/badge.svg?branch=tylertitsworth/coveralls)](https://coveralls.io/github/intel/ai-containers?branch=tylertitsworth/coveralls)
 [![CodeQL](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql)
 [![Docs](https://github.com/intel/ai-containers/actions/workflows/docs.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/docs.yaml)
 [![Lint](https://github.com/intel/ai-containers/actions/workflows/lint.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/lint.yaml)
