@@ -15,9 +15,7 @@
 name: Docs
 on:
   merge_group: null
-  pull_request_target:
-    types: [opened, edited, reopened, synchronize]
-    branches: [main]
+  pull_request: null
   push:
     branches:
     - main
@@ -38,17 +36,6 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      if: ${{ github.event_name == 'push' }}
-    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      if: ${{ github.event_name == 'pull_request_target' }}
-      with:
-        fetch-depth: 0
-        ref: "refs/pull/${{ github.event.number }}/merge"
-    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      if: ${{ github.event_name == 'merge_group' }}
-      with:
-        fetch-depth: 0
-        ref: ${{ github.event.merge_group.head_ref }}
     - uses: actions/setup-python@82c7e631bb3cdc910f68e0081d67478d79c6982d # v5.1.0
       with:
         python-version: 3.8
