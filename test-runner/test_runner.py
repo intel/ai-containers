@@ -24,7 +24,7 @@
 #
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
-
+# test
 import json
 import logging
 import os
