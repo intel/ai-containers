@@ -26,10 +26,6 @@ from pydantic import BaseModel
 from python_on_whales import DockerException, docker
 
 
-class PerfException(Exception):
-    "Constructs a PerfException class."
-
-
 class Threshold(BaseModel):
     "Constructs a Threshold class."
     name: str
