@@ -20,12 +20,14 @@ Define your project's registry and repository each time you use the project:
 # REGISTRY/REPO:TAG
 export REGISTRY=<registry_name>
 export REPO=<repo_name>
+
+docker login $REGISTRY
+
+# Verify your access permissions
+docker pull $REGISTRY/$REPO:latest
 ```
 
-The maintainers of Intel® AI Containers use [harbor](https://github.com/goharbor/harbor) to store containers.
-
-> [!NOTE]
-> `REGISTRY` and `REPO` are used to authenticate with the private registry necessary to push completed container layers and saved them for testing and publication. For example: `REGISTRY=intel && REPO=intel-extension-for-pytorch` would become `intel/intel-extension-for-pytorch` as the name of the container image, followed by the tag generated from the service found in that project's compose file.
+The maintainers of Intel® AI Containers use Azure to store containers, but an open source container registry like [harbor](https://github.com/goharbor/harbor) is preferred.
 
 > [!WARNING]
 > You can optionally skip this step and use some placeholder values, however some container groups depend on other images and will pull from a registry that you have not defined and result in an error.
