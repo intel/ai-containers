@@ -173,8 +173,16 @@ class Test(BaseModel):
                 build_args={
                     "BASE_IMAGE_NAME": img.split(":")[0],
                     "BASE_IMAGE_TAG": img.split(":")[1],
-                    "http_proxy": os.environ.get("http_proxy"),
-                    "https_proxy": os.environ.get("https_proxy"),
+                    "http_proxy": (
+                        os.environ.get("http_proxy")
+                        if "http_proxy" in os.environ
+                        else ""
+                    ),
+                    "https_proxy": (
+                        os.environ.get("https_proxy")
+                        if "https_proxy" in os.environ
+                        else ""
+                    ),
                 },
                 # Input File
                 file=self.get_path("Dockerfile.notebook"),
@@ -201,9 +209,13 @@ class Test(BaseModel):
             {key: expandvars(val) for key, val in self.env.items()} if self.env else {}
         )
         default_env = {
-            "http_proxy": os.environ.get("http_proxy"),
-            "https_proxy": os.environ.get("https_proxy"),
-            "no_proxy": os.environ.get("no_proxy"),
+            "http_proxy": (
+                os.environ.get("http_proxy") if "http_proxy" in os.environ else ""
+            ),
+            "https_proxy": (
+                os.environ.get("https_proxy") if "https_proxy" in os.environ else ""
+            ),
+            "no_proxy": os.environ.get("no_proxy") if "no_proxy" in os.environ else "",
         }
         # Always add proxies to the envs list
         env.update(default_env)

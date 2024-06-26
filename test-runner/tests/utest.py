@@ -111,7 +111,7 @@ def test_get_test_list(test_args_input, test_json_input):
     "test get_test_list() method."
     test_val = {
         "test1": {
-            "img": "${CACHE_REGISTRY}/cache/library/python:3.10-slim-bullseye",
+            "img": "${REGISTRY}/${REPO}:latest",
             "cmd": "head -n 1 /workspace/test-runner/requirements.txt",
             "notebook": True,
             "env": {"REGISTRY": "${REGISTRY}", "DEBUG": "true"},
