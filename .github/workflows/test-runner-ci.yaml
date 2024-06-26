@@ -59,7 +59,7 @@ jobs:
         REPO: ${{ secrets.REPO }}
     - uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 # v2.3.0
       with:
-        flag: ${{ matrix.python }}
+        flag-name: ${{ matrix.python }}
         parallel: true
   coverage:
     needs: [unit-test]
