@@ -175,12 +175,12 @@ class Test(BaseModel):
                     "BASE_IMAGE_TAG": img.split(":")[1],
                     "http_proxy": (
                         os.environ.get("http_proxy")
-                        if "http_proxy" in os.environ
+                        if os.environ.get("http_proxy") != ""
                         else ""
                     ),
                     "https_proxy": (
                         os.environ.get("https_proxy")
-                        if "https_proxy" in os.environ
+                        if os.environ.get("https_proxy") != ""
                         else ""
                     ),
                 },
@@ -210,12 +210,18 @@ class Test(BaseModel):
         )
         default_env = {
             "http_proxy": (
-                os.environ.get("http_proxy") if "http_proxy" in os.environ else ""
+                os.environ.get("http_proxy")
+                if os.environ.get("http_proxy") != ""
+                else ""
             ),
             "https_proxy": (
-                os.environ.get("https_proxy") if "https_proxy" in os.environ else ""
+                os.environ.get("https_proxy")
+                if os.environ.get("https_proxy") != ""
+                else ""
             ),
-            "no_proxy": os.environ.get("no_proxy") if "no_proxy" in os.environ else "",
+            "no_proxy": (
+                os.environ.get("no_proxy") if os.environ.get("no_proxy") != "" else ""
+            ),
         }
         # Always add proxies to the envs list
         env.update(default_env)
