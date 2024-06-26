@@ -24,7 +24,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   unit-test:
-    runs-on: k8-runners
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python: ["3.8", "3.9", "3.10", "3.11", "3.12"]
@@ -89,7 +89,7 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         treshholdAll: 80
   integration-test:
-    runs-on: k8-runners
+    runs-on: ubuntu-latest
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
