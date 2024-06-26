@@ -46,7 +46,7 @@ jobs:
       with:
         results_file: results.sarif
         results_format: sarif
-        repo_token: ${{ secrets.ACTION_TOKEN }}
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
         publish_results: true
     - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
       with:

@@ -30,14 +30,8 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      if: ${{ github.event_name == 'pull_request' }}
       with:
         fetch-depth: 0
-    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      if: ${{ github.event_name == 'merge_group' }}
-      with:
-        fetch-depth: 0
-        ref: ${{ github.event.merge_group.head_ref }}
     - uses: super-linter/super-linter/slim@88ea3923a7e1f89dd485d079f6eb5f5e8f937589 # v6.6.0
       env:
         # To report GitHub Actions status checks

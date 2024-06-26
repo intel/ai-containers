@@ -15,9 +15,7 @@
 name: Helm Chart CI
 on:
   merge_group: null
-  pull_request_target:
-    types: [opened, edited, reopened, synchronize]
-    branches: [main]
+  pull_request:
     paths:
     - 'workflows/charts/**'
 permissions: read-all
@@ -33,15 +31,6 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      if: ${{ github.event_name == 'pull_request_target' }}
-      with:
-        fetch-depth: 0
-        ref: "refs/pull/${{ github.event.number }}/merge"
-    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      if: ${{ github.event_name == 'merge_group' }}
-      with:
-        fetch-depth: 0
-        ref: ${{ github.event.merge_group.head_ref }}
     - uses: intel/ai-containers/workflows/charts@main
       with:
         kubeconfig_path: ${{ secrets.KUBECONFIG_PATH }}
