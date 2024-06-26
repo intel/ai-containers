@@ -13,7 +13,7 @@
 # limitations under the License.
 
 test1:
-  img: ${REGISTRY}/${REPO}:latest # substitute env from host
+  img: ${CACHE_REGISTRY}/cache/library/python:3.10-slim-bullseye
   cmd: head -n 1 /workspace/test-runner/requirements.txt # volume mounted file
   # device: /dev/dri
   # ipc: host
