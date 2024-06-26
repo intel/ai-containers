@@ -67,12 +67,12 @@ ENV PATH /opt/conda/envs/idp/bin:/opt/conda/condabin:/opt/conda/bin/:${PATH}
 ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64:/opt/conda/envs/idp/lib:${LD_LIBRARY_PATH}
 
 RUN echo "conda activate idp" >> ~/.bashrc
-SHELL ["conda", "run", "-n", "idp", "/bin/bash", "-c"]
 
 WORKDIR /
 COPY idp-requirements.txt .
 
-RUN conda run -n idp python -m pip install --no-cache-dir -r idp-requirements.txt
+RUN conda install -y --file idp-requirements.txt && \
+    conda clean -y --all
 
 RUN ln -sf /opt/conda/envs/idp/bin/python /usr/local/bin/python && \
     ln -sf /opt/conda/envs/idp/bin/python /usr/local/bin/python3 && \
