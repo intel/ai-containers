@@ -52,15 +52,13 @@ jobs:
       run: python -m tox
       env:
         CACHE_REGISTRY: ${{ secrets.CACHE_REGISTRY }}
+        COVERALLS_FLAG_NAME: ${{ matrix.python }}
+        COVERALLS_PARALLEL: true
         FORCE_COLOR: 1
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PERF_REPO: ${{ secrets.PERF_REPO }}
         REGISTRY: ${{ secrets.REGISTRY }}
         REPO: ${{ secrets.REPO }}
-    - uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 # v2.3.0
-      with:
-        flag-name: ${{ matrix.python }}
-        parallel: true
   coverage:
     needs: [unit-test]
     runs-on: ubuntu-latest
