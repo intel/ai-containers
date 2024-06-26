@@ -57,7 +57,7 @@ jobs:
         PERF_REPO: ${{ secrets.PERF_REPO }}
         REGISTRY: ${{ secrets.REGISTRY }}
         REPO: ${{ secrets.REPO }}
-    - uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 v2.3.0
+    - uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 # v2.3.0
       with:
         flag: ${{ matrix.python }}
         parallel: true
@@ -69,7 +69,7 @@ jobs:
       uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
       with:
         egress-policy: audit
-    - uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 v2.3.0
+    - uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 # v2.3.0
       with:
         parallel-finished: true
   integration-test:
