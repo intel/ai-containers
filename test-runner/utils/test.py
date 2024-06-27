@@ -166,16 +166,19 @@ class Test(BaseModel):
             docker.run(img, ["which", "papermill"])
         except DockerException as papermill_not_found:
             logging.error("Papermill not found: %s", papermill_not_found)
+            default_env = {
+                "BASE_IMAGE_NAME": img.split(":")[0],
+                "BASE_IMAGE_TAG": img.split(":")[1],
+            }
+            if "http_proxy" in os.environ:
+                default_env["http_proxy"] = os.environ.get("http_proxy")
+            if "https_proxy" in os.environ:
+                default_env["https_proxy"] = os.environ.get("https_proxy")
             docker.build(
                 # context path
                 ".",
                 # Image Input and Proxy Args
-                build_args={
-                    "BASE_IMAGE_NAME": img.split(":")[0],
-                    "BASE_IMAGE_TAG": img.split(":")[1],
-                    "http_proxy": os.environ.get("http_proxy"),
-                    "https_proxy": os.environ.get("https_proxy"),
-                },
+                build_args=default_env,
                 # Input File
                 file=self.get_path("Dockerfile.notebook"),
                 # Output Tag = Input Tag
@@ -200,11 +203,13 @@ class Test(BaseModel):
         env = (
             {key: expandvars(val) for key, val in self.env.items()} if self.env else {}
         )
-        default_env = {
-            "http_proxy": os.environ.get("http_proxy"),
-            "https_proxy": os.environ.get("https_proxy"),
-            "no_proxy": os.environ.get("no_proxy"),
-        }
+        default_env = {}
+        if "http_proxy" in os.environ:
+            default_env["http_proxy"] = os.environ.get("http_proxy")
+        if "https_proxy" in os.environ:
+            default_env["https_proxy"] = os.environ.get("https_proxy")
+        if "no_proxy" in os.environ:
+            default_env["no_proxy"] = os.environ.get("no_proxy")
         # Always add proxies to the envs list
         env.update(default_env)
         img = expandvars(self.img, nounset=True)
