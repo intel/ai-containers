@@ -82,4 +82,4 @@ services:
     depends_on:
       - dl-base
     extends: dl-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
