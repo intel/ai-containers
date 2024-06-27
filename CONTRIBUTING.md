@@ -145,4 +145,4 @@ commit automatically with `git commit -s`.
 
 ## License
 
-Intel® AI Containers is licensed under the terms in [LICENSE](#license). By contributing to the project, you agree to the license and copyright terms therein and release your contribution under these terms.
+Intel® AI Containers is licensed under the terms in [LICENSE](./LICENSE). By contributing to the project, you agree to the license and copyright terms therein and release your contribution under these terms.
