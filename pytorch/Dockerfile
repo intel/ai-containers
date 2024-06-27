@@ -117,13 +117,14 @@ RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bin
     cat '/generate_ssh_keys.sh' >> ~/.startup && \
     rm -rf /generate_ssh_keys.sh
 
+# hadolint global ignore=SC3037
 RUN echo -e "#!/bin/bash \n\
-    set -e \n\
-    set -a \n\
-    source ~/.startup \n\
-    set +a \n\
-    eval \"\$@\" \n\
-    tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh && \
+set -e \n\
+set -a \n\
+source ~/.startup \n\
+set +a \n\
+eval \"\$@\" \n\
+tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh && \
     chmod +x /usr/local/bin/dockerd-entrypoint.sh
 
 RUN echo 'HostKey /etc/ssh/ssh_host_dsa_key' > /var/run/sshd_config && \
