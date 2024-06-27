@@ -4,9 +4,9 @@ Thank you for considering contributing to Intel® AI Containers! We welcome your
 
 ## Getting Started
 
-Before you start contributing, submit a request to be added to the [Intel](https://github.com/intel) Organization on GitHub by contacting one of the [`mlops-maintain`](https://github.com/orgs/intel/teams/mlops-maintain) members.
+Before you start contributing, submit a request to be added to the [Intel](https://github.com/intel) Organization on GitHub by contacting one of the [`ai-containers-maintain`](https://github.com/orgs/intel/teams/ai-containers-maintain) members.
 
-Once assigned to the [`mlops-write`](https://github.com/orgs/intel/teams/mlops-write) or [`mlops-maintain`](https://github.com/orgs/intel/teams/mlops-maintain) team depending on the scope of your contributions, you will be able to create branches and submit pull requests.
+Once assigned to the [`ai-containers-write`](https://github.com/orgs/intel/teams/ai-containers-write) or [`ai-containers-maintain`](https://github.com/orgs/intel/teams/ai-containers-maintain) team depending on the scope of your contributions, you will be able to create branches and submit pull requests.
 
 Once you are added to the organization, you will be given acces to ai-containers' Azure Container Registry (ACR).
 
