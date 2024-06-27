@@ -18,6 +18,7 @@ on:
   pull_request:
     paths:
     - 'test-runner/**'
+  push: null
 permissions: read-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
