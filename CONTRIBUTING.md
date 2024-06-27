@@ -60,7 +60,6 @@ To ensure a smooth and effective contribution process, please follow these guide
 
 ### Making Changes
 
-- Fork the repository and create a new branch for your changes.
 - Keep each pull request focused on a single feature or bugfix.
 - Write clear and descriptive commit messages.
 - Keep code changes concise and well-documented.
