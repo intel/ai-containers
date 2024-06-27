@@ -45,6 +45,10 @@ inputs:
     required: false
     default: false
     type: boolean
+outputs:
+  container-group:
+    description: "Container Group"
+    value: ${{ steps.container-output.outputs.group }}
 runs:
   using: composite
   steps:
@@ -69,6 +73,26 @@ runs:
         COMPOSE_PROJECT_NAME=${{ env.project-number }} \
         ${{ inputs.env_overrides }} docker compose -p ${{ env.project-number }} up --build --force-recreate --always-recreate-deps --no-start
       working-directory: ${{ inputs.group_dir }}
+    - name: Print Containers
+      id: container-output
+      shell: bash
+      run: |
+        mkdir matrix
+        images=$(REGISTRY=${{ inputs.registry }} \
+        REPO=${{ inputs.repo }} \
+        COMPOSE_PROJECT_NAME=${{ env.project-number }} \
+        ${{ inputs.env_overrides }} docker compose -p ${{ env.project-number }} images --format json)
+        for image in $(echo $images | jq -r --arg registry "$REGISTRY" '.[] | select(.Repository | contains($registry)) | .Tag'); do
+          echo "$image" > matrix/$image.txt
+        done
+        echo "group=${{ inputs.group_dir }}" | tr '/' '_' >> $GITHUB_OUTPUT
+      working-directory: ${{ inputs.group_dir }}
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.project-number }}-${{ steps.container-output.outputs.group }}
+        path: ${{ inputs.group_dir }}/matrix/*
+        retention-days: 1
+        overwrite: true
     - name: Push Containers
       shell: bash
       if: ${{ !fromJson(inputs.no-push) }}
