@@ -113,6 +113,14 @@ The images below additionally include [Intel® oneAPI Collective Communications 
 | `2.1.0-pip-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v2.3.1]  | [v0.2.3]        |
 | `2.0.0-pip-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v2.1.1]  | [v0.1.0]        |
 
+---
+
+The image below is an extension of the Multinode container designed to run Huggingface Generative AI scripts
+
+| Tag(s)                | Pytorch  | IPEX         | oneCCL               | transformers       | Dockerfile      |
+| --------------------- | -------- | ------------ | -------------------- | --------- | --------------- |
+| `2.3.0-pip-multinode-hf-4.41.2-genai` | [v2.3.1](https://github.com/pytorch/pytorch/releases/tag/v2.3.1) | [v2.3.0+cpu] | [v2.3.0][ccl-v2.3.0] | [v4.41.2]  | [v0.4.0-Beta]   |
+
 #### Setup and Run Multinode Container
 
 Some additional assembly is required to utilize this container with OpenSSH. To perform any kind of DDP (Distributed Data Parallel) execution, containers are assigned the roles of launcher and worker respectively:
@@ -312,6 +320,9 @@ It is the image user's responsibility to ensure that any use of The images below
 [ccl-v2.2.0]: https://github.com/intel/torch-ccl/releases/tag/v2.2.0%2Bcpu
 [ccl-v2.1.0]: https://github.com/intel/torch-ccl/releases/tag/v2.1.0%2Bcpu
 [ccl-v2.0.0]: https://github.com/intel/torch-ccl/releases/tag/v2.1.0%2Bcpu
+
+<!-- HuggingFace transformers releases -->
+[v4.41.2]: https://github.com/huggingface/transformers/releases/tag/v4.41.2
 
 [803]: https://dgpu-docs.intel.com/releases/LTS_803.29_20240131.html
 [736]: https://dgpu-docs.intel.com/releases/stable_736_25_20231031.html
