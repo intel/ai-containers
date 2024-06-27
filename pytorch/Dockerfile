@@ -113,11 +113,18 @@ COPY generate_ssh_keys.sh .
 # modify generate_ssh_keys to be a helper script
 # print how to use helper script on bash startup
 # Avoids loop for further execution of the startup file
-RUN echo 'unset BASH_ENV' >> ~/.bash_startup && \
-    echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bash_startup && \
-    cat '/generate_ssh_keys.sh' >> ~/.bash_startup && \
-    rm -rf /generate_ssh_keys.sh && \
-    echo 'source ~/.bash_startup' >> ~/.bashrc
+RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
+    cat '/generate_ssh_keys.sh' >> ~/.startup && \
+    rm -rf /generate_ssh_keys.sh
+
+RUN echo -e "#!/bin/bash \n\
+    set -e \n\
+    set -a \n\
+    source ~/.startup \n\
+    set +a \n\
+    eval \"\$@\" \n\
+    tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh && \
+    chmod +x /usr/local/bin/dockerd-entrypoint.sh
 
 RUN echo 'HostKey /etc/ssh/ssh_host_dsa_key' > /var/run/sshd_config && \
     echo 'HostKey /etc/ssh/ssh_host_rsa_key' > /var/run/sshd_config && \
@@ -129,21 +136,14 @@ RUN echo 'HostKey /etc/ssh/ssh_host_dsa_key' > /var/run/sshd_config && \
     echo 'UsePAM yes' > /var/run/sshd_config && \
     echo 'Subsystem       sftp    /usr/lib/openssh/sftp-server' > /var/run/sshd_config
 
-
-ENV I_MPI_ROOT="${I_MPI_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"
-ENV CCL_ROOT="${CCL_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"
-ENV FI_PROVIDER_PATH="${FI_PROVIDER_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib/prov"
-ENV LIBRARY_PATH="${LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
-ENV PATH="${PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/bin"
-ENV CPATH="${CPATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/include"
-
 RUN mkdir -p /licensing
 
 RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
 
-ENV BASH_ENV='$HOME/.bash_startup'
+ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
+CMD ["bash"]
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
