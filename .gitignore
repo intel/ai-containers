@@ -3,6 +3,7 @@
 .pytest*
 .secrets
 .tox
+.venv/
 .vscode
 **__pycache__**
 **.ipynb_checkpoints**

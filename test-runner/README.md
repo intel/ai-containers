@@ -248,10 +248,6 @@ Inputs for the action:
     description: 'Container Cache Registry URL'
     required: false
     type: string
-  perf_repo:
-    description: 'Performance Test Repo'
-    required: false
-    type: string
   recipe_dir:
     description: 'Path to Recipe Directory'
     required: true
@@ -286,7 +282,6 @@ For testing [tests.yaml](tests.yaml) file, some variables need to be set
 export CACHE_REGISTRY=<harbor cache_registry_name>
 export REGISTRY=<harbor registry>
 export REPO=<harbor project/repo>
-# optional
-export PERF_REPO=<internal perf repo>
+
 python test-runner/test_runner.py -f test-runner/tests.yaml -a test-runner/.actions.json
 ```
