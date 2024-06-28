@@ -193,7 +193,7 @@ services:
     depends_on:
       - dl-base
     extends: dl-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-2024.1.0-py${PYTHON_VERSION:-3.10}
     command: |
       bash -c "conda run -n pytorch-cpu python -c 'import intel_extension_for_pytorch as ipex;print(ipex.__version__);' && \
       conda run -n pytorch-cpu python -c 'import neural_compressor;print(\"Neural Compressor Version:\", neural_compressor.__version__)' && \
