@@ -41,7 +41,7 @@ services:
     command: |
       bash -c "conda run -n classical-ml python -c 'import sklearn; import xgboost; print(\"SciKit:\", sklearn.__version__, \" XGBoost:\",xgboost.__version__)' && \
       conda run -n classical-ml python -c 'import modin.pandas as pd, modin.config as cfg; cfg.Engine.put(\"Ray\"); df = pd.DataFrame([1]);print(df+1)'"
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
     environment:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
