@@ -80,9 +80,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     gcc \
     libgl1-mesa-glx \
     libglib2.0-0 \
-    virtualenv && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    virtualenv
 
 ENV SIGOPT_PROJECT=.
 
@@ -91,23 +89,61 @@ COPY multinode-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
 
+ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
+
+RUN apt-get install -y --no-install-recommends --fix-missing \
+    openssh-client \
+    openssh-server && \
+    rm /etc/ssh/ssh_host_*_key \
+    /etc/ssh/ssh_host_*_key.pub && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Allow OpenSSH to talk to containers without asking for confirmation
+# hadolint global ignore=SC2002
+RUN mkdir -p /var/run/sshd && \
+    cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
+    echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
+    mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
+
 ARG PYTHON_VERSION
-RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.bashrc
 
+COPY generate_ssh_keys.sh .
 
-ENV I_MPI_ROOT="${I_MPI_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"
-ENV CCL_ROOT="${CCL_ROOT}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch"
-ENV FI_PROVIDER_PATH="${FI_PROVIDER_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib/prov"
-ENV LIBRARY_PATH="${LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
-ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
-ENV PATH="${PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/bin"
-ENV CPATH="${CPATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/include"
+# modify generate_ssh_keys to be a helper script
+# print how to use helper script on bash startup
+# Avoids loop for further execution of the startup file
+RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
+    cat '/generate_ssh_keys.sh' >> ~/.startup && \
+    rm -rf /generate_ssh_keys.sh
+
+# hadolint global ignore=SC3037
+RUN echo -e "#!/bin/bash \n\
+set -e \n\
+set -a \n\
+source ~/.startup \n\
+set +a \n\
+eval \"\$@\"" >> /usr/local/bin/dockerd-entrypoint.sh && \
+    chmod +x /usr/local/bin/dockerd-entrypoint.sh
+
+RUN echo 'HostKey /etc/ssh/ssh_host_dsa_key' > /var/run/sshd_config && \
+    echo 'HostKey /etc/ssh/ssh_host_rsa_key' > /var/run/sshd_config && \
+    echo 'HostKey /etc/ssh/ssh_host_ecdsa_key' > /var/run/sshd_config && \
+    echo 'HostKey /etc/ssh/ssh_host_ed25519_key' > /var/run/sshd_config && \
+    echo 'AuthorizedKeysFile /etc/ssh/authorized_keys' > /var/run/sshd_config && \
+    echo '## Enable DEBUG log. You can ignore this but this may help you debug any issue while enabling SSHD for the first time' > /var/run/sshd_config && \
+    echo 'LogLevel DEBUG3' > /var/run/sshd_config && \
+    echo 'UsePAM yes' > /var/run/sshd_config && \
+    echo 'Subsystem       sftp    /usr/lib/openssh/sftp-server' > /var/run/sshd_config
 
 RUN mkdir -p /licensing
 
 RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
+
+ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
+CMD ["bash"]
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
