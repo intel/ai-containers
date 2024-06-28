@@ -64,6 +64,8 @@ body:
           required: false
         - label: test-runner
           required: false
+        - label: workflows
+          required: false
   - type: textarea
     id: versions
     attributes:
