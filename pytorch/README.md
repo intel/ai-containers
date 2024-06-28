@@ -97,7 +97,7 @@ docker run -it --rm \
     --net=host \
     -v $PWD/workspace:/workspace \
     -w /workspace \
-    intel/intel-extension-for-tensorflow:xpu-jupyter
+    intel/intel-extension-for-pytorch:xpu-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
@@ -112,6 +112,21 @@ The images below additionally include [Intel® oneAPI Collective Communications 
 | `2.2.0-pip-multinode` | [v2.2.0] | [v2.2.0+cpu] | [v2.2.0][ccl-v2.2.0] | [v2.4.1]  | [v0.3.4]        |
 | `2.1.0-pip-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v2.3.1]  | [v0.2.3]        |
 | `2.0.0-pip-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v2.1.1]  | [v0.1.0]        |
+
+> **Note:** Passwordless SSH connection is also enabled in the image.
+> No SSH key in the image, so users need to generate one unique SSH key themselves.
+> Please put SSH key including id_rsa and id_rsa.pub files under /mnt/ssh_key foler. You could also mount a network disk into /mnt/ssh_key.
+> Since the SSH key is not owned by default user account in docker, please also do "chmod 644 id_rsa.pub; chmod 644 id_rsa" to grant read access for default user account.
+> Users could also use "/usr/bin/ssh-keygen -t rsa -b 4096 -N '' -f ~/mnt/ssh_key/id_rsa" to generate a new SSH Key.
+
+```bash
+docker run -it --rm \
+    -p 8888:8888 \
+    --net=host \
+    -v /mnt:/mnt \
+    -w /workspace \
+    intel/intel-extension-for-pytorch:2.3.0-pip-multinode
+```
 
 ---
 
@@ -173,6 +188,8 @@ You can find the list of services below for each container in the group:
 | `xpu`         | Adds Intel GPU Support                                              |
 | `xpu-jupyter` | Adds Jupyter notebook server to GPU image                           |
 | `serving`     | [TorchServe*]                                                       |
+
+> **Note:**   For multinode image, users also need to do "export SSH_KEY_PATH=<ssh_key_path>" to set the folder path which contains one unique SSH Key. /mnt/ssh_key is the default path.
 
 ## License
 

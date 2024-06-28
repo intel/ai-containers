@@ -75,16 +75,26 @@ CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/
 
 FROM ipex-base-${PACKAGE_OPTION} AS multinode
 
+ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
+
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
     python3-dev \
     gcc \
     libgl1-mesa-glx \
     libglib2.0-0 \
+    openssh-server \
+    net-tools \
     virtualenv && \
+    rm  /etc/ssh/ssh_host_*_key \
+    /etc/ssh/ssh_host_*_key.pub && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 ENV SIGOPT_PROJECT=.
+ARG SSHD_PORT=2345
+ENV SSHD_PORT ${SSHD_PORT}
+ARG SSH_KEY_PATH=/tmp/ssh_key
+ENV SSH_KEY_PATH ${SSH_KEY_PATH}
 
 WORKDIR /
 COPY multinode-requirements.txt .
@@ -108,6 +118,39 @@ RUN mkdir -p /licensing
 RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
+
+# Enable passwordless ssh for mpirun
+RUN mkdir /var/run/sshd
+RUN sed -i'' -e's/^#PermitRootLogin prohibit-password$/PermitRootLogin yes/' /etc/ssh/sshd_config \
+        && sed -i'' -e's/^#PasswordAuthentication yes$/PasswordAuthentication no/' /etc/ssh/sshd_config \
+        && sed -i'' -e's/^#PermitEmptyPasswords no$/PermitEmptyPasswords yes/' /etc/ssh/sshd_config \
+        && sed -i'' -e's/^UsePAM yes/UsePAM no/' /etc/ssh/sshd_config \
+        && echo "Port "$SSHD_PORT"" >> /etc/ssh/sshd_config \
+        && echo "Host *" >> /etc/ssh/ssh_config \
+        && echo "  Port "$SSHD_PORT"" >> /etc/ssh/ssh_config \
+        && echo "  StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+
+EXPOSE ${SSHD_PORT}
+RUN mkdir ~/.ssh
+
+RUN echo "if [ ! -f ~/.ssh/id_rsa ]; then" >> ~/.bashrc \
+    && echo "  cp "$SSH_KEY_PATH"/id_rsa ~/.ssh/" >> ~/.bashrc \
+    && echo "  cp "$SSH_KEY_PATH"/id_rsa.pub ~/.ssh/" >> ~/.bashrc \
+    && echo "  chmod 600 ~/.ssh/id_rsa" >> ~/.bashrc \
+    && echo "fi" >> ~/.bashrc \
+    && echo "if [ ! -f ~/.ssh/authorized_keys ]; then" >> ~/.bashrc \
+    && echo "  cat ~/.ssh/id_rsa.pub > ~/.ssh/authorized_keys" >> ~/.bashrc \
+    && echo "fi" >> ~/.bashrc \
+    && echo "if [ ! -f /etc/ssh/ssh_host_rsa_key ]; then" >> ~/.bashrc \
+    && echo "  ssh-keygen -q -N '' -t rsa -f /etc/ssh/ssh_host_rsa_key" >> ~/.bashrc \
+    && echo "fi" >> ~/.bashrc \
+    && echo "if [ ! -f /etc/ssh/ssh_host_ecdsa_key ]; then" >> ~/.bashrc \
+    && echo "  ssh-keygen -q -N '' -t ecdsa -f /etc/ssh/ssh_host_ecdsa_key" >> ~/.bashrc \
+    && echo "fi" >> ~/.bashrc \
+    && echo "if [ ! -f /etc/ssh/ssh_host_ed25519_key ]; then" >> ~/.bashrc \
+    && echo "  ssh-keygen -q -N '' -t ed25519 -f /etc/ssh/ssh_host_ed25519_key" >> ~/.bashrc \
+    && echo "  service ssh start" >> ~/.bashrc \
+    && echo "fi" >> ~/.bashrc
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
