@@ -76,13 +76,35 @@ RUN apt-get update && \
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
-    intel-media-va-driver-non-free libmfx1 libmfxgen1 libvpl2 \
-    libegl-mesa0 libegl1-mesa libegl1-mesa-dev libgbm1 libgl1-mesa-dev libgl1-mesa-dri \
-    libglapi-mesa libgles2-mesa-dev libglx-mesa0 libigdgmm12 libxatracker2 mesa-va-drivers \
-    mesa-vdpau-drivers mesa-vulkan-drivers va-driver-all vainfo hwinfo clinfo
+    intel-media-va-driver-non-free \
+    libmfx1 \
+    libmfxgen1 \
+    libvpl2 \
+    libegl-mesa0 \
+    libegl1-mesa \
+    libegl1-mesa-dev \
+    libgbm1 \
+    libgl1-mesa-dev \
+    libgl1-mesa-dri \
+    libglapi-mesa \
+    libgles2-mesa-dev \
+    libglx-mesa0 \
+    libigdgmm12 \
+    libxatracker2 \
+    mesa-va-drivers \
+    mesa-vdpau-drivers \
+    mesa-vulkan-drivers \
+    va-driver-all \
+    vainfo \
+    hwinfo \
+    clinfo
 
 RUN apt-get install -y --no-install-recommends --fix-missing \
-    libigc-dev intel-igc-cm libigdfcl-dev libigfxcmrt-dev level-zero-dev="${LEVEL_ZERO_DEV_VER}" && \
+    libigc-dev \
+    intel-igc-cm \
+    libigdfcl-dev \
+    libigfxcmrt-dev \
+    level-zero-dev="${LEVEL_ZERO_DEV_VER}" && \
     rm -rf /var/lib/apt/lists/*
 
 RUN rm /etc/apt/sources.list.d/*list

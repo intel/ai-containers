@@ -36,16 +36,53 @@ services:
         no_proxy: ''
       context: .
       labels:
-        docs: data-analytics
-        dependency.python: ${PYTHON_VERSION:-3.10}
+        docs: data_analytics
         org.opencontainers.image.title: "Intel® AI Tools Selector Preset Containers - Data Analytics"
         org.opencontainers.base.name: "ubuntu:22.04"
         org.opencontainers.image.name: "intel/data-analytics"
-        org.opencontainers.image.version: ${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
+        org.opencontainers.image.version: 2024.1.0-py${PYTHON_VERSION:-3.10}
+        dependency.python: ${PYTHON_VERSION:-3.10}
+        dependency.python.pip: requirements.txt
+        dependency.apt.bzip2: true
+        dependency.apt.ca-certificates: true
+        dependency.apt.diffutils: true
+        dependency.apt.gcc: true
+        dependency.apt.git: true
+        dependency.apt.gzip: true
+        dependency.apt.make: true
+        dependency.apt.patch: true
+        dependency.apt.rsync: true
+        dependency.apt.unzip: true
+        dependency.apt.wget: true
+        dependency.apt.xz-utils: true
+        dependency.conda.jupyterlab: '>=4.1.8'
+        dependency.conda.notebook: '>=7.1.3'
+        dependency.conda.jupyterhub: '>=4.1.5'
+        dependency.conda.jupyter-server-proxy: '>=4.1.2'
+        dependency.conda.mako: '>=1.2.2'
+        dependency.conda.pyjwt: '>=2.4.0'
+        dependency.conda.cryptography: '>=42.0.5'
+        dependency.conda.nodejs: '>=20.12.2'
+        dependency.conda.idna: '>=3.7'
+        dependency.conda.tqdm: '>=4.66.2'
+        dependency.conda.dpnp: '>=0.14.0'
+        dependency.conda.numpy: '>=1.26.4'
+        dependency.conda.python: "=${PYTHON_VERSION:-3.10}"
+        dependency.conda.modin-ray: '>=0.26.1'
+        dependency.conda.python-dotenv: '>=1.0.1'
+        dependency.conda.matplotlib-base: '>=3.4.3'
+        dependency.conda.dataset_librarian: '>=1.0.4'
+        dependency.conda.threadpoolctl: '>=3.3.0'
+        dependency.conda.ipython: '>=8.18.1'
+        dependency.conda.ipykernel: '>=6.29.3'
+        dependency.conda.kernda: '>=0.3.0'
+        dependency.conda.protobuf: '>=4.24.4'
+        dependency.conda.pillow: '>=10.2.0'
+        dependency.conda.tornado: '>=6.3.3'
       target: data-analytics-jupyter
     command: >
         bash -c "conda run -n data-analytics python -c 'import modin.pandas as pd, modin.config as cfg; cfg.Engine.put(\"Ray\"); df = pd.DataFrame([1]);print(df+1)'"
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-2024.1.0-py${PYTHON_VERSION:-3.10}
     environment:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}

@@ -116,7 +116,7 @@ RUN conda create -yn classical-ml -c ${INTEL_CHANNEL} -c conda-forge \
 
 # PyPI packages
 RUN conda run -n classical-ml python -m pip install --no-deps --no-cache-dir \
-    'cloud-data-connector=1.0.3'
+    'cloud-data-connector==1.0.3'
 
 
 ENV PYTHONSTARTUP=~/.patch_sklearn.py

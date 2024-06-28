@@ -22,6 +22,7 @@ services:
       args:
         BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
         BASE_TAG: ${BASE_TAG:-22.04}
+        DEEPSPEED_VERSION: ${DEEPSPEED_VERSION:-0.14.0}
         DEVICE: ${DEVICE:-flex}
         DPNP_VERSION: ${NUMBA_DPEX_VERSION:-0.14.0}
         HOROVOD_VERSION: ${HOROVOD_VERSION:-0.28.1.4}
@@ -55,12 +56,7 @@ services:
         no_proxy: ''
       context: ../deep-learning
       labels:
-        docs: deep-learning
-        dependency.python: ${PYTHON_VERSION:-3.10}
-        org.opencontainers.image.title: "Intel® AI Tools Selector Preset Containers - Deep Learning"
-        org.opencontainers.base.name: "ubuntu:22.04"
-        org.opencontainers.image.name: "intel/deep-learning"
-        org.opencontainers.image.version: ${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
+        docs: false
       target: deep-learning-jupyter
     environment:
       http_proxy: ${http_proxy}
@@ -80,17 +76,124 @@ services:
         COMPOSE_PROJECT_NAME: ${COMPOSE_PROJECT_NAME:-preset}
       context: .
       labels:
-        docs: inference-optimization
-        dependency.python: ${PYTHON_VERSION:-3.10}
+        docs: inference_optimization
         org.opencontainers.image.title: "Intel® AI Tools Selector Preset Containers - Inference Optimization"
         org.opencontainers.base.name: "intel/deep-learning"
         org.opencontainers.image.name: "intel/inference-optimization"
-        org.opencontainers.image.version: ${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
+        org.opencontainers.image.version: 2024.1.0-py${PYTHON_VERSION:-3.10}
+        dependency.python: ${PYTHON_VERSION:-3.10}
+        dependency.python.pip: requirements.txt
+        dependency.apt.apt-utils: true
+        dependency.apt.build-essential: true
+        dependency.apt.bzip2: true
+        dependency.apt.ca-certificates: true
+        dependency.apt.clinfo: true
+        dependency.apt.cmake: true
+        dependency.apt.diffutils: true
+        dependency.apt.g++: true
+        dependency.apt.gcc: true
+        dependency.apt.git: true
+        dependency.apt.gnupg2: true
+        dependency.apt.gpg-agent: true
+        dependency.apt.gzip: true
+        dependency.apt.hwinfo: true
+        dependency.apt.intel-igc-cm: true
+        dependency.apt.intel-level-zero-gpu: '1.3.27642.40-803~22.04'
+        dependency.apt.intel-media-va-driver-non-free: true
+        dependency.apt.intel-opencl-icd: '23.43.27642.40-803~22.04'
+        dependency.apt.level-zero: '1.14.0-744~22.04'
+        dependency.apt.level-zero-dev: '1.14.0-744~22.04'
+        dependency.apt.libegl1-mesa: true
+        dependency.apt.libegl1-mesa-dev: true
+        dependency.apt.libegl-mesa0: true
+        dependency.apt.libgbm1: true
+        dependency.apt.libgl1-mesa-dev: true
+        dependency.apt.libgl1-mesa-dri: true
+        dependency.apt.libglapi-mesa: true
+        dependency.apt.libgles2-mesa-dev: true
+        dependency.apt.libglx-mesa0: true
+        dependency.apt.libigc-dev: true
+        dependency.apt.libigdfcl-dev: true
+        dependency.apt.libigdgmm12: true
+        dependency.apt.libigfxcmrt-dev: true
+        dependency.apt.libmfx1: true
+        dependency.apt.libmfxgen1: true
+        dependency.apt.libopenmpi-dev: true
+        dependency.apt.libvpl2: true
+        dependency.apt.libxatracker2: true
+        dependency.apt.make: true
+        dependency.apt.mesa-va-drivers: true
+        dependency.apt.mesa-vdpau-drivers: true
+        dependency.apt.mesa-vulkan-drivers: true
+        dependency.apt.numactl: true
+        dependency.apt.openmpi-bin: true
+        dependency.apt.openmpi-common: true
+        dependency.apt.openssh-client: true
+        dependency.apt.openssh-server: true
+        dependency.apt.patch: true
+        dependency.apt.rsync: true
+        dependency.apt.sudo: true
+        dependency.apt.unzip: true
+        dependency.apt.va-driver-all: true
+        dependency.apt.vainfo: true
+        dependency.apt.wget: true
+        dependency.apt.xz-utils: true
+        dependency.conda.jupyterlab: '>=4.1.8'
+        dependency.conda.aiohttp: '>=3.9.0'
+        dependency.conda.cryptography: '>=42.0.4'
+        dependency.conda.dataset_librarian: '>=1.0.4'
+        dependency.conda.deepspeed: '>=0.14.0'
+        dependency.conda.dpcpp_impl_linux-64: '>=2024.1.'
+        dependency.conda.dpcpp-cpp-rt: '>=2024.1.'
+        dependency.conda.dpnp: '>=0.14.0'
+        dependency.conda.idna: '>=3.7'
+        dependency.conda.impi-devel: '>=2021.12'
+        dependency.conda.intel-extension-for-pytorch_cpu: '>=2.2.0=*cpu*'
+        dependency.conda.intel-extension-for-pytorch_gpu: '>=2.1.20=*xpu*'
+        dependency.conda.intel-extension-for-tensorflow_cpu: '>=2.15=*cpu*'
+        dependency.conda.intel-extension-for-tensorflow_gpu: '>=2.15=*xpu*'
+        dependency.conda.intel-openmp: '>=2024.1.0'
+        dependency.conda.intel-optimization-for-horovod: '>=0.28.1.4'
+        dependency.conda.ipykernel: '>=6.29.3'
+        dependency.conda.ipython: '>=8.18.1'
+        dependency.conda.jinja2: '>=3.1.3'
+        dependency.conda.jupyterhub: '>=4.1.5'
+        dependency.conda.jupyter-server-proxy: '>=4.1.2'
+        dependency.conda.kernda: '>=0.3.0'
+        dependency.conda.mako: '>=1.2.2'
+        dependency.conda.matplotlib-base: '>=3.4.3'
+        dependency.conda.mkl-dpcpp: '>=2024.1.0'
+        dependency.conda.neural-compressor: '>=2.4.1'
+        dependency.conda.nodejs: '>=20.12.2'
+        dependency.conda.notebook: '>=7.1.3'
+        dependency.conda.numpy: '>=1.26.4'
+        dependency.conda.oauthlib: '>=3.2.2'
+        dependency.conda.oneccl_bind_pt_cpu: '>=2.2.0=*cpu*'
+        dependency.conda.oneccl_bind_pt_gpu: '>=2.1.200=*xpu*'
+        dependency.conda.onnx: '>=1.14.1'
+        dependency.conda.packaging: '>=23.2'
+        dependency.conda.pandas: '>=2.2.2'
+        dependency.conda.pillow: '>=10.2.0'
+        dependency.conda.protobuf: '>=4.24'
+        dependency.conda.pyjwt: '>=2.4.0'
+        dependency.conda.python: "=${PYTHON_VERSION:-3.10}"
+        dependency.conda.pytorch_cpu: '>=2.2.0=*cpu*'
+        dependency.conda.pytorch_gpu: '>=2.1.0=*xpu*'
+        dependency.conda.setuptools: '>=69.1.0'
+        dependency.conda.tensorboardx: '>=2.6.2.2'
+        dependency.conda.tensorflow: '>=2.15'
+        dependency.conda.torchaudio_cpu: '>=2.2.0=*cpu*'
+        dependency.conda.torchaudio_gpu: '>=2.1.0=*xpu*'
+        dependency.conda.torchvision_cpu: '>=0.17=*cpu*'
+        dependency.conda.torchvision_gpu: '>=0.16.0=*xpu*'
+        dependency.conda.tornado: '>=6.3.3'
+        dependency.conda.tqdm: '>=4.66.2'
+        dependency.conda.werkzeug: '>=2.2.3'
       target: inference-optimization
     depends_on:
       - dl-base
     extends: dl-base
-    image: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${IDP_VERSION:-2024.1.0}-py${PYTHON_VERSION:-3.10}
     command: |
       bash -c "conda run -n pytorch-cpu python -c 'import intel_extension_for_pytorch as ipex;print(ipex.__version__);' && \
       conda run -n pytorch-cpu python -c 'import neural_compressor;print(\"Neural Compressor Version:\", neural_compressor.__version__)' && \

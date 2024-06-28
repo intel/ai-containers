@@ -110,7 +110,7 @@ RUN conda create -yn data-analytics -c "${INTEL_CHANNEL}" -c conda-forge \
     conda clean -y --all
 
 RUN conda run -n data-analytics python -m pip install --no-deps --no-cache-dir \
-    'cloud-data-connector=1.0.3'
+    'cloud-data-connector==1.0.3'
 
 FROM data-analytics-python as data-analytics-jupyter
 
