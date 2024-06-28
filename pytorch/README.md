@@ -97,7 +97,7 @@ docker run -it --rm \
     --net=host \
     -v $PWD/workspace:/workspace \
     -w /workspace \
-    intel/intel-extension-for-tensorflow:xpu-jupyter
+    intel/intel-extension-for-pytorch:xpu-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
@@ -112,6 +112,99 @@ The images below additionally include [Intel® oneAPI Collective Communications 
 | `2.2.0-pip-multinode` | [v2.2.0] | [v2.2.0+cpu] | [v2.2.0][ccl-v2.2.0] | [v2.4.1]  | [v0.3.4]        |
 | `2.1.0-pip-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v2.3.1]  | [v0.2.3]        |
 | `2.0.0-pip-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v2.1.1]  | [v0.1.0]        |
+
+> **Note:** Passwordless SSH connection is also enabled in the image.
+> The container does not contain the SSH ID keys. The user needs to mount those keys at `/root/.ssh/id_rsa` and `/root/.ssh/id_rsa.pub`.
+> User also need to append content of id_rsa.pub in `/etc/ssh/authorized_keys` in the SSH server container.
+> Since the SSH key is not owned by default user account in docker, please also do "chmod 644 id_rsa.pub; chmod 644 id_rsa" to grant read access for default user account.
+> Users could also use "/usr/bin/ssh-keygen -t rsa -b 4096 -N '' -f ~/mnt/ssh_key/id_rsa" to generate a new SSH Key inside the container.
+> Users need to mount a config file to list all hostnames at location `/root/.ssh/config` on the SSH client container.
+> Once all files are added
+
+#### Setup and Run IPEX Multi-Node Container
+
+Some additional assembly is required to utilize this container with OpenSSH. To perform any kind of DDP (Distributed Data Parallel) execution, containers are assigned the roles of launcher and worker respectively:
+
+SSH Server (Worker)
+
+1. *Authorized Keys* : `/etc/ssh/authorized_keys`
+
+SSH Client (Launcher)
+
+1. *Config File with Host IPs* : `/root/.ssh/config`
+2. *Private User Key* : `/root/.ssh/id_rsa`
+
+To add these files correctly please follow the steps described below.
+
+1. Setup ID Keys
+
+    You can use the commands provided below to [generate the Identity keys](https://www.ssh.com/academy/ssh/keygen#creating-an-ssh-key-pair-for-user-authentication) for OpenSSH.
+
+    ```bash
+    ssh-keygen -q -N "" -t rsa -b 4096 -f ./id_rsa
+    touch authorized_keys
+    cat id_rsa.pub >> authorized_keys
+    ```
+
+2. Add hosts to config
+
+    The launcher container needs to have the a config file with all hostnames and ports specified. An example of a hostfile is provided below.
+
+    ```bash
+    touch config
+    ```
+
+    ```txt
+    Host host1
+        HostName <Hostname of host1>
+        IdentitiesOnly yes
+        Port <SSH Port>
+    Host host2
+        HostName <Hostname of host2>
+        IdentitiesOnly yes
+        Port <SSH Port>
+    ...
+    ```
+
+3. Configure the permissions and ownership for all of the files you have created so far.
+
+    ```bash
+    chmod 600 id_rsa.pub id_rsa config authorized_keys
+    chown root:root id_rsa.pub id_rsa config authorized_keys
+    ```
+
+4. Now start the workers and execute DDP on the launcher.
+
+    1. Worker run command:
+
+        ```bash
+        export SSH_PORT=<SSH Port>
+        docker run -it --rm \
+            --net=host \
+            -v $PWD/authorized_keys:/root/.ssh/authorized_keys \
+            -v $PWD/tests:/workspace/tests \
+            -w /workspace \
+            -e SSH_PORT=${SSH_PORT} \
+            intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
+            bash -c '/usr/sbin/sshd -D -p ${SSH_PORT} -f /var/run/sshd_config'
+        ```
+
+    2. Launcher run command:
+
+        ```bash
+        docker run -it --rm \
+            --net=host \
+            -v $PWD/id_rsa:/root/.ssh/id_rsa \
+            -v $PWD/config:/root/.ssh/config \
+            -v $PWD/tests:/workspace/tests \
+            -w /workspace \
+            -e SSH_PORT=${SSH_PORT} \
+            intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
+            bash -c 'ipexrun cpu /workspace/tests/ipex-resnet50.py --ipex --device cpu --backend ccl'
+        ```
+
+> [!NOTE]
+> [Intel MPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/mpi-library.html) can be configured based on your machine settings. If the above commands do not work for you, see the documentation for how to configure based on your network.
 
 ---
 
