@@ -1,8 +1,8 @@
-daal4py==2024.4.0
+daal4py==2024.5.0
 matplotlib==3.9.0
 numpy==1.26.4
-scikit-learn-intelex==2024.4.0
+scikit-learn-intelex==2024.5.0
 threadpoolctl==3.5.0
-xgboost==2.0.3
+xgboost==2.1.0
 pandas==2.2.2
 nbconvert==7.16.4
