@@ -55,6 +55,23 @@ services:
         no_proxy: ''
       context: .
       labels:
+        docs: false
+      target: deep-learning-jupyter
+    command: |
+      bash -c "conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);' && \
+      conda run -n tensorflow-cpu python -c 'import tensorflow as tf; print(tf.__version__)'"
+    environment:
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+    network_mode: host
+    shm_size: 12GB
+    volumes:
+      - /dev/dri/by-path:/dev/dri/by-path
+
+
+  deep-learning:
+    build:
+      labels:
         docs: deep_learning
         org.opencontainers.image.title: "Intel® AI Tools Selector Preset Containers - Deep Learning"
         org.opencontainers.base.name: "ubuntu:22.04"
@@ -167,20 +184,11 @@ services:
         dependency.conda.tornado: '>=6.3.3'
         dependency.conda.tqdm: '>=4.66.2'
         dependency.conda.werkzeug: '>=2.2.3'
-      target: deep-learning-jupyter
-    command: |
-      bash -c "conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);' && \
-      conda run -n tensorflow-cpu python -c 'import tensorflow as tf; print(tf.__version__)'"
-    environment:
-      http_proxy: ${http_proxy}
-      https_proxy: ${https_proxy}
-    network_mode: host
-    shm_size: 12GB
-    volumes:
-      - /dev/dri/by-path:/dev/dri/by-path
-  deep-learning:
-    build:
       target: distributed-deep-learning
+    depends_on:
+      - dl-base
+    extends: dl-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.1.0-py${PYTHON_VERSION:-3.10}
     command: |
       bash -c "conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);' && \
       conda run -n pytorch-cpu bash -c 'mpirun --version' && \
@@ -192,7 +200,3 @@ services:
       conda run -n tensorflow-gpu python -c 'from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())' && \
       conda run -n tensorflow-gpu bash -c 'horovodrun --check-build && mpirun --version' && \
       conda run -n tensorflow-gpu python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow'"
-    depends_on:
-      - dl-base
-    extends: dl-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.1.0-py${PYTHON_VERSION:-3.10}
