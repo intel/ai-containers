@@ -39,117 +39,69 @@ spec:
             - name: pytorch
               image: {{ .Values.image.name }}:{{ .Values.image.tag }}
               imagePullPolicy: {{ .Values.image.pullPolicy }}
-              command:
-                - torchrun
-                - {{ .Values.distributed.script }}
-                - --model_name_or_path
-                - "{{ .Values.distributed.modelNameOrPath }}"
-                {{- if .Values.distributed.train.datasetName }}
-                - --dataset_name
-                - "{{ .Values.distributed.train.datasetName }}"
-                {{- end }}
-                - --dataset_cache_directory
-                - "{{ .Values.envVars.hfDatasetsCache }}"
-                {{- if .Values.distributed.train.dataFile }}
-                - --train_file
-                - "{{ .Values.distributed.train.dataFile }}"
-                {{- end }}
-                - --dataset_concatenation
-                - "{{ .Values.distributed.train.datasetConcatenation }}"
-                - --prompt_with_input
-                - "{{ .Values.distributed.train.promptWithInput }}"
-                - --prompt_without_input
-                - "{{ .Values.distributed.train.promptWithoutInput }}"
-                - --per_device_train_batch_size
-                - "{{ .Values.distributed.train.perDeviceBatchSize }}"
-                - --per_device_eval_batch_size
-                - "{{ .Values.distributed.eval.perDeviceBatchSize }}"
-                - --gradient_accumulation_steps
-                - "{{ .Values.distributed.train.gradientAccumulationSteps }}"
-                - --learning_rate
-                - "{{ .Values.distributed.train.learningRate }}"
-                - --num_train_epochs
-                - "{{ .Values.distributed.train.epochs }}"
-                - --max_steps
-                - "{{ .Values.distributed.train.maxSteps }}"
-                - --logging_steps
-                - "{{ .Values.distributed.train.loggingSteps }}"
-                - --save_total_limit
-                - "{{ .Values.distributed.train.saveTotalLimit }}"
-                - --output_dir
-                - "{{ .Values.distributed.train.outputDir }}"
-                - --validation_split_percentage
-                - "{{ .Values.distributed.eval.validationSplitPercentage }}"
-                - --log_level
-                - "{{ .Values.distributed.logLevel }}"
-                - --save_strategy
-                - "{{ .Values.distributed.train.saveStrategy }}"
-                - --ddp_find_unused_parameters
-                - "{{ .Values.distributed.train.ddpFindUnusedParameters }}"
-                {{- if .Values.distributed.train.ddpBackend }}
-                - --ddp_backend
-                - "{{ .Values.distributed.train.ddpBackend }}"
-                {{- end }}
-                {{- if .Values.distributed.train.instructionColumnName }}
-                - --instruction_column_name
-                - "{{ .Values.distributed.train.instructionColumnName }}"
-                {{- end }}
-                {{- if .Values.distributed.train.inputColumnName }}
-                - --input_column_name
-                - "{{ .Values.distributed.train.inputColumnName }}"
-                {{- end }}
-                {{- if .Values.distributed.train.outputColumnName }}
-                - --output_column_name
-                - "{{ .Values.distributed.train.outputColumnName }}"
-                {{- end }}
-                - --use_fast_tokenizer
-                - "{{ .Values.distributed.train.useFastTokenizer }}"
-                - --use_lora
-                - "{{ .Values.distributed.train.useLora }}"
-                - --lora_rank
-                - "{{ .Values.distributed.train.loraRank }}"
-                - --lora_alpha
-                - "{{ .Values.distributed.train.loraAlpha }}"
-                - --lora_dropout
-                - "{{ .Values.distributed.train.loraDropout }}"
-                - --lora_target_modules
-                - "{{ .Values.distributed.train.loraTargetModules }}"
-                - --no_cuda
-                - "{{ .Values.distributed.train.noCuda }}"
-                - --overwrite_output_dir
-                - "{{ .Values.distributed.train.overwriteOutputDir }}"
-                - --do_train
-                - "{{ .Values.distributed.doTrain }}"
-                - --do_eval
-                - "{{ .Values.distributed.doEval }}"
-                - --bf16
-                - "{{ .Values.distributed.train.bf16 }}"
-                - --use_ipex
-                - "{{ .Values.distributed.train.useIpex }}"
-                - --do_benchmark
-                - "{{ .Values.distributed.doBenchmark }}"
-                - --benchmark_warmup
-                - "{{ .Values.distributed.benchmark.warmup }}"
-                - --benchmark_iterations
-                - "{{ .Values.distributed.benchmark.iterations }}"
-                - --benchmark_cores_per_instance
-                - "{{ .Values.distributed.benchmark.coresPerInstance }}"
-                - --benchmark_num_instances
-                - "{{ .Values.distributed.benchmark.numInstances }}"
-                - --do_quantize
-                - "{{ .Values.distributed.doQuantize }}"
-                - --peft_model_dir
-                - "{{ .Values.distributed.quantize.peftModelDir }}"
-                - --quantize_output_dir
-                - "{{ .Values.distributed.quantize.outputDir }}"
-                - --woq_bits
-                - "{{ .Values.distributed.quantize.woqBits }}"
-                - --woq_group_size
-                - "{{ .Values.distributed.quantize.woqGroupSize }}"
-                - --woq_scheme
-                - "{{ .Values.distributed.quantize.woqScheme }}"
-                - --woq_algo
-                - "{{ .Values.distributed.quantize.woqAlgo }}"
+              args:
+                - >-
+                  torchrun {{ .Values.distributed.script }} \
+                    --model_name_or_path {{ .Values.distributed.modelNameOrPath }} \
+                    {{- if .Values.distributed.train.datasetName }}
+                    --dataset_name {{ .Values.distributed.train.datasetName }} \
+                    {{- end }}
+                    --dataset_cache_directory {{ .Values.envVars.hfDatasetsCache }} \
+                    {{- if .Values.distributed.train.dataFile }}
+                    --train_file {{ .Values.distributed.train.dataFile }} \
+                    {{- end }}
+                    --dataset_concatenation {{ .Values.distributed.train.datasetConcatenation }} \
+                    --prompt_with_input {{ .Values.distributed.train.promptWithInput }} \
+                    --prompt_without_input {{ .Values.distributed.train.promptWithoutInput }} \
+                    --per_device_train_batch_size {{ .Values.distributed.train.perDeviceBatchSize }} \
+                    --per_device_eval_batch_size {{ .Values.distributed.eval.perDeviceBatchSize }} \
+                    --gradient_accumulation_steps {{ .Values.distributed.train.gradientAccumulationSteps }} \
+                    --learning_rate {{ .Values.distributed.train.learningRate }} \
+                    --num_train_epochs {{ .Values.distributed.train.epochs }} \
+                    --max_steps {{ .Values.distributed.train.maxSteps }} \
+                    --logging_steps {{ .Values.distributed.train.loggingSteps }} \
+                    --save_total_limit {{ .Values.distributed.train.saveTotalLimit }} \
+                    --output_dir {{ .Values.distributed.train.outputDir }} \
+                    --validation_split_percentage {{ .Values.distributed.eval.validationSplitPercentage }} \
+                    --log_level {{ .Values.distributed.logLevel }} \
+                    --save_strategy {{ .Values.distributed.train.saveStrategy }} \
+                    --ddp_find_unused_parameters {{ .Values.distributed.train.ddpFindUnusedParameters }} \
+                    {{- if .Values.distributed.train.ddpBackend }}
+                    --ddp_backend {{ .Values.distributed.train.ddpBackend }} \
+                    {{- end }}
+                    {{- if .Values.distributed.train.instructionColumnName }}
+                    --instruction_column_name {{ .Values.distributed.train.instructionColumnName }} \
+                    {{- end }}
+                    {{- if .Values.distributed.train.inputColumnName }}
+                    --input_column_name {{ .Values.distributed.train.inputColumnName }} \
+                    {{- end }}
+                    {{- if .Values.distributed.train.outputColumnName }}
+                    --output_column_name {{ .Values.distributed.train.outputColumnName }} \
+                    {{- end }}
+                    --use_fast_tokenizer {{ .Values.distributed.train.useFastTokenizer }} \
+                    --use_lora {{ .Values.distributed.train.useLora }} \
+                    --lora_rank {{ .Values.distributed.train.loraRank }} \
+                    --lora_alpha {{ .Values.distributed.train.loraAlpha }} \
+                    --lora_dropout {{ .Values.distributed.train.loraDropout }} \
+                    --lora_target_modules {{ .Values.distributed.train.loraTargetModules }} \
+                    --no_cuda {{ .Values.distributed.train.noCuda }} \
+                    --overwrite_output_dir {{ .Values.distributed.train.overwriteOutputDir }} \
+                    --do_train {{ .Values.distributed.doTrain }} \
+                    --do_eval {{ .Values.distributed.doEval }} \
+                    --bf16 {{ .Values.distributed.train.bf16 }} \
+                    --use_ipex {{ .Values.distributed.train.useIpex }} \
+                    --do_benchmark {{ .Values.distributed.doBenchmark }} \
+                    --benchmark_warmup {{ .Values.distributed.benchmark.warmup }} \
+                    --benchmark_iterations {{ .Values.distributed.benchmark.iterations }} \
+                    --benchmark_cores_per_instance {{ .Values.distributed.benchmark.coresPerInstance }} \
+                    --benchmark_num_instances {{ .Values.distributed.benchmark.numInstances }} \
+                    --do_quantize {{ .Values.distributed.doQuantize }} \
+                    --peft_model_dir {{ .Values.distributed.quantize.peftModelDir }} \
+                    --quantize_output_dir {{ .Values.distributed.quantize.outputDir }} \
+                    --woq_bits {{ .Values.distributed.quantize.woqBits }} \
+                    --woq_group_size {{ .Values.distributed.quantize.woqGroupSize }} \
+                    --woq_scheme {{ .Values.distributed.quantize.woqScheme }} \
+                    --woq_algo {{ .Values.distributed.quantize.woqAlgo }};
               {{- if .Values.deploy.env.enabled }}
               envFrom:
               - configMapRef:
