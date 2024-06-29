@@ -97,4 +97,3 @@ services:
     shm_size: 12GB
     volumes:
       - /dev/dri/by-path:/dev/dri/by-path
-
