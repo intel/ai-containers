@@ -23,13 +23,13 @@
             {{ read_csv('assets/max-pvc.csv') }}
 
 === "[Preset Containers](https://github.com/intel/ai-containers/blob/main/preset/README.md)"
-    === "Data Analytics"
+    === "[Data Analytics](https://hub.docker.com/r/intel/data-analytics)"
         {{ read_csv('assets/data_analytics.csv') }}
-    === "Classical ML"
+    === "[Classical ML](https://hub.docker.com/r/intel/classical-ml)"
         {{ read_csv('assets/classical_ml.csv') }}
-    === "Deep Learning"
+    === "[Deep Learning](https://hub.docker.com/r/intel/deep-learning)"
         {{ read_csv('assets/deep_learning.csv') }}
-    === "Inference Optimization"
+    === "[Inference Optimization](https://hub.docker.com/r/intel/inference-optimization)"
         {{ read_csv('assets/inference_optimization.csv') }}
 
 === "[Workflows](https://hub.docker.com/r/intel/ai-workflows)"
