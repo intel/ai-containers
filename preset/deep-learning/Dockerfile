@@ -76,13 +76,35 @@ RUN apt-get update && \
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
-    intel-media-va-driver-non-free libmfx1 libmfxgen1 libvpl2 \
-    libegl-mesa0 libegl1-mesa libegl1-mesa-dev libgbm1 libgl1-mesa-dev libgl1-mesa-dri \
-    libglapi-mesa libgles2-mesa-dev libglx-mesa0 libigdgmm12 libxatracker2 mesa-va-drivers \
-    mesa-vdpau-drivers mesa-vulkan-drivers va-driver-all vainfo hwinfo clinfo
+    intel-media-va-driver-non-free \
+    libmfx1 \
+    libmfxgen1 \
+    libvpl2 \
+    libegl-mesa0 \
+    libegl1-mesa \
+    libegl1-mesa-dev \
+    libgbm1 \
+    libgl1-mesa-dev \
+    libgl1-mesa-dri \
+    libglapi-mesa \
+    libgles2-mesa-dev \
+    libglx-mesa0 \
+    libigdgmm12 \
+    libxatracker2 \
+    mesa-va-drivers \
+    mesa-vdpau-drivers \
+    mesa-vulkan-drivers \
+    va-driver-all \
+    vainfo \
+    hwinfo \
+    clinfo
 
 RUN apt-get install -y --no-install-recommends --fix-missing \
-    libigc-dev intel-igc-cm libigdfcl-dev libigfxcmrt-dev level-zero-dev="${LEVEL_ZERO_DEV_VER}" && \
+    libigc-dev \
+    intel-igc-cm \
+    libigdfcl-dev \
+    libigfxcmrt-dev \
+    level-zero-dev="${LEVEL_ZERO_DEV_VER}" && \
     rm -rf /var/lib/apt/lists/*
 
 RUN rm /etc/apt/sources.list.d/*list
@@ -118,10 +140,10 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     conda config --add channels intel && \
     conda init --all && \
     conda install -c conda-forge \
-        jupyterlab \
-        notebook \
-        jupyterhub \
-        jupyter-server-proxy \
+        'jupyterlab>=4.1.8' \
+        'notebook>=7.1.3' \
+        'jupyterhub>=4.1.5' \
+        'jupyter-server-proxy>=4.1.2' \
         'mako>=1.2.2' \
         'pyjwt>=2.4.0' \
         'cryptography>=42.0.5' \
@@ -160,36 +182,36 @@ RUN conda create -yn pytorch-cpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c 
         intel-extension-for-pytorch="${IPEX_CPU_VERSION}" \
         torchvision="${TORCHVISION_CPU_VERSION}" \
         torchaudio="${TORCHAUDIO_CPU_VERSION}" \
-        matplotlib-base \
-        ipykernel \
-        kernda  \
+        'matplotlib-base>=3.4.3' \
+        'ipykernel>=6.29.3' \
+        'kernda>=0.3.0'  \
         'pillow>=10.2.0' \
         'aiohttp>=3.9.0' \
         'tornado>=6.3.3' \
         'jinja2>=3.1.3' \
         'idna>=3.7' \
-        onnx \
+        'onnx>=1.15.0' \
         && \
     conda clean -y --all
 
 # PyPI packages
 RUN conda run -n pytorch-cpu pip install --no-deps --no-cache-dir --ignore-installed \
-        ninja \
-        python-dotenv \
+        'ninja>=1.11.1.1' \
+        'python-dotenv>=1.0.1' \
         'tqdm>=4.66.2' \
-        cloud-data-connector \
-        dataset-librarian && \
+        'cloud-data-connector>=1.0.3' \
+        'dataset-librarian>=1.0.4' && \
     conda run -n pytorch-cpu pip install --no-cache-dir --ignore-installed \
-        transformers \
-        datasets \
-        evaluate && \
-    conda run -n pytorch-cpu pip install  --no-cache-dir -U accelerate && \
+        'transformers>=4.40.2' \
+        'datasets>=2.19.1' \
+        'evaluate>=0.4.2' && \
+    conda run -n pytorch-cpu pip install  --no-cache-dir -U 'accelerate>=0.30.0' && \
     conda run -n pytorch-cpu pip install  --no-cache-dir "git+https://github.com/huggingface/optimum-intel.git" && \
     conda clean -y --all
 
 
 
-RUN conda run -n pytorch-cpu conda install protobuf=4.24 -c conda-forge --override --force-reinstall -y
+RUN conda run -n pytorch-cpu conda install 'protobuf=4.24' -c conda-forge --override --force-reinstall -y
 
 # PyTorch Installation
 ARG IDP_VERSION
@@ -219,41 +241,41 @@ RUN conda create -yn pytorch-gpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c 
         intel-extension-for-pytorch="${IPEX_GPU_VERSION}" \
         torchvision="${TORCHVISION_GPU_VERSION}" \
         torchaudio="${TORCHAUDIO_GPU_VERSION}" \
-        tensorboardx \
-        matplotlib-base \
-        pandas \
-        ipython \
-        ipykernel \
-        kernda  \
+        'tensorboardx>=2.6.2.2' \
+        'matplotlib-base>=3.4.3' \
+        'pandas>=2.2.2' \
+        'ipython>=8.18.1' \
+        'ipykernel>=6.29.3' \
+        'kernda>=0.3.0'  \
         'pillow>=10.2.0' \
         'aiohttp>=3.9.0' \
         'tornado>=6.3.3' \
         'jinja2>=3.1.3' \
         'idna>=3.7' \
-        onnx \
-        packaging=23.2 \
-        setuptools=69.1.0 \
+        'onnx>=1.15.0' \
+        'packaging=23.2' \
+        'setuptools=69.1.0' \
         && \
     conda clean -y --all
 
 # PyPI packages
 RUN conda run -n pytorch-gpu pip install --no-deps --no-cache-dir --ignore-installed \
-        ninja \
-        python-dotenv \
+        'ninja>=1.11.1.1' \
+        'python-dotenv>=1.0.1' \
         'tqdm>=4.66.2' \
-        cloud-data-connector \
-        dataset-librarian && \
+        'cloud-data-connector>=1.0.3' \
+        'dataset-librarian>=1.0.4' && \
     conda run -n pytorch-gpu pip install --no-cache-dir --ignore-installed \
-        transformers \
-        datasets \
-        evaluate && \
-    conda run -n pytorch-gpu pip install --no-cache-dir -U accelerate && \
+        'transformers>=4.40.2' \
+        'datasets>=2.19.1' \
+        'evaluate>=0.4.2' && \
+    conda run -n pytorch-gpu pip install --no-cache-dir -U 'accelerate>=0.30.0' && \
     conda run -n pytorch-gpu pip install --no-cache-dir "git+https://github.com/huggingface/optimum-intel.git" && \
     conda clean -y --all
 
 
 
-RUN conda run -n pytorch-gpu conda install protobuf=4.24 -c conda-forge --override --force-reinstall -y
+RUN conda run -n pytorch-gpu conda install 'protobuf=4.24' -c conda-forge --override --force-reinstall -y
 
 
 # TensorFlow Installation
@@ -283,11 +305,11 @@ RUN conda create -yn tensorflow-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
         intel-optimization-for-horovod="${INTEL_HOROVOD}" \
         tensorflow="${TF_VERSION}" \
         impi-devel="${IMPI_VERSION}" \
-        matplotlib-base \
-        dataset_librarian \
-        ipython \
-        ipykernel \
-        kernda  \
+        'matplotlib-base>=3.4.3' \
+        'dataset_librarian>=1.0.4' \
+        'ipython>=8.18.1' \
+        'ipykernel>=6.29.3' \
+        'kernda>=0.3.0'  \
         'pillow>=10.2.0' \
         'cryptography>=42.0.4' \
         'werkzeug>=2.2.3' \
@@ -296,19 +318,19 @@ RUN conda create -yn tensorflow-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
         'pyjwt>=2.8.0' \
         'oauthlib>=3.2.2' \
         'idna>=3.7' \
-        onnx \
+        'onnx>=1.14.1' \
         && \
     conda clean -y --all
 
 # PyPI packages
 RUN conda run -n tensorflow-cpu pip install --no-cache-dir --ignore-installed \
-        py-cpuinfo \
-        requests \
-        cryptography
+        'py-cpuinfo>=9.0.0' \
+        'requests>=2.31.0' \
+        'cryptography>=42.0.7'
 RUN conda run -n tensorflow-cpu pip install --no-deps --no-cache-dir --ignore-installed \
-        tensorflow_hub \
+        'tensorflow-hub>=0.16.1' \
         'tqdm>=4.66.2' \
-        cloud-data-connector && \
+        'cloud-data-connector>=1.0.3' && \
     conda clean -y --all
 
 # Tensorflow Env - conda packages
@@ -322,11 +344,11 @@ RUN conda create -yn tensorflow-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
         intel-optimization-for-horovod="${INTEL_HOROVOD}" \
         tensorflow="${TF_VERSION}" \
         impi-devel="${IMPI_VERSION}" \
-        matplotlib-base \
-        dataset_librarian \
-        ipython \
-        ipykernel \
-        kernda  \
+        'matplotlib-base>=3.4.3' \
+        'dataset_librarian>=1.0.4' \
+        'ipython>=8.18.1' \
+        'ipykernel>=6.29.3' \
+        'kernda>=0.3.0' \
         'pillow>=10.2.0' \
         'cryptography>=42.0.4' \
         'werkzeug>=2.2.3' \
@@ -335,21 +357,21 @@ RUN conda create -yn tensorflow-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
         'pyjwt>=2.8.0' \
         'oauthlib>=3.2.2' \
         'idna>=3.7' \
-        onnx \
-        packaging=23.2 \
-        setuptools=69.1.0 \
+        'onnx>=1.14.1' \
+        'packaging=23.2' \
+        'setuptools=69.1.0' \
         && \
     conda clean -y --all
 
 # PyPI packages
 RUN conda run -n tensorflow-gpu pip install --no-cache-dir --ignore-installed \
-        py-cpuinfo \
-        requests \
-        cryptography
+        'py-cpuinfo>=9.0.0' \
+        'requests>=2.31.0' \
+        'cryptography>=42.0.7'
 RUN conda run -n tensorflow-gpu pip install --no-deps --no-cache-dir --ignore-installed \
-        tensorflow_hub \
+        'tensorflow-hub>=0.16.1' \
         'tqdm>=4.66.2' \
-        cloud-data-connector  && \
+        'cloud-data-connector>=1.0.3' && \
     conda clean -y --all
 
 FROM deep-learning-python as deep-learning-jupyter
@@ -408,11 +430,11 @@ USER dev
 
 RUN conda install -n pytorch-cpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
         deepspeed="${DEEPSPEED_VERSION}" \
-        tensorboardx
+        'tensorboardx>=2.6.2.2'
 
 RUN conda install -n pytorch-gpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
         deepspeed="${DEEPSPEED_VERSION}" \
-        tensorboardx
+        'tensorboardx>=2.6.2.2'
 
 COPY --chown=dev notebooks /home/dev/jupyter
 COPY --chown=dev tests /home/dev/sample-tests
