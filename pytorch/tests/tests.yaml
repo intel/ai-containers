@@ -26,10 +26,14 @@ import-xpu-jupyter-${PACKAGE_OPTION:-pip}:
   cmd: python -m jupyter --version
 import-cpu-oneccl-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-oneccl-inc-${INC_VERSION:-2.6}
-  cmd: python -c "import oneccl_bindings_for_pytorch as oneccl; print(f'oneccl {oneccl.__version__}')"
+  cmd: python -c "'import oneccl_bindings_for_pytorch as oneccl;print(oneccl.__version__)'"
 import-cpu-inc-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-oneccl-inc-${INC_VERSION:-2.6}
-  cmd: python -c "import neural_compressor as inc;print(inc.__version__)"
+  cmd: python -c "'import neural_compressor as inc;print(inc.__version__)'"
+import-cpu-deepspeed-${PACKAGE_OPTION:-pip}:
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-oneccl-inc-${INC_VERSION:-2.6}
+  cmd: ds_report
+  shm_size: 2gb
 ipex-cpu-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-base
   cmd: python /tests/ipex-resnet50.py --ipex --device cpu --backend gloo
@@ -49,6 +53,14 @@ ipex-xpu-jupyter-${PACKAGE_OPTION:-pip}:
 oneccl-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-oneccl-inc-${INC_VERSION:-2.6}
   cmd: ipexrun cpu /tests/ipex-resnet50.py --ipex --device cpu --backend ccl
+  privileged: true
+  volumes:
+  - dst: /tests
+    src: $PWD/pytorch/tests
+oneccl-ds-${PACKAGE_OPTION:-pip}:
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-oneccl-inc-${INC_VERSION:-2.6}
+  cmd: ipexrun cpu /tests/ipex-resnet50.py --ipex --device cpu --backend ccl --deepspeed
+  privileged: true
   volumes:
   - dst: /tests
     src: $PWD/pytorch/tests

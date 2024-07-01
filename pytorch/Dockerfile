@@ -80,8 +80,11 @@ FROM ipex-base-${PACKAGE_OPTION} AS multinode
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
     python3-dev \
     gcc \
+    g++ \
     libgl1-mesa-glx \
     libglib2.0-0 \
+    libopenmpi-dev \
+    numactl \
     virtualenv
 
 ENV SIGOPT_PROJECT=.
@@ -89,7 +92,8 @@ ENV SIGOPT_PROJECT=.
 WORKDIR /
 COPY multinode-requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r multinode-requirements.txt && \
+RUN DS_BUILD_OPS=1 python -m pip install --no-cache-dir -r multinode-requirements.txt && \
+    echo "Y" | pip uninstall nvidia-ml-py && \
     rm -rf multinode-requirements.txt
 
 ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
