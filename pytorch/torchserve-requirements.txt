@@ -9,4 +9,4 @@ torchserve==0.11.0
 torchtext==0.18.0
 torchvision==0.18.1
 -f https://developer.intel.com/ipex-whl-stable-cpu
-intel_extension_for_pytorch==2.3.0+cpu
+intel_extension_for_pytorch==2.3.100+cpu
