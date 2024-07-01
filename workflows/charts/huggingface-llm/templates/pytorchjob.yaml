@@ -108,8 +108,6 @@ spec:
                   name: {{ .Values.deploy.env.configMapName }}
               {{- end }}
               env:
-              - name: CCL_ATL_TRANSPORT
-                value: ofi
               {{- if .Values.envVars.ldPreload }}
               - name: LD_PRELOAD
                 value: "{{ .Values.envVars.ldPreload }}"
