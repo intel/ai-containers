@@ -34,13 +34,13 @@ RUN conda install -yn tensorflow-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
         neural-compressor="${NEURAL_COMPRESSOR_VERSION}"
 
 RUN conda run -n tensorflow-cpu python -m pip install --no-deps --no-cache-dir \
-        tf2onnx \
-        onnxruntime && \
+        'tf2onnx>=1.16.1' \
+        'onnxruntime>=1.17.3' && \
     conda clean -y --all
 
 RUN conda run -n tensorflow-gpu python -m pip install --no-deps --no-cache-dir \
-        tf2onnx \
-        onnxruntime && \
+        'tf2onnx>=1.16.1' \
+        'onnxruntime>=1.17.3' && \
     conda clean -y --all
 
 COPY --chown=dev notebooks /home/dev/jupyter
