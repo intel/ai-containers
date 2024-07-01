@@ -12,15 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
----
 dataset-librarian-${PYTHON_VERSION:-3.9}:
   cmd: conda run -n data-analytics bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-${RELEASE:-2024.1.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-${RELEASE:-2024.1.0}-py${PYTHON_VERSION:-3.9}
 modin-${PYTHON_VERSION:-3.9}:
   cmd: conda run -n data-analytics sample-tests/modin/test_modin.sh
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-${RELEASE:-2024.1.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-${RELEASE:-2024.1.0}-py${PYTHON_VERSION:-3.9}
   shm_size: 10G
 modin-notebook-${PYTHON_VERSION:-3.9}:
   cmd: papermill --log-output jupyter/modin/IntelModin_Vs_Pandas.ipynb -k data-analytics
-  img: ${REGISTRY}/aiops/mlops-ci:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-${RELEASE:-2024.1.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-${RELEASE:-2024.1.0}-py${PYTHON_VERSION:-3.9}
   notebook: True
