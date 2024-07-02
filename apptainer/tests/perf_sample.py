@@ -12,12 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# pylint: disable: duplicate-code
+
 import time
 
 import numpy as np
 
 start = time.time()
-
+ 
 rd = np.random.RandomState(88)
 a = rd.randint(1, 1000, (1000, 1000))
 y = rd.randint(1, 1000, (1000))
