@@ -29,7 +29,7 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
 jobs:
   dependency-review:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     permissions:
       pull-requests: write
     steps:
