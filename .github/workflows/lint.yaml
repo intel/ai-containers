@@ -13,7 +13,10 @@
 # limitations under the License.
 
 name: Lint
-permissions: read-all
+permissions:
+  contents: read
+  actions: read
+  statuses: write
 on:
   merge_group: null
   pull_request: null
