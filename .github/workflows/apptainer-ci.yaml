@@ -31,8 +31,8 @@ jobs:
         with:
           apptainer-version: 1.3.2
       - name: Apptainer login to registry
-        run: apptainer registry login  -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }} oras://${{ secrets.REGISTRY }}
+        run: apptainer registry login  -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} oras://${{ secrets.REGISTRY }}
       - uses: sramakintel/ai-containers/apptainer@sramakr1/apptainer_ci_python
         with:
           registry: oras://${{ secrets.REGISTRY }}
-          repo: ${{ secrets.REPO }}
+          repo: ${{ secrets.REPO }}-apptainer
