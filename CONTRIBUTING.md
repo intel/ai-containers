@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for considering contributing to Intel® AI Containers! We welcome your help to make this project better.
+Thank you for considering contributing to Intel® AI Containers! We welcome your help to make this project better. Contributing to an open source project can be a daunting task, but the Intel AI Containers team is here to help you through the process. If at any point in this process you feel out of your depth or confused by our processes, please don't hesitate to reach out to a maintainer or file an [issue](https://github.com/intel/ai-containers/issues).
 
 ## Getting Started
 
@@ -41,12 +41,6 @@ In order to complete the review process, the following steps are required:
 3. At least one approval from a [codeowner](https://github.com/intel/ai-containers/blob/main/.github/CODEOWNERS) that maintains the area of the code you are changing.
 
 Depending on the size and complexity of the change, additional reviews may be required and it may be subject to additional requirements, for example, if you are submitting a contribution to [Test Runner](https://github.com/intel/ai-containers/tree/main/test-runner) you may be required to write unit tests that satisfy our coverage requirements.
-
-### Merge Queue
-
-Once your pull request has been approved, it will be added to the merge queue. The merge queue is a list of pull requests that are ready to be merged. The merge queue runs additional CI over your code to make sure no regressions were introduced into other areas of the codebase.
-
-If your pull request passes the merge queue, it will be merged into the main branch. Otherwise, it will be removed from the merge queue, and you will need to address the issues that caused the failure.
 
 ## Contribution Guidelines
 
