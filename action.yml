@@ -55,7 +55,7 @@ runs:
     - name: Build Apptainer
       shell: bash
       run: |
-        apptainer build python-base.sif apptainer.def 
+        apptainer build python-base.sif apptainer.def
       working-directory: ${{ inputs.group_dir }}
     - name: Push Apptainer
       shell: bash
@@ -65,10 +65,10 @@ runs:
     - name: Test Appatiner
       shell: bash
       run: |
-        apptainer pull "${{ inputs.registry }}/${{ inputs.repo }}:${{ env.project-number }}-python-base-sif" 
+        apptainer pull "${{ inputs.registry }}/${{ inputs.repo }}:${{ env.project-number }}-python-base-sif"
         apptainer exec *"${{ env.project-number }}-python-base-sif".sif python tests/perf_sample.py
       working-directory: ${{ inputs.group_dir }}
     - name: Clean Cache and Remove Images
       shell: bash
-      run: apptainer cache clean --force  && rm -rf *.sif 
+      run: apptainer cache clean --force  && rm -rf *.sif
       working-directory: ${{ inputs.group_dir }}
