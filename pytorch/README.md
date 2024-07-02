@@ -210,7 +210,7 @@ To add these files correctly please follow the steps described below.
 
 #### Hugging Face Generative AI Container
 
-The image below is an extension of the IPEX Multi-Node Container designed to run Hugging Face Generative AI scripts. The container has the typical installations needed to run and fine tune PyTorch generative text models from Hugging Face. It can be used to run multinode jobs using the same instructions from the [IPEX Multi-Node container](####-setup-and-run-ipex-multi-node-container).
+The image below is an extension of the IPEX Multi-Node Container designed to run Hugging Face Generative AI scripts. The container has the typical installations needed to run and fine tune PyTorch generative text models from Hugging Face. It can be used to run multinode jobs using the same instructions from the [IPEX Multi-Node container](#setup-and-run-ipex-multi-node-container).
 
 | Tag(s)                | Pytorch  | IPEX         | oneCCL               | transformers       | Dockerfile      |
 | --------------------- | -------- | ------------ | -------------------- | --------- | --------------- |
