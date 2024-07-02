@@ -145,6 +145,20 @@ RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
 CMD ["bash"]
 
+FROM multinode AS hf-genai
+
+COPY hf-genai-requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r hf-genai-requirements.txt
+
+ENV I_MPI_ROOT=${I_MPI_ROOT}
+ENV CCL_ROOT=${CCL_ROOT}
+ENV FI_PROVIDER_PATH=${FI_PROVIDER_PATH}
+ENV LIBRARY_PATH=${LIBRARY_PATH}
+ENV LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
+ENV PATH=${PATH}
+ENV CPATH=${CPATH}
+
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
 RUN apt-get update && \
