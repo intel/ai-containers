@@ -30,6 +30,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--device", default="cpu", choices=["cpu", "xpu"])
 parser.add_argument("--ipex", action="store_true")
 parser.add_argument("--backend", default="gloo", choices=["gloo", "ccl"])
+parser.add_argument("--deepspeed", action="store_true")
 args = parser.parse_args()
 
 try:
@@ -37,12 +38,17 @@ try:
 except:
     pass
 
-dist.init_process_group(
-    backend=args.backend,
-    init_method=init_method,
-    world_size=int(os.environ.get("WORLD_SIZE")),
-    rank=int(os.environ.get("RANK")),
-)
+if args.deepspeed:
+    import deepspeed
+
+    deepspeed.init_distributed(dist_backend="mpi")
+else:
+    dist.init_process_group(
+        backend=args.backend,
+        init_method=init_method,
+        world_size=int(os.environ.get("WORLD_SIZE")),
+        rank=int(os.environ.get("RANK")),
+    )
 
 model = models.resnet50(pretrained=False)
 
