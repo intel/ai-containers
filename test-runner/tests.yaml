@@ -39,10 +39,10 @@ test${TEST:-4}:
   cmd: echo "${TEST:-4}"
 test6:
   img: ${CACHE_REGISTRY}/cache/library/python:3.11-slim-bullseye
-  cmd: "echo 'hello: world'"
+  cmd: "echo 'hello: world!'"
   mask:
   - hello
 test7:
-  cmd: "echo 'world: hello'"
+  cmd: "echo 'world: hello!'"
   mask:
   - world
