@@ -123,8 +123,7 @@ set -e \n\
 set -a \n\
 source ~/.startup \n\
 set +a \n\
-eval \"\$@\" \n\
-tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh && \
+eval \"\$@\"" >> /usr/local/bin/dockerd-entrypoint.sh && \
     chmod +x /usr/local/bin/dockerd-entrypoint.sh
 
 RUN echo 'HostKey /etc/ssh/ssh_host_dsa_key' > /var/run/sshd_config && \

@@ -79,3 +79,11 @@ updates:
     package-ecosystem: pip
     schedule:
       interval: weekly
+  - directory: /preset
+    groups:
+      preset:
+        patterns:
+          - "*requirements.txt"
+    package-ecosystem: pip
+    schedule:
+      interval: weekly

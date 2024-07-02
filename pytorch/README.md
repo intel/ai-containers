@@ -97,7 +97,7 @@ docker run -it --rm \
     --net=host \
     -v $PWD/workspace:/workspace \
     -w /workspace \
-    intel/intel-extension-for-pytorch:xpu-jupyter
+    intel/intel-extension-for-pytorch:2.3.0-pip-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
