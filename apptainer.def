@@ -22,7 +22,7 @@ From: {{BASE_IMAGE_NAME}}:{{ BASE_IMAGE_TAG}}
 
 %environment
     export DEBIAN_FRONTEND=noninteractive
-    
+
 %files
     requirements.txt .
 
@@ -39,7 +39,7 @@ From: {{BASE_IMAGE_NAME}}:{{ BASE_IMAGE_TAG}}
     python{{ PYTHON_VERSION }}-distutils && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-    
+
     rm -rf /usr/lib/python{{ PYTHON_VERSION }}/EXTERNALLY-MANAGED
 
     ln -sf "$(which python{{ PYTHON_VERSION }})" /usr/local/bin/python && \
