@@ -57,7 +57,7 @@ class Test(BaseModel):
     notebook: Optional[bool] = False
     serving: Optional[bool] = False
     cap_add: Optional[str] = "AUDIT_READ"
-    device: Optional[str] = "/dev/dri"
+    device: Optional[str] = ""
     entrypoint: Optional[str] = ""
     groups_add: Optional[List[str]] = ["109", "44"]
     hostname: Optional[str] = None
