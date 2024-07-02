@@ -14,13 +14,13 @@
 
 name: Apptainer CI
 on:
-  pull_request:
-    branches:
-      - '*/apptainer_ci_python'
+  pull_request: null
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
+
+permissions: read-all
 
 jobs:
   setup-build:
