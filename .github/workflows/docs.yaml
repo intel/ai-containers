@@ -25,7 +25,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   mkdocs:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     permissions:
       contents: read
       id-token: write
