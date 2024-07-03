@@ -34,7 +34,7 @@ jobs:
         with:
           apptainer-version: 1.3.2
       - name: Apptainer login to registry
-        run: apptainer registry login  -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }} oras://${{ secrets.REGISTRY }}
+        run: apptainer registry login  -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }} docker://${{ secrets.REGISTRY }}
       - uses: intel/ai-containers/apptainer@sramakr1/apptainer_python
         with:
           registry: oras://${{ secrets.REGISTRY }}
