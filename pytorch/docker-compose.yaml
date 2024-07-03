@@ -78,6 +78,7 @@ services:
         dependency.apt.python3-dev: true
         dependency.pip.apt.virtualenv: true
         dependency.python.pip: multinode-requirements.txt
+        dependency.python.deepspeed: 0.14.4
         org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-base"
         org.opencontainers.image.title: "Intel® Extension for PyTorch MultiNode Image"
         org.opencontainers.image.version: ${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-multinode
