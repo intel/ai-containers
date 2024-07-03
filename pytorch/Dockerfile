@@ -100,12 +100,7 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Allow OpenSSH to talk to containers without asking for confirmation
-# hadolint global ignore=SC2002
-RUN mkdir -p /var/run/sshd && \
-    cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
-    echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
-    mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
+RUN mkdir -p /var/run/sshd
 
 ARG PYTHON_VERSION
 
