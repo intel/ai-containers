@@ -28,7 +28,7 @@ permissions: read-all
 jobs:
   analysis:
     name: Scorecard analysis
-    runs-on: intel-ubuntu-latest
+    runs-on: ubuntu-latest
     permissions:
       security-events: write
       id-token: write
