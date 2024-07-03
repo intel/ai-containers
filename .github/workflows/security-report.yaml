@@ -17,11 +17,11 @@
 # policy, and support documentation.
 
 name: Security Report
-permissions: read-all
 on:
   push:
     tags: ['**']
   workflow_dispatch: null
+permissions: read-all
 jobs:
   report:
     runs-on: ubuntu-latest
