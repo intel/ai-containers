@@ -1,0 +1,3 @@
+Host *
+    Port 3022
+    IdentityFile ~/.ssh/id_rsa
