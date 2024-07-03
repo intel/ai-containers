@@ -14,7 +14,7 @@
 
 name: Apptainer CI
 on:
-  pull_request: null
+  pull_request:
   branches:
     - '*/apptainer_python'
 
