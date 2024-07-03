@@ -21,7 +21,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   group-diff:
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
     outputs:
       groups: ${{ steps.group-list.outputs.FOLDERS }}
     steps:
@@ -71,7 +71,7 @@ jobs:
     secrets: inherit
   status-check:
     needs: [group-diff, pipeline-ci]
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
     if: always()
     steps:
     - name: Harden Runner
