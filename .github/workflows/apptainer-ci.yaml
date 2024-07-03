@@ -37,7 +37,7 @@ jobs:
         env:
           APPTAINER_DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           APPTAINER_DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-        run: apptainer registry login  -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }} docker://${{ secrets.REGISTRY }}
+        run: apptainer remote logout && apptainer registry login  -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }} docker://${{ secrets.REGISTRY }}
       - uses: intel/ai-containers/apptainer@sramakr1/apptainer_python
         with:
           registry: oras://${{ secrets.REGISTRY }}
