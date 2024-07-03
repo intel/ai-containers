@@ -68,7 +68,7 @@ jobs:
     uses: ./.github/workflows/container-ci.yaml
     with:
       group_dir: ${{ matrix.group }}
-      ref: leminh/test-runner
+      ref: leminh/test-runners
     secrets: inherit
   merge-logs:
     # download all artifacts across containers
