@@ -92,7 +92,8 @@ ENV SIGOPT_PROJECT=.
 WORKDIR /
 COPY multinode-requirements.txt .
 
-RUN DS_BUILD_OPS=1 python -m pip install --no-cache-dir -r multinode-requirements.txt && \
+RUN python -m pip install --no-cache-dir -r multinode-requirements.txt && \
+    DS_BUILD_OPS=1 python -m pip install --no-cache-dir deepspeed==0.14.4 && \
     echo "Y" | pip uninstall nvidia-ml-py && \
     rm -rf multinode-requirements.txt
 
