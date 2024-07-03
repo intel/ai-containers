@@ -20,7 +20,7 @@ on:
 permissions: read-all
 jobs:
   get-groups:
-    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    runs-on: intel-ubuntu-latest
     outputs:
       groups: ${{ steps.group-list.outputs.FOLDERS }}
     steps:
