@@ -1,0 +1,68 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+name: Build Apptainer Group
+description: Build Apptainer containers based on defintion files in the apptainer directory
+author: srikanth.ramakrishna@intel.com
+inputs:
+  group_dir:
+    description: Directory to build
+    required: false
+    default: 'apptainer'
+    type: string
+  env_overrides:
+    description: Bash Env Variable Overrides in `KEY=VAL && KEY2=VAL2` format
+    required: false
+    type: string
+  registry:
+    description: Container Registry URL
+    required: false
+    default: 'intel'
+    type: string
+  repo:
+    description: Container Project Repository
+    required: false
+    default: 'ai-containers'
+    type: string
+  no-push:
+    description: Do not push to Registry
+    required: false
+    default: false
+    type: boolean
+  no-start:
+    description: Do not start containers after building them
+    required: false
+    default: false
+    type: boolean
+runs:
+  using: composite
+  steps:
+    - name: Generate Project Number
+      shell: bash
+      run: echo "project-number=$(shuf -i 0-10000 -n1)" >> $GITHUB_ENV
+    - name: Build Apptainer
+      shell: bash
+      run: |
+        apptainer build python-base.sif apptainer.def
+      working-directory: ${{ inputs.group_dir }}
+    - name: Push Apptainer
+      shell: bash
+      run: |
+        apptainer push python-base.sif "${{ inputs.registry }}/${{ inputs.repo }}:${{ env.project-number }}-python-base-sif"
+      working-directory: ${{ inputs.group_dir }}
+    - name: Clean cache and Remove Images
+      shell: bash
+      run: apptainer cache clean --force  && rm -rf *.sif
+      working-directory: ${{ inputs.group_dir }}
