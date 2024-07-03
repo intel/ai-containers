@@ -41,7 +41,9 @@ except:
 if args.deepspeed:
     import deepspeed
 
-    deepspeed.init_distributed(dist_backend="mpi")
+    deepspeed.init_distributed(
+        deepspeed.accelerator.get_accelerator().communication_backend_name()
+    )
 else:
     dist.init_process_group(
         backend=args.backend,
