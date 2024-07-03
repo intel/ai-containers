@@ -15,6 +15,7 @@
 
 set -e
 set -a
-source ~/.startup
+# shellcheck disable=SC1091
+source "$HOME/.startup"
 set +a
 "$@"

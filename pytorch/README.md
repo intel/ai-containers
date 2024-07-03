@@ -147,6 +147,7 @@ To add these files correctly please follow the steps described below.
     chmod 600 id_rsa config authorized_keys
     chown root:root id_rsa.pub id_rsa config authorized_keys
     ```
+
 3. Setup hostfile. The hostfile is needed for running torch distributed using `ipexrun` utility. If you're not using `ipexrun` you can skip this step.
 
     ```txt
@@ -154,6 +155,7 @@ To add these files correctly please follow the steps described below.
     <Host 2 IP/Hostname>
     ...
     ```
+
 4. Now start the workers and execute DDP on the launcher.
 
     1. Worker run command:
@@ -168,7 +170,7 @@ To add these files correctly please follow the steps described below.
             bash -c '/usr/sbin/sshd -D'
         ```
 
-    3. Launcher run command:
+    2. Launcher run command:
 
         ```bash
         docker run -it --rm \
@@ -181,7 +183,7 @@ To add these files correctly please follow the steps described below.
             bash -c 'ipexrun cpu  --nnodes 2 --nprocs-per-node 1 --master-addr 127.0.0.1 --master-port 3022 /workspace/tests/ipex-resnet50.py --ipex --device cpu --backend ccl'
         ```
 
-4. Start SSH server with a custom port.
+5. Start SSH server with a custom port.
     If the user wants to define their own port to start the SSH server, it can be done so using the commands described below.
 
     1. Worker command:

@@ -108,7 +108,7 @@ RUN mkdir -p /var/run/sshd && \
 
 ARG PYTHON_VERSION
 
-COPY generate_ssh_keys.sh .
+COPY multinode/generate_ssh_keys.sh .
 
 # modify generate_ssh_keys to be a helper script
 # print how to use helper script on bash startup
@@ -117,9 +117,9 @@ RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bin
     cat '/generate_ssh_keys.sh' >> ~/.startup && \
     rm -rf /generate_ssh_keys.sh
 
-COPY dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
-COPY sshd_config /etc/ssh/sshd_config
-COPY ssh_config /etc/ssh/ssh_config
+COPY multinode/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+COPY multinode/sshd_config /etc/ssh/sshd_config
+COPY multinode/ssh_config /etc/ssh/ssh_config
 
 RUN mkdir -p /licensing
 
