@@ -26,7 +26,7 @@ on:
 permissions: read-all
 jobs:
   report:
-    runs-on: intel-ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
@@ -36,6 +36,7 @@ jobs:
     - uses: rsdmike/github-security-report-action@a149b24539044c92786ec39af8ba38c93496495d # v3.0.4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+        sarifReportDir: ${{ github.workspace }}
     - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
       with:
         name: reports
