@@ -126,15 +126,19 @@ set +a \n\
 eval \"\$@\"" >> /usr/local/bin/dockerd-entrypoint.sh && \
     chmod +x /usr/local/bin/dockerd-entrypoint.sh
 
-RUN echo 'HostKey /etc/ssh/ssh_host_dsa_key' > /var/run/sshd_config && \
-    echo 'HostKey /etc/ssh/ssh_host_rsa_key' > /var/run/sshd_config && \
-    echo 'HostKey /etc/ssh/ssh_host_ecdsa_key' > /var/run/sshd_config && \
-    echo 'HostKey /etc/ssh/ssh_host_ed25519_key' > /var/run/sshd_config && \
-    echo 'AuthorizedKeysFile /etc/ssh/authorized_keys' > /var/run/sshd_config && \
-    echo '## Enable DEBUG log. You can ignore this but this may help you debug any issue while enabling SSHD for the first time' > /var/run/sshd_config && \
-    echo 'LogLevel DEBUG3' > /var/run/sshd_config && \
-    echo 'UsePAM yes' > /var/run/sshd_config && \
-    echo 'Subsystem       sftp    /usr/lib/openssh/sftp-server' > /var/run/sshd_config
+RUN echo 'HostKey /etc/ssh/ssh_host_dsa_key' > /etc/ssh/sshd_config && \
+    echo 'HostKey /etc/ssh/ssh_host_rsa_key' >> /etc/ssh/sshd_config && \
+    echo 'HostKey /etc/ssh/ssh_host_ecdsa_key' >> /etc/ssh/sshd_config && \
+    echo 'HostKey /etc/ssh/ssh_host_ed25519_key' >> /etc/ssh/sshd_config && \
+    echo 'AuthorizedKeysFile /etc/ssh/authorized_keys' >> /etc/ssh/sshd_config && \
+    echo '## Enable DEBUG log. You can ignore this but this may help you debug any issue while enabling SSHD for the first time' >> /etc/ssh/sshd_config && \
+    echo 'LogLevel DEBUG3' >> /etc/ssh/sshd_config && \
+    echo 'Port 3022' >> /etc/ssh/sshd_config && \
+    echo 'UsePAM yes' >> /etc/ssh/sshd_config && \
+    echo 'Subsystem       sftp    /usr/lib/openssh/sftp-server' >> /etc/ssh/sshd_config && \
+    echo 'Host *' > /etc/ssh/ssh_config && \
+    echo '  Port 3022' >> /etc/ssh/ssh_config && \
+    echo '  IdentityFile ~/.ssh/id_rsa' >> /etc/ssh/ssh_config
 
 RUN mkdir -p /licensing
 
