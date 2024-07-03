@@ -15,15 +15,20 @@
 name: Lint
 permissions: read-all
 on:
-  merge_group: null
   pull_request: null
+  push:
+    branches: ["main"]
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 jobs:
   lint:
     name: Lint
-    runs-on: ubuntu-latest
+    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    permissions:
+      contents: read
+      actions: read
+      statuses: write
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
