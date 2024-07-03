@@ -18,7 +18,7 @@ Images available here start with the [Ubuntu* 22.04](https://hub.docker.com/_/ub
 
 > **Note:** There are two dockerhub repositories (`intel/intel-extension-for-pytorch` and `intel/intel-optimized-pytorch`) that are routinely updated with the latest images, however, some legacy images have not be published to both repositories.
 
-## XPU images
+## XPU imagesv
 
 The images below include support for both CPU and GPU optimizations:
 
@@ -208,6 +208,29 @@ To add these files correctly please follow the steps described below.
 
 ---
 
+#### Hugging Face Generative AI Container
+
+The image below is an extension of the IPEX Multi-Node Container designed to run Hugging Face Generative AI scripts. The container has the typical installations needed to run and fine tune PyTorch generative text models from Hugging Face. It can be used to run multinode jobs using the same instructions from the [IPEX Multi-Node container](#setup-and-run-ipex-multi-node-container).
+
+| Tag(s)                | Pytorch  | IPEX         | oneCCL               | transformers       | Dockerfile      |
+| --------------------- | -------- | ------------ | -------------------- | --------- | --------------- |
+| `2.3.0-pip-multinode-hf-4.41.2-genai` | [v2.3.1](https://github.com/pytorch/pytorch/releases/tag/v2.3.1) | [v2.3.0+cpu] | [v2.3.0][ccl-v2.3.0] | [v4.41.2]  | [v0.4.0-Beta]   |
+
+Below is an example that shows single node job with the existing [`finetune.py`](../workflows/charts/huggingface-llm/scripts/finetune.py) script.
+
+```bash
+# Change into home directory first and run the command
+docker run -it \
+    -v $PWD/workflows/charts/huggingface-llm/scripts:/workspace/scripts \
+    intel/intel-extension-for-pytorch:2.3.0-pip-multinode-hf-4.41.2-genai \
+    bash
+
+# From inside the container run the command with appropriate <script-args>
+python finetune.py <script-args>
+```
+
+---
+
 The images below are [TorchServe*] with CPU Optimizations:
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
@@ -320,6 +343,9 @@ It is the image user's responsibility to ensure that any use of The images below
 [ccl-v2.2.0]: https://github.com/intel/torch-ccl/releases/tag/v2.2.0%2Bcpu
 [ccl-v2.1.0]: https://github.com/intel/torch-ccl/releases/tag/v2.1.0%2Bcpu
 [ccl-v2.0.0]: https://github.com/intel/torch-ccl/releases/tag/v2.1.0%2Bcpu
+
+<!-- HuggingFace transformers releases -->
+[v4.41.2]: https://github.com/huggingface/transformers/releases/tag/v4.41.2
 
 [803]: https://dgpu-docs.intel.com/releases/LTS_803.29_20240131.html
 [736]: https://dgpu-docs.intel.com/releases/stable_736_25_20231031.html
