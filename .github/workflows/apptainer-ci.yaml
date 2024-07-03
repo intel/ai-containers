@@ -15,7 +15,6 @@
 name: Apptainer CI
 on:
   pull_request:
-  push:
     branches:
       - '*/apptainer_python'
 
