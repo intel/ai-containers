@@ -65,10 +65,35 @@ jobs:
         group: ${{ fromJson(needs.group-diff.outputs.groups) }}
         experimental: [true]
       fail-fast: false
-    uses: intel/ai-containers/.github/workflows/container-ci.yaml@main
+    uses: ./.github/workflows/container-ci.yaml
     with:
       group_dir: ${{ matrix.group }}
+      ref: leminh/test-runner
     secrets: inherit
+  merge-logs:
+    # download all artifacts across containers
+    needs: [pipeline-ci]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: my-artifact*json
+        merge-multiple: true
+    - name: Display structure of downloaded files
+      run: ls .
+    - name: Combine JSON files
+      run: |
+        jq -s '[.[] | .[]]' *.json > combined.json
+    - name: Generate TXT file
+      run: |
+        echo "| Test-Group    | Test        | Status   |" > output.txt
+        echo "|---------------|-------------|----------|" >> output.txt
+        jq -r '.[] | "| \(.Group) | \(.Test) | \(.Status) |" ' combined.json >> output.txt
+    - name: Display structure of downloaded files
+      run: |
+        ls .
+        cat combined.json
+        cat output.txt
   status-check:
     needs: [group-diff, pipeline-ci]
     runs-on: ubuntu-latest

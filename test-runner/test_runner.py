@@ -38,7 +38,7 @@ from typing import List
 from expandvars import expandvars
 from python_on_whales import DockerException, docker
 from tabulate import tabulate
-from utils.test import PerfException, Test
+from utils.test import Test
 from yaml import YAMLError, full_load
 
 
@@ -64,6 +64,13 @@ def parse_args(args: list):
     parser.add_argument(
         "-l", "--logs", dest="logs_path", default="output", help="-l /path/to/logs"
     )
+    parser.add_argument(
+        "-n",
+        "--name",
+        dest="test_name",
+        help="unique test name identifier",
+        required=True,
+    )
 
     return parser.parse_args(args)
 
@@ -76,7 +83,9 @@ def set_log_filename(logger: logging.Logger, name: str, logs_path: str):
         name (str): name of the new log filename
         logs_path (str): path to the new log filename
     """
-    test_handler = logging.FileHandler(f"{logs_path}/{name}.log")
+    # name of the tests directory (ie. python, python1 )
+
+    test_handler = logging.FileHandler(f"{logs_path}-{name}.log")
     try:
         [prev_handler] = [
             handler
@@ -105,14 +114,13 @@ def get_test_list(args: dict, tests_yaml: List[dict]):
         List[dict]: list of expanded tests
     """
     tests_list = {}
-    disable_masking = False
     for test in tests_yaml:
         if re.search(r"\$\{([A-Za-z0-9_]*)\:\-(.*?)\}", test):
             if args.actions_path:
                 with open(args.actions_path, "r", encoding="utf-8") as actions_file:
                     for key, dval in json.load(actions_file).items():
-                        if key == "mask" and dval == [False]:
-                            disable_masking = True
+                        if key == "mask":
+                            [args.mask] = dval
                         if isinstance(dval, list) and key != "experimental":
                             for _, val in enumerate(dval):
                                 os.environ[key] = str(val)
@@ -135,7 +143,7 @@ def get_test_list(args: dict, tests_yaml: List[dict]):
             logging.error("Command not found for %s", test)
             sys.exit(1)
 
-    return tests_list, disable_masking
+    return tests_list
 
 
 if __name__ == "__main__":
@@ -148,6 +156,8 @@ if __name__ == "__main__":
         rmtree(args.logs_path)
         os.makedirs(args.logs_path)
     # Set up Logging for test-runner context
+    unique_identifier = args.file_path.split("/")[1]  # python/test/test.yaml
+    log_handler_prefix = f"{args.logs_path}/{unique_identifier}"  # logs/python-test
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -167,15 +177,16 @@ if __name__ == "__main__":
         except YAMLError as yaml_exc:
             logging.error(yaml_exc)
             sys.exit(1)
-    tests_list, disable_masking = get_test_list(args, tests_json)
+    tests_list = get_test_list(args, tests_json)
     logging.debug("Creating Test Objects from: %s", tests_list)
     # For each test, create a Test Object with the test name is the key of the test in yaml
     tests = [Test(name=test, **tests_list[test]) for test in tests_list]
     logging.info("Setup Completed - Running Tests")
     summary = []
+    json_summary = []
     ERROR = False
     for idx, test in enumerate(tests):
-        if disable_masking:
+        if not args.mask:
             test.mask = []
         # Set Context to test-runner.log
         set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
@@ -187,30 +198,42 @@ if __name__ == "__main__":
         # returns the stdout of the test and the RETURNCODE
         try:  # Try for Runtime Failure Conditions
             log = test.container_run() if test.img else test.run()
-        except (DockerException, PerfException, YAMLError) as err:
+        except DockerException as err:
             logging.error(err)
             summary.append([idx + 1, test.name, "FAIL"])
+            json_summary.append(
+                {"Group": args.test_name, "Test": test.name, "Status": "FAIL"}
+            )
             ERROR = True
             continue
         except KeyboardInterrupt:
             summary.append([idx + 1, test.name, "FAIL"])
+            json_summary.append(
+                {"Group": args.test_name, "Test": test.name, "Status": "FAIL"}
+            )
             ERROR = True
             break
         summary.append([idx + 1, test.name, "PASS"])
+        json_summary.append(
+            {"Group": args.test_name, "Test": test.name, "Status": "PASS"}
+        )
+    json_summary_path = f"{log_handler_prefix}-test-runner.json"
+
+    with open(json_summary_path, "w") as file:
+        json.dump(json_summary, file, indent=4)
+
     # Switch logging context back to the initial state
     set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
     # Remove remaining containers
-    test_images = [expandvars(test.img) for test in tests if test.img]
-    if test_images:
-        remaining_containers = docker.container.list()
-        for container in remaining_containers:
-            docker.stop(container, time=None)
-        docker.image.remove(test_images, force=True, prune=False)
-        docker.system.prune()
-        logging.info("%d Images Removed", len(test_images))
+    remaining_containers = docker.container.list()
+    for container in remaining_containers:
+        docker.stop(container, time=None)
     # Print Summary Table
     logging.info(
         "\n%s", tabulate(summary, headers=["#", "Test", "Status"], tablefmt="orgtbl")
     )
+    test_images = [expandvars(test.img) for test in tests if test.img]
+    docker.image.remove(test_images, force=True)
+    logging.info("%d Images Removed", len(test_images))
     if ERROR:
         sys.exit(1)

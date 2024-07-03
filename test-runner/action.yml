@@ -56,7 +56,7 @@ runs:
           python -m pip install -r mlops/test-runner/requirements.txt
     - name: Test
       shell: bash
-      run: venv/bin/python mlops/test-runner/test_runner.py -f ${{ inputs.test_dir }}/tests.yaml -l ${{ inputs.test_dir }}/logs -a ${{ inputs.recipe_dir }}/.actions.json -v
+      run: venv/bin/python test-runner/test_runner.py -f ${{ inputs.test_dir }}/tests.yaml -n ${{ inputs.test_dir }} -l ${{ inputs.test_dir }}/logs -a ${{ inputs.recipe_dir }}/.actions.json -v
       env:
         CACHE_REGISTRY: ${{ inputs.cache_registry }}
         PYTHONPATH: mlops/test-runner
@@ -75,5 +75,11 @@ runs:
       if: always()
       with:
         name: ${{ env.test }} outputs
-        path: ${{ inputs.test_dir }}/logs
+        path: ${{ inputs.test_dir }}/logs/*.log
+        overwrite: true
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: my-artifact ${{ env.test }} json
+        path: ${{ inputs.test_dir }}/logs/*.json
         overwrite: true
