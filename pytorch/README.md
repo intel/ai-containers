@@ -198,14 +198,14 @@ To add these files correctly please follow the steps described below.
             bash -c '/usr/sbin/sshd -D -p ${SSH_PORT}'
         ```
 
-    2. Add hosts to config. (**Note:** This is an optional step) 
+    2. Add hosts to config. (**Note:** This is an optional step)
 
         User can optionally mount their own custom client config file to define a list of hosts and ports where the SSH server is running inside the container. An example of a hostfile is provided below. This file is supposed to be mounted in the launcher container at `/etc/ssh/ssh_config`.
 
         ```bash
         touch config
         ```
-        
+
        ```txt
         Host host1
             HostName <Hostname of host1>
