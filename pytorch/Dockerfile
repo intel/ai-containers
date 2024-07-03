@@ -85,9 +85,10 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
 ENV SIGOPT_PROJECT=.
 
 WORKDIR /
-COPY multinode-requirements.txt .
+COPY multinode/requirements.txt requirements.txt
 
-RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    rm -rf requirements.txt
 
 ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
 
