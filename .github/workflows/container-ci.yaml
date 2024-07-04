@@ -128,7 +128,7 @@ jobs:
   scan-containers:
     needs: [setup-scan]
     if: ${{ !inputs.no_build && github.event_name == 'pull_request' }}
-    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest # ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     strategy:
       matrix:
         container: ${{ fromJSON(needs.setup-scan.outputs.matrix) }}
