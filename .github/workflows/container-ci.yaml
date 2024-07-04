@@ -63,7 +63,7 @@ jobs:
   setup-build:
     outputs:
       matrix: ${{ steps.build-matrix.outputs.matrix }}
-    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest # ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
@@ -79,7 +79,7 @@ jobs:
   build-containers:
     needs: [setup-build]
     env: ${{ matrix }}
-    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest # ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     strategy:
       matrix: ${{ fromJson(needs.setup-build.outputs.matrix) }}
       fail-fast: false
@@ -111,7 +111,7 @@ jobs:
   setup-scan:
     needs: [build-containers]
     if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest # ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     outputs:
       matrix: ${{ steps.scan-matrix.outputs.matrix }}
     steps:
@@ -128,7 +128,7 @@ jobs:
   scan-containers:
     needs: [setup-scan]
     if: ${{ !inputs.no_build && github.event_name == 'pull_request' }}
-    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest # ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     strategy:
       matrix:
         container: ${{ fromJSON(needs.setup-scan.outputs.matrix) }}
@@ -164,7 +164,7 @@ jobs:
       ####################################################################################################
   setup-test:
     needs: [build-containers]
-    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest # ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     outputs:
       matrix: ${{ steps.test-matrix.outputs.matrix }}
     steps:
