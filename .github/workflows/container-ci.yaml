@@ -45,9 +45,17 @@ on:
         default: false
         required: true
         type: boolean
+      ref:
+        description: 'Enter Git Ref:'
+        required: true
+        default: 'main'
+        type: string
   workflow_call:
     inputs:
       group_dir:
+        required: true
+        type: string
+      ref:
         required: true
         type: string
       no_push:
@@ -56,6 +64,7 @@ on:
       no_start:
         required: false
         type: boolean
+
 jobs:
 ####################################################################################################
 # Compose Build
@@ -70,6 +79,8 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      with:
+        ref: ${{ inputs.ref }}
     - name: Set Matrix
       id: build-matrix
       run: echo "matrix=$(jq -c . < ${{ inputs.group_dir }}/.actions.json)" >> $GITHUB_OUTPUT
