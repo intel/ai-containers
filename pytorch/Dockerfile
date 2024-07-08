@@ -85,9 +85,10 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
 ENV SIGOPT_PROJECT=.
 
 WORKDIR /
-COPY multinode-requirements.txt .
+COPY multinode/requirements.txt requirements.txt
 
-RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    rm -rf requirements.txt
 
 ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
 
@@ -99,16 +100,11 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Allow OpenSSH to talk to containers without asking for confirmation
-# hadolint global ignore=SC2002
-RUN mkdir -p /var/run/sshd && \
-    cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
-    echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
-    mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
+RUN mkdir -p /var/run/sshd
 
 ARG PYTHON_VERSION
 
-COPY generate_ssh_keys.sh .
+COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
 
 # modify generate_ssh_keys to be a helper script
 # print how to use helper script on bash startup
@@ -117,26 +113,9 @@ RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bin
     cat '/generate_ssh_keys.sh' >> ~/.startup && \
     rm -rf /generate_ssh_keys.sh
 
-# hadolint global ignore=SC3037
-RUN echo -e "#!/bin/bash \n\
-set -e \n\
-set -a \n\
-source ~/.startup \n\
-set +a \n\
-eval \"\$@\"" >> /usr/local/bin/dockerd-entrypoint.sh && \
-    chmod +x /usr/local/bin/dockerd-entrypoint.sh
-
-RUN echo 'HostKey /etc/ssh/ssh_host_dsa_key' > /var/run/sshd_config && \
-    echo 'HostKey /etc/ssh/ssh_host_rsa_key' > /var/run/sshd_config && \
-    echo 'HostKey /etc/ssh/ssh_host_ecdsa_key' > /var/run/sshd_config && \
-    echo 'HostKey /etc/ssh/ssh_host_ed25519_key' > /var/run/sshd_config && \
-    echo 'AuthorizedKeysFile /etc/ssh/authorized_keys' > /var/run/sshd_config && \
-    echo '## Enable DEBUG log. You can ignore this but this may help you debug any issue while enabling SSHD for the first time' > /var/run/sshd_config && \
-    echo 'LogLevel DEBUG3' > /var/run/sshd_config && \
-    echo 'UsePAM yes' > /var/run/sshd_config && \
-    echo 'LoginGraceTime 0' >> /var/run/sshd_config && \
-    echo 'LoginGraceTime 0' >> /etc/ssh/sshd_config && \
-    echo 'Subsystem       sftp    /usr/lib/openssh/sftp-server' > /var/run/sshd_config
+COPY multinode/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+COPY multinode/sshd_config /etc/ssh/sshd_config
+COPY multinode/ssh_config /etc/ssh/ssh_config
 
 RUN mkdir -p /licensing
 
