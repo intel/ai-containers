@@ -59,7 +59,7 @@ docker run -it --rm \
     --device /dev/dri \
     -v /dev/dri/by-path:/dev/dri/by-path \
     --ipc=host \
-    intel/intel-extension-for-pytorch:xpu-jupyter
+    intel/intel-extension-for-pytorch:2.1.20-xpu-pip-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
