@@ -113,12 +113,8 @@ The images below additionally include [Intel® oneAPI Collective Communications 
 | `2.0.0-pip-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v2.1.1]  | [v0.1.0]        |
 
 > **Note:** Passwordless SSH connection is also enabled in the image.
-> The container does not contain the SSH ID keys. The user needs to mount those keys at `/root/.ssh/id_rsa` and `/root/.ssh/id_rsa.pub`.
-> User also need to append content of id_rsa.pub in `/etc/ssh/authorized_keys` in the SSH server container.
-> Since the SSH key is not owned by default user account in docker, please also do "chmod 644 id_rsa.pub; chmod 644 id_rsa" to grant read access for default user account.
-> Users could also use "/usr/bin/ssh-keygen -t rsa -b 4096 -N '' -f ~/mnt/ssh_key/id_rsa" to generate a new SSH Key inside the container.
-> Users need to mount a config file to list all hostnames at location `/root/.ssh/config` on the SSH client container.
-> Once all files are added
+> The container does not contain the SSH ID keys. The user needs to mount those keys at `/root/.ssh/id_rsa` and `/etc/ssh/authorized_keys`.
+> Since the SSH key is not owned by default user account in docker, please also do "chmod 600 authorized_keys; chmod 600 id_rsa" to grant read access for default user account.
 
 #### Setup and Run IPEX Multi-Node Container
 
@@ -130,8 +126,7 @@ SSH Server (Worker)
 
 SSH Client (Launcher)
 
-1. *Config File with Host IPs* : `/root/.ssh/config`
-2. *Private User Key* : `/root/.ssh/id_rsa`
+1. *Private User Key* : `/root/.ssh/id_rsa`
 
 To add these files correctly please follow the steps described below.
 
@@ -145,31 +140,19 @@ To add these files correctly please follow the steps described below.
     cat id_rsa.pub >> authorized_keys
     ```
 
-2. Add hosts to config
-
-    The launcher container needs to have the a config file with all hostnames and ports specified. An example of a hostfile is provided below.
+2. Configure the permissions and ownership for all of the files you have created so far.
 
     ```bash
-    touch config
+    chmod 600 id_rsa config authorized_keys
+    chown root:root id_rsa.pub id_rsa config authorized_keys
     ```
+
+3. Setup hostfile. The hostfile is needed for running torch distributed using `ipexrun` utility. If you're not using `ipexrun` you can skip this step.
 
     ```txt
-    Host host1
-        HostName <Hostname of host1>
-        IdentitiesOnly yes
-        Port <SSH Port>
-    Host host2
-        HostName <Hostname of host2>
-        IdentitiesOnly yes
-        Port <SSH Port>
+    <Host 1 IP/Hostname>
+    <Host 2 IP/Hostname>
     ...
-    ```
-
-3. Configure the permissions and ownership for all of the files you have created so far.
-
-    ```bash
-    chmod 600 id_rsa.pub id_rsa config authorized_keys
-    chown root:root id_rsa.pub id_rsa config authorized_keys
     ```
 
 4. Now start the workers and execute DDP on the launcher.
@@ -177,15 +160,13 @@ To add these files correctly please follow the steps described below.
     1. Worker run command:
 
         ```bash
-        export SSH_PORT=<SSH Port>
         docker run -it --rm \
             --net=host \
-            -v $PWD/authorized_keys:/root/.ssh/authorized_keys \
+            -v $PWD/authorized_keys:/etc/ssh/authorized_keys \
             -v $PWD/tests:/workspace/tests \
             -w /workspace \
-            -e SSH_PORT=${SSH_PORT} \
             intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
-            bash -c '/usr/sbin/sshd -D -p ${SSH_PORT} -f /var/run/sshd_config'
+            bash -c '/usr/sbin/sshd -D'
         ```
 
     2. Launcher run command:
@@ -194,12 +175,65 @@ To add these files correctly please follow the steps described below.
         docker run -it --rm \
             --net=host \
             -v $PWD/id_rsa:/root/.ssh/id_rsa \
-            -v $PWD/config:/root/.ssh/config \
             -v $PWD/tests:/workspace/tests \
+            -v $PWD/hostfile:/workspace/hostfile \
             -w /workspace \
-            -e SSH_PORT=${SSH_PORT} \
             intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
-            bash -c 'ipexrun cpu /workspace/tests/ipex-resnet50.py --ipex --device cpu --backend ccl'
+            bash -c 'ipexrun cpu  --nnodes 2 --nprocs-per-node 1 --master-addr 127.0.0.1 --master-port 3022 /workspace/tests/ipex-resnet50.py --ipex --device cpu --backend ccl'
+        ```
+
+5. Start SSH server with a custom port.
+    If the user wants to define their own port to start the SSH server, it can be done so using the commands described below.
+
+    1. Worker command:
+
+        ```bash
+        export SSH_PORT=<User SSH Port>
+        docker run -it --rm \
+            --net=host \
+            -v $PWD/authorized_keys:/etc/ssh/authorized_keys \
+            -v $PWD/tests:/workspace/tests \
+            -e SSH_PORT=${SSH_PORT} \
+            -w /workspace \
+            intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
+            bash -c '/usr/sbin/sshd -D -p ${SSH_PORT}'
+        ```
+
+    2. Add hosts to config. (**Note:** This is an optional step)
+
+        User can optionally mount their own custom client config file to define a list of hosts and ports where the SSH server is running inside the container. An example of a hostfile is provided below. This file is supposed to be mounted in the launcher container at `/etc/ssh/ssh_config`.
+
+        ```bash
+        touch config
+        ```
+
+       ```txt
+        Host host1
+            HostName <Hostname of host1>
+            IdentitiesOnly yes
+            IdentityFile ~/.root/id_rsa
+            Port <SSH Port>
+        Host host2
+            HostName <Hostname of host2>
+            IdentitiesOnly yes
+            IdentityFile ~/.root/id_rsa
+            Port <SSH Port>
+        ...
+        ```
+
+    3. Launcher run command:
+
+        ```bash
+        docker run -it --rm \
+            --net=host \
+            -v $PWD/id_rsa:/root/.ssh/id_rsa \
+            -v $PWD/config:/etc/ssh/ssh_config \
+            -v $PWD/hostfile:/workspace/hostfile \
+            -v $PWD/tests:/workspace/tests \
+            -e SSH_PORT=${SSH_PORT} \
+            -w /workspace \
+            intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
+            bash -c 'ipexrun cpu --nnodes 2 --nprocs-per-node 1 --master-addr 127.0.0.1 --master-port ${SSH_PORT} /workspace/tests/ipex-resnet50.py --ipex --device cpu --backend ccl'
         ```
 
 > [!NOTE]
