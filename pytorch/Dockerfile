@@ -135,7 +135,7 @@ RUN echo 'HostKey /etc/ssh/ssh_host_dsa_key' > /var/run/sshd_config && \
     echo 'LogLevel DEBUG3' > /var/run/sshd_config && \
     echo 'UsePAM yes' > /var/run/sshd_config && \
     echo 'LoginGraceTime 0' > /var/run/sshd_config && \
-    echo 'LoginGraceTime 0' > /etc/ssh/sshd_config && \
+    echo 'LoginGraceTime 0' >> /etc/ssh/sshd_config && \
     echo 'Subsystem       sftp    /usr/lib/openssh/sftp-server' > /var/run/sshd_config
 
 RUN mkdir -p /licensing
