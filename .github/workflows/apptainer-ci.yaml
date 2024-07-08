@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: Output Modified Group Directories
         id: group-list
-        run: | 
+        run: |
           # Get diff array filtered by specific filetypes
           DIFF=$(git diff --diff-filter=d \
               --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }} \
