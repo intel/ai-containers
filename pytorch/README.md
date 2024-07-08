@@ -249,8 +249,8 @@ The images below additionally include [Intel® oneAPI Collective Communications 
 
 The images below are built only with CPU and GPU optimizations and include [Intel® Distribution for Python*]:
 
-| Tag(s)           | Pytorch  | IPEX         | Dockerfile      |
-| ---------------- | -------- | ------------ | --------------- |
+| Tag(s)           | Pytorch  | IPEX         | Driver | Dockerfile      |
+| ---------------- | -------- | ------------ | -------- | ------ |
 | `2.1.10-xpu-idp-base` | [v2.1.0] | [v2.1.10+xpu]  | [736]  | [v0.2.3] |
 
 The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
@@ -259,7 +259,6 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 | --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
 | `2.1.20-xpu-idp-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`       | [v0.3.4]     |
 | `2.1.10-xpu-idp-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`       | [v0.2.3]     |
-
 
 ## Build from Source
 
