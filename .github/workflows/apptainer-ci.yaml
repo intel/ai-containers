@@ -57,6 +57,8 @@ jobs:
           # Convert the array to a JSON array
           DOCKER_COMPOSE_PATHS_JSON=$(printf '%s\n' "${DOCKER_COMPOSE_PATHS[@]}" | jq -R '.' | jq -sc 'unique_by(.)')
           echo "FOLDERS=$DOCKER_COMPOSE_PATHS_JSON" >> $GITHUB_OUTPUT
+          echo $DOCKER_COMPOSE_PATHS
+          echo $FOLDERS
   setup-build:
     needs: [group-diff]
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
