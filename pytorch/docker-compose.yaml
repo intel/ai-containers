@@ -84,7 +84,7 @@ services:
         org.opencontainers.image.version: ${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-multinode
       target: multinode
     command: >
-      python -c "'import neural_compressor;import oneccl_bindings_for_pytorch as oneccl;import deepspeed;
+      bash -c "python -c 'import neural_compressor;import oneccl_bindings_for_pytorch as oneccl;import deepspeed;
       print(\"Neural Compressor:\", neural_compressor.__version__,
       \"\\nOneCCL:\", oneccl.__version__,
       \"\\nDeepspeed:\", deepspeed.__version__)'"
