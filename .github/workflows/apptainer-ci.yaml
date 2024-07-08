@@ -38,7 +38,7 @@ jobs:
           # Get diff array filtered by specific filetypes
           DIFF=$(git diff --diff-filter=d \
               --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }} \
-              -- '*/*Dockerfile' '*.py' '*.yaml' '*.yml' '*.sh' '*/*requirements.txt' '*.json' '*/*/*.def' | \
+              -- '*/*Dockerfile' '*.py' '*.yaml' '*.yml' '*.sh' '*/*requirements.txt' '*.json' '*/*/apptainer.def' | \
               jq -R '.' | jq -sc '.' \
           )
           # Search for compose files in each file to determine the container groups
@@ -57,8 +57,6 @@ jobs:
           # Convert the array to a JSON array
           DOCKER_COMPOSE_PATHS_JSON=$(printf '%s\n' "${DOCKER_COMPOSE_PATHS[@]}" | jq -R '.' | jq -sc 'unique_by(.)')
           echo "FOLDERS=$DOCKER_COMPOSE_PATHS_JSON" >> $GITHUB_OUTPUT
-          echo $DOCKER_COMPOSE_PATHS
-          echo $FOLDERS
   setup-build:
     needs: [group-diff]
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
