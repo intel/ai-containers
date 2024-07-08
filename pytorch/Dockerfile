@@ -116,7 +116,10 @@ COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
 # modify generate_ssh_keys to be a helper script
 # print how to use helper script on bash startup
 # Avoids loop for further execution of the startup file
-RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
+ARG PACKAGE_OPTION=pip
+ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
+RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then PYPATH="/opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages"; fi && \
+    echo "source ${PYPATH}/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
     cat '/generate_ssh_keys.sh' >> ~/.startup && \
     rm -rf /generate_ssh_keys.sh
 
