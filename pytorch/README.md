@@ -237,7 +237,10 @@ To add these files correctly please follow the steps described below.
         ```
 
 > [!NOTE]
-> [Intel MPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/mpi-library.html) can be configured based on your machine settings. If the above commands do not work for you, see the documentation for how to configure based on your network.
+> [Intel® MPI] can be configured based on your machine settings. If the above commands do not work for you, see the documentation for how to configure based on your network.
+
+> [!TIP]
+> Additionally, [DeepSpeed*] optimizations can be utilized in place of ipexrun with the `ccl` backend for multi-node training.
 
 ---
 
@@ -331,12 +334,14 @@ It is the image user's responsibility to ensure that any use of The images below
 [Intel® Data Center GPU Flex Series]: https://ark.intel.com/content/www/us/en/ark/products/series/230021/intel-data-center-gpu-flex-series.html
 [Intel® Data Center GPU Max Series]: https://ark.intel.com/content/www/us/en/ark/products/series/232874/intel-data-center-gpu-max-series.html
 
+[Intel® MPI]: (https://www.intel.com/content/www/us/en/developer/tools/oneapi/mpi-library.html)
 [Intel® Extension for PyTorch*]: https://intel.github.io/intel-extension-for-pytorch/
 [Intel® Distribution for Python*]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/distribution-for-python.html
 [Intel® oneAPI Collective Communications Library]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/oneccl.html
 [INC]: https://github.com/intel/neural-compressor
 [PyTorch*]: https://pytorch.org/
 [TorchServe*]: https://github.com/pytorch/serve
+[DeepSpeed*]: https://github.com/microsoft/DeepSpeed
 
 [v0.4.0-Beta]: https://github.com/intel/ai-containers/blob/main/pytorch/Dockerfile
 [v0.3.4]: https://github.com/intel/ai-containers/blob/v0.3.4/pytorch/Dockerfile

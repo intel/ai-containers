@@ -1,3 +1,5 @@
-oneccl_bind_pt==2.3.0+cpu
--f https://developer.intel.com/ipex-whl-stable-cpu
 neural-compressor==2.6
+oneccl_bind_pt==2.3.0+cpu
+--extra-index-url https://developer.intel.com/ipex-whl-stable-cpu
+oneccl-devel>=2021.13.0 # required to build deepspeed ops
+mpi4py>=3.1.0 # required to build deepspeed ops
