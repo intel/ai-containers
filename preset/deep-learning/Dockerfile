@@ -421,7 +421,8 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
         /etc/ssh/ssh_host_*_key.pub && \
     rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /var/run/sshd
+RUN mkdir -p /var/run/sshd && \
+    echo 'LoginGraceTime 0' > /etc/ssh/sshd_config
 
 # https://github.com/openucx/ucx/issues/4742#issuecomment-584059909
 ENV UCX_TLS=ud,sm,self
