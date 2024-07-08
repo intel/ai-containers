@@ -8,3 +8,5 @@ LogLevel DEBUG3
 Port 3022
 UsePAM yes
 Subsystem       sftp    /usr/lib/openssh/sftp-server
+# https://ubuntu.com/security/CVE-2024-6387
+LoginGraceTime 0
