@@ -46,9 +46,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 | Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
 | --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
 | `2.1.20-xpu-pip-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`       | [v0.3.4]     |
-| `2.1.20-xpu-idp-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`       | [v0.3.4]     |
 | `2.1.10-xpu-pip-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`       | [v0.3.4]     |
-| `2.1.10-xpu-idp-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`       | [v0.3.4]     |
 
 ### Run the XPU Jupyter Container
 
@@ -246,6 +244,22 @@ The images below additionally include [Intel® oneAPI Collective Communications 
 | `2.2.0-idp-multinode` | [v2.2.0] | [v2.2.0+cpu] | [v2.2.0][ccl-v2.2.0] | [v2.4.1]  | [v0.3.4]        |
 | `2.1.0-idp-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v2.3.1]  | [v0.2.3]        |
 | `2.0.0-idp-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v2.1.1]  | [v0.1.0]        |
+
+## XPU images with Intel® Distribution for Python*
+
+The images below are built only with CPU and GPU optimizations and include [Intel® Distribution for Python*]:
+
+| Tag(s)           | Pytorch  | IPEX         | Dockerfile      |
+| ---------------- | -------- | ------------ | --------------- |
+| `2.1.10-xpu-idp-base` | [v2.1.0] | [v2.1.10+xpu]  | [736]  | [v0.2.3] |
+
+The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
+
+| Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
+| --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
+| `2.1.20-xpu-idp-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`       | [v0.3.4]     |
+| `2.1.10-xpu-idp-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`       | [v0.3.4]     |
+
 
 ## Build from Source
 
