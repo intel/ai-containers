@@ -38,9 +38,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Generate Project Number
-      shell: bash
-      run: echo "project-number=$(shuf -i 0-10000 -n1)" >> $GITHUB_ENV
     - name: Build Apptainer
       shell: bash
       run: |

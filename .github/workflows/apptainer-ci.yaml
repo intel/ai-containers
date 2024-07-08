@@ -60,6 +60,7 @@ jobs:
   setup-build:
     needs: [group-diff]
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    if: needs.group-diff.outputs.groups != '[""]'
     strategy:
       matrix:
         group: ${{ fromJson(needs.group-diff.outputs.groups) }}
