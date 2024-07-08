@@ -45,9 +45,10 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
 | --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
-| `xpu-jupyter`         | [v2.1.0] | [v2.1.30+xpu] | [803]  | `8888`       | [v0.4.0-Beta]   |
-| `2.1.20-xpu-pip-base` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`       | [v0.3.4]        |
-| `2.1.10-xpu-pip-base` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`       | [v0.3.4]        |
+| `2.1.20-xpu-pip-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`       | [v0.3.4]     |
+| `2.1.20-xpu-idp-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`       | [v0.3.4]     |
+| `2.1.10-xpu-pip-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`       | [v0.3.4]     |
+| `2.1.10-xpu-idp-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`       | [v0.3.4]     |
 
 ### Run the XPU Jupyter Container
 
