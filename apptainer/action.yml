@@ -19,8 +19,7 @@ author: srikanth.ramakrishna@intel.com
 inputs:
   group_dir:
     description: Directory to build
-    required: false
-    default: 'apptainer'
+    required: true
     type: string
   env_overrides:
     description: Bash Env Variable Overrides in `KEY=VAL && KEY2=VAL2` format
@@ -45,14 +44,14 @@ runs:
     - name: Build Apptainer
       shell: bash
       run: |
-        apptainer build python-base.sif apptainer.def
-      working-directory: ${{ inputs.group_dir }}
+        apptainer build "${{ inputs.group_dir }}.sif" apptainer.def
+      working-directory: apptainer/${{ inputs.group_dir }}
     - name: Push Apptainer
       shell: bash
       run: |
-        apptainer push python-base.sif "${{ inputs.registry }}/${{ inputs.repo }}:${{ github.run_number }}-python-base-sif"
+        apptainer push python-base.sif "${{ inputs.registry }}/${{ inputs.repo }}:${{ github.run_number }}-${{ inputs.group_dir }}-sif"
       working-directory: ${{ inputs.group_dir }}
     - name: Clean cache and Remove Images
       shell: bash
       run: apptainer cache clean --force  && rm -rf *.sif
-      working-directory: ${{ inputs.group_dir }}
+      working-directory: apptainer/${{ inputs.group_dir }}
