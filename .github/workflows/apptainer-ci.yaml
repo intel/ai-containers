@@ -31,6 +31,7 @@ jobs:
     outputs:
       groups: ${{ steps.group-list.outputs.FOLDERS }}
     steps:
+      - uses: actions/checkout@v4
       - name: Output Modified Group Directories
         id: group-list
         run: |
