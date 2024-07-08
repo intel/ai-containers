@@ -45,9 +45,8 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
 | --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
-| `xpu-jupyter`         | [v2.1.0] | [v2.1.30+xpu] | [803]  | `8888`       | [v0.4.0-Beta]   |
-| `2.1.20-xpu-pip-base` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`       | [v0.3.4]        |
-| `2.1.10-xpu-pip-base` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`       | [v0.3.4]        |
+| `2.1.20-xpu-pip-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`       | [v0.3.4]     |
+| `2.1.10-xpu-pip-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`       | [v0.2.3]     |
 
 ### Run the XPU Jupyter Container
 
@@ -58,7 +57,7 @@ docker run -it --rm \
     --device /dev/dri \
     -v /dev/dri/by-path:/dev/dri/by-path \
     --ipc=host \
-    intel/intel-extension-for-pytorch:xpu-jupyter
+    intel/intel-extension-for-pytorch:2.1.20-xpu-pip-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
@@ -279,6 +278,21 @@ The images below additionally include [Intel® oneAPI Collective Communications 
 | `2.2.0-idp-multinode` | [v2.2.0] | [v2.2.0+cpu] | [v2.2.0][ccl-v2.2.0] | [v2.4.1]  | [v0.3.4]        |
 | `2.1.0-idp-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v2.3.1]  | [v0.2.3]        |
 | `2.0.0-idp-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v2.1.1]  | [v0.1.0]        |
+
+## XPU images with Intel® Distribution for Python*
+
+The images below are built only with CPU and GPU optimizations and include [Intel® Distribution for Python*]:
+
+| Tag(s)           | Pytorch  | IPEX         | Driver | Dockerfile      |
+| ---------------- | -------- | ------------ | -------- | ------ |
+| `2.1.10-xpu-idp-base` | [v2.1.0] | [v2.1.10+xpu]  | [736]  | [v0.2.3] |
+
+The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
+
+| Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
+| --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
+| `2.1.20-xpu-idp-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`       | [v0.3.4]     |
+| `2.1.10-xpu-idp-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`       | [v0.2.3]     |
 
 ## Build from Source
 
