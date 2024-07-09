@@ -14,9 +14,7 @@
 
 name: Apptainer CI
 on:
-  pull_request:
-    branches:
-      - '*/apptainer_python'
+  pull_request: null
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
