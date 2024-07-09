@@ -56,7 +56,7 @@ on:
         required: true
         type: string
       ref:
-        required: true
+        required: false
         type: string
       no_push:
         required: false
