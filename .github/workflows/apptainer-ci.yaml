@@ -82,4 +82,4 @@ jobs:
         with:
           registry: oras://${{ secrets.REGISTRY }}
           repo: ${{ secrets.REPO }}-apptainer
-          group_dir: $${{ matrix.group }}
+          group_dir: ${{ matrix.group }}
