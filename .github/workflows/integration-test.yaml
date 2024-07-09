@@ -68,7 +68,6 @@ jobs:
     uses: ./.github/workflows/container-ci.yaml
     with:
       group_dir: ${{ matrix.group }}
-      ref: leminh/test-runners
     secrets: inherit
   merge-logs:
     # download all artifacts across containers
@@ -96,12 +95,14 @@ jobs:
         cat output.txt
   pr-comment:
     needs: [merge-logs]
-    uses: marocchino/sticky-pull-request-comment@v2.0.0
-    with:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      number: ${{ github.event.pull_request.number }}
-      header: Test
-      path: output.txt
+    runs-on: ubuntu-latest
+    steps:
+    - uses: marocchino/sticky-pull-request-comment@v2
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        number: ${{ github.event.pull_request.number }}
+        header: Test
+        path: output.txt
   status-check:
     needs: [group-diff, pipeline-ci]
     runs-on: ubuntu-latest
