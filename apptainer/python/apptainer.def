@@ -26,7 +26,6 @@ From: {{BASE_IMAGE_NAME}}:{{ BASE_IMAGE_TAG}}
 %files
     requirements.txt .
 
-
 %post
     apt-get update -y && \
         apt-get install -y --no-install-recommends --fix-missing \
