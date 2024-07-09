@@ -93,11 +93,8 @@ jobs:
         ls .
         cat combined.json
         cat output.txt
-  pr-comment:
-    needs: [merge-logs]
-    runs-on: ubuntu-latest
-    steps:
-    - uses: marocchino/sticky-pull-request-comment@v2
+    - name: PR-comment
+      uses: marocchino/sticky-pull-request-comment@v2
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         number: ${{ github.event.pull_request.number }}
