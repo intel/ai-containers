@@ -329,7 +329,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [Intel® Data Center GPU Flex Series]: https://ark.intel.com/content/www/us/en/ark/products/series/230021/intel-data-center-gpu-flex-series.html
 [Intel® Data Center GPU Max Series]: https://ark.intel.com/content/www/us/en/ark/products/series/232874/intel-data-center-gpu-max-series.html
 
-[Intel® MPI]: (https://www.intel.com/content/www/us/en/developer/tools/oneapi/mpi-library.html)
+[Intel® MPI]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/mpi-library.html
 [Intel® Extension for PyTorch*]: https://intel.github.io/intel-extension-for-pytorch/
 [Intel® Distribution for Python*]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/distribution-for-python.html
 [Intel® oneAPI Collective Communications Library]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/oneccl.html
