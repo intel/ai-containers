@@ -186,8 +186,6 @@ if __name__ == "__main__":
     json_summary = []
     ERROR = False
     for idx, test in enumerate(tests):
-        if not args.mask:
-            test.mask = []
         # Set Context to test-runner.log
         set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
         logging.info("Running Test: %s", test.name)
