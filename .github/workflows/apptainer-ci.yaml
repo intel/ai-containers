@@ -14,7 +14,10 @@
 
 name: Apptainer CI
 on:
-  pull_request: null
+  pull_request:
+  push:
+    branches:
+      - '*/apptainer_python'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -33,10 +36,10 @@ jobs:
         id: group-list
         run: |
           # Get diff array filtered by specific filetypes
-          DIFF=$(git diff --diff-filter=d \
-              --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }} \
-              -- '*/*Dockerfile' '*.py' '*.yaml' '*.yml' '*.sh' '*/*requirements.txt' '*.json' '*/*/apptainer.def' | \
-              jq -R '.' | jq -sc '.' \
+           DIFF=$(git diff --diff-filter=d \
+                --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }} \
+                -- '*/*Dockerfile' '*.py' '*.yaml' '*.yml' '*.sh' '*/*requirements.txt' '*.json' '*/*/apptainer.def' | \
+                jq -R '.' | jq -sc '.' \
           )
           # Search for compose files in each file to determine the container groups
           DOCKER_COMPOSE_PATHS=()
@@ -54,7 +57,7 @@ jobs:
           # Convert the array to a JSON array
           DOCKER_COMPOSE_PATHS_JSON=$(printf '%s\n' "${DOCKER_COMPOSE_PATHS[@]}" | jq -R '.' | jq -sc 'unique_by(.)')
           echo "FOLDERS=$DOCKER_COMPOSE_PATHS_JSON" >> $GITHUB_OUTPUT
-          cp -r $GITHUB_OUTPUT ${{ github.workspace }}/folder.txt
+
   setup-build:
     needs: [group-diff]
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
