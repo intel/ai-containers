@@ -38,7 +38,7 @@ jobs:
           # Get diff array filtered by specific filetypes
            DIFF=$(git diff --diff-filter=d \
                 --name-only main...sramakr1/apptainer_python \
-                -- '*.py' '*.yaml' '*.yml' '*/*requirements.txt' '*.json' '*/*/apptainer.def' | \
+                -- '*.yaml' | \
                 jq -R '.' | jq -sc '.' \
           )
           # Search for compose files in each file to determine the container groups
