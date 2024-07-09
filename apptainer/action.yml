@@ -47,7 +47,7 @@ runs:
       shell: bash
       run: |
         apptainer push ${{ inputs.group_dir }}.sif "${{ inputs.registry }}/${{ inputs.repo }}:${{ github.run_number }}-${{ inputs.group_dir }}-sif"
-      working-directory: ${{ inputs.group_dir }}
+      working-directory: apptainer/${{ inputs.group_dir }}
     - name: Clean cache and Remove Images
       shell: bash
       run: apptainer cache clean --force  && rm -rf *.sif
