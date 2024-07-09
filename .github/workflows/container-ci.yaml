@@ -190,7 +190,8 @@ jobs:
   test-containers:
     needs: [setup-build, setup-test]
     if: ${{ needs.setup-test.outputs.matrix != '[]' }}
-    runs-on: [self-hosted, Linux, "${{ inputs.runner_label || fromJson(needs.setup-build.outputs.matrix).runner_label }}"]
+    # runs-on: [ubuntu-latest, "${{ inputs.runner_label || fromJson(needs.setup-build.outputs.matrix).runner_label }}"]
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         tests: ${{ fromJson(needs.setup-test.outputs.matrix) }}
