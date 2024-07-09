@@ -46,7 +46,7 @@ runs:
     - name: Push Apptainer
       shell: bash
       run: |
-        apptainer push python-base.sif "${{ inputs.registry }}/${{ inputs.repo }}:${{ github.run_number }}-${{ inputs.group_dir }}-sif"
+        apptainer push ${{ inputs.group_dir }}.sif "${{ inputs.registry }}/${{ inputs.repo }}:${{ github.run_number }}-${{ inputs.group_dir }}-sif"
       working-directory: ${{ inputs.group_dir }}
     - name: Clean cache and Remove Images
       shell: bash
