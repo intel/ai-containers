@@ -208,7 +208,7 @@ jobs:
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Test Container Group
-      uses: intel/ai-containers/test-runner@main
+      uses: intel/ai-containers/test-runner@leminh/test-runners
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
         recipe_dir: ${{ inputs.group_dir }}
