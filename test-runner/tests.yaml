@@ -20,7 +20,7 @@ test1:
   notebook: True
   env:
     REGISTRY: ${REGISTRY} # substitute env from host
-    DEBUG: 'true' # single quotes
+    DEBUG: 'false' # single quotes
   volumes:
   - src: /tf_dataset
     dst: /tmp
