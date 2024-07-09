@@ -15,7 +15,6 @@
 name: Apptainer CI
 on:
   pull_request:
-  push:
     branches:
       - '*/apptainer_python'
 
@@ -61,6 +60,7 @@ jobs:
   setup-build:
     needs: [group-diff]
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    if: needs.group-diff.outputs.groups != '[""]'
     strategy:
       matrix:
         group: ${{ fromJson(needs.group-diff.outputs.groups) }}
@@ -80,4 +80,4 @@ jobs:
         with:
           registry: oras://${{ secrets.REGISTRY }}
           repo: ${{ secrets.REPO }}-apptainer
-          group_dir: python
+          group_dir: $${{ matrix.group }}
