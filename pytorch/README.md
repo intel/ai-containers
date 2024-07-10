@@ -253,11 +253,9 @@ Below is an example that shows single node job with the existing [`finetune.py`]
 # Change into home directory first and run the command
 docker run -it \
     -v $PWD/workflows/charts/huggingface-llm/scripts:/workspace/scripts \
+    -w /workspace/scripts \
     intel/intel-extension-for-pytorch:2.3.0-pip-multinode-hf-4.41.2-genai \
-    bash
-
-# From inside the container run the command with appropriate <script-args>
-python finetune.py <script-args>
+    bash -c 'python finetune.py <script-args>'
 ```
 
 ---
