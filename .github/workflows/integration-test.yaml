@@ -15,8 +15,7 @@
 name: Integration Tests
 on:
   pull_request: null
-permissions:
-  pull-requests: write
+permissions: read-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
@@ -74,6 +73,8 @@ jobs:
     # download all artifacts across containers
     needs: [pipeline-ci]
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
     - uses: actions/download-artifact@v4
       with:
