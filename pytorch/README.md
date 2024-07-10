@@ -18,7 +18,7 @@ Images available here start with the [Ubuntu* 22.04](https://hub.docker.com/_/ub
 
 > **Note:** There are two dockerhub repositories (`intel/intel-extension-for-pytorch` and `intel/intel-optimized-pytorch`) that are routinely updated with the latest images, however, some legacy images have not be published to both repositories.
 
-## XPU imagesv
+## XPU images
 
 The images below include support for both CPU and GPU optimizations:
 
