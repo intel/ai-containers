@@ -44,7 +44,8 @@ ARG TORCHVISION_VERSION
 WORKDIR /
 COPY requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    rm -rf requirements.txt
 
 FROM ${PYTHON_BASE} AS ipex-base-idp
 
@@ -64,7 +65,8 @@ FROM ipex-base-${PACKAGE_OPTION} AS jupyter
 WORKDIR /jupyter
 COPY jupyter-requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
+RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt && \
+    rm -rf jupyter-requirements.txt
 
 RUN mkdir -p /jupyter/ && chmod -R a+rwx /jupyter/
 RUN mkdir /.local && chmod a+rwx /.local
@@ -78,16 +80,22 @@ FROM ipex-base-${PACKAGE_OPTION} AS multinode
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
     python3-dev \
     gcc \
+    g++ \
     libgl1-mesa-glx \
     libglib2.0-0 \
+    libopenmpi-dev \
+    numactl \
     virtualenv
 
 ENV SIGOPT_PROJECT=.
 
 WORKDIR /
-COPY multinode-requirements.txt .
+COPY multinode/requirements.txt requirements.txt
 
-RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    DS_BUILD_OPS=1 python -m pip install --no-cache-dir deepspeed==0.14.4 && \
+    echo "Y" | pip uninstall nvidia-ml-py && \
+    rm -rf requirements.txt
 
 ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
 
@@ -99,42 +107,25 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Allow OpenSSH to talk to containers without asking for confirmation
-# hadolint global ignore=SC2002
-RUN mkdir -p /var/run/sshd && \
-    cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
-    echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
-    mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
+RUN mkdir -p /var/run/sshd
 
 ARG PYTHON_VERSION
 
-COPY generate_ssh_keys.sh .
+COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
 
 # modify generate_ssh_keys to be a helper script
 # print how to use helper script on bash startup
 # Avoids loop for further execution of the startup file
-RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
+ARG PACKAGE_OPTION=pip
+ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
+RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then PYPATH="/opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages"; fi && \
+    echo "source ${PYPATH}/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
     cat '/generate_ssh_keys.sh' >> ~/.startup && \
     rm -rf /generate_ssh_keys.sh
 
-# hadolint global ignore=SC3037
-RUN echo -e "#!/bin/bash \n\
-set -e \n\
-set -a \n\
-source ~/.startup \n\
-set +a \n\
-eval \"\$@\"" >> /usr/local/bin/dockerd-entrypoint.sh && \
-    chmod +x /usr/local/bin/dockerd-entrypoint.sh
-
-RUN echo 'HostKey /etc/ssh/ssh_host_dsa_key' > /var/run/sshd_config && \
-    echo 'HostKey /etc/ssh/ssh_host_rsa_key' > /var/run/sshd_config && \
-    echo 'HostKey /etc/ssh/ssh_host_ecdsa_key' > /var/run/sshd_config && \
-    echo 'HostKey /etc/ssh/ssh_host_ed25519_key' > /var/run/sshd_config && \
-    echo 'AuthorizedKeysFile /etc/ssh/authorized_keys' > /var/run/sshd_config && \
-    echo '## Enable DEBUG log. You can ignore this but this may help you debug any issue while enabling SSHD for the first time' > /var/run/sshd_config && \
-    echo 'LogLevel DEBUG3' > /var/run/sshd_config && \
-    echo 'UsePAM yes' > /var/run/sshd_config && \
-    echo 'Subsystem       sftp    /usr/lib/openssh/sftp-server' > /var/run/sshd_config
+COPY multinode/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+COPY multinode/sshd_config /etc/ssh/sshd_config
+COPY multinode/ssh_config /etc/ssh/ssh_config
 
 RUN mkdir -p /licensing
 
@@ -143,7 +134,6 @@ RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
 
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
-CMD ["bash"]
 
 FROM multinode AS hf-genai
 

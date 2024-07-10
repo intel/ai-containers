@@ -77,18 +77,20 @@ services:
         dependency.apt.libglib2: true
         dependency.apt.python3-dev: true
         dependency.pip.apt.virtualenv: true
-        dependency.python.pip: multinode-requirements.txt
+        dependency.pip.deepspeed: 0.14.4
+        dependency.python.pip: multinode/requirements.txt
         org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-base"
         org.opencontainers.image.title: "Intel® Extension for PyTorch MultiNode Image"
         org.opencontainers.image.version: ${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-multinode
       target: multinode
     command: >
-      sh -c "python -c 'import neural_compressor;import
-      oneccl_bindings_for_pytorch as oneccl; print(\"Neural Compressor
-      Version:\", neural_compressor.__version__, \"\\nOneCCL:\",
-      oneccl.__version__)'"
+      bash -c "python -c 'import neural_compressor;import oneccl_bindings_for_pytorch as oneccl;import deepspeed;
+      print(\"Neural Compressor:\", neural_compressor.__version__,
+      \"\\nOneCCL:\", oneccl.__version__,
+      \"\\nDeepspeed:\", deepspeed.__version__)'"
     extends: ipex-base
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-oneccl-inc-${INC_VERSION:-2.6}
+    shm_size: 2gb
   xpu:
     build:
       args:
