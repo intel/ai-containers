@@ -43,7 +43,11 @@ To configure the container, use `--build-arg` to override default build argument
 
 ```bash
 export BASE_IMAGE_TAG=<specific OS base image tag>
-apptainer build --build-arg BASE_IMAGE_TAG=$BASE_IMAGE_TAG apptainer-python.sif apptainer.def
+export PYTHON_VERSION=<specific python version>
+
+apptainer build --build-arg BASE_IMAGE_TAG=$BASE_IMAGE_TAG \
+--build-arg PYTHON_VERSION=$PYTHON_VERSION \
+apptainer-python.sif apptainer.def
 apptainer push apptainer-python.sif  oras://$REGISTRY/$REPO:python-sif
 ```
 
