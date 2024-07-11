@@ -28,10 +28,12 @@ apptainer registry login docker://${REGISTRY}
 # Verify your access permissions
 apptainer pull oras://$REGISTRY/$REPO:latest-sif
 ```
+
 You can refer to the [link](https://apptainer.org/docs/user/latest/docker_and_oci.html#containers-from-other-registries) for
 Apptainer support for different container registries.
 
 ## Build and Push Apptainer
+
 To build and push an apptainer container with python ingredient you can do the following:
 
 ```bash
