@@ -21,19 +21,13 @@ inputs:
     description: Directory to build
     required: true
     type: string
-  env_overrides:
-    description: Bash Env Variable Overrides in `KEY=VAL && KEY2=VAL2` format
-    required: false
-    type: string
   registry:
     description: Container Registry URL
-    required: false
-    default: 'intel'
+    required: true
     type: string
   repo:
     description: Container Project Repository
-    required: false
-    default: 'ai-containers'
+    required: true
     type: string
 runs:
   using: composite

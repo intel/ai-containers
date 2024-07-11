@@ -4,16 +4,7 @@ Apptainer (formerly Singularity) is an [open-source](https://github.com/apptaine
 
 ## Install Apptainer
 
-You will need a linux system to install and use apptainers. You can install Apptainer either from source or from pre-built packages. Refer to installation instructions provided [here](https://apptainer.org/docs/admin/main/installation.html). For example, on Ubuntu based system, follow these instructions.
-
-```bash
-sudo apt update
-sudo apt install -y software-properties-common
-sudo add-apt-repository -y ppa:apptainer/ppa
-sudo apt update
-sudo apt install -y apptainer
-apptainer version
-```
+You will need a linux system to install and use apptainers. You can install Apptainer either from source or from pre-built packages. Refer to installation instructions provided [here](https://apptainer.org/docs/admin/main/installation.html).
 
 ## Project Setup
 
@@ -53,8 +44,26 @@ apptainer-python.sif apptainer.def
 apptainer push apptainer-python.sif  oras://$REGISTRY/$REPO:python-sif
 ```
 
-## Support
+## GitHub Actions CI/CD
 
-The Intel AI MLOps team tracks bugs and enhancement requests using
-[GitHub issues](https://github.com/intel/ai-containers/issues). Before submitting a
-suggestion or bug report, search the existing GitHub issues to see if your issue has already been reported.
+The composite action performs build, push and clean up of apptainer images for a given `input_dir` directory. 
+
+Inputs for the actions:
+
+```bash
+inputs:
+  group_dir:
+    description: Directory to build
+    required: true
+    type: string
+  registry:
+    description: Container Registry URL
+    required: true
+    type: string
+  repo:
+    description: Container Project Repository
+    required: true
+    type: string
+```
+
+See an [Example](../.github/workflows/apptainer-ci.yaml#L62) implementation of the action. 
