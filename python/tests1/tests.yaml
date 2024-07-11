@@ -1,0 +1,37 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import-${IDP_VERISON:-core}:
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-${IDP_VERSION:-core}-py${PYTHON_VERSION:-3.10}-base
+  cmd: python -c "import mkl"
+perf-${IDP_VERSION:-core}:
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-${IDP_VERSION:-core}-py${PYTHON_VERSION:-3.10}-base
+  cmd: python /tests1/perf_sample.py
+  volumes:
+  - dst: /tests1
+    src: $PWD/python/tests1
+perf-stock:
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-base
+  cmd: python /tests1/perf_sample.py
+  volumes:
+  - dst: /tests1
+    src: $PWD/python/tests1
+# compare-perf-${IDP_VERSION:-core}:
+#     img: python:3.11-slim-bullseye
+#     cmd: bash /tests/compare-perf.sh ${IDP_VERSION:-core}
+#     volumes:
+#       - dst: /logs
+#         src: $PWD/python/tests/logs
+#       - dst: /tests
+#         src: $PWD/python/tests

@@ -100,8 +100,9 @@ jobs:
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         number: ${{ github.event.pull_request.number }}
-        header: Test
+        header: test-runner combined summary
         path: output.txt
+        recreate: true
   status-check:
     needs: [group-diff, pipeline-ci]
     runs-on: ubuntu-latest
