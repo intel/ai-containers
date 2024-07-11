@@ -46,7 +46,7 @@ apptainer push apptainer-python.sif  oras://$REGISTRY/$REPO:python-sif
 
 ## GitHub Actions CI/CD
 
-The composite action performs build, push and clean up of apptainer images for a given `input_dir` directory. 
+The composite action performs build, push and clean up of apptainer images for a given `input_dir` directory.
 
 Inputs for the actions:
 
@@ -66,4 +66,4 @@ inputs:
     type: string
 ```
 
-See an [Example](../.github/workflows/apptainer-ci.yaml#L62) implementation of the action. 
+See an [Example](../.github/workflows/apptainer-ci.yaml#L62) implementation of the action.
