@@ -78,7 +78,7 @@ jobs:
           APPTAINER_DOCKER_USERNAME: ${{ secrets.REGISTRY_USER }}
           APPTAINER_DOCKER_PASSWORD: ${{ secrets.REGISTRY_TOKEN }}
         run: apptainer registry login  -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_TOKEN }} docker://${{ secrets.REGISTRY }}
-      - uses: intel/ai-containers/apptainer@sramakr1/apptainer_python
+      - uses: intel/ai-containers/apptainer@main
         with:
           registry: oras://${{ secrets.REGISTRY }}
           repo: ${{ secrets.REPO }}-apptainer
