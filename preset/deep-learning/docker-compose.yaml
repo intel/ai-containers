@@ -29,7 +29,7 @@ services:
         ICD_VER: 23.43.27642.40-803~22.04
         IDP_VERSION: ${IDP_VERSION:-2024.1.0}
         IMPI_VERSION: ${IMPI_VERSION:-2021.12}
-        INTEL_CHANNEL: ${INTEL_CHANNEL:-intel}
+        INTEL_CHANNEL: ${INTEL_CHANNEL:-https://software.repos.intel.com/python/conda/}
         IPEX_CPU_VERSION: ${IPEX_CPU_VERSION:-2.2.0=*cpu*}
         IPEX_GPU_VERSION: ${IPEX_GPU_VERSION:-2.1.20=*xpu*}
         ITEX_VERSION: ${ITEX_VERSION:-2.15}
