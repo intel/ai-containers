@@ -257,7 +257,9 @@ RUN no_proxy="" NO_PROXY="" apt-get update && \
 ARG TF_VER="2.15.0"
 
 RUN conda install intel-extension-for-tensorflow=${TF_VER}=*xpu* \
-    -c intel/label/oneapi -c intel -c conda-forge
+    -c https://software.repos.intel.com/python/conda \
+    -c https://software.repos.intel.com/python/conda \
+    -c conda-forge
 
 ENV LD_LIBRARY_PATH=/opt/conda/envs/idp/lib:$LD_LIBRARY_PATH
 

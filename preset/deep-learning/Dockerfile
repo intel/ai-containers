@@ -137,7 +137,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda update -y conda && \
     conda config --add channels conda-forge && \
-    conda config --add channels intel && \
+    conda config --add channels https://software.repos.intel.com/python/conda/ && \
     conda init --all && \
     conda install -c conda-forge \
         'jupyterlab>=4.1.8' \
@@ -172,7 +172,7 @@ ARG TORCHAUDIO_CPU_VERSION
 ARG DEEPSPEED_VERSION
 
 # PyTorch CPU Env - conda packages
-RUN conda create -yn pytorch-cpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
+RUN conda create -yn pytorch-cpu -c https://software.repos.intel.com/python/conda -c "${INTEL_CHANNEL}" -c conda-forge \
         dpnp="${DPNP_VERSION}" \
         numpy="${NUMPY_VERSION}" \
         python="${PYTHON_VERSION}" \
@@ -227,7 +227,7 @@ ARG IDEX_VERSION
 ARG DEEPSPEED_VERSION
 
 # PyTorch GPU Env - conda packages
-RUN conda create -yn pytorch-gpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
+RUN conda create -yn pytorch-gpu -c https://software.repos.intel.com/python/conda -c "${INTEL_CHANNEL}" -c conda-forge \
         dpnp="${DPNP_VERSION}" \
         dpcpp-cpp-rt="${IDP_VERSION}" \
         mkl-dpcpp="${IDP_VERSION}" \
@@ -429,11 +429,11 @@ ENV UCX_TLS=ud,sm,self
 
 USER dev
 
-RUN conda install -n pytorch-cpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
+RUN conda install -n pytorch-cpu -c https://software.repos.intel.com/python/conda -c "${INTEL_CHANNEL}" -c conda-forge \
         deepspeed="${DEEPSPEED_VERSION}" \
         'tensorboardx>=2.6.2.2'
 
-RUN conda install -n pytorch-gpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
+RUN conda install -n pytorch-gpu -c https://software.repos.intel.com/python/conda -c "${INTEL_CHANNEL}" -c conda-forge \
         deepspeed="${DEEPSPEED_VERSION}" \
         'tensorboardx>=2.6.2.2'
 

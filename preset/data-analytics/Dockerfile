@@ -65,7 +65,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda update -y conda && \
     conda config --add channels conda-forge && \
-    conda config --add channels intel && \
+    conda config --add channels https://software.repos.intel.com/python/conda/ && \
     conda init --all && \
     conda install -y \
         'jupyterlab>=4.1.8' \
