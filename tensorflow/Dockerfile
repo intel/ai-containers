@@ -258,7 +258,6 @@ ARG TF_VER="2.15.0"
 
 RUN conda install intel-extension-for-tensorflow=${TF_VER}=*xpu* \
     -c https://software.repos.intel.com/python/conda \
-    -c https://software.repos.intel.com/python/conda \
     -c conda-forge
 
 ENV LD_LIBRARY_PATH=/opt/conda/envs/idp/lib:$LD_LIBRARY_PATH
