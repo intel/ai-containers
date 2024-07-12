@@ -199,8 +199,8 @@ RUN conda run -n pytorch-cpu pip install --no-deps --no-cache-dir --ignore-insta
         'ninja>=1.11.1.1' \
         'python-dotenv>=1.0.1' \
         'tqdm>=4.66.2' \
-        'cloud-data-connector>=1.0.3' \
-        'dataset-librarian>=1.0.4' && \
+        'cloud-data-connector==1.0.3' \
+        'dataset-librarian==1.0.4' && \
     conda run -n pytorch-cpu pip install --no-cache-dir --ignore-installed \
         'transformers>=4.40.2' \
         'datasets>=2.19.1' \
@@ -263,8 +263,8 @@ RUN conda run -n pytorch-gpu pip install --no-deps --no-cache-dir --ignore-insta
         'ninja>=1.11.1.1' \
         'python-dotenv>=1.0.1' \
         'tqdm>=4.66.2' \
-        'cloud-data-connector>=1.0.3' \
-        'dataset-librarian>=1.0.4' && \
+        'cloud-data-connector==1.0.3' \
+        'dataset-librarian==1.0.4' && \
     conda run -n pytorch-gpu pip install --no-cache-dir --ignore-installed \
         'transformers>=4.40.2' \
         'datasets>=2.19.1' \
@@ -306,7 +306,6 @@ RUN conda create -yn tensorflow-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
         tensorflow="${TF_VERSION}" \
         impi-devel="${IMPI_VERSION}" \
         'matplotlib-base>=3.4.3' \
-        'dataset_librarian>=1.0.4' \
         'ipython>=8.18.1' \
         'ipykernel>=6.29.3' \
         'kernda>=0.3.0'  \
@@ -330,6 +329,7 @@ RUN conda run -n tensorflow-cpu pip install --no-cache-dir --ignore-installed \
 RUN conda run -n tensorflow-cpu pip install --no-deps --no-cache-dir --ignore-installed \
         'tensorflow-hub>=0.16.1' \
         'tqdm>=4.66.2' \
+        'dataset-librarian==1.0.4' \
         'cloud-data-connector>=1.0.3' && \
     conda clean -y --all
 
@@ -345,7 +345,6 @@ RUN conda create -yn tensorflow-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
         tensorflow="${TF_VERSION}" \
         impi-devel="${IMPI_VERSION}" \
         'matplotlib-base>=3.4.3' \
-        'dataset_librarian>=1.0.4' \
         'ipython>=8.18.1' \
         'ipykernel>=6.29.3' \
         'kernda>=0.3.0' \
@@ -371,7 +370,8 @@ RUN conda run -n tensorflow-gpu pip install --no-cache-dir --ignore-installed \
 RUN conda run -n tensorflow-gpu pip install --no-deps --no-cache-dir --ignore-installed \
         'tensorflow-hub>=0.16.1' \
         'tqdm>=4.66.2' \
-        'cloud-data-connector>=1.0.3' && \
+        'dataset-librarian==1.0.4' \
+        'cloud-data-connector==1.0.3' && \
     conda clean -y --all
 
 FROM deep-learning-python as deep-learning-jupyter

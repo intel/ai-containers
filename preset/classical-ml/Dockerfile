@@ -102,7 +102,6 @@ RUN conda create -yn classical-ml -c ${INTEL_CHANNEL} -c conda-forge \
         'python-dotenv>=1.0.1' \
         'tqdm>=4.66.2' \
         'matplotlib-base>=3.4.3' \
-        'dataset_librarian>=1.0.4' \
         'threadpoolctl>=3.3.0' \
         'ipython>=8.18.1' \
         'ipykernel>=6.29.3' \
@@ -116,6 +115,7 @@ RUN conda create -yn classical-ml -c ${INTEL_CHANNEL} -c conda-forge \
 
 # PyPI packages
 RUN conda run -n classical-ml python -m pip install --no-deps --no-cache-dir \
+    'dataset-librarian==1.0.4' \
     'cloud-data-connector==1.0.3'
 
 
