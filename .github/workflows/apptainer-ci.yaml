@@ -30,7 +30,7 @@ jobs:
     outputs:
       groups: ${{ steps.group-list.outputs.FOLDERS }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
       - name: Output Modified Group Directories
@@ -69,8 +69,8 @@ jobs:
         experimental: [true]
       fail-fast: false
     steps:
-      - uses: actions/checkout@v4
-      - uses: eWaterCycle/setup-apptainer@v2.0.0
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: eWaterCycle/setup-apptainer@4bb22c52d4f63406c49e94c804632975787312b3 # v2.0.0
         with:
           apptainer-version: 1.3.3
       - name: Apptainer login to registry
