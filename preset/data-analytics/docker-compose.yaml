@@ -24,7 +24,7 @@ services:
         BASE_TAG: ${BASE_TAG:-22.04}
         DPNP_VERSION: ${NUMBA_DPEX_VERSION:-0.14.0}
         IDP_VERSION: ${IDP_VERSION:-2024.1.0}
-        INTEL_CHANNEL: ${INTEL_CHANNEL:-intel}
+        INTEL_CHANNEL: ${INTEL_CHANNEL:-https://software.repos.intel.com/python/conda/}
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Linux-x86_64}
         MODIN_VERSION: ${MODIN_VERSION:-0.26.1}
         MPI_VERSION: ${MPI_VERSION:-2021.12.0}
