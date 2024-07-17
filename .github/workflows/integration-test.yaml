@@ -81,7 +81,9 @@ jobs:
         pattern: my-artifact*json
         merge-multiple: true
     - name: Display structure of downloaded files
-      run: ls .
+      run: |
+        cd /home/runner/work/ai-containers/ai-containers
+        ls .
     - name: Combine JSON files
       run: |
         jq -s '[.[] | .[]]' *.json > combined.json
@@ -103,6 +105,7 @@ jobs:
         header: test-runner combined summary
         path: output.txt
         recreate: true
+        delete: true
   status-check:
     needs: [group-diff, pipeline-ci]
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
