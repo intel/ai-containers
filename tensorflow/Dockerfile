@@ -106,7 +106,8 @@ ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 ENV OMPI_MCA_tl_tcp_if_exclude="lo,docker0"
 
 # Install OpenSSH for MPI to communicate between containers
-RUN mkdir -p /var/run/sshd
+RUN mkdir -p /var/run/sshd && \
+    echo 'LoginGraceTime 0' >> /etc/ssh/sshd_config
 
 # Install Horovod
 ARG HOROVOD_WITH_TENSORFLOW=1

@@ -1,3 +1,4 @@
+#!/bin/bash
 # Copyright (c) 2024 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,8 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-self-hosted-runner:
-  labels:
-  - intel-ubuntu-latest
-  - k8-runners
-  - kubectl
+set -e
+set -a
+# shellcheck disable=SC1091
+source "$HOME/.startup"
+set +a
+"$@"
