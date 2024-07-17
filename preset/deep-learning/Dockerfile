@@ -432,7 +432,7 @@ RUN conda install -n pytorch-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
         deepspeed="${DEEPSPEED_VERSION}" \
         'tensorboardx>=2.6.2.2'
 
-        RUN conda install -n pytorch-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
+RUN conda install -n pytorch-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
         deepspeed="${DEEPSPEED_VERSION}" \
         'tensorboardx>=2.6.2.2'
 
