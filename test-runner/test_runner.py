@@ -156,7 +156,7 @@ if __name__ == "__main__":
         rmtree(args.logs_path)
         os.makedirs(args.logs_path)
     # Set up Logging for test-runner context
-    unique_identifier = args.log_path.replace("/", "-")
+    unique_identifier = args.logs_path.replace("/", "-")
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
