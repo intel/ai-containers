@@ -162,7 +162,7 @@ if __name__ == "__main__":
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         handlers=[
             logging.StreamHandler(),
-            logging.FileHandler(f"{args.logs_path}/test-runner.log"),
+            logging.FileHandler(f"my-artifact-{args.logs_path}/test-runner.log"),
         ],
     )
     # Set Debug if -v

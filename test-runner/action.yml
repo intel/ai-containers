@@ -81,5 +81,5 @@ runs:
       if: always()
       with:
         name: my-artifact ${{ env.test }} json
-        path: ${{ inputs.test_dir }}/logs/*.json
+        path: my-artifact*.json
         overwrite: true
