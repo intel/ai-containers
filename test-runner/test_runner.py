@@ -156,8 +156,7 @@ if __name__ == "__main__":
         rmtree(args.logs_path)
         os.makedirs(args.logs_path)
     # Set up Logging for test-runner context
-    unique_identifier = args.file_path.split("/")[1]  # python/test/test.yaml
-    log_handler_prefix = f"{args.logs_path}/{unique_identifier}"  # logs/python-test
+    unique_identifier = args.log_path.replace("/", "-")
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -215,7 +214,7 @@ if __name__ == "__main__":
         json_summary.append(
             {"Group": args.test_name, "Test": test.name, "Status": "PASS"}
         )
-    json_summary_path = f"{log_handler_prefix}-test-runner.json"
+    json_summary_path = f"{unique_identifier}-test-runner.json"
 
     with open(json_summary_path, "w") as file:
         json.dump(json_summary, file, indent=4)

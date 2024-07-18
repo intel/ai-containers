@@ -105,7 +105,6 @@ jobs:
         header: test-runner combined summary
         path: output.txt
         recreate: true
-        delete: true
   status-check:
     needs: [group-diff, pipeline-ci]
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
