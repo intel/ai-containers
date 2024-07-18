@@ -162,7 +162,7 @@ if __name__ == "__main__":
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         handlers=[
             logging.StreamHandler(),
-            logging.FileHandler(f"my-artifact-{args.logs_path}/test-runner.log"),
+            logging.FileHandler(f"{args.logs_path}/test-runner.log"),
         ],
     )
     # Set Debug if -v
@@ -214,7 +214,7 @@ if __name__ == "__main__":
         json_summary.append(
             {"Group": args.test_name, "Test": test.name, "Status": "PASS"}
         )
-    json_summary_path = f"{unique_identifier}-test-runner.json"
+    json_summary_path = f"my-artifact-{unique_identifier}-test-runner.json"
 
     with open(json_summary_path, "w") as file:
         json.dump(json_summary, file, indent=4)
