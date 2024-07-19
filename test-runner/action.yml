@@ -80,6 +80,6 @@ runs:
     - uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: my-artifact ${{ env.test }} json
-        path: my-artifact*.json
+        name: test-runner-summary ${{ env.test }}
+        path: test-runner-summary*.json
         overwrite: true

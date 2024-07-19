@@ -45,11 +45,6 @@ on:
         default: false
         required: true
         type: boolean
-      ref:
-        description: 'Enter Git Ref:'
-        required: true
-        default: 'main'
-        type: string
   workflow_call:
     inputs:
       group_dir:

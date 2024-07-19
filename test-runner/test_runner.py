@@ -64,13 +64,6 @@ def parse_args(args: list):
     parser.add_argument(
         "-l", "--logs", dest="logs_path", default="output", help="-l /path/to/logs"
     )
-    parser.add_argument(
-        "-n",
-        "--name",
-        dest="test_name",
-        help="unique test name identifier",
-        required=True,
-    )
 
     return parser.parse_args(args)
 
@@ -214,7 +207,7 @@ if __name__ == "__main__":
         json_summary.append(
             {"Group": args.test_name, "Test": test.name, "Status": "PASS"}
         )
-    json_summary_path = f"my-artifact-{unique_identifier}-test-runner.json"
+    json_summary_path = f"test-runner-summary-{unique_identifier}.json"
 
     with open(json_summary_path, "w") as file:
         json.dump(json_summary, file, indent=4)
@@ -222,9 +215,14 @@ if __name__ == "__main__":
     # Switch logging context back to the initial state
     set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
     # Remove remaining containers
-    remaining_containers = docker.container.list()
-    for container in remaining_containers:
-        docker.stop(container, time=None)
+    test_images = [expandvars(test.img) for test in tests if test.img]
+    if test_images:
+        remaining_containers = docker.container.list()
+        for container in remaining_containers:
+            docker.stop(container, time=None)
+        docker.image.remove(test_images, force=True, prune=False)
+        docker.system.prune()
+        logging.info("%d Images Removed", len(test_images))
     # Print Summary Table
     logging.info(
         "\n%s", tabulate(summary, headers=["#", "Test", "Status"], tablefmt="orgtbl")

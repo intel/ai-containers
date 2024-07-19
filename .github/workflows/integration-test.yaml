@@ -78,7 +78,7 @@ jobs:
     steps:
     - uses: actions/download-artifact@v4
       with:
-        pattern: my-artifact*json
+        pattern: test-runner-summary*
         merge-multiple: true
     - name: Display structure of downloaded files
       run: |
