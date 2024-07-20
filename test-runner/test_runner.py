@@ -38,7 +38,7 @@ from typing import List
 from expandvars import expandvars
 from python_on_whales import DockerException, docker
 from tabulate import tabulate
-from utils.test import Test
+from utils.test import PerfException, Test
 from yaml import YAMLError, full_load
 
 
@@ -76,9 +76,7 @@ def set_log_filename(logger: logging.Logger, name: str, logs_path: str):
         name (str): name of the new log filename
         logs_path (str): path to the new log filename
     """
-    # name of the tests directory (ie. python, python1 )
-
-    test_handler = logging.FileHandler(f"{logs_path}-{name}.log")
+    test_handler = logging.FileHandler(f"{logs_path}/{name}.log")
     try:
         [prev_handler] = [
             handler
@@ -107,13 +105,14 @@ def get_test_list(args: dict, tests_yaml: List[dict]):
         List[dict]: list of expanded tests
     """
     tests_list = {}
+    disable_masking = False
     for test in tests_yaml:
         if re.search(r"\$\{([A-Za-z0-9_]*)\:\-(.*?)\}", test):
             if args.actions_path:
                 with open(args.actions_path, "r", encoding="utf-8") as actions_file:
                     for key, dval in json.load(actions_file).items():
-                        if key == "mask":
-                            [args.mask] = dval
+                        if key == "mask" and dval == [False]:
+                            disable_masking = True
                         if isinstance(dval, list) and key != "experimental":
                             for _, val in enumerate(dval):
                                 os.environ[key] = str(val)
@@ -136,7 +135,7 @@ def get_test_list(args: dict, tests_yaml: List[dict]):
             logging.error("Command not found for %s", test)
             sys.exit(1)
 
-    return tests_list
+    return tests_list, disable_masking
 
 
 if __name__ == "__main__":
@@ -169,7 +168,7 @@ if __name__ == "__main__":
         except YAMLError as yaml_exc:
             logging.error(yaml_exc)
             sys.exit(1)
-    tests_list = get_test_list(args, tests_json)
+    tests_list, disable_masking = get_test_list(args, tests_json)
     logging.debug("Creating Test Objects from: %s", tests_list)
     # For each test, create a Test Object with the test name is the key of the test in yaml
     tests = [Test(name=test, **tests_list[test]) for test in tests_list]
@@ -178,6 +177,8 @@ if __name__ == "__main__":
     json_summary = []
     ERROR = False
     for idx, test in enumerate(tests):
+        if disable_masking:
+            test.mask = []
         # Set Context to test-runner.log
         set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
         logging.info("Running Test: %s", test.name)
@@ -188,7 +189,7 @@ if __name__ == "__main__":
         # returns the stdout of the test and the RETURNCODE
         try:  # Try for Runtime Failure Conditions
             log = test.container_run() if test.img else test.run()
-        except DockerException as err:
+        except (DockerException, PerfException, YAMLError) as err:
             logging.error(err)
             summary.append([idx + 1, test.name, "FAIL"])
             json_summary.append(
@@ -227,8 +228,5 @@ if __name__ == "__main__":
     logging.info(
         "\n%s", tabulate(summary, headers=["#", "Test", "Status"], tablefmt="orgtbl")
     )
-    test_images = [expandvars(test.img) for test in tests if test.img]
-    docker.image.remove(test_images, force=True)
-    logging.info("%d Images Removed", len(test_images))
     if ERROR:
         sys.exit(1)
