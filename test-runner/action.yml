@@ -81,5 +81,5 @@ runs:
       if: always()
       with:
         name: test-runner-summary ${{ env.test }}
-        path: test-runner-summary*.json
+        path: test-runner-summary*
         overwrite: true
