@@ -192,20 +192,20 @@ if __name__ == "__main__":
             logging.error(err)
             summary.append([idx + 1, test.name, "FAIL"])
             json_summary.append(
-                {"Group": args.test_name, "Test": test.name, "Status": "FAIL"}
+                {"Group": unique_identifier, "Test": test.name, "Status": "FAIL"}
             )
             ERROR = True
             continue
         except KeyboardInterrupt:
             summary.append([idx + 1, test.name, "FAIL"])
             json_summary.append(
-                {"Group": args.test_name, "Test": test.name, "Status": "FAIL"}
+                {"Group": unique_identifier, "Test": test.name, "Status": "FAIL"}
             )
             ERROR = True
             break
         summary.append([idx + 1, test.name, "PASS"])
         json_summary.append(
-            {"Group": args.test_name, "Test": test.name, "Status": "PASS"}
+            {"Group": unique_identifier, "Test": test.name, "Status": "PASS"}
         )
     json_summary_path = f"test-runner-summary-{unique_identifier}.json"
 
