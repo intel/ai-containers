@@ -76,14 +76,10 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.0
       with:
         pattern: test-runner-summary*
         merge-multiple: true
-    - name: Display structure of downloaded files
-      run: |
-        cd /home/runner/work/ai-containers/ai-containers
-        ls .
     - name: Combine JSON files
       run: |
         jq -s '[.[] | .[]]' *.json > combined.json
@@ -98,7 +94,7 @@ jobs:
         cat combined.json
         cat output.txt
     - name: PR-comment
-      uses: marocchino/sticky-pull-request-comment@v2
+      uses: marocchino/sticky-pull-request-comment@331f8f5b4215f0445d3c07b4967662a32a2d3e31 #v2.0
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         number: ${{ github.event.pull_request.number }}
