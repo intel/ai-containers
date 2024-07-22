@@ -65,7 +65,7 @@ jobs:
         group: ${{ fromJson(needs.group-diff.outputs.groups) }}
         experimental: [true]
       fail-fast: false
-    uses: intel/ai-containers/.github/workflows/container-ci.yaml@main
+    uses: ./.github/workflows/container-ci.yaml
     with:
       group_dir: ${{ matrix.group }}
     secrets: inherit
@@ -94,7 +94,7 @@ jobs:
         cat combined.json
         cat output.txt
     - name: PR-comment
-      uses: marocchino/sticky-pull-request-comment@331f8f5b4215f0445d3c07b4967662a32a2d3e31 #v2.0
+      uses: marocchino/sticky-pull-request-comment@331f8f5b4215f0445d3c07b4967662a32a2d3e31 #v2.9.0
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         number: ${{ github.event.pull_request.number }}

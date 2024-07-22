@@ -185,7 +185,8 @@ jobs:
   test-containers:
     needs: [setup-build, setup-test]
     if: ${{ needs.setup-test.outputs.matrix != '[]' }}
-    runs-on: [self-hosted, Linux, "${{ inputs.runner_label || fromJson(needs.setup-build.outputs.matrix).runner_label }}"]
+    # runs-on: [self-hosted, Linux, "${{ inputs.runner_label || fromJson(needs.setup-build.outputs.matrix).runner_label }}"]
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         tests: ${{ fromJson(needs.setup-test.outputs.matrix) }}
@@ -202,7 +203,7 @@ jobs:
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Test Container Group
-      uses: intel/ai-containers/test-runner@main
+      uses: intel/ai-containers/test-runner@leminh/test-runners
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
         recipe_dir: ${{ inputs.group_dir }}

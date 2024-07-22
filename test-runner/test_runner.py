@@ -210,7 +210,7 @@ if __name__ == "__main__":
         )
     json_summary_path = f"test-runner-summary-{unique_identifier}.json"
 
-    with open(json_summary_path, "w") as file:
+    with open(json_summary_path, "w", encoding="utf-8") as file:
         json.dump(json_summary, file, indent=4)
 
     # Switch logging context back to the initial state
