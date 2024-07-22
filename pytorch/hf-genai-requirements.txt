@@ -2,13 +2,11 @@ accelerate==0.28.0
 datasets==2.19.0
 einops==0.7.0
 evaluate==0.4.1
-nltk==3.8.1
 onnxruntime-extensions==0.10.1
 onnxruntime==1.17.3
 peft==0.10.0
 protobuf==4.24.4
 py-cpuinfo==9.0.0
-rouge_score==0.1.2
 scikit-learn==1.5.0
 SentencePiece==0.2.0
 tokenizers==0.19.1
