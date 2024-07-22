@@ -77,23 +77,24 @@ jobs:
       pull-requests: write
     steps:
     - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.0
+      id: download_artifact_outputs
       with:
         pattern: test-runner-summary*
         merge-multiple: true
     - name: Combine JSON files
+      id: combine_json
+      if: steps.download_artifact_outputs
       run: |
         jq -s '[.[] | .[]]' *.json > combined.json
+        echo "Files found in the directory"
     - name: Generate TXT file
+      if: steps.combine_json
       run: |
         echo "| Test-Group    | Test        | Status   |" > output.txt
         echo "|---------------|-------------|----------|" >> output.txt
         jq -r '.[] | "| \(.Group) | \(.Test) | \(.Status) |" ' combined.json >> output.txt
-    - name: Display structure of downloaded files
-      run: |
-        ls .
-        cat combined.json
-        cat output.txt
     - name: PR-comment
+      if: steps.combine_json
       uses: marocchino/sticky-pull-request-comment@331f8f5b4215f0445d3c07b4967662a32a2d3e31 #v2.9.0
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
