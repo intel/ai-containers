@@ -56,7 +56,9 @@ on:
       no_start:
         required: false
         type: boolean
-
+      ref:
+        required: false
+        type: string
 jobs:
   ####################################################################################################
   # Compose Build
@@ -71,6 +73,8 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      with:
+        ref: ${{ inputs.ref }}
     - name: Set Matrix
       id: build-matrix
       run: echo "matrix=$(jq -c . < ${{ inputs.group_dir }}/.actions.json)" >> $GITHUB_OUTPUT
