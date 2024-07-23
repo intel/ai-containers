@@ -93,5 +93,5 @@ services:
       sklearn.__version__, \" XGBoost:\", xgboost.__version__)' &&
 
       conda run -n classical-ml python -c 'import modin.pandas as pd;import modin.config
-      as cfg;cfg.Engine.put(\"Ray\");df = pd.DataFrame([1]);print(df+1)' 
+      as cfg;cfg.Engine.put(\"Ray\");df = pd.DataFrame([1]);print(df+1)'
       "
