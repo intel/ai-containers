@@ -18,12 +18,14 @@ import-ipex-cpu-${PACKAGE_OPTION:-pip}:
 import-ipex-xpu-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.30xpu}-xpu-base
   cmd: python -c "import torch; import intel_extension_for_pytorch as ipex;[print(f'[{i}] {torch.xpu.get_device_properties(i)}') for i in range(torch.xpu.device_count())];"
+  device: "/dev/dri"
 import-cpu-jupyter-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-jupyter
   cmd: python -m jupyter --version
 import-xpu-jupyter-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.30xpu}-xpu-jupyter
   cmd: python -m jupyter --version
+  device: "/dev/dri"
 import-cpu-oneccl-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-oneccl-inc-${INC_VERSION:-2.6}
   cmd: python -c "'import oneccl_bindings_for_pytorch as oneccl;print(oneccl.__version__)'"
@@ -46,12 +48,14 @@ ipex-cpu-${PACKAGE_OPTION:-pip}:
 ipex-xpu-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.30xpu}-xpu-base
   cmd: python /tests/ipex-resnet50.py --ipex --device xpu
+  device: "/dev/dri"
   volumes:
   - dst: /tests
     src: $PWD/pytorch/tests
 ipex-xpu-jupyter-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.30xpu}-xpu-jupyter
   cmd: papermill --log-output  /jupyter/xpu.ipynb -k python3
+  device: "/dev/dri"
   notebook: True
 oneccl-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-oneccl-inc-${INC_VERSION:-2.6}
