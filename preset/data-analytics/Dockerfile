@@ -15,7 +15,7 @@
 ARG BASE_IMAGE="ubuntu"
 ARG BASE_TAG="22.04"
 
-FROM ${BASE_IMAGE}:${BASE_TAG} as data-analytics-base
+FROM ${BASE_IMAGE}:${BASE_TAG} as data-analytics
 
 ENV DEBIAN_FRONTEND=noninteractive
 
