@@ -256,7 +256,7 @@ RUN conda create -yn 'tensorflow-cpu' \
         "dpnp=${DPNP_VERSION}" \
         "intel-extension-for-tensorflow=${ITEX_CPU_VERSION}=*cpu*" \
         "intel-optimization-for-horovod=${HOROVOD_VERSION}" \
-        'ipykernel==6.29.5' \ 
+        'ipykernel==6.29.5' \
         'kernda==0.3.0' \
         'matplotlib-base>=3.8.4' \
         'mpi==1.0' \
