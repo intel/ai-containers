@@ -224,6 +224,8 @@ if __name__ == "__main__":
         docker.image.remove(test_images, force=True, prune=False)
         docker.system.prune()
         logging.info("%d Images Removed", len(test_images))
+    # DEBUG
+    logging.info("Saved json summary file in: %s", json_summary_path)
     # Print Summary Table
     logging.info(
         "\n%s", tabulate(summary, headers=["#", "Test", "Status"], tablefmt="orgtbl")
