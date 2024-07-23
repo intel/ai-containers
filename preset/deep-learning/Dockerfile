@@ -15,7 +15,7 @@
 ARG BASE_IMAGE=ubuntu
 ARG BASE_TAG=22.04
 
-FROM ${BASE_IMAGE}:${BASE_TAG} AS dgpu-base
+FROM ${BASE_IMAGE}:${BASE_TAG} AS deep-learning-base
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -108,8 +108,6 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
     rm -rf /var/lib/apt/lists/*
 
 RUN rm /etc/apt/sources.list.d/*list
-
-FROM dgpu-base as deep-learning-python
 
 # Setting up non-root directories
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash dev
