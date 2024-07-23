@@ -22,44 +22,42 @@ services:
       args:
         BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
         BASE_TAG: ${BASE_TAG:-22.04}
-        DEEPSPEED_VERSION: ${DEEPSPEED_VERSION:-0.14.0}
+        DEEPSPEED_VERSION: ${DEEPSPEED_VERSION:-0.14.2}
         DEVICE: ${DEVICE:-flex}
-        DPNP_VERSION: ${NUMBA_DPEX_VERSION:-0.14.0}
-        HOROVOD_VERSION: ${HOROVOD_VERSION:-0.28.1.4}
-        ICD_VER: 23.43.27642.40-803~22.04
-        IDP_VERSION: ${IDP_VERSION:-2024.1.0}
-        IMPI_VERSION: ${IMPI_VERSION:-2021.12}
+        DPNP_VERSION: ${DPNP_VERSION:-0.15.0}
+        HOROVOD_VERSION: ${HOROVOD_VERSION:-0.28.1.5}
+        ICD_VER: 23.43.27642.52-803~22.04
+        IDP_VERSION: ${IDP_VERSION:-2024.2}
+        IMPI_VERSION: ${IMPI_VERSION:-2021.13}
         INTEL_CHANNEL: ${INTEL_CHANNEL:-https://software.repos.intel.com/python/conda/}
-        IPEX_CPU_VERSION: ${IPEX_CPU_VERSION:-2.2.0=*cpu*}
-        IPEX_GPU_VERSION: ${IPEX_GPU_VERSION:-2.1.20=*xpu*}
-        ITEX_VERSION: ${ITEX_VERSION:-2.15}
+        IPEX_CPU_VERSION: ${IPEX_CPU_VERSION:-2.3.100}
+        IPEX_XPU_VERSION: ${IPEX_XPU_VERSION:-2.1.40}
+        ITEX_CPU_VERSION: ${ITEX_CPU_VERSION:-2.15.0}
+        ITEX_XPU_VERSION: ${ITEX_XPU_VERSION:-2.15.0.1}
         LEVEL_ZERO_DEV_VER: 1.14.0-744~22.04
-        LEVEL_ZERO_GPU_VER: 1.3.27642.40-803~22.04
+        LEVEL_ZERO_GPU_VER: 1.3.27642.52-803~22.04
         LEVEL_ZERO_VER: 1.14.0-744~22.04
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Linux-x86_64}
-        MPI_VERSION: ${MPI_VERSION:-2021.12.0}
-        NUMBA_DPEX_VERSION: ${NUMBA_DPEX_VERSION:-0.22.1}
+        MPI_VERSION: ${MPI_VERSION:-2021.13}
+        NUMBA_DPEX_VERSION: ${NUMBA_DPEX_VERSION:-0.23.0}
         NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4}
-        ONECCL_CPU_VERSION: ${ONECCL_CPU_VERSION:-2.2.0=*cpu*}
-        ONECCL_GPU_VERSION: ${ONECCL_GPU_VERSION:-2.1.200=*xpu*}
+        ONECCL_CPU_VERSION: ${ONECCL_CPU_VERSION:-2.3.0}
+        ONECCL_XPU_VERSION: ${ONECCL_XPU_VERSION:-2.1.400}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
-        TF_VERSION: ${TF_VERSION:-2.15}
-        TORCHAUDIO_CPU_VERSION: ${TORCHAUDIO_CPU_VERSION:-2.2.0=*cpu*}
-        TORCHAUDIO_GPU_VERSION: ${TORCHAUDIO_GPU_VERSION:-2.1.0=*xpu*}
-        TORCHVISION_CPU_VERSION: ${TORCHVISION_CPU_VERSION:-0.17=*cpu*}
-        TORCHVISION_GPU_VERSION: ${TORCHVISION_GPU_VERSION:-0.16.0=*xpu*}
-        TORCH_CPU_VERSION: ${TORCH_CPU_VERSION:-2.2.0=*cpu*}
-        TORCH_GPU_VERSION: ${TORCH_GPU_VERSION:-2.1.0=*xpu*}
+        TF_VERSION: ${TF_VERSION:-2.15.1}
+        TORCHAUDIO_CPU_VERSION: ${TORCHAUDIO_CPU_VERSION:-2.3.1}
+        TORCHAUDIO_XPU_VERSION: ${TORCHAUDIO_XPU_VERSION:-2.1.0}
+        TORCHVISION_CPU_VERSION: ${TORCHVISION_CPU_VERSION:-0.18.1}
+        TORCHVISION_XPU_VERSION: ${TORCHVISION_XPU_VERSION:-0.16.0}
+        TORCH_CPU_VERSION: ${TORCH_CPU_VERSION:-2.3.1}
+        TORCH_XPU_VERSION: ${TORCH_XPU_VERSION:-2.1.0}
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
         no_proxy: ''
       context: .
       labels:
         docs: false
-      target: deep-learning-jupyter
-    command: |
-      bash -c "conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);' && \
-      conda run -n tensorflow-cpu python -c 'import tensorflow as tf; print(tf.__version__)'"
+      target: ddeep-learning-base
     environment:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
@@ -67,6 +65,17 @@ services:
     shm_size: 12GB
     volumes:
       - /dev/dri/by-path:/dev/dri/by-path
+    command: >
+      bash -c "
+      conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);' 
+      &&
+      
+      conda run -n tensorflow-cpu python -c 'import tensorflow as tf;print(tf.__version__)'
+      "
+
+####################################
+####################################
+
   deep-learning:
     build:
       labels:
@@ -74,7 +83,7 @@ services:
         org.opencontainers.image.title: "Intel® AI Tools Selector Preset Containers - Deep Learning"
         org.opencontainers.base.name: "ubuntu:22.04"
         org.opencontainers.image.name: "intel/deep-learning"
-        org.opencontainers.image.version: 2024.1.0-py${PYTHON_VERSION:-3.10}
+        org.opencontainers.image.version: 2024.2.0-py${PYTHON_VERSION:-3.10}
         dependency.python: ${PYTHON_VERSION:-3.10}
         dependency.python.pip: requirements.txt
         dependency.apt.apt-utils: true
@@ -92,11 +101,11 @@ services:
         dependency.apt.gzip: true
         dependency.apt.hwinfo: true
         dependency.apt.intel-igc-cm: true
-        dependency.apt.intel-level-zero-gpu: '=1.3.27642.40-803~22.04'
+        dependency.apt.intel-level-zero-gpu: true
         dependency.apt.intel-media-va-driver-non-free: true
-        dependency.apt.intel-opencl-icd: '=23.43.27642.40-803~22.04'
-        dependency.apt.level-zero: '=1.14.0-744~22.04'
-        dependency.apt.level-zero-dev: '=1.14.0-744~22.04'
+        dependency.apt.intel-opencl-icd: true
+        dependency.apt.level-zero: true
+        dependency.apt.level-zero-dev: true
         dependency.apt.libegl1-mesa: true
         dependency.apt.libegl1-mesa-dev: true
         dependency.apt.libegl-mesa0: true
@@ -132,69 +141,75 @@ services:
         dependency.apt.vainfo: true
         dependency.apt.wget: true
         dependency.apt.xz-utils: true
-        dependency.conda.jupyterlab: '>=4.1.8'
-        dependency.conda.aiohttp: '>=3.9.0'
-        dependency.conda.cryptography: '>=42.0.4'
-        dependency.conda.dataset_librarian: '>=1.0.4'
-        dependency.conda.deepspeed: '=0.14.0'
-        dependency.conda.dpcpp_impl_linux-64: '=2024.1.0'
-        dependency.conda.dpcpp-cpp-rt: '=2024.1.0'
-        dependency.conda.dpnp: '=0.14.0'
-        dependency.conda.idna: '>=3.7'
-        dependency.conda.impi-devel: '=2021.12'
-        dependency.conda.intel-extension-for-pytorch_cpu: '=2.2.0=*cpu*'
-        dependency.conda.intel-extension-for-pytorch_gpu: '=2.1.20=*xpu*'
-        dependency.conda.intel-extension-for-tensorflow_cpu: '=2.15=*cpu*'
-        dependency.conda.intel-extension-for-tensorflow_gpu: '=2.15=*xpu*'
-        dependency.conda.intel-openmp: '=2024.1.0'
-        dependency.conda.intel-optimization-for-horovod: '=0.28.1.4'
-        dependency.conda.ipykernel: '>=6.29.3'
-        dependency.conda.ipython: '>=8.18.1'
-        dependency.conda.jinja2: '>=3.1.3'
-        dependency.conda.jupyterhub: '>=4.1.5'
-        dependency.conda.jupyter-server-proxy: '>=4.1.2'
-        dependency.conda.kernda: '>=0.3.0'
-        dependency.conda.mako: '>=1.2.2'
-        dependency.conda.matplotlib-base: '>=3.4.3'
-        dependency.conda.mkl-dpcpp: '2024.1.0'
-        dependency.conda.nodejs: '>=20.12.2'
-        dependency.conda.notebook: '>=7.1.3'
-        dependency.conda.numpy: '=1.26.4'
-        dependency.conda.oauthlib: '>=3.2.2'
-        dependency.conda.oneccl_bind_pt_cpu: '=2.2.0=*cpu*'
-        dependency.conda.oneccl_bind_pt_gpu: '=2.1.200=*xpu*'
-        dependency.conda.onnx: '>=1.14.1'
-        dependency.conda.packaging: '=23.2'
-        dependency.conda.pandas: '>=2.2.2'
-        dependency.conda.pillow: '>=10.2.0'
-        dependency.conda.protobuf: '=4.24'
-        dependency.conda.pyjwt: '>=2.4.0'
+        #######################################
+        dependency.conda.accelerate: '==0.32.1'
+        dependency.conda.colorama: '==0.4.6'
+        dependency.conda.conda: '==24.5.0'
+        dependency.conda.deepspeed: '==0.14.2'
+        dependency.conda.dpnp: '==0.15.0'
+        dependency.conda.intel-extension-for-pytorch_cpu: '==2.3.100'
+        dependency.conda.intel-extension-for-pytorch_xpu: '==2.1.40'
+        dependency.conda.intel-extension-for-tensorflow_cpu: '==2.15.0'
+        dependency.conda.intel-extension-for-tensorflow_xpu: '==2.15.0.1'
+        dependency.conda.intel-optimization-for-horovod: '==0.28.1.5'
+        dependency.conda.ipykernel: '==6.29.5'
+        dependency.conda.jupyter-server-proxy: '==4.3.0'
+        dependency.conda.jupyterhub: '==5.0.0'
+        dependency.conda.kernda: '==0.3.0'
+        dependency.conda.ld_impl_linux-64: '==2.40'
+        dependency.conda.mamba: '==1.5.8'
+        dependency.conda.matplotlib-base: '>=3.8.4'
+        dependency.conda.mpi: '==1.0'
+        dependency.conda.mpich: '==4.2.2'
+        dependency.conda.networkx: '==3.3'
+        dependency.conda.notebook: '==7.2.1'
+        dependency.conda.oneccl_bind_pt_cpu: '==2.3.0'
+        dependency.conda.oneccl_bind_pt_gpu: '==2.1.400'
+        dependency.conda.onnx: '==1.14.1'
+        dependency.conda.py-cpuinfo: '==9.0.0'
+        dependency.conda.pytorch_cpu: '==2.3.1'
+        dependency.conda.pytorch_xpu: '==2.1.0'
         dependency.conda.python: "=${PYTHON_VERSION:-3.10}"
-        dependency.conda.pytorch_cpu: '=2.2.0=*cpu*'
-        dependency.conda.pytorch_gpu: '=2.1.0=*xpu*'
-        dependency.conda.setuptools: '=69.1.0'
-        dependency.conda.tensorboardx: '>=2.6.2.2'
-        dependency.conda.tensorflow: '=2.15'
-        dependency.conda.torchaudio_cpu: '=2.2.0=*cpu*'
-        dependency.conda.torchaudio_gpu: '=2.1.0=*xpu*'
-        dependency.conda.torchvision_cpu: '=0.17=*cpu*'
-        dependency.conda.torchvision_gpu: '=0.16.0=*xpu*'
-        dependency.conda.tornado: '>=6.3.3'
-        dependency.conda.tqdm: '>=4.66.2'
-        dependency.conda.werkzeug: '>=2.2.3'
-      target: distributed-deep-learning
+        dependency.conda.tensorboardx: '==2.6.2.2'
+        dependency.conda.tensorflow: '==2.15.1'
+        dependency.conda.tensorflow-hub: '==0.16.1'
+        dependency.conda.torchaudio_cpu: '==2.3.1'
+        dependency.conda.torchaudio_xpu: '==2.1.0'
+        dependency.conda.torchvision_cpu: '==0.18.1'
+        dependency.conda.torchvision_xpu: '==0.16.01'
+      target: deep-learning
     depends_on:
       - dl-base
     extends: dl-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.1.0-py${PYTHON_VERSION:-3.10}
-    command: |
-      bash -c "conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);' && \
-      conda run -n pytorch-cpu bash -c 'mpirun --version' && \
-      conda run -n pytorch-cpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\nOneCCL:\", oneccl.__version__)' && \
-      conda run -n pytorch-gpu python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());print(ipex.xpu.has_onemkl())' && \
-      conda run -n pytorch-gpu bash -c 'mpirun --version' && \
-      conda run -n pytorch-gpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\nOneCCL:\", oneccl.__version__)' && \
-      conda run -n tensorflow-cpu python -c 'import tensorflow;print(tensorflow.__version__);import intel_extension_for_tensorflow as itex;print(itex.__version__)' && \
-      conda run -n tensorflow-gpu python -c 'from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())' && \
-      conda run -n tensorflow-gpu bash -c 'horovodrun --check-build && mpirun --version' && \
-      conda run -n tensorflow-gpu python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow'"
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-2024.2.0-py${PYTHON_VERSION:-3.10}
+    command: >
+      bash -c "
+      conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);'
+      &&
+      
+      conda run -n pytorch-cpu bash -c 'mpirun --version'
+      &&
+
+      conda run -n pytorch-cpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\nOneCCL:\", oneccl.__version__)'
+      &&
+
+      conda run -n pytorch-gpu python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());print(ipex.xpu.has_onemkl())'
+      &&
+
+      conda run -n pytorch-gpu bash -c 'mpirun --version'
+      &&
+
+      conda run -n pytorch-gpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\nOneCCL:\", oneccl.__version__)'
+      &&
+
+      conda run -n tensorflow-cpu python -c 'import tensorflow;print(tensorflow.__version__);import intel_extension_for_tensorflow as itex;print(itex.__version__)'
+      &&
+
+      conda run -n tensorflow-gpu python -c 'from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'
+      &&
+
+      conda run -n tensorflow-gpu bash -c 'horovodrun --check-build && mpirun --version'
+      &&
+
+      conda run -n tensorflow-gpu python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow'
+      "
