@@ -39,7 +39,7 @@ jobs:
           # Get diff array filtered by specific filetypes
           DIFF=$(git diff --diff-filter=d \
                 --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }} \
-                -- '*.yaml' '*.yml' '*.def' | \
+                -- '*.yaml' '*.yml' '*.def' '*requirements.txt' | \
                 jq -R '.' | jq -sc '.' \
           )
           # Search for compose files in each file to determine the container groups
