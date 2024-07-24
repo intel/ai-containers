@@ -176,6 +176,7 @@ RUN conda create -yn pytorch-cpu \
         'tensorboardx==2.6.2.2' \
         "torchaudio=${TORCHAUDIO_CPU_VERSION}" \
         "torchvision=${TORCHVISION_CPU_VERSION}" \
+        && \
     conda clean -y --all
 
 # PyPI packages
