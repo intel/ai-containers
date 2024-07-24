@@ -57,7 +57,7 @@ services:
       context: .
       labels:
         docs: false
-      target: ddeep-learning-base
+      target: deep-learning-base
     environment:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
