@@ -304,6 +304,7 @@ The images below are built only with CPU and GPU optimizations and include [Inte
 
 | Tag(s)           | Pytorch  | IPEX         | Driver | Dockerfile      |
 | ---------------- | -------- | ------------ | -------- | ------ |
+| `2.1.30-xpu-idp-base` | [v2.1.0] | [v2.1.30+xpu]  | [803]  | [v0.4.0-Beta] |
 | `2.1.10-xpu-idp-base` | [v2.1.0] | [v2.1.10+xpu]  | [736]  | [v0.2.3] |
 
 The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
