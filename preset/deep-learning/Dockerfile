@@ -137,7 +137,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda update -y conda && \
     conda config --add channels conda-forge && \
-    conda config --add channels intel && \
+    conda config --add channels https://software.repos.intel.com/python/conda/ && \
     conda init --all && \
     conda install -c conda-forge \
         'jupyterlab>=4.1.8' \
@@ -172,7 +172,7 @@ ARG TORCHAUDIO_CPU_VERSION
 ARG DEEPSPEED_VERSION
 
 # PyTorch CPU Env - conda packages
-RUN conda create -yn pytorch-cpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
+RUN conda create -yn pytorch-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
         dpnp="${DPNP_VERSION}" \
         numpy="${NUMPY_VERSION}" \
         python="${PYTHON_VERSION}" \
@@ -199,8 +199,8 @@ RUN conda run -n pytorch-cpu pip install --no-deps --no-cache-dir --ignore-insta
         'ninja>=1.11.1.1' \
         'python-dotenv>=1.0.1' \
         'tqdm>=4.66.2' \
-        'cloud-data-connector>=1.0.3' \
-        'dataset-librarian>=1.0.4' && \
+        'cloud-data-connector==1.0.3' \
+        'dataset-librarian==1.0.4' && \
     conda run -n pytorch-cpu pip install --no-cache-dir --ignore-installed \
         'transformers>=4.40.2' \
         'datasets>=2.19.1' \
@@ -227,7 +227,7 @@ ARG IDEX_VERSION
 ARG DEEPSPEED_VERSION
 
 # PyTorch GPU Env - conda packages
-RUN conda create -yn pytorch-gpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
+RUN conda create -yn pytorch-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
         dpnp="${DPNP_VERSION}" \
         dpcpp-cpp-rt="${IDP_VERSION}" \
         mkl-dpcpp="${IDP_VERSION}" \
@@ -263,8 +263,8 @@ RUN conda run -n pytorch-gpu pip install --no-deps --no-cache-dir --ignore-insta
         'ninja>=1.11.1.1' \
         'python-dotenv>=1.0.1' \
         'tqdm>=4.66.2' \
-        'cloud-data-connector>=1.0.3' \
-        'dataset-librarian>=1.0.4' && \
+        'cloud-data-connector==1.0.3' \
+        'dataset-librarian==1.0.4' && \
     conda run -n pytorch-gpu pip install --no-cache-dir --ignore-installed \
         'transformers>=4.40.2' \
         'datasets>=2.19.1' \
@@ -306,7 +306,6 @@ RUN conda create -yn tensorflow-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
         tensorflow="${TF_VERSION}" \
         impi-devel="${IMPI_VERSION}" \
         'matplotlib-base>=3.4.3' \
-        'dataset_librarian>=1.0.4' \
         'ipython>=8.18.1' \
         'ipykernel>=6.29.3' \
         'kernda>=0.3.0'  \
@@ -330,6 +329,7 @@ RUN conda run -n tensorflow-cpu pip install --no-cache-dir --ignore-installed \
 RUN conda run -n tensorflow-cpu pip install --no-deps --no-cache-dir --ignore-installed \
         'tensorflow-hub>=0.16.1' \
         'tqdm>=4.66.2' \
+        'dataset-librarian==1.0.4' \
         'cloud-data-connector>=1.0.3' && \
     conda clean -y --all
 
@@ -345,7 +345,6 @@ RUN conda create -yn tensorflow-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
         tensorflow="${TF_VERSION}" \
         impi-devel="${IMPI_VERSION}" \
         'matplotlib-base>=3.4.3' \
-        'dataset_librarian>=1.0.4' \
         'ipython>=8.18.1' \
         'ipykernel>=6.29.3' \
         'kernda>=0.3.0' \
@@ -371,7 +370,8 @@ RUN conda run -n tensorflow-gpu pip install --no-cache-dir --ignore-installed \
 RUN conda run -n tensorflow-gpu pip install --no-deps --no-cache-dir --ignore-installed \
         'tensorflow-hub>=0.16.1' \
         'tqdm>=4.66.2' \
-        'cloud-data-connector>=1.0.3' && \
+        'dataset-librarian==1.0.4' \
+        'cloud-data-connector==1.0.3' && \
     conda clean -y --all
 
 FROM deep-learning-python as deep-learning-jupyter
@@ -421,18 +421,19 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
         /etc/ssh/ssh_host_*_key.pub && \
     rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /var/run/sshd
+RUN mkdir -p /var/run/sshd && \
+    echo 'LoginGraceTime 0' >> /etc/ssh/sshd_config
 
 # https://github.com/openucx/ucx/issues/4742#issuecomment-584059909
 ENV UCX_TLS=ud,sm,self
 
 USER dev
 
-RUN conda install -n pytorch-cpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
+RUN conda install -n pytorch-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
         deepspeed="${DEEPSPEED_VERSION}" \
         'tensorboardx>=2.6.2.2'
 
-RUN conda install -n pytorch-gpu -c intel/label/oneapi -c "${INTEL_CHANNEL}" -c conda-forge \
+RUN conda install -n pytorch-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
         deepspeed="${DEEPSPEED_VERSION}" \
         'tensorboardx>=2.6.2.2'
 

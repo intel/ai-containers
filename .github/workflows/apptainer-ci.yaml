@@ -1,0 +1,85 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Apptainer CI
+on:
+  pull_request:
+    paths:
+    - 'apptainer/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions: read-all
+
+jobs:
+  group-diff:
+    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    outputs:
+      groups: ${{ steps.group-list.outputs.FOLDERS }}
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+        with:
+          fetch-depth: 0
+      - name: Output Modified Group Directories
+        id: group-list
+        run: |
+          # Get diff array filtered by specific filetypes
+          DIFF=$(git diff --diff-filter=d \
+                --name-only ${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }} \
+                -- '*.yaml' '*.yml' '*.def' | \
+                jq -R '.' | jq -sc '.' \
+          )
+          # Search for compose files in each file to determine the container groups
+          DOCKER_COMPOSE_PATHS=()
+          for path in $(echo $DIFF | jq -r '.[]'); do
+            while [[ "$path" != "." ]]; do
+              DIR_PATH=$(dirname "$path")
+              if [ -n "$(find "$DIR_PATH" -maxdepth 1 -name 'apptainer.def' -print -quit)" ] && [ "$DIR_PATH" != "." ]; then
+                DOCKER_COMPOSE_PATHS+=$(echo $"$DIR_PATH" | cut -d'/' -f 2)
+                path="."
+              else
+                path="$DIR_PATH"
+              fi
+            done
+          done
+          # Convert the array to a JSON array
+          DOCKER_COMPOSE_PATHS_JSON=$(printf '%s\n' "${DOCKER_COMPOSE_PATHS[@]}" | jq -R '.' | jq -sc 'unique_by(.)')
+          echo "FOLDERS=$DOCKER_COMPOSE_PATHS_JSON" >> $GITHUB_OUTPUT
+
+  setup-build:
+    needs: [group-diff]
+    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    if: needs.group-diff.outputs.groups != '[""]'
+    strategy:
+      matrix:
+        group: ${{ fromJson(needs.group-diff.outputs.groups) }}
+        experimental: [true]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - uses: eWaterCycle/setup-apptainer@4bb22c52d4f63406c49e94c804632975787312b3 # v2.0.0
+        with:
+          apptainer-version: 1.3.3
+      - name: Apptainer login to registry
+        env:
+          APPTAINER_DOCKER_USERNAME: ${{ secrets.REGISTRY_USER }}
+          APPTAINER_DOCKER_PASSWORD: ${{ secrets.REGISTRY_TOKEN }}
+        run: apptainer registry login  -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_TOKEN }} docker://${{ secrets.REGISTRY }}
+      - uses: intel/ai-containers/apptainer@main
+        with:
+          registry: oras://${{ secrets.REGISTRY }}
+          repo: ${{ secrets.REPO }}-apptainer
+          group_dir: ${{ matrix.group }}

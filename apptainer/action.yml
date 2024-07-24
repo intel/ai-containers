@@ -1,0 +1,48 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+name: Build Apptainer Group
+description: Build Apptainer containers based on defintion files in the apptainer directory
+author: srikanth.ramakrishna@intel.com
+inputs:
+  group_dir:
+    description: Directory to build
+    required: true
+    type: string
+  registry:
+    description: Container Registry URL
+    required: true
+    type: string
+  repo:
+    description: Container Project Repository
+    required: true
+    type: string
+runs:
+  using: composite
+  steps:
+    - name: Build Apptainer
+      shell: bash
+      run: |
+        apptainer build "${{ inputs.group_dir }}.sif" apptainer.def
+      working-directory: apptainer/${{ inputs.group_dir }}
+    - name: Push Apptainer
+      shell: bash
+      run: |
+        apptainer push ${{ inputs.group_dir }}.sif "${{ inputs.registry }}/${{ inputs.repo }}:${{ github.run_number }}-${{ inputs.group_dir }}-sif"
+      working-directory: apptainer/${{ inputs.group_dir }}
+    - name: Clean cache and Remove Images
+      shell: bash
+      run: apptainer cache clean --force  && rm -rf *.sif
+      working-directory: apptainer/${{ inputs.group_dir }}
