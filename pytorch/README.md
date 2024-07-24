@@ -105,16 +105,18 @@ After running the command above, copy the URL (something like `http://127.0.0.1:
 
 The images below additionally include [Intel® oneAPI Collective Communications Library] (oneCCL) and Neural Compressor ([INC]):
 
-| Tag(s)                | Pytorch  | IPEX         | oneCCL               | INC       | Dockerfile      |
-| --------------------- | -------- | ------------ | -------------------- | --------- | --------------- |
-| `2.3.0-pip-multinode` | [v2.3.0] | [v2.3.0+cpu] | [v2.3.0][ccl-v2.3.0] | [v2.5.1]  | [v0.4.0-Beta]   |
-| `2.2.0-pip-multinode` | [v2.2.0] | [v2.2.0+cpu] | [v2.2.0][ccl-v2.2.0] | [v2.4.1]  | [v0.3.4]        |
-| `2.1.0-pip-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v2.3.1]  | [v0.2.3]        |
-| `2.0.0-pip-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v2.1.1]  | [v0.1.0]        |
+| Tag(s)                  | Pytorch  | IPEX           | oneCCL               | INC       | Dockerfile     |
+| ---------------------   | -------- | ------------   | -------------------- | --------- | -------------- |
+| `2.3.0-pip-multinode`   | [v2.3.0] | [v2.3.0+cpu]   | [v2.3.0][ccl-v2.3.0] | [v2.6]    | [v0.4.0-Beta]  |
+| `2.2.0-pip-multinode`   | [v2.2.2] | [v2.2.0+cpu]   | [v2.2.0][ccl-v2.2.0] | [v2.6]    | [v0.4.0-Beta]  |
+| `2.1.100-pip-mulitnode` | [v2.1.2] | [v2.1.100+cpu] | [v2.1.0][ccl-v2.1.0] | [v2.6]    | [v0.4.0-Beta]  |
+| `2.0.100-pip-multinode` | [v2.0.1] | [v2.0.100+cpu] | [v2.0.0][ccl-v2.0.0] | [v2.6]    | [v0.4.0-Beta]  |
 
-> **Note:** Passwordless SSH connection is also enabled in the image.
-> The container does not contain the SSH ID keys. The user needs to mount those keys at `/root/.ssh/id_rsa` and `/etc/ssh/authorized_keys`.
-> Since the SSH key is not owned by default user account in docker, please also do "chmod 600 authorized_keys; chmod 600 id_rsa" to grant read access for default user account.
+> [!NOTE]
+> Passwordless SSH connection is also enabled in the image, but the container does not contain any SSH ID keys. The user needs to mount those keys at `/root/.ssh/id_rsa` and `/etc/ssh/authorized_keys`.
+
+> [!TIP]
+> Before mounting any keys, modify the permissions of those files with `chmod 600 authorized_keys; chmod 600 id_rsa` to grant read access for the default user account.
 
 #### Setup and Run IPEX Multi-Node Container
 
@@ -132,7 +134,7 @@ To add these files correctly please follow the steps described below.
 
 1. Setup ID Keys
 
-    You can use the commands provided below to [generate the Identity keys](https://www.ssh.com/academy/ssh/keygen#creating-an-ssh-key-pair-for-user-authentication) for OpenSSH.
+    You can use the commands provided below to [generate the identity keys](https://www.ssh.com/academy/ssh/keygen#creating-an-ssh-key-pair-for-user-authentication) for OpenSSH.
 
     ```bash
     ssh-keygen -q -N "" -t rsa -b 4096 -f ./id_rsa
@@ -140,22 +142,44 @@ To add these files correctly please follow the steps described below.
     cat id_rsa.pub >> authorized_keys
     ```
 
-2. Configure the permissions and ownership for all of the files you have created so far.
+2. Configure the permissions and ownership for all of the files you have created so far
 
     ```bash
     chmod 600 id_rsa config authorized_keys
     chown root:root id_rsa.pub id_rsa config authorized_keys
     ```
 
-3. Setup hostfile. The hostfile is needed for running torch distributed using `ipexrun` utility. If you're not using `ipexrun` you can skip this step.
+3. Create a hostfile for `torchrun` or `ipexrun`. (Optional)
 
     ```txt
-    <Host 1 IP/Hostname>
-    <Host 2 IP/Hostname>
+    Host host1
+        HostName <Hostname of host1>
+        IdentitiesOnly yes
+        IdentityFile ~/.root/id_rsa
+        Port <SSH Port>
+    Host host2
+        HostName <Hostname of host2>
+        IdentitiesOnly yes
+        IdentityFile ~/.root/id_rsa
+        Port <SSH Port>
     ...
     ```
 
-4. Now start the workers and execute DDP on the launcher.
+4. Configure [Intel® oneAPI Collective Communications Library] in your python script
+
+    ```python
+    import oneccl_bindings_for_pytorch
+    import os
+
+    dist.init_process_group(
+        backend="ccl",
+        init_method="tcp://127.0.0.1:3022",
+        world_size=int(os.environ.get("WORLD_SIZE")),
+        rank=int(os.environ.get("RANK")),
+    )
+    ```
+
+5. Now start the workers and execute DDP on the launcher
 
     1. Worker run command:
 
@@ -182,62 +206,57 @@ To add these files correctly please follow the steps described below.
             bash -c 'ipexrun cpu  --nnodes 2 --nprocs-per-node 1 --master-addr 127.0.0.1 --master-port 3022 /workspace/tests/ipex-resnet50.py --ipex --device cpu --backend ccl'
         ```
 
-5. Start SSH server with a custom port.
-    If the user wants to define their own port to start the SSH server, it can be done so using the commands described below.
-
-    1. Worker command:
-
-        ```bash
-        export SSH_PORT=<User SSH Port>
-        docker run -it --rm \
-            --net=host \
-            -v $PWD/authorized_keys:/etc/ssh/authorized_keys \
-            -v $PWD/tests:/workspace/tests \
-            -e SSH_PORT=${SSH_PORT} \
-            -w /workspace \
-            intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
-            bash -c '/usr/sbin/sshd -D -p ${SSH_PORT}'
-        ```
-
-    2. Add hosts to config. (**Note:** This is an optional step)
-
-        User can optionally mount their own custom client config file to define a list of hosts and ports where the SSH server is running inside the container. An example of a hostfile is provided below. This file is supposed to be mounted in the launcher container at `/etc/ssh/ssh_config`.
-
-        ```bash
-        touch config
-        ```
-
-       ```txt
-        Host host1
-            HostName <Hostname of host1>
-            IdentitiesOnly yes
-            IdentityFile ~/.root/id_rsa
-            Port <SSH Port>
-        Host host2
-            HostName <Hostname of host2>
-            IdentitiesOnly yes
-            IdentityFile ~/.root/id_rsa
-            Port <SSH Port>
-        ...
-        ```
-
-    3. Launcher run command:
-
-        ```bash
-        docker run -it --rm \
-            --net=host \
-            -v $PWD/id_rsa:/root/.ssh/id_rsa \
-            -v $PWD/config:/etc/ssh/ssh_config \
-            -v $PWD/hostfile:/workspace/hostfile \
-            -v $PWD/tests:/workspace/tests \
-            -e SSH_PORT=${SSH_PORT} \
-            -w /workspace \
-            intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
-            bash -c 'ipexrun cpu --nnodes 2 --nprocs-per-node 1 --master-addr 127.0.0.1 --master-port ${SSH_PORT} /workspace/tests/ipex-resnet50.py --ipex --device cpu --backend ccl'
-        ```
-
 > [!NOTE]
-> [Intel MPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/mpi-library.html) can be configured based on your machine settings. If the above commands do not work for you, see the documentation for how to configure based on your network.
+> [Intel® MPI] can be configured based on your machine settings. If the above commands do not work for you, see the documentation for how to configure based on your network.
+
+#### Enable [DeepSpeed*] optimizations
+
+To enable [DeepSpeed*] optimizations with [Intel® oneAPI Collective Communications Library], add the following to your python script:
+
+```python
+import deepspeed
+
+# Rather than dist.init_process_group(), use deepspeed.init_distributed()
+deepspeed.init_distributed(backend="ccl")
+```
+
+Additionally, if you have a [DeepSpeed* configuration](https://www.deepspeed.ai/getting-started/#deepspeed-configuration) you can use the below command as your launcher to run your script with that configuration:
+
+```bash
+    docker run -it --rm \
+    --net=host \
+    -v $PWD/id_rsa:/root/.ssh/id_rsa \
+    -v $PWD/tests:/workspace/tests \
+    -v $PWD/hostfile:/workspace/hostfile \
+    -v $PWD/ds_config.json:/workspace/ds_config.json \
+    -w /workspace \
+    intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
+    bash -c 'deepspeed --launcher IMPI \
+    --master_addr 127.0.0.1 --master_port 3022 \
+    --deepspeed_config ds_config.json --hostfile /workspace/hostfile \
+    /workspace/tests/ipex-resnet50.py --ipex --device cpu --backend ccl --deepspeed'
+```
+
+---
+
+#### Hugging Face Generative AI Container
+
+The image below is an extension of the IPEX Multi-Node Container designed to run Hugging Face Generative AI scripts. The container has the typical installations needed to run and fine tune PyTorch generative text models from Hugging Face. It can be used to run multinode jobs using the same instructions from the [IPEX Multi-Node container](#setup-and-run-ipex-multi-node-container).
+
+| Tag(s)                | Pytorch  | IPEX         | oneCCL               | transformers       | Dockerfile      |
+| --------------------- | -------- | ------------ | -------------------- | --------- | --------------- |
+| `2.3.0-pip-multinode-hf-4.41.2-genai` | [v2.3.1](https://github.com/pytorch/pytorch/releases/tag/v2.3.1) | [v2.3.0+cpu] | [v2.3.0][ccl-v2.3.0] | [v4.41.2]  | [v0.4.0-Beta]   |
+
+Below is an example that shows single node job with the existing [`finetune.py`](../workflows/charts/huggingface-llm/scripts/finetune.py) script.
+
+```bash
+# Change into home directory first and run the command
+docker run -it \
+    -v $PWD/workflows/charts/huggingface-llm/scripts:/workspace/scripts \
+    -w /workspace/scripts \
+    intel/intel-extension-for-pytorch:2.3.0-pip-multinode-hf-4.41.2-genai \
+    bash -c 'python finetune.py <script-args>'
+```
 
 ---
 
@@ -274,7 +293,7 @@ The images below additionally include [Intel® oneAPI Collective Communications 
 
 | Tag(s)                | Pytorch  | IPEX         | oneCCL               | INC       | Dockerfile      |
 | --------------------- | -------- | ------------ | -------------------- | --------- | --------------- |
-| `2.3.0-idp-multinode` | [v2.3.0] | [v2.3.0+cpu] | [v2.3.0][ccl-v2.3.0] | [v2.5.1]  | [v0.4.0-Beta]   |
+| `2.3.0-idp-multinode` | [v2.3.0] | [v2.3.0+cpu] | [v2.3.0][ccl-v2.3.0] | [v2.6]    | [v0.4.0-Beta]   |
 | `2.2.0-idp-multinode` | [v2.2.0] | [v2.2.0+cpu] | [v2.2.0][ccl-v2.2.0] | [v2.4.1]  | [v0.3.4]        |
 | `2.1.0-idp-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v2.3.1]  | [v0.2.3]        |
 | `2.0.0-idp-multinode` | [v2.0.0] | [v2.0.0+cpu] | [v2.0.0][ccl-v2.0.0] | [v2.1.1]  | [v0.1.0]        |
@@ -285,6 +304,7 @@ The images below are built only with CPU and GPU optimizations and include [Inte
 
 | Tag(s)           | Pytorch  | IPEX         | Driver | Dockerfile      |
 | ---------------- | -------- | ------------ | -------- | ------ |
+| `2.1.30-xpu-idp-base` | [v2.1.0] | [v2.1.30+xpu]  | [803]  | [v0.4.0-Beta] |
 | `2.1.10-xpu-idp-base` | [v2.1.0] | [v2.1.10+xpu]  | [736]  | [v0.2.3] |
 
 The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
@@ -331,12 +351,14 @@ It is the image user's responsibility to ensure that any use of The images below
 [Intel® Data Center GPU Flex Series]: https://ark.intel.com/content/www/us/en/ark/products/series/230021/intel-data-center-gpu-flex-series.html
 [Intel® Data Center GPU Max Series]: https://ark.intel.com/content/www/us/en/ark/products/series/232874/intel-data-center-gpu-max-series.html
 
+[Intel® MPI]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/mpi-library.html
 [Intel® Extension for PyTorch*]: https://intel.github.io/intel-extension-for-pytorch/
 [Intel® Distribution for Python*]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/distribution-for-python.html
 [Intel® oneAPI Collective Communications Library]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/oneccl.html
 [INC]: https://github.com/intel/neural-compressor
 [PyTorch*]: https://pytorch.org/
 [TorchServe*]: https://github.com/pytorch/serve
+[DeepSpeed*]: https://github.com/microsoft/DeepSpeed
 
 [v0.4.0-Beta]: https://github.com/intel/ai-containers/blob/main/pytorch/Dockerfile
 [v0.3.4]: https://github.com/intel/ai-containers/blob/v0.3.4/pytorch/Dockerfile
@@ -349,25 +371,32 @@ It is the image user's responsibility to ensure that any use of The images below
 [v2.0.110+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.0.110%2Bxpu
 
 [v2.3.0]: https://github.com/pytorch/pytorch/releases/tag/v2.3.0
+[v2.2.2]: https://github.com/pytorch/pytorch/releases/tag/v2.2.2
 [v2.2.0]: https://github.com/pytorch/pytorch/releases/tag/v2.2.0
+[v2.1.2]: https://github.com/pytorch/pytorch/releases/tag/v2.1.2
 [v2.1.0]: https://github.com/pytorch/pytorch/releases/tag/v2.1.0
 [v2.0.1]: https://github.com/pytorch/pytorch/releases/tag/v2.0.1
 [v2.0.0]: https://github.com/pytorch/pytorch/releases/tag/v2.0.0
 
-[v2.5.1]: https://github.com/intel/neural-compressor/releases/tag/v2.5.1
+[v2.6]: https://github.com/intel/neural-compressor/releases/tag/v2.6
 [v2.4.1]: https://github.com/intel/neural-compressor/releases/tag/v2.4.1
 [v2.3.1]: https://github.com/intel/neural-compressor/releases/tag/v2.3.1
 [v2.1.1]: https://github.com/intel/neural-compressor/releases/tag/v2.1.1
 
 [v2.3.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.3.0%2Bcpu
 [v2.2.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.2.0%2Bcpu
+[v2.1.100+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.0%2Bcpu
 [v2.1.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.0%2Bcpu
+[v2.0.100+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.0.0%2Bcpu
 [v2.0.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.0.0%2Bcpu
 
 [ccl-v2.3.0]: https://github.com/intel/torch-ccl/releases/tag/v2.3.0%2Bcpu
 [ccl-v2.2.0]: https://github.com/intel/torch-ccl/releases/tag/v2.2.0%2Bcpu
 [ccl-v2.1.0]: https://github.com/intel/torch-ccl/releases/tag/v2.1.0%2Bcpu
 [ccl-v2.0.0]: https://github.com/intel/torch-ccl/releases/tag/v2.1.0%2Bcpu
+
+<!-- HuggingFace transformers releases -->
+[v4.41.2]: https://github.com/huggingface/transformers/releases/tag/v4.41.2
 
 [803]: https://dgpu-docs.intel.com/releases/LTS_803.29_20240131.html
 [736]: https://dgpu-docs.intel.com/releases/stable_736_25_20231031.html

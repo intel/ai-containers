@@ -55,7 +55,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     ln -s /opt/conda ~/miniforge3 && \
     export PATH="/opt/conda/bin/:${PATH}" && \
     conda update -y conda && \
-    conda config --add channels intel && \
+    conda config --add channels https://software.repos.intel.com/python/conda/ && \
     conda create -yn idp \
     "intelpython3_${IDP_VERSION}" \
     "python=${PYTHON_VERSION}" && \

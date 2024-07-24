@@ -87,3 +87,11 @@ updates:
     package-ecosystem: pip
     schedule:
       interval: weekly
+  - directory: /apptainer/python
+    groups:
+      apptainer:
+        patterns:
+          - "*"
+    package-ecosystem: pip
+    schedule:
+      interval: weekly

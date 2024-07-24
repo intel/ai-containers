@@ -44,7 +44,8 @@ ARG TORCHVISION_VERSION
 WORKDIR /
 COPY requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    rm -rf requirements.txt
 
 FROM ${PYTHON_BASE} AS ipex-base-idp
 
@@ -64,7 +65,8 @@ FROM ipex-base-${PACKAGE_OPTION} AS jupyter
 WORKDIR /jupyter
 COPY jupyter-requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
+RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt && \
+    rm -rf jupyter-requirements.txt
 
 RUN mkdir -p /jupyter/ && chmod -R a+rwx /jupyter/
 RUN mkdir /.local && chmod a+rwx /.local
@@ -78,8 +80,11 @@ FROM ipex-base-${PACKAGE_OPTION} AS multinode
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
     python3-dev \
     gcc \
+    g++ \
     libgl1-mesa-glx \
     libglib2.0-0 \
+    libopenmpi-dev \
+    numactl \
     virtualenv
 
 ENV SIGOPT_PROJECT=.
@@ -88,6 +93,8 @@ WORKDIR /
 COPY multinode/requirements.txt requirements.txt
 
 RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    DS_BUILD_OPS=1 python -m pip install --no-cache-dir deepspeed==0.14.4 && \
+    echo "Y" | pip uninstall nvidia-ml-py && \
     rm -rf requirements.txt
 
 ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
@@ -109,7 +116,10 @@ COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
 # modify generate_ssh_keys to be a helper script
 # print how to use helper script on bash startup
 # Avoids loop for further execution of the startup file
-RUN echo "source /usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
+ARG PACKAGE_OPTION=pip
+ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
+RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then PYPATH="/opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages"; fi && \
+    echo "source ${PYPATH}/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
     cat '/generate_ssh_keys.sh' >> ~/.startup && \
     rm -rf /generate_ssh_keys.sh
 
@@ -124,7 +134,13 @@ RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
 
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
-CMD ["bash"]
+
+FROM multinode AS hf-genai
+
+COPY hf-genai-requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r hf-genai-requirements.txt && \
+    rm -rf hf-genai-requirements.txt
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
