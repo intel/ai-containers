@@ -60,7 +60,6 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
     rm ./miniforge.sh && \
     ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge3"  && \
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
-    conda config --add channels ${INTEL_CHANNEL} && \
     conda init --all && \
     conda install -y \
         'colorama==0.4.6' \
@@ -72,9 +71,12 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
         'notebook==7.2.1' \
         'pip==24.0' \
         'python==3.10.14' \
-        && \
-    jupyter labextension disable "@jupyterlab/apputils-extension:announcements" && \
-    conda clean -y --all
+    && \
+    jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
+    && \
+    conda clean -y --all \
+    && \
+    conda config --add channels ${INTEL_CHANNEL}
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 RUN conda config --set pip_interop_enabled True
