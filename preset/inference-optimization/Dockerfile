@@ -15,12 +15,12 @@
 ARG COMPOSE_PROJECT_NAME
 FROM ${COMPOSE_PROJECT_NAME}-dl-base as inference-optimization
 
-ENV SIGOPT_PROJECT=.
+SHELL ["/bin/bash", "-c"]
 
+ENV SIGOPT_PROJECT=.
 ARG NEURAL_COMPRESSOR_VERSION
 ARG INTEL_CHANNEL
 
-SHELL ["/bin/bash", "-c"]
 
 RUN ENVS_LIST=('pytorch-cpu' 'pytorch-gpu' 'tensorflow-cpu' 'tensorflow-gpu') && \
     for i in "${!ENVS_LIST[@]}"; do \

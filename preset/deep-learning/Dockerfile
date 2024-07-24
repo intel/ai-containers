@@ -17,17 +17,14 @@ ARG BASE_TAG=22.04
 
 FROM ${BASE_IMAGE}:${BASE_TAG} AS deep-learning-base
 
-ENV DEBIAN_FRONTEND=noninteractive
+SHELL ["/bin/bash", "-c"]
 
+ENV DEBIAN_FRONTEND=noninteractive
 # See http://bugs.python.org/issue19846
 ENV LANG C.UTF-8
 ARG PYTHON_VERSION
 
 EXPOSE 8080
-
-ENV LANG=C.UTF-8
-
-SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends --fix-missing \
@@ -323,6 +320,7 @@ CMD ["bash", "-c", "jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.
 
 FROM deep-learning-base as deep-learning
 
+SHELL ["/bin/bash", "-c"]
 USER root
 
 # Install OpenMPI
