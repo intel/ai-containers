@@ -7,7 +7,7 @@
 [![CodeQL](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/github-code-scanning/codeql)
 [![Docs](https://github.com/intel/ai-containers/actions/workflows/docs.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/docs.yaml)
 [![Lint](https://github.com/intel/ai-containers/actions/workflows/lint.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/lint.yaml)
-[![Test Runner CI](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml/badge.svg?event=merge_group)](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml)
+[![Test Runner CI](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml)
 [![Helm Chart CI](https://github.com/intel/ai-containers/actions/workflows/chart-ci.yaml/badge.svg?event=merge_group)](https://github.com/intel/ai-containers/actions/workflows/chart-ci.yaml)
 [![Weekly Tests](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml)
 
