@@ -81,20 +81,29 @@ jobs:
       with:
         pattern: test-runner-summary*
         merge-multiple: true
+    - name: Check for JSON files
+      run: |
+        if [ -n "$(find . -maxdepth 1 -name 'test-runner-summary*.json' -print -quit)" ]; then
+          echo "Files matching the pattern test-runner-summary*.json found in the directory"
+          echo "has_matching_json_files=true" >> $GITHUB_OUTPUT"
+        else
+          echo "No files matching the pattern test-runner-summary*.json found in the directory"
+          echo "has_matching_json_files=false" >> $GITHUB_OUTPUT"
+        fi
+      id: check_matching_json_files
     - name: Combine JSON files
-      if: ${{ steps.download_artifact_outputs.outputs.total != 0 }}
-      id: combine_json
+      if: ${{ steps.check_matching_json_files.outputs.has_matching_json_files == 'true' }}
       run: |
         jq -s '[.[] | .[]]' *.json > combined.json
         echo "Files found in the directory"
     - name: Generate TXT file
-      if: ${{ steps.download_artifact_outputs.outputs.total != 0 }}
+      if: ${{ steps.check_matching_json_files.outputs.has_matching_json_files == 'true' }}
       run: |
         echo "| Test-Group    | Test        | Status   |" > output.txt
         echo "|---------------|-------------|----------|" >> output.txt
         jq -r '.[] | "| \(.Group) | \(.Test) | \(.Status) |" ' combined.json >> output.txt
     - name: PR-comment
-      if: ${{ steps.download_artifact_outputs.outputs.total != 0 }}
+      if: ${{ steps.check_matching_json_files.outputs.has_matching_json_files == 'true' }}
       uses: marocchino/sticky-pull-request-comment@331f8f5b4215f0445d3c07b4967662a32a2d3e31 # v2.9.0
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
