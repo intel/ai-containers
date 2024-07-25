@@ -204,7 +204,7 @@ WORKDIR /jupyter
 COPY jupyter-requirements.txt .
 RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
 
-RUN if $(which conda >/dev/null); then \
+RUN if $( which conda >/dev/null ); then \
     echo "conda activate idp" >> ~/.bashrc; \
     fi
 
