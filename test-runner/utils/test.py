@@ -57,7 +57,7 @@ class Test(BaseModel):
     notebook: Optional[bool] = False
     serving: Optional[bool] = False
     cap_add: Optional[str] = "AUDIT_READ"
-    device: Optional[str] = "/dev/dri"
+    device: Optional[List[str]] = []
     entrypoint: Optional[str] = ""
     groups_add: Optional[List[str]] = ["109", "44"]
     hostname: Optional[str] = None
@@ -109,7 +109,7 @@ class Test(BaseModel):
             networks=["host"],
             # Misc
             cap_add=[self.cap_add],
-            devices=[expandvars(self.device, nounset=True)],
+            devices=self.device,
             entrypoint=(
                 expandvars(self.entrypoint, nounset=True) if self.entrypoint else None
             ),
@@ -134,7 +134,7 @@ class Test(BaseModel):
                 networks=["host"],
                 # Misc
                 cap_add=[self.cap_add],
-                devices=[expandvars(self.device, nounset=True)],
+                devices=self.device,
                 hostname=self.hostname,
                 ipc=self.ipc,
                 privileged=self.privileged,
@@ -231,7 +231,7 @@ class Test(BaseModel):
                 volumes=volumes,
                 # Misc
                 cap_add=[self.cap_add],
-                devices=[expandvars(self.device, nounset=True)],
+                devices=self.device,
                 entrypoint=(
                     expandvars(self.entrypoint, nounset=True)
                     if self.entrypoint

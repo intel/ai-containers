@@ -10,8 +10,8 @@ The images below include variations for only the core packages in the [Intel® D
 
 | Tag(s)                 | IDP        |
 | ---------------------- | ---------- |
-| `3.10-full`, `latest`  | `2024.1.0` |
-| `3.10-core`            | `2024.1.0` |
+| `3.10-full`, `latest`  | `2024.2.0` |
+| `3.10-core`            | `2024.2.0` |
 
 ## Build from Source
 

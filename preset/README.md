@@ -1,21 +1,21 @@
-# Intel® AI Tools Selector Preset Containers
+# AI Tools Selector Preset Containers
 
-Intel® AI Tools Selector Preset Containers provides data scientists and developers with environment to perform various data-science tasks such as data analysis, data processing, machine learning and deep learning models training and inference. Each container is equipped with the Python packages and tools suited for each tasks while being powered by Intel® Distribution For Python. More detail about each container is described in the table below.
+AI Tools Selector Preset Containers provides data scientists and developers with environment to perform various data-science tasks such as data analysis, data processing, machine learning and deep learning models training and inference. Each container is equipped with the Python packages and tools suited for each task. More detail about each container is described in the table below.
 
 ## Preset Containers
 
 | Preset Container Name | Purpose | Tools | Image Name |
 | -----------------------------| ------------- | ------------- | ----------------- |
-| Data Analytics | Perform large scale data analysis | [Intel® Distribution For Python](https://www.intel.com/content/www/us/en/developer/tools/oneapi/distribution-for-python.html), [Modin*](https://github.com/modin-project/modin), [Intel® Dataset Librarian](https://github.com/IntelAI/models/tree/master/datasets/dataset_api), [Intel® Data Connector](https://github.com/IntelAI/models/tree/master/datasets/cloud_data_connector) | [`intel/data-analytics:latest-py3.9`](https://hub.docker.com/r/intel/data-analytics/tags)<br />[`intel/data-analytics:latest-py3.10`](https://hub.docker.com/r/intel/data-analytics/tags) |
-| Classical ML | Train classical-ml models using scikit, modin and xgboost | [Intel® Distribution For Python](https://www.intel.com/content/www/us/en/developer/tools/oneapi/distribution-for-python.html), [Intel® extension for SciKit Learn](https://github.com/intel/scikit-learn-intelex), [XGBoost*](https://github.com/dmlc/xgboost), [Modin*](https://github.com/modin-project/modin), <br /> [Intel® Dataset Librarian](https://github.com/IntelAI/models/tree/master/datasets/dataset_api), [Intel® Data Connector](https://github.com/IntelAI/models/tree/master/datasets/cloud_data_connector) | [`intel/classical-ml:latest-py3.9`](https://hub.docker.com/r/intel/classical-ml/tags)<br />[`intel/classical-ml:latest-py3.10`](https://hub.docker.com/r/intel/classical-ml/tags) |
-| Deep Learning | Train large scale Deep Learning models with Tensorflow or PyTorch | [Intel® Distribution For Python](https://www.intel.com/content/www/us/en/developer/tools/oneapi/distribution-for-python.html), [PyTorch*](https://pytorch.org/), [Tensorflow*](https://www.tensorflow.org/),<br /> [Intel® Extension for PyTorch](https://github.com/intel/intel-extension-for-pytorch), [Intel® Extension for Tensorflow](https://github.com/intel/intel-extension-for-tensorflow),<br /> [Intel® Optimization for Horovod](https://github.com/intel/intel-optimization-for-horovod), [Intel® Dataset Librarian](https://github.com/IntelAI/models/tree/master/datasets/dataset_api), [Intel® Data Connector](https://github.com/IntelAI/models/tree/master/datasets/cloud_data_connector), [Intel® Extension for DeepSpeed](https://github.com/intel/intel-extension-for-deepspeed) | [`intel/deep-learning:latest-py3.9`](https://hub.docker.com/r/intel/deep-learning/tags)<br />[`intel/deep-learning:latest-py3.10`](https://hub.docker.com/r/intel/deep-learning/tags) |
-| Inference Optimization | Optimize Deep Learning models for inference<br /> using Intel® Neural Compressor | [Intel® Distribution For Python](https://www.intel.com/content/www/us/en/developer/tools/oneapi/distribution-for-python.html), [PyTorch*](https://pytorch.org/), [Tensorflow*](https://www.tensorflow.org/), <br /> [Intel® Extension for PyTorch](https://github.com/intel/intel-extension-for-pytorch), [Intel® Extension for Tensorflow](https://github.com/intel/intel-extension-for-tensorflow),<br /> [Intel® Neural Compressor](https://github.com/intel/neural-compressor), [Intel® Dataset Librarian](https://github.com/IntelAI/models/tree/master/datasets/dataset_api), [Intel® Data Connector](https://github.com/IntelAI/models/tree/master/datasets/cloud_data_connector) | [`intel/inference-optimization:latest-py3.9`](https://hub.docker.com/r/intel/inference-optimization/tags)<br />[`intel/inference-optimization:latest-py3.10`](https://hub.docker.com/r/intel/inference-optimization/tags) |
+| Data Analytics | Perform large scale data analysis |[Modin*](https://github.com/modin-project/modin), [Intel® Dataset Librarian](https://github.com/IntelAI/models/tree/master/datasets/dataset_api), [Intel® Data Connector](https://github.com/IntelAI/models/tree/master/datasets/cloud_data_connector) | [`intel/data-analytics:latest-py3.9`](https://hub.docker.com/r/intel/data-analytics/tags)<br />[`intel/data-analytics:latest-py3.10`](https://hub.docker.com/r/intel/data-analytics/tags) |
+| Classical ML | Train classical-ml models using scikit, modin and xgboost |[Intel® extension for SciKit Learn](https://github.com/intel/scikit-learn-intelex), [Intel® Optimization for XGBoost*](https://github.com/dmlc/xgboost), [Modin*](https://github.com/modin-project/modin), <br /> [Intel® Dataset Librarian](https://github.com/IntelAI/models/tree/master/datasets/dataset_api), [Intel® Data Connector](https://github.com/IntelAI/models/tree/master/datasets/cloud_data_connector) | [`intel/classical-ml:latest-py3.9`](https://hub.docker.com/r/intel/classical-ml/tags)<br />[`intel/classical-ml:latest-py3.10`](https://hub.docker.com/r/intel/classical-ml/tags) |
+| Deep Learning | Train large scale Deep Learning models with Tensorflow or PyTorch | [Intel® Extension for PyTorch](https://github.com/intel/intel-extension-for-pytorch), [Intel® Extension for Tensorflow](https://github.com/intel/intel-extension-for-tensorflow),<br /> [Intel® Optimization for Horovod](https://github.com/intel/intel-optimization-for-horovod), [Intel® Dataset Librarian](https://github.com/IntelAI/models/tree/master/datasets/dataset_api), [Intel® Data Connector](https://github.com/IntelAI/models/tree/master/datasets/cloud_data_connector), [Intel® Extension for DeepSpeed](https://github.com/intel/intel-extension-for-deepspeed) | [`intel/deep-learning:latest-py3.9`](https://hub.docker.com/r/intel/deep-learning/tags)<br />[`intel/deep-learning:latest-py3.10`](https://hub.docker.com/r/intel/deep-learning/tags) |
+| Inference Optimization | Optimize Deep Learning models for inference<br /> using Intel® Neural Compressor | [Intel® Extension for PyTorch](https://github.com/intel/intel-extension-for-pytorch), [Intel® Extension for Tensorflow](https://github.com/intel/intel-extension-for-tensorflow),<br /> [Intel® Neural Compressor](https://github.com/intel/neural-compressor), [Intel® Dataset Librarian](https://github.com/IntelAI/models/tree/master/datasets/dataset_api), [Intel® Data Connector](https://github.com/IntelAI/models/tree/master/datasets/cloud_data_connector) | [`intel/inference-optimization:latest-py3.9`](https://hub.docker.com/r/intel/inference-optimization/tags)<br />[`intel/inference-optimization:latest-py3.10`](https://hub.docker.com/r/intel/inference-optimization/tags) |
 
 ## Prerequisites
 
 1. Make sure [docker](https://docs.docker.com/engine/) is installed on the machine. Follow the [instruction here](https://docs.docker.com/engine/install/) to install docker engine on a host machine.
 
-2. Pull a Preset Container of your choice from the [Intel® AI Tools Selector](https://www.intel.com/content/www/us/en/developer/tools/oneapi/ai-tools-selector.html) or from the [table](#preset-containers). The commands below use the `deep-learning` preset as an example.
+2. Pull a Preset Container of your choice from the [AI Tools Selector](https://www.intel.com/content/www/us/en/developer/tools/oneapi/ai-tools-selector.html) or from the [table](#preset-containers). The commands below use the `deep-learning` preset as an example.
 
 ```bash
 docker pull intel/deep-learning:latest-py3.9
@@ -46,7 +46,7 @@ docker run -it --rm \
 ```
 
 > [!NOTE]
-> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications(Ex. Modin). Docker recommends increasing shared memory size using `--shm-size`.
+> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications (Ex. Modin*). Docker recommends increasing shared memory size using `--shm-size`.
 
 #### Run on GPU
 
@@ -106,7 +106,7 @@ docker run -it --rm \
 ```
 
 > [!NOTE]
-> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications(Ex. Modin). Docker recommends increasing shared memory size using `--shm-size`.
+> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications (Ex. Modin*). Docker recommends increasing shared memory size using `--shm-size`.
 
 #### Run on Jupyter GPU
 
@@ -131,7 +131,7 @@ docker run -it --rm \
 ```
 
 > [!NOTE]
-> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications(Ex. Modin). Docker recommends increasing shared memory size using `--shm-size`.
+> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications (Ex. Modin*). Docker recommends increasing shared memory size using `--shm-size`.
 
 #### Next Steps
 
@@ -156,7 +156,7 @@ docker run ... intel/deep-learning:latest-py3.9 \
 
 ## Run in Multi-Node Distributed Mode [Advanced]
 
-You can follow the instructions provided for [Tensorflow](https://github.com/intel/ai-containers/tree/main/preset/deep-learning/demo/tensorflow-distributed/README.md) and [PyTorch](https://github.com/intel/ai-containers/tree/main/preset/deep-learning/demo/pytorch-distributed/README.md) along with the Deep Learning or Inference Optimization presets using your preferred framework.
+You can follow the instructions provided for [Intel® Extension for TensorFlow*](https://github.com/intel/ai-containers/tree/main/preset/deep-learning/demo/tensorflow-distributed/README.md) and [Intel® Extension for PyTorch*](https://github.com/intel/ai-containers/tree/main/preset/deep-learning/demo/pytorch-distributed/README.md) along with the Deep Learning or Inference Optimization presets using your preferred framework.
 
 ## Troubleshooting and Support
 
@@ -164,4 +164,4 @@ If you face some issue in using the container you can find more information on h
 
 ---
 
-* Other names and brands may be claimed as the property of others. [Trademarks](http://www.intel.com/content/www/us/en/legal/trademarks.html)
+*Other names and brands may be claimed as the property of others. [Trademarks](http://www.intel.com/content/www/us/en/legal/trademarks.html)
