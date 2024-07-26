@@ -92,8 +92,6 @@ jobs:
           echo "No files matching the pattern test-runner-summary*.json found in the directory"
         fi
       id: check_matching_json_files
-    - name: Verify Output Value
-      run: echo "has_matching_json_files is ${{ steps.check_matching_json_files.outputs.has_matching_json_files }}"
     - name: Combine JSON files
       if: ${{ steps.check_matching_json_files.outputs.has_matching_json_files == 'true' }}
       run: |
