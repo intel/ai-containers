@@ -85,10 +85,10 @@ jobs:
       shell: bash
       run: |
         if [[ -n "$(find . -maxdepth 1 -name 'test-runner-summary*.json' -print -quit)" ]]; then
-          echo "has_matching_json_files=true" >> $GITHUB_OUTPUT"
+          echo "has_matching_json_files=true" >> "$GITHUB_OUTPUT"
           echo "Files matching the pattern test-runner-summary*.json found in the directory"
         else
-          echo "has_matching_json_files=false" >> $GITHUB_OUTPUT"
+          echo "has_matching_json_files=false" >> "$GITHUB_OUTPUT"
           echo "No files matching the pattern test-runner-summary*.json found in the directory"
         fi
       id: check_matching_json_files
