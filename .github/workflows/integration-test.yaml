@@ -84,12 +84,12 @@ jobs:
     - name: Check for JSON files
       shell: bash
       run: |
-        if [ -n "$(find . -maxdepth 1 -name 'test-runner-summary*.json' -print -quit)" ]; then
-          echo "Files matching the pattern test-runner-summary*.json found in the directory"
+        if [[ -n "$(find . -maxdepth 1 -name 'test-runner-summary*.json' -print -quit)" ]]; then
           echo "has_matching_json_files=true" >> $GITHUB_OUTPUT"
+          echo "Files matching the pattern test-runner-summary*.json found in the directory"
         else
-          echo "No files matching the pattern test-runner-summary*.json found in the directory"
           echo "has_matching_json_files=false" >> $GITHUB_OUTPUT"
+          echo "No files matching the pattern test-runner-summary*.json found in the directory"
         fi
       id: check_matching_json_files
     - name: Verify Output Value
