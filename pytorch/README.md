@@ -53,10 +53,8 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 ```bash
 docker run -it --rm \
     -p 8888:8888 \
-    --net=host \
     --device /dev/dri \
     -v /dev/dri/by-path:/dev/dri/by-path \
-    --ipc=host \
     intel/intel-extension-for-pytorch:2.1.20-xpu-pip-jupyter
 ```
 
@@ -93,7 +91,6 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 ```bash
 docker run -it --rm \
     -p 8888:8888 \
-    --net=host \
     -v $PWD/workspace:/workspace \
     -w /workspace \
     intel/intel-extension-for-pytorch:2.3.0-pip-jupyter
@@ -304,6 +301,7 @@ The images below are built only with CPU and GPU optimizations and include [Inte
 
 | Tag(s)           | Pytorch  | IPEX         | Driver | Dockerfile      |
 | ---------------- | -------- | ------------ | -------- | ------ |
+| `2.1.30-xpu-idp-base` | [v2.1.0] | [v2.1.30+xpu]  | [803]  | [v0.4.0-Beta] |
 | `2.1.10-xpu-idp-base` | [v2.1.0] | [v2.1.10+xpu]  | [736]  | [v0.2.3] |
 
 The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
