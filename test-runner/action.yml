@@ -75,5 +75,11 @@ runs:
       if: always()
       with:
         name: ${{ env.test }} outputs
-        path: ${{ inputs.test_dir }}/logs
+        path: ${{ inputs.test_dir }}/logs/*.log
+        overwrite: true
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-runner-summary ${{ env.test }}
+        path: test-runner-summary*.json
         overwrite: true
