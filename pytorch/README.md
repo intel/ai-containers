@@ -53,10 +53,8 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 ```bash
 docker run -it --rm \
     -p 8888:8888 \
-    --net=host \
     --device /dev/dri \
     -v /dev/dri/by-path:/dev/dri/by-path \
-    --ipc=host \
     intel/intel-extension-for-pytorch:2.1.20-xpu-pip-jupyter
 ```
 
@@ -93,7 +91,6 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 ```bash
 docker run -it --rm \
     -p 8888:8888 \
-    --net=host \
     -v $PWD/workspace:/workspace \
     -w /workspace \
     intel/intel-extension-for-pytorch:2.3.0-pip-jupyter
