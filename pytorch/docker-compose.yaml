@@ -199,5 +199,7 @@ services:
         org.opencontainers.image.title: "Intel® Extension for PyTorch MultiNode Huggingface Generative AI Image"
         org.opencontainers.image.version: ${IPEX_VERSION:-2.3.0}-${PACKAGE_OPTION:-pip}-multinode-hf-${HF_VERSION:-4.41.2}-genai"
       target: hf-genai
-    extends: multinode
+    extends: ipex-base
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-hf-${HF_VERSION:-4.41.2}
+    command: >
+      bash -c "python-c 'import transformers; print(transformers.__version__)'"
