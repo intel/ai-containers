@@ -263,6 +263,7 @@ RUN conda create -yn 'tensorflow-cpu' \
         'py-cpuinfo==9.0.0' \
         "tensorflow=${TF_VERSION}" \
         'tensorflow-hub==0.16.1' \
+        'tqdm==4.66.4' \
         && \
     conda clean -y --all
 
@@ -287,6 +288,7 @@ RUN conda create -yn 'tensorflow-gpu' \
         'py-cpuinfo==9.0.0' \
         "tensorflow=${TF_VERSION}" \
         'tensorflow-hub==0.16.1' \
+        'tqdm==4.66.4' \
         && \
     conda clean -y --all
 
