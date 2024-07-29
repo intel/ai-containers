@@ -46,7 +46,7 @@ A test is defined as a set of commands to be executed along with their associate
 | notebook   | Optional[str]  | A flag indicating whether the test utilizes a [jupyter notebook](#notebook-test). |
 | serving    | Optional[str]  | A flag indicating whether a [serving test](#serving-test) should be invoked. |
 | [cap_add](https://github.com/compose-spec/compose-spec/blob/master/spec.md#cap_add)    | Optional[str]  | Specifies additional container capabilities. |
-| [device](https://github.com/compose-spec/compose-spec/blob/master/spec.md#devices)     | Optional[str]  | Defines a list of device mappings like a dGPU. |
+| [device](https://github.com/compose-spec/compose-spec/blob/master/spec.md#devices)     | Optional[List[str]]  | Defines a list of device mappings like a dGPU. |
 | [entrypoint](https://github.com/compose-spec/compose-spec/blob/master/spec.md#entrypoint) | Optional[str]  | Overrides the entrypoint for the container specified by the image. |
 | [hostname](https://github.com/compose-spec/compose-spec/blob/master/spec.md#hostname)   | Optional[str]  | Declares a custom host name to use for the container. |
 | [ipc](https://github.com/compose-spec/compose-spec/blob/master/spec.md#ipc)        | Optional[str]  | Configures the IPC isolation mode set by the container. |
