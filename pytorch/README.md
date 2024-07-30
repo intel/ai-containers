@@ -412,6 +412,6 @@ It is the image user's responsibility to ensure that any use of The images below
 [736]: https://dgpu-docs.intel.com/releases/stable_736_25_20231031.html
 [647]: https://dgpu-docs.intel.com/releases/stable_647_21_20230714.html
 
-<!-- MLPerf Dashvoard -->
+<!-- MLPerf Dashboard -->
 [Inference v4.1]: https://mlcommons.org/benchmarks/inference-datacenter
 [Get Started with Intel MLPerf]: https://www.intel.com/content/www/us/en/developer/articles/guide/get-started-mlperf-intel-optimized-docker-images.html
