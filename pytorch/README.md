@@ -332,6 +332,19 @@ You can find the list of services below for each container in the group:
 | `xpu-jupyter` | Adds Jupyter notebook server to GPU image                           |
 | `serving`     | [TorchServe*]                                                       |
 
+## MLPerf Optimized Workloads
+
+The following images are available for MLPerf-optimized workloads. Instructions are available [here](https://www.intel.com/content/www/us/en/developer/articles/guide/get-started-mlperf-intel-optimized-docker-images.html).
+
+| Tag(s)                            | Base OS          | MLPerf Round     | Target Platform                 |
+| --------------------------------- | ---------------- | ---------------- | ------------------------------- |
+| `mlperf-inference-4.1-resnet50`   | [rockylinux:8.7] | [Inference v4.1] | Intel(R) Xeon(R) Platinum 8592+ |
+| `mlperf-inference-4.1-retinanet`  | [ubuntu:22.04]   | [Inference v4.1] | Intel(R) Xeon(R) Platinum 8592+ |
+| `mlperf-inference-4.1-gptj`       | [ubuntu:22.04]   | [Inference v4.1] | Intel(R) Xeon(R) Platinum 8592+ |
+| `mlperf-inference-4.1-bert`       | [ubuntu:22.04]   | [Inference v4.1] | Intel(R) Xeon(R) Platinum 8592+ |
+| `mlperf-inference-4.1-dlrmv2`     | [rockylinux:8.7] | [Inference v4.1] | Intel(R) Xeon(R) Platinum 8592+ |
+| `mlperf-inference-4.1-3dunet`     | [ubuntu:22.04]   | [Inference v4.1] | Intel(R) Xeon(R) Platinum 8592+ |
+
 ## License
 
 View the [License](https://github.com/intel/intel-extension-for-pytorch/blob/main/LICENSE) for the [Intel® Extension for PyTorch*].
