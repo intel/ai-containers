@@ -334,7 +334,7 @@ You can find the list of services below for each container in the group:
 
 ## MLPerf Optimized Workloads
 
-The following images are available for MLPerf-optimized workloads. Instructions are available [here](https://www.intel.com/content/www/us/en/developer/articles/guide/get-started-mlperf-intel-optimized-docker-images.html).
+The following images are available for MLPerf-optimized workloads. Instructions are available at '[Get Started with Intel MLPerf]'.
 
 | Tag(s)                            | Base OS        | MLPerf Round     | Target Platform                 |
 | --------------------------------- | -------------- | ---------------- | ------------------------------- |
@@ -414,3 +414,4 @@ It is the image user's responsibility to ensure that any use of The images below
 
 <!-- MLPerf Dashvoard -->
 [Inference v4.1]: https://mlcommons.org/benchmarks/inference-datacenter
+[Get Started with Intel MLPerf]: https://www.intel.com/content/www/us/en/developer/articles/guide/get-started-mlperf-intel-optimized-docker-images.html
