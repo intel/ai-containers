@@ -24,7 +24,7 @@ concurrency:
 jobs:
   lint:
     name: Lint
-    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    runs-on: 'ubuntu-latest'
     permissions:
       contents: read
       actions: read
