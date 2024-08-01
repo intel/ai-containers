@@ -26,6 +26,8 @@
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
 
+set -e
+
 apt-get -y update
 apt-get -y install curl
 # curl -O https://torchserve.pytorch.org/mar_files/squeezenet1_1.mar
@@ -33,4 +35,4 @@ curl --fail -O https://raw.githubusercontent.com/pytorch/serve/master/docs/image
 curl --fail -X GET http://localhost:8080/ping
 curl --fail -X POST "http://localhost:8081/models?initial_workers=1&synchronous=true&url=/home/model-server/model-store/squeezenet1_1.mar&model_name=squeezenet"
 curl --fail -X POST http://127.0.0.1:8080/v2/models/squeezenet/infer -T /home/model-server/model-store/kitten_small.jpg
-rm -rf kitten_small.jpg
+rm -rf /home/model-server/model-store/squeezenet1_1.mar kitten_small.jpg
