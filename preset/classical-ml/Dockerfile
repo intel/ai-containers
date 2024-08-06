@@ -27,18 +27,18 @@ SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends --fix-missing \
-    bzip2 \
-    ca-certificates \
-    diffutils \
-    gcc \
-    git \
-    gzip \
-    make \
-    patch \
-    rsync \
-    unzip \
-    wget \
-    xz-utils && \
+        bzip2 \
+        ca-certificates \
+        diffutils \
+        gcc \
+        git \
+        gzip \
+        make \
+        patch \
+        rsync \
+        unzip \
+        wget \
+        xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
 # Setting up non-root directories
@@ -64,13 +64,18 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
     conda install -y \
         'colorama==0.4.6' \
         'conda==24.5.0' \
-        'jupyterhub==5.0.0' \
+        'jupyterhub==5.1.0' \
         'jupyter-server-proxy==4.3.0' \
         'mamba==1.5.8' \
         'networkx==3.3' \
         'notebook==7.2.1' \
         'pip==24.0' \
         'python==3.10.14' \
+        'idna>=3.7' \
+        'requests>=2.32.0' \
+        'setuptools>=70.0.0' \
+        'tqdm>=4.66.3' \
+        'urllib3>=2.2.2' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -100,8 +105,12 @@ RUN conda create -yn classical-ml \
         "modin-ray=${MODIN_VERSION}" \
         'python-dotenv==1.0.1' \
         "scikit-learn-intelex=${SKLEARNEX_VERSION}" \
-        'tqdm==4.66.4' \
         "xgboost=${XGBOOST_VERSION}" \
+        'idna>=3.7' \
+        'requests>=2.32.0' \
+        'setuptools>=70.0.0' \
+        'tqdm>=4.66.3' \
+        'urllib3>=2.2.2' \
         && \
     conda clean -y --all
 
@@ -114,6 +123,9 @@ COPY base/.patch_sklearn.py ~/.patch_sklearn.py
 
 ENV PYTHONSTARTUP=/home/dev/.patch_sklearn.py
 COPY base/.patch_sklearn.py /home/dev/.patch_sklearn.py
+
+###############################################
+# Adding jupyter functionality
 
 EXPOSE 8888
 

@@ -29,7 +29,7 @@ services:
         ICD_VER: 23.43.27642.52-803~22.04
         IDP_VERSION: ${IDP_VERSION:-2024.2}
         IMPI_VERSION: ${IMPI_VERSION:-2021.13}
-        INTEL_CHANNEL: ${INTEL_CHANNEL:-https://software.repos.intel.com/python/conda/}
+        INTEL_CHANNEL: ${INTEL_CHANNEL:-https://s3-us-west-2.amazonaws.com/swm.dev.intel.com/intel-conda/}
         IPEX_CPU_VERSION: ${IPEX_CPU_VERSION:-2.3.100}
         IPEX_XPU_VERSION: ${IPEX_XPU_VERSION:-2.1.40}
         ITEX_CPU_VERSION: ${ITEX_CPU_VERSION:-2.15.0}
@@ -154,7 +154,7 @@ services:
         dependency.conda.intel-optimization-for-horovod: '==0.28.1.5'
         dependency.conda.ipykernel: '==6.29.5'
         dependency.conda.jupyter-server-proxy: '==4.3.0'
-        dependency.conda.jupyterhub: '==5.0.0'
+        dependency.conda.jupyterhub: '==5.1.0'
         dependency.conda.kernda: '==0.3.0'
         dependency.conda.ld_impl_linux-64: '==2.40'
         dependency.conda.mamba: '==1.5.8'
@@ -165,7 +165,7 @@ services:
         dependency.conda.notebook: '==7.2.1'
         dependency.conda.oneccl_bind_pt_cpu: '==2.3.0'
         dependency.conda.oneccl_bind_pt_gpu: '==2.1.400'
-        dependency.conda.onnx: '==1.14.1'
+        dependency.conda.onnx: '>=1.16.0'
         dependency.conda.py-cpuinfo: '==9.0.0'
         dependency.conda.pytorch_cpu: '==2.3.1'
         dependency.conda.pytorch_xpu: '==2.1.0'
@@ -190,7 +190,7 @@ services:
       conda run -n pytorch-cpu bash -c 'mpirun --version'
       &&
 
-      conda run -n pytorch-cpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\nOneCCL:\", oneccl.__version__)'
+      conda run -n pytorch-cpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\nOneCCL:\", oneccl.__version__)'
       &&
 
       conda run -n pytorch-gpu python -c 'import torch;print(torch.device(\"xpu\"));import intel_extension_for_pytorch as ipex;print(ipex.xpu.is_available());print(ipex.xpu.has_onemkl())'
@@ -199,7 +199,7 @@ services:
       conda run -n pytorch-gpu bash -c 'mpirun --version'
       &&
 
-      conda run -n pytorch-gpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\nOneCCL:\", oneccl.__version__)'
+      conda run -n pytorch-gpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\nOneCCL:\", oneccl.__version__)'
       &&
 
       conda run -n tensorflow-cpu python -c 'import tensorflow;print(tensorflow.__version__);import intel_extension_for_tensorflow as itex;print(itex.__version__)'

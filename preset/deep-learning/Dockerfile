@@ -28,30 +28,33 @@ EXPOSE 8080
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends --fix-missing \
-    apt-utils \
-    build-essential \
-    bzip2 \
-    ca-certificates \
-    clinfo \
-    cmake \
-    diffutils \
-    g++ \
-    gcc \
-    git \
-    gnupg2 \
-    gpg-agent \
-    gzip \
-    make \
-    numactl \
-    patch \
-    rsync \
-    unzip \
-    wget \
-    sudo \
-    xz-utils && \
+        apt-utils \
+        build-essential \
+        bzip2 \
+        ca-certificates \
+        clinfo \
+        cmake \
+        diffutils \
+        g++ \
+        gcc \
+        git \
+        gnupg2 \
+        gpg-agent \
+        gzip \
+        make \
+        numactl \
+        patch \
+        rsync \
+        unzip \
+        wget \
+        sudo \
+        xz-utils \
+    && \
     rm -rf /var/lib/apt/lists/*
 
+###############################
 # GPU Drivers setup
+
 ARG DEVICE
 ARG ICD_VER
 ARG LEVEL_ZERO_GPU_VER
@@ -67,46 +70,48 @@ RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] http
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
-    intel-opencl-icd="${ICD_VER}" \
-    intel-level-zero-gpu="${LEVEL_ZERO_GPU_VER}" \
-    level-zero="${LEVEL_ZERO_VER}"
+        intel-opencl-icd="${ICD_VER}" \
+        intel-level-zero-gpu="${LEVEL_ZERO_GPU_VER}" \
+        level-zero="${LEVEL_ZERO_VER}"
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
-    intel-media-va-driver-non-free \
-    libmfx1 \
-    libmfxgen1 \
-    libvpl2 \
-    libegl-mesa0 \
-    libegl1-mesa \
-    libegl1-mesa-dev \
-    libgbm1 \
-    libgl1-mesa-dev \
-    libgl1-mesa-dri \
-    libglapi-mesa \
-    libgles2-mesa-dev \
-    libglx-mesa0 \
-    libigdgmm12 \
-    libxatracker2 \
-    mesa-va-drivers \
-    mesa-vdpau-drivers \
-    mesa-vulkan-drivers \
-    va-driver-all \
-    vainfo \
-    hwinfo \
-    clinfo
+        clinfo \
+        hwinfo \
+        intel-media-va-driver-non-free \
+        libegl-mesa0 \
+        libegl1-mesa \
+        libegl1-mesa-dev \
+        libgbm1 \
+        libgl1-mesa-dev \
+        libgl1-mesa-dri \
+        libglapi-mesa \
+        libgles2-mesa-dev \
+        libglx-mesa0 \
+        libigdgmm12 \
+        libmfx1 \
+        libmfxgen1 \
+        libvpl2 \
+        mesa-va-drivers \
+        mesa-vdpau-drivers \
+        mesa-vulkan-drivers \
+        va-driver-all \
+        vainfo
 
 RUN apt-get install -y --no-install-recommends --fix-missing \
-    libigc-dev \
-    intel-igc-cm \
-    libigdfcl-dev \
-    libigfxcmrt-dev \
-    level-zero-dev="${LEVEL_ZERO_DEV_VER}" && \
+        intel-igc-cm \
+        libigc-dev \
+        libigdfcl-dev \
+        libigfxcmrt-dev \
+        level-zero-dev="${LEVEL_ZERO_DEV_VER}" \
+    && \
     rm -rf /var/lib/apt/lists/*
 
 RUN rm /etc/apt/sources.list.d/*list
 
+##########################
 # Setting up non-root directories
+
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash dev
 RUN groupadd -g 109 render
 ## Add the user to the required groups
@@ -117,8 +122,6 @@ USER dev
 WORKDIR /home/dev
 
 ENV CONDA_ROOT=/home/dev/conda
-
-# Miniforge Python Installation
 ARG MINIFORGE_VERSION
 ARG PYTHON_VERSION
 ARG IDP_VERSION
@@ -135,12 +138,21 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
         'colorama==0.4.6' \
         'conda==24.5.0' \
         'jupyter-server-proxy==4.3.0' \
-        'jupyterhub==5.0.0' \
+        'jupyterhub==5.1.0' \
         'ld_impl_linux-64==2.40' \
         'mamba==1.5.8' \
         'networkx==3.3' \
         'notebook==7.2.1' \
         'python==3.10.14' \
+        'aiohttp>=3.9.4' \
+        'certifi>=2024.07.04' \
+        'idna>=3.7' \
+        'jinja2>=3.1.4' \
+        'requests>=2.32.0' \
+        'setuptools>=70.0.0' \
+        'tqdm>=4.66.3' \
+        'urllib3>=2.2.2' \
+        'zipp>=3.19.1' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -178,10 +190,18 @@ RUN conda create -yn pytorch-cpu \
         'tensorboardx==2.6.2.2' \
         "torchaudio=${TORCHAUDIO_CPU_VERSION}" \
         "torchvision=${TORCHVISION_CPU_VERSION}" \
+        'aiohttp>=3.9.4' \
+        'certifi>=2024.07.04' \
+        'idna>=3.7' \
+        'jinja2>=3.1.4' \
+        'onnx>=1.16.0' \
+        'requests>=2.32.0' \
+        'tqdm>=4.66.3' \
+        'urllib3>=2.2.2' \
+        'zipp>=3.19.1' \
         && \
     conda clean -y --all
 
-# PyPI packages
 RUN conda run -n pytorch-cpu pip install --no-deps --no-cache-dir \
         'dataset-librarian==1.0.4' \
         && \
@@ -203,7 +223,6 @@ ARG TORCHVISION_XPU_VERSION
 ARG TORCHAUDIO_XPU_VERSION
 ARG IDEX_VERSION
 
-# PyTorch GPU Env - conda packages
 RUN conda create -yn 'pytorch-gpu' \
     -c huggingface \
         "python=${PYTHON_VERSION}" \
@@ -218,6 +237,15 @@ RUN conda create -yn 'pytorch-gpu' \
         'tensorboardx==2.6.2.2' \
         "torchaudio=${TORCHAUDIO_XPU_VERSION}" \
         "torchvision=${TORCHVISION_XPU_VERSION}" \
+        'aiohttp>=3.9.4' \
+        'certifi>=2024.07.04' \
+        'idna>=3.7' \
+        'jinja2>=3.1.4' \
+        'onnx>=1.16.0' \
+        'requests>=2.32.0' \
+        'tqdm>=4.66.3' \
+        'urllib3>=2.2.2' \
+        'zipp>=3.19.1' \
         && \
     conda clean -y --all
 
@@ -259,11 +287,18 @@ RUN conda create -yn 'tensorflow-cpu' \
         'matplotlib-base>=3.8.4' \
         'mpi==1.0' \
         'mpich==4.2.2' \
-        'onnx==1.14.1' \
+        'onnx>=1.14.1' \
         'py-cpuinfo==9.0.0' \
         "tensorflow=${TF_VERSION}" \
         'tensorflow-hub==0.16.1' \
         'tqdm==4.66.4' \
+        'aiohttp>=3.9.4' \
+        'certifi>=2024.07.04' \
+        'idna>=3.7' \
+        'requests>=2.32.0' \
+        'urllib3>=2.2.2' \
+        'werkzeug>=3.0.3' \
+        'zipp>=3.19.1' \
         && \
     conda clean -y --all
 
@@ -274,6 +309,7 @@ RUN conda run -n 'tensorflow-cpu' pip install --no-deps --no-cache-dir \
 
 #######################################
 # TensorFlow gpu Installation
+
 RUN conda create -yn 'tensorflow-gpu' \
         "python=${PYTHON_VERSION}" \
         "dpnp=${DPNP_VERSION}" \
@@ -284,11 +320,17 @@ RUN conda create -yn 'tensorflow-gpu' \
         'matplotlib-base>=3.8.4' \
         'mpi==1.0' \
         'mpich==4.2.2' \
-        'onnx==1.14.1' \
+        'onnx>=1.14.1' \
         'py-cpuinfo==9.0.0' \
         "tensorflow=${TF_VERSION}" \
         'tensorflow-hub==0.16.1' \
         'tqdm==4.66.4' \
+        'aiohttp>=3.9.4' \
+        'certifi>=2024.07.04' \
+        'idna>=3.7' \
+        'requests>=2.32.0' \
+        'urllib3>=2.2.2' \
+        'zipp>=3.19.1' \
         && \
     conda clean -y --all
 
@@ -358,14 +400,11 @@ ENV UCX_TLS=ud,sm,self
 
 USER dev
 
-RUN conda install -n pytorch-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
-        deepspeed="${DEEPSPEED_VERSION}" \
-        'tensorboardx>=2.6.2.2'
-
 RUN ENVS_LIST=('pytorch-cpu' 'pytorch-gpu') && \
     for i in "${!ENVS_LIST[@]}"; do \
         CONDA_ENV="${ENVS_LIST[i]}" && \
         conda install -yn "$CONDA_ENV" \
+        -c "https://$USER_AF:$PASS_AF@af01p-fm.devtools.intel.com/artifactory/api/conda/aitools-conda_channel-fm-local/intel-2024.2.0" \
         "deepspeed=${DEEPSPEED_VERSION}" \
         'tensorboardx==2.6.2.2' \
     ; done && \

@@ -24,7 +24,7 @@ services:
         BASE_TAG: ${BASE_TAG:-22.04}
         DPNP_VERSION: ${NUMBA_DPEX_VERSION:-0.15.0}
         IDP_VERSION: ${IDP_VERSION:-2024.1.0}
-        INTEL_CHANNEL: ${INTEL_CHANNEL:-https://software.repos.intel.com/python/conda/}
+        INTEL_CHANNEL: ${INTEL_CHANNEL:-https://s3-us-west-2.amazonaws.com/swm.dev.intel.com/intel-conda/}
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Linux-x86_64}
         MODIN_VERSION: ${MODIN_VERSION:-0.30.0}
         NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4}
@@ -58,7 +58,7 @@ services:
         dependency.conda.conda: '==24.5.0'
         dependency.conda.dpnp: '==0.15.0'
         dependency.conda.ipykernel: '==6.29.5'
-        dependency.conda.jupyterhub: '==5.0.0'
+        dependency.conda.jupyterhub: '==5.1.0'
         dependency.conda.jupyter-server-proxy: '==4.3.0'
         dependency.conda.kernda: '==0.3.0'
         dependency.conda.mamba: '==1.5.8'
@@ -68,7 +68,7 @@ services:
         dependency.conda.notebook: '==7.2.1'
         dependency.conda.python: "=${PYTHON_VERSION:-3.10}"
         dependency.conda.python-dotenv: '==1.0.1'
-        dependency.conda.tqdm: '==4.66.4'
+        dependency.conda.tqdm: '>=4.66.3'
       target: data-analytics
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-2024.2.0-py${PYTHON_VERSION:-3.10}
     environment:

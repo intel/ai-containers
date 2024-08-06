@@ -21,14 +21,12 @@ ENV SIGOPT_PROJECT=.
 ARG NEURAL_COMPRESSOR_VERSION
 ARG INTEL_CHANNEL
 
-
 RUN ENVS_LIST=('pytorch-cpu' 'pytorch-gpu' 'tensorflow-cpu' 'tensorflow-gpu') && \
     for i in "${!ENVS_LIST[@]}"; do \
         CONDA_ENV="${ENVS_LIST[i]}" && \
         conda install -yn "$CONDA_ENV" \
-        -c "https://$USER_AF:$PASS_AF@af01p-fm.devtools.intel.com/artifactory/aitools-conda_channel-fm-local" \
-        -c "https://$USER_AF:$PASS_AF@af01p-fm.devtools.intel.com/artifactory/api/conda/aitools-conda_channel-fm-local/intel-2024.2.0" \
         "neural-compressor=${NEURAL_COMPRESSOR_VERSION}" \
+        'scikit-learn>=1.5.0' \
         ; \
     done && \
     conda clean -y --all

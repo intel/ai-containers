@@ -27,18 +27,18 @@ SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends --fix-missing \
-    bzip2 \
-    ca-certificates \
-    diffutils \
-    gcc \
-    git \
-    gzip \
-    make \
-    patch \
-    rsync \
-    unzip \
-    wget \
-    xz-utils && \
+        bzip2 \
+        ca-certificates \
+        diffutils \
+        gcc \
+        git \
+        gzip \
+        make \
+        patch \
+        rsync \
+        unzip \
+        wget \
+        xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
 # Setting up non-root directories
@@ -64,12 +64,17 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     conda install -y \
         'colorama==0.4.6' \
         'conda==24.5.0' \
-        'jupyterhub==5.0.0' \
+        'jupyterhub==5.1.0' \
         'jupyter-server-proxy==4.3.0' \
         'mamba==1.5.8' \
         'networkx==3.3' \
         'notebook==7.2.1' \
         'python==3.10.14' \
+        'idna>=3.7' \
+        'requests>=2.32.0' \
+        'setuptools>=70.0.0' \
+        'tqdm>=4.66.3' \
+        'urllib3>=2.2.2' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -94,7 +99,11 @@ RUN conda create -yn data-analytics \
         'matplotlib-base==3.8.4' \
         "modin-ray=${MODIN_VERSION}" \
         'python-dotenv==1.0.1' \
-        'tqdm==4.66.4' \
+        'idna>=3.7' \
+        'requests>=2.32.0' \
+        'setuptools>=70.0.0' \
+        'tqdm>=4.66.3' \
+        'urllib3>=2.2.2' \
         && \
     conda clean -y --all
 
