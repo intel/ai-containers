@@ -54,6 +54,8 @@ ipex-serving-rest-inference:
   volumes:
   - src: $PWD/pytorch/serving/model-store
     dst: /home/model-server/model-store
+  - src: $PWD/pytorch/serving/wf-store
+    dst: /home/model-server/wf-store
   env:
     ENABLE_TORCH_PROFILER: 'true'
   shm_size: 1g
@@ -65,6 +67,8 @@ ipex-serving-grpc-inference:
   volumes:
   - src: $PWD/pytorch/serving/model-store
     dst: /home/model-server/model-store
+  - src: $PWD/pytorch/serving/wf-store
+    dst: /home/model-server/wf-store
   env:
     ENABLE_TORCH_PROFILER: 'true'
   shm_size: 1g

@@ -49,6 +49,12 @@ docker container stop server
 
 As demonstrated in the above example, models must be registered before they can be used for predictions. The best way to ensure models are pre-registered with ideal settings is to modify the included [config file](./config.properties) for the torchserve server.
 
+> [!NOTE]
+> Since torchserve 0.11.1 torchserve asks for token authentication for security. We've disabled it in the config.properties by setting `disable_token_authorization=true`. If you want to enable the authentication you can find more details in the [documentation](https://github.com/pytorch/serve/blob/master/docs/token_authorization_api.md).
+
+> [!NOTE]
+> Since torchserve 0.11.1 the model API has been disabled by default. We enable the model API by setting `enable_model_api=true` in provided config.properties.
+
 1. Add your model to the config file
 
     ```properties
