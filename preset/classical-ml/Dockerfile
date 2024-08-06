@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 ARG BASE_IMAGE="ubuntu"
 ARG BASE_TAG="22.04"
 
 FROM ${BASE_IMAGE}:${BASE_TAG} as classical-ml
 
 ENV DEBIAN_FRONTEND=noninteractive
-
-# See http://bugs.python.org/issue19846
 
 ENV LANG=C.UTF-8
 
@@ -41,9 +40,7 @@ RUN apt-get update -y && \
         xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
-# Setting up non-root directories
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash -m dev
-# Set a password for the user (Optional)
 RUN echo 'dev:password' | chpasswd
 USER dev
 WORKDIR /home/dev
@@ -54,11 +51,11 @@ ARG PYTHON_VERSION
 ARG IDP_VERSION
 ARG INTEL_CHANNEL
 
-RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-${MINIFORGE_VERSION}.sh -O miniforge.sh && \
+RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-forge/miniforge/releases/latest/download/${MINIFORGE_VERSION}.sh -O miniforge.sh && \
     chmod +x miniforge.sh && \
     ./miniforge.sh -b -p "${CONDA_ROOT}" && \
     rm ./miniforge.sh && \
-    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge3"  && \
+    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge" && \
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda init --all && \
     conda install -y \
@@ -76,6 +73,7 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
         'setuptools>=70.0.0' \
         'tqdm>=4.66.3' \
         'urllib3>=2.2.2' \
+        'nodejs==22.5.1' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -94,7 +92,6 @@ ARG MODIN_VERSION
 ARG NUMPY_VERSION
 ARG SKLEARNEX_VERSION
 
-# Conda packages
 RUN conda create -yn classical-ml \
         "python=${PYTHON_VERSION}" \
         "daal4py=${DAAL4PY_VERSION}" \
@@ -105,6 +102,7 @@ RUN conda create -yn classical-ml \
         "modin-ray=${MODIN_VERSION}" \
         'python-dotenv==1.0.1' \
         "scikit-learn-intelex=${SKLEARNEX_VERSION}" \
+        'tqdm==4.66.4' \
         "xgboost=${XGBOOST_VERSION}" \
         'idna>=3.7' \
         'requests>=2.32.0' \
@@ -114,7 +112,6 @@ RUN conda create -yn classical-ml \
         && \
     conda clean -y --all
 
-# PyPI packages
 RUN conda run -n classical-ml python -m pip install --no-deps --no-cache-dir \
     'dataset-librarian==1.0.4'
 
@@ -123,9 +120,6 @@ COPY base/.patch_sklearn.py ~/.patch_sklearn.py
 
 ENV PYTHONSTARTUP=/home/dev/.patch_sklearn.py
 COPY base/.patch_sklearn.py /home/dev/.patch_sklearn.py
-
-###############################################
-# Adding jupyter functionality
 
 EXPOSE 8888
 

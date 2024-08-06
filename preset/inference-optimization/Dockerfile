@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 ARG COMPOSE_PROJECT_NAME
 FROM ${COMPOSE_PROJECT_NAME}-dl-base as inference-optimization
 
@@ -25,8 +26,8 @@ RUN ENVS_LIST=('pytorch-cpu' 'pytorch-gpu' 'tensorflow-cpu' 'tensorflow-gpu') &&
     for i in "${!ENVS_LIST[@]}"; do \
         CONDA_ENV="${ENVS_LIST[i]}" && \
         conda install -yn "$CONDA_ENV" \
-        "neural-compressor=${NEURAL_COMPRESSOR_VERSION}" \
-        'scikit-learn>=1.5.0' \
+            "neural-compressor=${NEURAL_COMPRESSOR_VERSION}" \
+            'scikit-learn>=1.5.0' \
         ; \
     done && \
     conda clean -y --all

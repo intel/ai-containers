@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 ARG BASE_IMAGE="ubuntu"
 ARG BASE_TAG="22.04"
 
 FROM ${BASE_IMAGE}:${BASE_TAG} as data-analytics
 
 ENV DEBIAN_FRONTEND=noninteractive
-
-# See http://bugs.python.org/issue19846
 
 ENV LANG=C.UTF-8
 
@@ -41,9 +40,7 @@ RUN apt-get update -y && \
         xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
-# Setting up non-root directories
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash -m dev
-# Set a password for the user (Optional)
 RUN echo 'dev:password' | chpasswd
 USER dev
 WORKDIR /home/dev
@@ -54,11 +51,11 @@ ARG PYTHON_VERSION
 ARG IDP_VERSION
 ARG INTEL_CHANNEL
 
-RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-${MINIFORGE_VERSION}.sh" -O miniforge.sh && \
+RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-forge/miniforge/releases/latest/download/${MINIFORGE_VERSION}.sh" -O miniforge.sh && \
     chmod +x miniforge.sh && \
     ./miniforge.sh -b -p "${CONDA_ROOT}" && \
     rm ./miniforge.sh && \
-    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge3" && \
+    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge"  && \
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda init --all && \
     conda install -y \
@@ -75,6 +72,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
         'setuptools>=70.0.0' \
         'tqdm>=4.66.3' \
         'urllib3>=2.2.2' \
+        'nodejs==22.5.1' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -90,7 +88,6 @@ ARG DPNP_VERSION
 ARG MODIN_VERSION
 ARG NUMPY_VERSION
 
-# data-analytics Env - conda packages
 RUN conda create -yn data-analytics \
         "python=${PYTHON_VERSION}" \
         "dpnp=${DPNP_VERSION}" \

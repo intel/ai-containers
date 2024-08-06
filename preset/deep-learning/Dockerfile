@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 ARG BASE_IMAGE=ubuntu
 ARG BASE_TAG=22.04
 
@@ -20,7 +21,6 @@ FROM ${BASE_IMAGE}:${BASE_TAG} AS deep-learning-base
 SHELL ["/bin/bash", "-c"]
 
 ENV DEBIAN_FRONTEND=noninteractive
-# See http://bugs.python.org/issue19846
 ENV LANG C.UTF-8
 ARG PYTHON_VERSION
 
@@ -52,26 +52,21 @@ RUN apt-get update -y && \
     && \
     rm -rf /var/lib/apt/lists/*
 
-###############################
-# GPU Drivers setup
-
 ARG DEVICE
 ARG ICD_VER
 ARG LEVEL_ZERO_GPU_VER
 ARG LEVEL_ZERO_VER
 ARG LEVEL_ZERO_DEV_VER
 
-
-# Public Drivers link
 RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-    gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
+    gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
-        intel-opencl-icd="${ICD_VER}" \
         intel-level-zero-gpu="${LEVEL_ZERO_GPU_VER}" \
+        intel-opencl-icd="${ICD_VER}" \
         level-zero="${LEVEL_ZERO_VER}"
 
 RUN apt-get update && \
@@ -105,18 +100,11 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
         libigfxcmrt-dev \
         level-zero-dev="${LEVEL_ZERO_DEV_VER}" \
     && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN rm /etc/apt/sources.list.d/*list
-
-##########################
-# Setting up non-root directories
+    rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*list
 
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash dev
 RUN groupadd -g 109 render
-## Add the user to the required groups
 RUN usermod -aG root,sudo,video,render dev
-# Set a password for the user (Optional)
 RUN echo 'dev:password' | chpasswd
 USER dev
 WORKDIR /home/dev
@@ -127,11 +115,11 @@ ARG PYTHON_VERSION
 ARG IDP_VERSION
 ARG INTEL_CHANNEL
 
-RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-${MINIFORGE_VERSION}.sh" -O miniforge.sh && \
+RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-forge/miniforge/releases/latest/download/${MINIFORGE_VERSION}.sh" -O miniforge.sh && \
     chmod +x miniforge.sh && \
     ./miniforge.sh -b -p "${CONDA_ROOT}" && \
     rm ./miniforge.sh && \
-    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge3"  && \
+    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge"  && \
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda init --all && \
     conda install -y \
@@ -153,6 +141,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
         'tqdm>=4.66.3' \
         'urllib3>=2.2.2' \
         'zipp>=3.19.1' \
+        'nodejs==22.5.1' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -163,9 +152,6 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 RUN conda config --set pip_interop_enabled True
 
-##############################
-# PyTorch cpu Installation
-ARG IDP_VERSION
 ARG DPNP_VERSION
 ARG NUMPY_VERSION
 ARG TORCH_CPU_VERSION
@@ -175,8 +161,7 @@ ARG TORCHVISION_CPU_VERSION
 ARG TORCHAUDIO_CPU_VERSION
 ARG DEEPSPEED_VERSION
 
-# PyTorch CPU Env - conda packages
-RUN conda create -yn pytorch-cpu \
+RUN conda create -yn 'pytorch-cpu' \
     -c huggingface \
         "python=${PYTHON_VERSION}" \
         'accelerate==0.32.1' \
@@ -202,17 +187,15 @@ RUN conda create -yn pytorch-cpu \
         && \
     conda clean -y --all
 
-RUN conda run -n pytorch-cpu pip install --no-deps --no-cache-dir \
+RUN conda run -n 'pytorch-cpu' pip install --no-deps --no-cache-dir \
         'dataset-librarian==1.0.4' \
         && \
-    conda run -n pytorch-cpu pip install --no-cache-dir \
+    conda run -n 'pytorch-cpu' pip install --no-cache-dir \
         'evaluate==0.4.2' \
         "git+https://github.com/huggingface/optimum-intel.git" \
         && \
     conda clean -y --all
 
-#######################################
-# PyTorch GPU Installation
 ARG IDP_VERSION
 ARG DPNP_VERSION
 ARG NUMPY_VERSION
@@ -258,12 +241,9 @@ RUN conda run -n 'pytorch-gpu' pip install --no-deps --no-cache-dir \
         && \
     conda clean -y --all
 
-#######################################
-# TensorFlow cpu Installation
 ARG IDP_VERSION
 ARG DPNP_VERSION
 ARG NUMPY_VERSION
-
 ARG TF_VERSION
 ARG ITEX_CPU_VERSION
 ARG ITEX_XPU_VERSION
@@ -275,8 +255,6 @@ ARG HOROVOD_WITHOUT_MXNET=1
 ARG HOROVOD_WITHOUT_GLOO=1
 ARG HOROVOD_WITH_MPI=1
 
-
-# Tensorflow Env - conda packages
 RUN conda create -yn 'tensorflow-cpu' \
         "python=${PYTHON_VERSION}" \
         "dpnp=${DPNP_VERSION}" \
@@ -307,9 +285,6 @@ RUN conda run -n 'tensorflow-cpu' pip install --no-deps --no-cache-dir \
         && \
     conda clean -y --all
 
-#######################################
-# TensorFlow gpu Installation
-
 RUN conda create -yn 'tensorflow-gpu' \
         "python=${PYTHON_VERSION}" \
         "dpnp=${DPNP_VERSION}" \
@@ -339,9 +314,6 @@ RUN conda run -n 'tensorflow-gpu' pip install --no-deps --no-cache-dir \
         && \
     conda clean -y --all
 
-#######################################
-# Adding jupyter capabilities
-
 EXPOSE 8888
 
 RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
@@ -362,15 +334,11 @@ RUN \
 
 CMD ["bash", "-c", "jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
-#######################################
-# Adding distributed capabilities
-
 FROM deep-learning-base as deep-learning
 
 SHELL ["/bin/bash", "-c"]
 USER root
 
-# Install OpenMPI
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends --fix-missing \
         libopenmpi-dev \
@@ -381,7 +349,6 @@ ENV OMPI_ALLOW_RUN_AS_ROOT=1
 ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 ENV OMPI_MCA_tl_tcp_if_exclude="lo,docker0"
 
-# Install OpenSSH
 RUN apt-get install -y --no-install-recommends --fix-missing \
         openssh-client \
         openssh-server \
@@ -395,7 +362,6 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
     && \
     echo 'LoginGraceTime 0' >> /etc/ssh/sshd_config
 
-# https://github.com/openucx/ucx/issues/4742#issuecomment-584059909
 ENV UCX_TLS=ud,sm,self
 
 USER dev
@@ -404,9 +370,8 @@ RUN ENVS_LIST=('pytorch-cpu' 'pytorch-gpu') && \
     for i in "${!ENVS_LIST[@]}"; do \
         CONDA_ENV="${ENVS_LIST[i]}" && \
         conda install -yn "$CONDA_ENV" \
-        -c "https://$USER_AF:$PASS_AF@af01p-fm.devtools.intel.com/artifactory/api/conda/aitools-conda_channel-fm-local/intel-2024.2.0" \
-        "deepspeed=${DEEPSPEED_VERSION}" \
-        'tensorboardx==2.6.2.2' \
+            "deepspeed=${DEEPSPEED_VERSION}" \
+            'tensorboardx==2.6.2.2' \
     ; done && \
     conda clean -y --all
 
