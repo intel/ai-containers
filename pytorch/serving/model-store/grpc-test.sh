@@ -25,6 +25,7 @@
 #
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
+set -e
 
 apt-get -y update
 apt-get -y install curl
