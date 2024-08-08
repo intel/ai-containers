@@ -15,6 +15,7 @@
 # -*- coding: utf-8 -*-
 #
 
+
 version: '3'
 services:
   data-analytics:
@@ -22,25 +23,26 @@ services:
       args:
         BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
         BASE_TAG: ${BASE_TAG:-22.04}
-        DPNP_VERSION: ${NUMBA_DPEX_VERSION:-0.15.0}
-        IDP_VERSION: ${IDP_VERSION:-2024.1.0}
+        DPNP_VERSION: ${DPNP_VERSION:-0.15.0}
+        IDP_VERSION: ${IDP_VERSION:-2024.2}
         INTEL_CHANNEL: ${INTEL_CHANNEL:-https://software.repos.intel.com/python/conda/}
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Miniforge3-Linux-x86_64}
         MODIN_VERSION: ${MODIN_VERSION:-0.30.0}
         NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4}
-        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.9}
         XGBOOST_VERSION: ${XGBOOST_VERSION:-2.0.3}
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
         no_proxy: ''
       context: .
+      target: data-analytics
       labels:
         docs: data_analytics
         org.opencontainers.image.title: "Intel® AI Tools Selector Preset Containers - Data Analytics"
         org.opencontainers.base.name: "ubuntu:22.04"
         org.opencontainers.image.name: "intel/data-analytics"
-        org.opencontainers.image.version: 2024.2.0-py${PYTHON_VERSION:-3.10}
-        dependency.python: ${PYTHON_VERSION:-3.10}
+        org.opencontainers.image.version: 2024.2.0-py${PYTHON_VERSION:-3.9}
+        dependency.python: ${PYTHON_VERSION:-3.9}
         dependency.python.pip: requirements.txt
         dependency.apt.bzip2: true
         dependency.apt.ca-certificates: true
@@ -56,21 +58,19 @@ services:
         dependency.apt.xz-utils: true
         dependency.conda.colorama: '==0.4.6'
         dependency.conda.conda: '==24.5.0'
-        dependency.conda.dpnp: '==0.15.0'
+        dependency.conda.dpnp: '=0.15.0'
         dependency.conda.ipykernel: '==6.29.5'
         dependency.conda.jupyterhub: '==5.1.0'
         dependency.conda.jupyter-server-proxy: '==4.3.0'
         dependency.conda.kernda: '==0.3.0'
         dependency.conda.mamba: '==1.5.8'
         dependency.conda.matplotlib-base: '==3.8.4'
-        dependency.conda.modin-ray: '0.30.0'
+        dependency.conda.modin-ray: '=0.30.0'
         dependency.conda.networkx: '==3.3'
         dependency.conda.notebook: '==7.2.1'
-        dependency.conda.python: "=${PYTHON_VERSION:-3.10}"
+        dependency.conda.python: '==3.10.14'
         dependency.conda.python-dotenv: '==1.0.1'
-        dependency.conda.tqdm: '>=4.66.3'
-      target: data-analytics
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-2024.2.0-py${PYTHON_VERSION:-3.10}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-data-analytics-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
     environment:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
