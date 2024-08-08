@@ -7,6 +7,6 @@ torch-model-archiver==0.11.1
 torch-workflow-archiver==0.2.14
 torchserve==0.11.1
 torchtext==0.18.0
-torchvision==0.18.1
+torchvision==0.19.0
 -f https://developer.intel.com/ipex-whl-stable-cpu
 intel_extension_for_pytorch==2.3.100+cpu
