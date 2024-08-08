@@ -1,4 +1,4 @@
-torch==2.3.1
+torch==2.2.0
 torchvision==0.18.1
 torchaudio==2.3.1
 -f https://download.pytorch.org/whl/cpu/torch_stable.html

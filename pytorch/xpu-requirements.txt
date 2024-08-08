@@ -1,4 +1,4 @@
-torch==2.1.0.post2+cxx11.abi
+torch==2.2.0
 torchvision==0.16.0.post2+cxx11.abi
 torchaudio==2.1.0.post2+cxx11.abi
 intel_extension_for_pytorch==2.1.30+xpu
