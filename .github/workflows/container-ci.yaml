@@ -86,6 +86,7 @@ jobs:
     outputs:
       group: ${{ steps.build-group.outputs.container-group }}
     steps:
+    - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       if: ${{ !inputs.no_build }}
     - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
