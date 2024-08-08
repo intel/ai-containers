@@ -41,30 +41,4 @@ COPY requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r requirements.txt
 
-# Install OpenSSH for MPI to communicate between containers
-RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
-    openssh-client \
-    openssh-server && \
-    rm  /etc/ssh/ssh_host_*_key \
-    /etc/ssh/ssh_host_*_key.pub && \
-    apt-get clean autoclean && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
-
-# Allow OpenSSH to talk to containers without asking for confirmation
-# hadolint global ignore=SC2002
-RUN mkdir -p /var/run/sshd && \
-    cat /etc/ssh/ssh_config | grep -v StrictHostKeyChecking > /etc/ssh/ssh_config.new && \
-    echo "    StrictHostKeyChecking no" >> /etc/ssh/ssh_config.new && \
-    echo 'LoginGraceTime 0' >> /etc/ssh/sshd_config && \
-    mv /etc/ssh/ssh_config.new /etc/ssh/ssh_config
-
 COPY scripts /workspace/scripts/
-
-COPY generate_ssh_keys.sh /workspace/generate_ssh_keys.sh
-
-RUN cat /workspace/generate_ssh_keys.sh >> "${HOME}/.bash_profile" && \
-    sed -i 's#source /inc/bin/activate##g' "${HOME}/.bashrc" && \
-    cat /workspace/generate_ssh_keys.sh >> "${HOME}/.bashrc"
-
-ENV BASH_ENV=${HOME}/.bash_profile
