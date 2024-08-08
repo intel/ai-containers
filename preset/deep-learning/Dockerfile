@@ -321,7 +321,7 @@ RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
 
 RUN \
     ENVS_LIST=('pytorch-cpu' 'pytorch-gpu' 'tensorflow-cpu' 'tensorflow-gpu') && \
-    KERNEL_NAMES=('Intel PyTorch cpu' 'Intel PyTorch gpu' 'Intel TensorFlow cpu' 'Intel TensorFlow gpu') && \
+    KERNEL_NAMES=('Intel PyTorch CPU' 'Intel PyTorch GPU' 'Intel TensorFlow CPU' 'Intel TensorFlow GPU') && \
     for i in "${!ENVS_LIST[@]}"; do \
         CONDA_ENV="${ENVS_LIST[i]}" && \
         KERNEL_NAME="${KERNEL_NAMES[i]}" && \
