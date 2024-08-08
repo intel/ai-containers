@@ -130,10 +130,10 @@ WORKDIR /home/dev
 COPY --chown=dev notebooks /home/dev/jupyter
 COPY --chown=dev tests /home/dev/sample-tests
 
-RUN KERNEL_DIR="${CONDA_ROOT}/envs/classical-ml/share/jupyter/kernels/classical-ml" && \
-    conda run -n classical-ml python -m ipykernel install --prefix "${CONDA_ROOT}/envs/classical-ml" --name classical-ml --display-name "Classical ML" && \
+RUN KERNEL_DIR="${CONDA_ROOT}/share/jupyter/kernels/classical-ml" && \
+    conda run -n classical-ml python -m ipykernel install --prefix "$CONDA_ROOT" --name classical-ml --display-name "Classical ML" && \
     conda run -n classical-ml kernda -o -y "$KERNEL_DIR/kernel.json" && \
-    conda run -n classical-ml jupyter kernelspec list
+    conda run -n base jupyter kernelspec list
 
 CMD ["bash", "-c", "source activate classical-ml && jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 

@@ -325,11 +325,10 @@ RUN \
     for i in "${!ENVS_LIST[@]}"; do \
         CONDA_ENV="${ENVS_LIST[i]}" && \
         KERNEL_NAME="${KERNEL_NAMES[i]}" && \
-        KERNEL_DIR="${CONDA_ROOT}/envs/$CONDA_ENV/share/jupyter/kernels/$CONDA_ENV" && \
-        conda list -n "$CONDA_ENV" | grep typing_extensions && \
-        conda run -n "$CONDA_ENV" python -m ipykernel install --prefix "${CONDA_ROOT}/envs/$CONDA_ENV" --name "$CONDA_ENV" --display-name "$KERNEL_NAME" && \
+        KERNEL_DIR="${CONDA_ROOT}/share/jupyter/kernels/$CONDA_ENV" && \
+        conda run -n "$CONDA_ENV" python -m ipykernel install --prefix "$CONDA_ROOT" --name "$CONDA_ENV" --display-name "$KERNEL_NAME" && \
         conda run -n "$CONDA_ENV" kernda -o -y "$KERNEL_DIR/kernel.json" && \
-        conda run -n "$CONDA_ENV" jupyter kernelspec list \
+        conda run -n base jupyter kernelspec list \
     ; done
 
 CMD ["bash", "-c", "jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]

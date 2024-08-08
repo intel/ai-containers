@@ -115,10 +115,10 @@ RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
 COPY --chown=dev notebooks /home/dev/jupyter
 COPY --chown=dev tests /home/dev/sample-tests
 
-RUN KERNEL_DIR="${CONDA_ROOT}/envs/data-analytics/share/jupyter/kernels/data-analytics" && \
-    conda run -n data-analytics python -m ipykernel install --prefix "${CONDA_ROOT}/envs/data-analytics" --name data-analytics --display-name "Data Analytics" && \
+RUN KERNEL_DIR="${CONDA_ROOT}/share/jupyter/kernels/data-analytics" && \
+    conda run -n data-analytics python -m ipykernel install --prefix "$CONDA_ROOT" --name data-analytics --display-name "Data Analytics" && \
     conda run -n data-analytics kernda -o -y "$KERNEL_DIR/kernel.json" && \
-    conda run -n data-analytics jupyter kernelspec list
+    conda run -n base jupyter kernelspec list
 
 CMD ["bash", "-c", "source activate data-analytics && jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
