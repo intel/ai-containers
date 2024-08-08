@@ -194,7 +194,8 @@ RUN apt-get update && \
 WORKDIR /
 COPY xpu-requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r xpu-requirements.txt
+RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
+    rm -rf xpu-requirements.txt /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
 
