@@ -25,7 +25,7 @@
 #
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
-
+# test
 ARG REGISTRY
 ARG REPO
 ARG GITHUB_RUN_NUMBER
