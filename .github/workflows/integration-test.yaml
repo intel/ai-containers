@@ -113,7 +113,7 @@ jobs:
         path: output.txt
         recreate: true
   status-check:
-    needs: [group-diff, pipeline-ci]
+    needs: [group-diff, pipeline-ci, merge-logs]
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     if: always()
     steps:
