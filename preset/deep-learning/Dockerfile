@@ -175,6 +175,7 @@ RUN conda create -yn 'pytorch-cpu' \
         'tensorboardx==2.6.2.2' \
         "torchaudio=${TORCHAUDIO_CPU_VERSION}" \
         "torchvision=${TORCHVISION_CPU_VERSION}" \
+        'python-dotenv==1.0.1' \
         'aiohttp>=3.9.4' \
         'certifi>=2024.07.04' \
         'idna>=3.7' \
@@ -220,6 +221,7 @@ RUN conda create -yn 'pytorch-gpu' \
         'tensorboardx==2.6.2.2' \
         "torchaudio=${TORCHAUDIO_XPU_VERSION}" \
         "torchvision=${TORCHVISION_XPU_VERSION}" \
+        'python-dotenv==1.0.1' \
         'aiohttp>=3.9.4' \
         'certifi>=2024.07.04' \
         'idna>=3.7' \
@@ -270,6 +272,7 @@ RUN conda create -yn 'tensorflow-cpu' \
         "tensorflow=${TF_VERSION}" \
         'tensorflow-hub==0.16.1' \
         'tqdm==4.66.4' \
+        'python-dotenv==1.0.1' \
         'aiohttp>=3.9.4' \
         'certifi>=2024.07.04' \
         'idna>=3.7' \
@@ -300,6 +303,7 @@ RUN conda create -yn 'tensorflow-gpu' \
         "tensorflow=${TF_VERSION}" \
         'tensorflow-hub==0.16.1' \
         'tqdm==4.66.4' \
+        'python-dotenv==1.0.1' \
         'aiohttp>=3.9.4' \
         'certifi>=2024.07.04' \
         'idna>=3.7' \
