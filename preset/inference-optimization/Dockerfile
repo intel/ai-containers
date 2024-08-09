@@ -12,35 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 ARG COMPOSE_PROJECT_NAME
 FROM ${COMPOSE_PROJECT_NAME}-dl-base as inference-optimization
 
-ENV SIGOPT_PROJECT=.
+SHELL ["/bin/bash", "-c"]
 
+ENV SIGOPT_PROJECT=.
 ARG NEURAL_COMPRESSOR_VERSION
 ARG INTEL_CHANNEL
 
-
-RUN conda install -yn pytorch-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
-        neural-compressor="${NEURAL_COMPRESSOR_VERSION}"
-
-RUN conda install -yn pytorch-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
-        neural-compressor="${NEURAL_COMPRESSOR_VERSION}"
-
-RUN conda install -yn tensorflow-cpu -c "${INTEL_CHANNEL}" -c conda-forge \
-        neural-compressor="${NEURAL_COMPRESSOR_VERSION}"
-
-RUN conda install -yn tensorflow-gpu -c "${INTEL_CHANNEL}" -c conda-forge \
-        neural-compressor="${NEURAL_COMPRESSOR_VERSION}"
-
-RUN conda run -n tensorflow-cpu python -m pip install --no-deps --no-cache-dir \
-        'tf2onnx>=1.16.1' \
-        'onnxruntime>=1.17.3' && \
+RUN ENVS_LIST=('pytorch-cpu' 'pytorch-gpu' 'tensorflow-cpu' 'tensorflow-gpu') && \
+    for i in "${!ENVS_LIST[@]}"; do \
+        CONDA_ENV="${ENVS_LIST[i]}" && \
+        conda install -yn "$CONDA_ENV" \
+            "neural-compressor=${NEURAL_COMPRESSOR_VERSION}" \
+            'scikit-learn>=1.5.0' \
+        ; \
+    done && \
     conda clean -y --all
 
-RUN conda run -n tensorflow-gpu python -m pip install --no-deps --no-cache-dir \
-        'tf2onnx>=1.16.1' \
-        'onnxruntime>=1.17.3' && \
+RUN ENVS_LIST=('tensorflow-cpu' 'tensorflow-gpu') && \
+    for i in "${!ENVS_LIST[@]}"; do \
+        CONDA_ENV="${ENVS_LIST[i]}" && \
+        conda run -n "$CONDA_ENV" python -m pip install --no-deps --no-cache-dir \
+        'tf2onnx==1.16.1' \
+        'onnxruntime==1.18.1' \
+        ; \
+    done && \
     conda clean -y --all
 
 COPY --chown=dev notebooks /home/dev/jupyter

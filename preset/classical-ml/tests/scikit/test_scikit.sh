@@ -14,8 +14,8 @@
 # limitations under the License.
 
 set -xe
+
 SCRIPT_DIR=$(dirname "$0")
 
 python "${SCRIPT_DIR}/kmeans.py"
-
-python "${SCRIPT_DIR}/kmeans.py" true
+python "${SCRIPT_DIR}/kmeans.py" true # Enable intel opt
