@@ -265,8 +265,6 @@ RUN conda create -yn 'tensorflow-cpu' \
         'ipykernel==6.29.5' \
         'kernda==0.3.0' \
         'matplotlib-base>=3.8.4' \
-        'mpi==1.0' \
-        'mpich==4.2.2' \
         'onnx>=1.14.1' \
         'py-cpuinfo==9.0.0' \
         "tensorflow=${TF_VERSION}" \
@@ -296,8 +294,6 @@ RUN conda create -yn 'tensorflow-gpu' \
         'ipykernel==6.29.5' \
         'kernda==0.3.0' \
         'matplotlib-base>=3.8.4' \
-        'mpi==1.0' \
-        'mpich==4.2.2' \
         'onnx>=1.14.1' \
         'py-cpuinfo==9.0.0' \
         "tensorflow=${TF_VERSION}" \
