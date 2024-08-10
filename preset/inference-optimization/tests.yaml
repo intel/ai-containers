@@ -34,13 +34,15 @@ inference-optimization-inc-itex-notebook-${PYTHON_VERSION:-3.9}-cpu:
 #   img: amr-registry.caas.intel.com/aiops/aikit-products-dev:inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
 #   notebook: True
 
-inference-optimization-inc-tensorflow-${PYTHON_VERSION:-3.9}-cpu:
-  cmd: conda run -n tensorflow-cpu sample-tests/neural_compressor/tensorflow/run.sh cpu
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
-inference-optimization-inc-tensorflow-${PYTHON_VERSION:-3.9}-gpu:
-  cmd: conda run -n tensorflow-gpu sample-tests/neural_compressor/tensorflow/run.sh gpu
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
-  device: ["/dev/dri"]
+# Status: Commented due to deprecated tests
+# TODO: identify an updated test
+# inference-optimization-inc-tensorflow-${PYTHON_VERSION:-3.9}-cpu:
+#   cmd: conda run -n tensorflow-cpu sample-tests/neural_compressor/tensorflow/run.sh cpu
+#   img: amr-registry.caas.intel.com/aiops/aikit-products-dev:inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+# inference-optimization-inc-tensorflow-${PYTHON_VERSION:-3.9}-gpu:
+#   cmd: conda run -n tensorflow-gpu sample-tests/neural_compressor/tensorflow/run.sh gpu
+#   img: amr-registry.caas.intel.com/aiops/aikit-products-dev:inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+#   device: ["/dev/dri"]
 
 inference-optimization-inc-torch-${PYTHON_VERSION:-3.9}-cpu:
   cmd: conda run -n pytorch-cpu sample-tests/neural_compressor/torch/run.sh cpu
