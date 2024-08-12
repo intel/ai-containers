@@ -1,1 +1,1 @@
-cloud-data-connector==1.0.3
+dataset-librarian==1.0.4
