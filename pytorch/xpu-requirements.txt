@@ -1,7 +1,7 @@
-torch==2.1.0.post2+cxx11.abi
-torchvision==0.16.0.post2+cxx11.abi
-torchaudio==2.1.0.post2+cxx11.abi
-intel_extension_for_pytorch==2.1.30+xpu
-oneccl_bind_pt==2.1.300+xpu
+torch==2.4.0
+torchvision==0.19.0
+torchaudio==2.4.0
+intel_extension_for_pytorch==2.3.100+cpu
+oneccl_bind_pt==2.3.0+cpu
 --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us
-setuptools==71.1.0
+setuptools==72.1.0
