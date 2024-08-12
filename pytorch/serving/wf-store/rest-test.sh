@@ -26,6 +26,8 @@
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
 
+set -e
+
 apt-get -y update
 apt-get -y install curl
 
@@ -47,4 +49,4 @@ curl --fail -X POST http://127.0.0.1:8080/wfpredict/dog_breed_wf -T Dog1.jpg
 curl --fail -O https://raw.githubusercontent.com/pytorch/serve/master/examples/Workflows/dog_breed_classification/model_input/Dog2.jpg
 curl --fail -X POST http://127.0.0.1:8080/wfpredict/dog_breed_wf -T Dog2.jpg
 
-rm -rf ./*.war ./Cat.jpg ./Dog1.jpg ./Dog2.jpg ../model-store/*.mar
+rm -rf ./*.war ./Cat.jpg ./Dog1.jpg ./Dog2.jpg

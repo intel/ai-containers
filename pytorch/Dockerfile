@@ -194,7 +194,8 @@ RUN apt-get update && \
 WORKDIR /
 COPY xpu-requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r xpu-requirements.txt
+RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
+    rm -rf xpu-requirements.txt /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
 
@@ -204,8 +205,8 @@ WORKDIR /jupyter
 COPY jupyter-requirements.txt .
 RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
 
-RUN if [ ! -d "$(which conda)" ]; then \
-    echo "conda activate idp" >> ~/.bashrc; \
+RUN if eval "which conda >/dev/null )"; then \
+        echo "conda activate idp" >> ~/.bashrc; \
     fi
 
 COPY --chown=root notebooks/ipex-xpu.ipynb /jupyter/xpu.ipynb
