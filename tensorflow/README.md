@@ -14,11 +14,12 @@
 
 The images below include support for both CPU and GPU optimizations:
 
-| Tag(s)                 | TensorFlow  | ITEX           | Driver | Dockerfile      |
-| ---------------------- | ----------- | -------------- | ------ | --------------- |
-| `2.15.0.0-xpu`, `xpu`  | [v2.15.0]   | [v2.15.0.0]    | [803]  | [v0.4.0-Beta]   |
-| `2.14.0.1-xpu`         | [v2.14.1]   | [v2.14.0.1]    | [736]  | [v0.3.4]        |
-| `2.13.0.0-xpu`         | [v2.13.0]   | [v2.13.0.0]    | [647]  | [v0.2.3]        |
+| Tag(s)                 | TensorFlow  | ITEX           | Driver  | Dockerfile      |
+| ---------------------- | ----------- | -------------- | ------- | --------------- |
+| `2.15.0.1-xpu`, `xpu`  | [v2.15.1]   | [v2.15.0.1]    | [803.63]| [v0.4.0-Beta]   |
+| `2.15.0.0-xpu`         | [v2.15.0]   | [v2.15.0.0]    | [803]   | [v0.4.0-Beta]   |
+| `2.14.0.1-xpu`         | [v2.14.1]   | [v2.14.0.1]    | [736]   | [v0.3.4]        |
+| `2.13.0.0-xpu`         | [v2.13.0]   | [v2.13.0.0]    | [647]   | [v0.2.3]        |
 
 ### Run the XPU Container
 
@@ -219,10 +220,12 @@ It is the image user's responsibility to ensure that any use of The images below
 [v0.3.4]: https://github.com/intel/ai-containers/blob/v0.3.4/tensorflow/Dockerfile
 [v0.2.3]: https://github.com/intel/ai-containers/blob/v0.2.3/tensorflow/Dockerfile
 
+[v2.15.1]: https://github.com/tensorflow/tensorflow/releases/tag/v2.15.1
 [v2.15.0]: https://github.com/tensorflow/tensorflow/releases/tag/v2.15.0
 [v2.14.1]: https://github.com/tensorflow/tensorflow/releases/tag/v2.14.1
 [v2.13.0]: https://github.com/tensorflow/tensorflow/releases/tag/v2.13.0
 
+[v2.15.0.1]: https://github.com/intel/intel-extension-for-tensorflow/releases/tag/v2.15.0.1
 [v2.15.0.0]: https://github.com/intel/intel-extension-for-tensorflow/releases/tag/v2.15.0.0
 [v2.14.0.1]: https://github.com/intel/intel-extension-for-tensorflow/releases/tag/v2.14.0.1
 [v2.13.0.0]: https://github.com/intel/intel-extension-for-tensorflow/releases/tag/v2.13.0.0
@@ -230,6 +233,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [v0.28.1]: https://github.com/horovod/horovod/releases/tag/v0.28.1
 [v0.28.0]: https://github.com/horovod/horovod/releases/tag/v0.28.0
 
+[803.63]: https://dgpu-docs.intel.com/releases/LTS_803.63_20240617.html
 [803]: https://dgpu-docs.intel.com/releases/LTS_803.29_20240131.html
 [736]: https://dgpu-docs.intel.com/releases/stable_736_25_20231031.html
 [647]: https://dgpu-docs.intel.com/releases/stable_647_21_20230714.html
