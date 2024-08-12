@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 ARG BASE_IMAGE="ubuntu"
 ARG BASE_TAG="22.04"
 
-FROM ${BASE_IMAGE}:${BASE_TAG} as classical-ml-base
+FROM ${BASE_IMAGE}:${BASE_TAG} as classical-ml
 
 ENV DEBIAN_FRONTEND=noninteractive
-
-# See http://bugs.python.org/issue19846
 
 ENV LANG=C.UTF-8
 
@@ -27,25 +26,21 @@ SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends --fix-missing \
-    bzip2 \
-    ca-certificates \
-    diffutils \
-    gcc \
-    git \
-    gzip \
-    make \
-    patch \
-    rsync \
-    unzip \
-    wget \
-    xz-utils && \
+        bzip2 \
+        ca-certificates \
+        diffutils \
+        gcc \
+        git \
+        gzip \
+        make \
+        patch \
+        rsync \
+        unzip \
+        wget \
+        xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
-FROM classical-ml-base as classical-ml-python
-
-# Setting up non-root directories
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash -m dev
-# Set a password for the user (Optional)
 RUN echo 'dev:password' | chpasswd
 USER dev
 WORKDIR /home/dev
@@ -56,76 +51,75 @@ ARG PYTHON_VERSION
 ARG IDP_VERSION
 ARG INTEL_CHANNEL
 
-RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-${MINIFORGE_VERSION}.sh -O miniforge.sh && \
+RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-forge/miniforge/releases/latest/download/${MINIFORGE_VERSION}.sh -O miniforge.sh && \
     chmod +x miniforge.sh && \
     ./miniforge.sh -b -p "${CONDA_ROOT}" && \
     rm ./miniforge.sh && \
-    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge3"  && \
+    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge" && \
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
-    conda update -y conda && \
-    conda config --add channels conda-forge && \
-    conda config --add channels https://software.repos.intel.com/python/conda/ && \
     conda init --all && \
     conda install -y \
-        'jupyterlab>=4.1.8' \
-        'notebook>=7.1.3' \
-        'jupyterhub>=4.1.5' \
-        'jupyter-server-proxy>=4.1.2' \
-        'mako>=1.2.2' \
-        'pyjwt>=2.4.0' \
-        'cryptography>=42.0.5' \
-        'nodejs>=20.12.2' \
-        'aiohttp>=3.9.4' \
+        'colorama==0.4.6' \
+        'conda==24.5.0' \
+        'jupyterhub==5.1.0' \
+        'jupyter-server-proxy==4.3.0' \
+        'mamba==1.5.8' \
+        'networkx==3.3' \
+        'notebook==7.2.1' \
+        'pip==24.0' \
+        'python==3.10.14' \
         'idna>=3.7' \
-        'oauthlib>=3.2.2' \
-        && \
-    jupyter labextension disable "@jupyterlab/apputils-extension:announcements" && \
-    conda clean -y --all
+        'requests>=2.32.0' \
+        'setuptools>=70.0.0' \
+        'tqdm>=4.66.3' \
+        'urllib3>=2.2.2' \
+        'nodejs==22.5.1' \
+    && \
+    jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
+    && \
+    conda clean -y --all \
+    && \
+    conda config --add channels ${INTEL_CHANNEL}
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
+RUN conda config --set pip_interop_enabled True
 
 ARG IDP_VERSION
+ARG DAAL4PY_VERSION
 ARG DPNP_VERSION
 ARG XGBOOST_VERSION
 ARG MODIN_VERSION
 ARG NUMPY_VERSION
 ARG SKLEARNEX_VERSION
 
-# Conda packages
-RUN conda create -yn classical-ml -c ${INTEL_CHANNEL} -c conda-forge \
-        dpnp=${DPNP_VERSION} \
-        numpy=${NUMPY_VERSION} \
-        python=${PYTHON_VERSION} \
-        scikit-learn-intelex==${SKLEARNEX_VERSION} \
-        xgboost=${XGBOOST_VERSION} \
-        modin-ray=${MODIN_VERSION} \
-        'python-dotenv>=1.0.1' \
-        'tqdm>=4.66.2' \
-        'matplotlib-base>=3.4.3' \
-        'threadpoolctl>=3.3.0' \
-        'ipython>=8.18.1' \
-        'ipykernel>=6.29.3' \
-        'kernda>=0.3.0' \
-        'protobuf>=4.24' \
-        'pillow>=10.2.0' \
-        'tornado>=6.3.3' && \
+RUN conda create -yn classical-ml \
+        "python=${PYTHON_VERSION}" \
+        "daal4py=${DAAL4PY_VERSION}" \
+        "dpnp=${DPNP_VERSION}" \
+        'ipykernel==6.29.5' \
+        'kernda==0.3.0' \
+        'matplotlib-base==3.8.4' \
+        "modin-ray=${MODIN_VERSION}" \
+        'python-dotenv==1.0.1' \
+        "scikit-learn-intelex=${SKLEARNEX_VERSION}" \
+        'tqdm==4.66.4' \
+        "xgboost=${XGBOOST_VERSION}" \
+        'idna>=3.7' \
+        'requests>=2.32.0' \
+        'setuptools>=70.0.0' \
+        'tqdm>=4.66.3' \
+        'urllib3>=2.2.2' \
+        && \
     conda clean -y --all
 
-
-
-# PyPI packages
 RUN conda run -n classical-ml python -m pip install --no-deps --no-cache-dir \
-    'dataset-librarian==1.0.4' \
-    'cloud-data-connector==1.0.3'
-
+    'dataset-librarian==1.0.4'
 
 ENV PYTHONSTARTUP=~/.patch_sklearn.py
 COPY base/.patch_sklearn.py ~/.patch_sklearn.py
 
 ENV PYTHONSTARTUP=/home/dev/.patch_sklearn.py
 COPY base/.patch_sklearn.py /home/dev/.patch_sklearn.py
-
-FROM classical-ml-python as classical-ml-jupyter
 
 EXPOSE 8888
 
@@ -136,10 +130,10 @@ WORKDIR /home/dev
 COPY --chown=dev notebooks /home/dev/jupyter
 COPY --chown=dev tests /home/dev/sample-tests
 
-RUN "${CONDA_ROOT}/envs/classical-ml/bin/python" -m ipykernel install --user --name classical-ml --display-name "Classical ML" && \
-    "${CONDA_ROOT}/envs/classical-ml/bin/kernda" -o -y "$HOME/.local/share/jupyter/kernels/$(echo classical-ml | sed -e 's/\(.*\)/\L\1/')/kernel.json" && \
-    "${CONDA_ROOT}/envs/classical-ml/bin/python" -m ipykernel.kernelspec --user && \
-    conda clean -y --all
+RUN KERNEL_DIR="${CONDA_ROOT}/share/jupyter/kernels/classical-ml" && \
+    conda run -n classical-ml python -m ipykernel install --prefix "$CONDA_ROOT" --name classical-ml --display-name "Classical ML" && \
+    conda run -n classical-ml kernda -o -y "$KERNEL_DIR/kernel.json" && \
+    conda run -n base jupyter kernelspec list
 
 CMD ["bash", "-c", "source activate classical-ml && jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
