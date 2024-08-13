@@ -33,7 +33,7 @@ jobs:
           # intel_extension_for_pytorch==2.3.100+cpu
           # --extra-index-url https://developer.intel.com/ipex-whl-stable-cpu
           cd pytorch
-          docker compose up --build pip ipex-base
+          REGISTRY=${{secrets.registry}} REPO=${{secrets.repo}} docker compose up --build pip ipex-base
   group-diff:
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     outputs:
