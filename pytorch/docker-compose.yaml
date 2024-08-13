@@ -185,8 +185,6 @@ services:
     build:
       args:
         HF_VERSION: ${HF_VERSION:-4.41.2}
-        no_proxy: ''
-        NO_PROXY: ''
       labels:
         dependency.python.pip: hf-genai-requirements.txt
         org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.3.0}-${PACKAGE_OPTION:-pip}-multinode"
