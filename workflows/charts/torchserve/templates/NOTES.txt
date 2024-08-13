@@ -14,3 +14,8 @@
   echo "Visit http://127.0.0.1:8080 to use your application"
   kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
 {{- end }}
+{{- if eq false .Values.deploy.tokens_disabled }}
+2. Display the tokens for accessing the APIs. For more details about token authentication checkout: https://github.com/pytorch/serve/blob/master/docs/token_authorization_api.md
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "torchserve.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl exec --namespace {{ .Release.Namespace }}  $POD_NAME -- cat /home/model-server/key_file.json
+{{- end }}
