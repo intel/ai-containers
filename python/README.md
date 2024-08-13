@@ -15,7 +15,7 @@ The images below include variations for only the core packages in the [Intel® D
 
 ## Build from Source
 
-To build the images from source, clone the [Intel® AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
+To build the images from source, clone the [Intel® AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following commands:
 
 ```bash
 cd python
@@ -29,6 +29,18 @@ You can find the list of services below for each container in the group:
 | ------------ | ------------------------------------------------------------------- |
 | `idp`        | Base image with [Intel® Distribution for Python]                    |
 | `pip`        | Equivalent python image without [Intel® Distribution for Python]    |
+
+## Run a Performance Sample
+
+To run a performance sample, clone the [Intel® AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following commands:
+
+```bash
+cd python
+docker run --rm -it \
+    -v $PWD/tests:/tests \
+    intel/python:latest \
+    python /tests/perf_sample.py
+```
 
 ## License
 
