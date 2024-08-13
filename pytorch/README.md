@@ -24,6 +24,7 @@ The images below include support for both CPU and GPU optimizations:
 
 | Tag(s)                 | Pytorch  | IPEX           | Driver | Dockerfile      |
 | ---------------------- | -------- | -------------- | ------ | --------------- |
+| `2.1.40-xpu`           | [v2.1.0] | [v2.1.40+xpu]  | [914]  | [v0.4.0-Beta]   |
 | `2.1.30-xpu`           | [v2.1.0] | [v2.1.30+xpu]  | [803]  | [v0.4.0-Beta]   |
 | `2.1.20-xpu`           | [v2.1.0] | [v2.1.20+xpu]  | [803]  | [v0.3.4]        |
 | `2.1.10-xpu`           | [v2.1.0] | [v2.1.10+xpu]  | [736]  | [v0.2.3]        |
@@ -36,7 +37,7 @@ docker run -it --rm \
     --device /dev/dri \
     -v /dev/dri/by-path:/dev/dri/by-path \
     --ipc=host \
-    intel/intel-extension-for-pytorch:2.1.30-xpu
+    intel/intel-extension-for-pytorch:2.1.40-xpu
 ```
 
 ---
@@ -45,8 +46,9 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
 | --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
-| `2.1.20-xpu-pip-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`       | [v0.3.4]     |
-| `2.1.10-xpu-pip-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`       | [v0.2.3]     |
+| `2.1.40-xpu-pip-jupyter` | [v2.1.0] | [v2.1.40+xpu]  | [914]  | `8888`   | [v0.4.0-Beta]   |
+| `2.1.20-xpu-pip-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`    | [v0.3.4]        |
+| `2.1.10-xpu-pip-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`    | [v0.2.3]        |
 
 ### Run the XPU Jupyter Container
 
@@ -55,7 +57,7 @@ docker run -it --rm \
     -p 8888:8888 \
     --device /dev/dri \
     -v /dev/dri/by-path:/dev/dri/by-path \
-    intel/intel-extension-for-pytorch:2.1.20-xpu-pip-jupyter
+    intel/intel-extension-for-pytorch:2.1.40-xpu-pip-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
@@ -301,6 +303,7 @@ The images below are built only with CPU and GPU optimizations and include [Inte
 
 | Tag(s)           | Pytorch  | IPEX         | Driver | Dockerfile      |
 | ---------------- | -------- | ------------ | -------- | ------ |
+| `2.1.40-xpu-idp-base` | [v2.1.0] | [v2.1.40+xpu] | [914]  | [v0.4.0-Beta] |
 | `2.1.30-xpu-idp-base` | [v2.1.0] | [v2.1.30+xpu]  | [803]  | [v0.4.0-Beta] |
 | `2.1.10-xpu-idp-base` | [v2.1.0] | [v2.1.10+xpu]  | [736]  | [v0.2.3] |
 
@@ -308,8 +311,9 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
 | --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
-| `2.1.20-xpu-idp-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`       | [v0.3.4]     |
-| `2.1.10-xpu-idp-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`       | [v0.2.3]     |
+| `2.1.40-xpu-idp-jupyter` | [v2.1.0] | [v2.1.40+xpu] | [914]  | `8888`   | [v0.4.0-Beta]   |
+| `2.1.20-xpu-idp-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`   | [v0.3.4]        |
+| `2.1.10-xpu-idp-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`   | [v0.2.3]        |
 
 ## Build from Source
 
@@ -375,6 +379,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [v0.2.3]: https://github.com/intel/ai-containers/blob/v0.2.3/pytorch/Dockerfile
 [v0.1.0]: https://github.com/intel/ai-containers/blob/v0.1.0/pytorch/Dockerfile
 
+[v2.1.40+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.40%2Bxpu
 [v2.1.30+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.30%2Bxpu
 [v2.1.20+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.20%2Bxpu
 [v2.1.10+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.10%2Bxpu
@@ -408,6 +413,7 @@ It is the image user's responsibility to ensure that any use of The images below
 <!-- HuggingFace transformers releases -->
 [v4.41.2]: https://github.com/huggingface/transformers/releases/tag/v4.41.2
 
+[914]: https://dgpu-docs.intel.com/releases/stable_914_33_20240730.html
 [803]: https://dgpu-docs.intel.com/releases/LTS_803.29_20240131.html
 [736]: https://dgpu-docs.intel.com/releases/stable_736_25_20231031.html
 [647]: https://dgpu-docs.intel.com/releases/stable_647_21_20230714.html
