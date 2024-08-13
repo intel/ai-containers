@@ -24,9 +24,19 @@ jobs:
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+      - name: print-env
+        run: |
+          env | grep proxy
       - name: repro-index
         run: |
           no_proxy='' wget https://developer.intel.com/ipex-whl-stable-cpu -O -
+      - name: repro-compose
+        run: |
+          # pip install -r requirements.txt
+          # intel_extension_for_pytorch==2.3.100+cpu
+          # --extra-index-url https://developer.intel.com/ipex-whl-stable-cpu
+          cd pytorch
+          docker compose up --build pip ipex-base
   group-diff:
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     outputs:
