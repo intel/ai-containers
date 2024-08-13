@@ -47,6 +47,9 @@ spec:
           - configMapRef:
               name: {{ .Values.deploy.env.configMapName }}
           {{- end }}
+          env:
+          - name: TS_DISABLE_TOKEN_AUTHORIZATION
+            value: "{{ .Values.deploy.tokens_disabled }}"
           ports:
             - name: rest-1
               containerPort: 8080
