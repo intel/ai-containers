@@ -135,7 +135,7 @@ services:
         DPCPP_VER: ${DPCPP_VER:-2024.2.1-1079}
         MKL_VER: ${MKL_VER:-2024.2.1-103}
         CCL_VER: ${CCL_VER:-2021.13.1-31}
-        TF_VER: ${TF_VER:-2.15.1}
+        ITEX_VER: ${ITEX_VER:-2.15.0.1}
         no_proxy: ''
         NO_PROXY: ''
       labels:
