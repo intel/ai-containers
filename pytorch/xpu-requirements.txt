@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 torch==2.1.0.post3+cxx11.abi
 torchvision==0.16.0.post3+cxx11.abi
 torchaudio==2.1.0.post3+cxx11.abi
