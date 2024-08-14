@@ -36,11 +36,6 @@ ARG PYTHON_VERSION
 ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-base
 FROM ${PYTHON_BASE} AS ipex-base-pip
 
-ARG IPEX_VERSION
-ARG PYTORCH_VERSION
-ARG TORCHAUDIO_VERSION
-ARG TORCHVISION_VERSION
-
 WORKDIR /
 COPY requirements.txt .
 
@@ -48,11 +43,6 @@ RUN python -m pip install --no-cache-dir -r requirements.txt && \
     rm -rf requirements.txt
 
 FROM ${PYTHON_BASE} AS ipex-base-idp
-
-ARG IPEX_VERSION
-ARG PYTORCH_VERSION
-ARG TORCHAUDIO_VERSION
-ARG TORCHVISION_VERSION
 
 WORKDIR /
 COPY requirements.txt .
@@ -158,8 +148,8 @@ RUN apt-get update && \
     rm -rf  /var/lib/apt/lists/*
 
 RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-    gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
+    gpg --dearmor --yes --output /usr/share/keyrings/intel-graphics.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 
 ARG ICD_VER
@@ -171,8 +161,8 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
     intel-opencl-icd=${ICD_VER} \
     intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
-    level-zero=${LEVEL_ZERO_VER} \
-    level-zero-dev=${LEVEL_ZERO_DEV_VER} && \
+    libze1=${LEVEL_ZERO_VER} \
+    libze-dev=${LEVEL_ZERO_DEV_VER} && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
