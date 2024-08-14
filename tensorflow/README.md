@@ -37,6 +37,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)        | TensorFlow  | IPEX          | Driver | Dockerfile      |
 | ------------- | ----------- | ------------- | ------ | --------------- |
+| `2.15.0.1-xpu-jupyter` | [v2.15.1] | [v2.15.0.1]    | [803.63]| [v0.4.0-Beta]   |
 | `xpu-jupyter` | [v2.14.1]   | [v2.14.0.1]   | [736]  | [v0.3.4]   |
 
 ### Run the XPU Jupyter Container
@@ -48,7 +49,7 @@ docker run -it --rm \
     --device /dev/dri \
     -v /dev/dri/by-path:/dev/dri/by-path \
     --ipc=host \
-    intel/intel-extension-for-tensorflow:xpu-jupyter
+    intel/intel-extension-for-tensorflow:2.15.0.1-xpu-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
@@ -169,6 +170,22 @@ The images below additionally include [Horovod]:
 | `2.15.0-idp-multinode`         | [v2.15.0]   | [v2.15.0.0]  | [v0.28.1] | [v0.4.0-Beta]   |
 | `2.14.0-idp-openmpi-multinode` | [v2.14.1]   | [v2.14.0.1]  | [v0.28.1] | [v0.3.4]        |
 | `2.13-idp-openmpi-mulitnode`   | [v2.13.0]   | [v2.13.0.0]  | [v0.28.0] | [v0.2.3]        |
+
+## XPU images with Intel® Distribution for Python*
+
+The images below are built only with CPU and GPU optimizations and include [Intel® Distribution for Python*]:
+
+| Tag(s)           | Pytorch  | ITEX         | Driver | Dockerfile      |
+| ---------------- | -------- | ------------ | -------- | ------ |
+| `2.15.0.1-xpu-idp-base` | [v2.15.1]   | [v2.15.0.1]  | [803]  | [v0.4.0-Beta] |
+| `2.15.0-xpu-idp-base` | [v2.15.0]   | [v2.15.0.0]  | [803]  | [v0.4.0-Beta] |
+
+The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
+
+| Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
+| --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
+| `2.15.0.1-xpu-idp-jupyter` | [v2.15.1] | [v2.15.0.1]  | [803]  | `8888`   | [v0.4.0-Beta]   |
+| `2.15.0-xpu-idp-jupyter` | [v2.1.0] | [v2.15.0.0]  | [803]  | `8888`   | [v0.4.0-Beta]   |
 
 ## Build from Source
 
