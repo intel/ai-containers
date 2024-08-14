@@ -256,7 +256,7 @@ RUN no_proxy="" NO_PROXY="" apt-get update && \
 
 ARG ITEX_VER="2.15.0.1"
 
-RUN conda install -y intel-extension-for-tensorflow=${ITEX_VER}=*xpu* \
+RUN conda install -n idp -y intel-extension-for-tensorflow=${ITEX_VER}=*xpu* \
     -c https://software.repos.intel.com/python/conda
 
 ENV LD_LIBRARY_PATH=/opt/conda/envs/idp/lib:$LD_LIBRARY_PATH
