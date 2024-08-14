@@ -16,7 +16,7 @@
 
 cd .. || exit
 docker compose pull torchserve
-docker tag "$(docker images -q | head -n1)" intel/torchserve:latest
+docker tag "${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-ubuntu-22.04-py3.10-torchserve" intel/torchserve:latest
 git clone https://github.com/pytorch/serve
 cd serve/kubernetes/kserve || exit
 git apply ../../../serving/kfs.patch
