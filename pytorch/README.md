@@ -68,7 +68,8 @@ The images below are built only with CPU optimizations (GPU acceleration support
 
 | Tag(s)                     | Pytorch  | IPEX         | Dockerfile      |
 | -------------------------- | -------- | ------------ | --------------- |
-| `2.3.0-pip-base`, `latest` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
+| `2.4.0-pip-base`, `latest` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
+| `2.3.0-pip-base`           | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
 | `2.2.0-pip-base`           | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
 | `2.1.0-pip-base`           | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]        |
 | `2.0.0-pip-base`           | [v2.0.0] | [v2.0.0+cpu] | [v0.1.0]        |
@@ -85,6 +86,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- |
+| `2.4.0-pip-jupyter` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
 | `2.3.0-pip-jupyter` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
 | `2.2.0-pip-jupyter` | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
 | `2.1.0-pip-jupyter` | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]        |
@@ -95,7 +97,7 @@ docker run -it --rm \
     -p 8888:8888 \
     -v $PWD/workspace:/workspace \
     -w /workspace \
-    intel/intel-extension-for-pytorch:2.3.0-pip-jupyter
+    intel/intel-extension-for-pytorch:2.4.0-pip-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
@@ -106,6 +108,7 @@ The images below additionally include [Intel® oneAPI Collective Communications 
 
 | Tag(s)                  | Pytorch  | IPEX           | oneCCL               | INC       | Dockerfile     |
 | ---------------------   | -------- | ------------   | -------------------- | --------- | -------------- |
+| `2.4.0-pip-multinode`   | [v2.4.0] | [v2.4.0+cpu]   | [v2.4.0][ccl-v2.4.0] | [v3.0]    | [v0.4.0-Beta]  |
 | `2.3.0-pip-multinode`   | [v2.3.0] | [v2.3.0+cpu]   | [v2.3.0][ccl-v2.3.0] | [v2.6]    | [v0.4.0-Beta]  |
 | `2.2.0-pip-multinode`   | [v2.2.2] | [v2.2.0+cpu]   | [v2.2.0][ccl-v2.2.0] | [v2.6]    | [v0.4.0-Beta]  |
 | `2.1.100-pip-mulitnode` | [v2.1.2] | [v2.1.100+cpu] | [v2.1.0][ccl-v2.1.0] | [v2.6]    | [v0.4.0-Beta]  |
@@ -188,7 +191,7 @@ To add these files correctly please follow the steps described below.
             -v $PWD/authorized_keys:/etc/ssh/authorized_keys \
             -v $PWD/tests:/workspace/tests \
             -w /workspace \
-            intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
+            intel/intel-extension-for-pytorch:2.4.0-pip-multinode \
             bash -c '/usr/sbin/sshd -D'
         ```
 
@@ -201,7 +204,7 @@ To add these files correctly please follow the steps described below.
             -v $PWD/tests:/workspace/tests \
             -v $PWD/hostfile:/workspace/hostfile \
             -w /workspace \
-            intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
+            intel/intel-extension-for-pytorch:2.4.0-pip-multinode \
             bash -c 'ipexrun cpu  --nnodes 2 --nprocs-per-node 1 --master-addr 127.0.0.1 --master-port 3022 /workspace/tests/ipex-resnet50.py --ipex --device cpu --backend ccl'
         ```
 
@@ -229,7 +232,7 @@ Additionally, if you have a [DeepSpeed* configuration](https://www.deepspeed.ai/
     -v $PWD/hostfile:/workspace/hostfile \
     -v $PWD/ds_config.json:/workspace/ds_config.json \
     -w /workspace \
-    intel/intel-extension-for-pytorch:2.3.0-pip-multinode \
+    intel/intel-extension-for-pytorch:2.4.0-pip-multinode \
     bash -c 'deepspeed --launcher IMPI \
     --master_addr 127.0.0.1 --master_port 3022 \
     --deepspeed_config ds_config.json --hostfile /workspace/hostfile \
@@ -242,9 +245,9 @@ Additionally, if you have a [DeepSpeed* configuration](https://www.deepspeed.ai/
 
 The image below is an extension of the IPEX Multi-Node Container designed to run Hugging Face Generative AI scripts. The container has the typical installations needed to run and fine tune PyTorch generative text models from Hugging Face. It can be used to run multinode jobs using the same instructions from the [IPEX Multi-Node container](#setup-and-run-ipex-multi-node-container).
 
-| Tag(s)                | Pytorch  | IPEX         | oneCCL               | transformers       | Dockerfile      |
-| --------------------- | -------- | ------------ | -------------------- | --------- | --------------- |
-| `2.3.0-pip-multinode-hf-4.41.2-genai` | [v2.3.1](https://github.com/pytorch/pytorch/releases/tag/v2.3.1) | [v2.3.0+cpu] | [v2.3.0][ccl-v2.3.0] | [v4.41.2]  | [v0.4.0-Beta]   |
+| Tag(s)                                | Pytorch  | IPEX         | oneCCL               | HF Transformers | Dockerfile      |
+| ------------------------------------- | -------- | ------------ | -------------------- | --------------- | --------------- |
+| `2.4.0-pip-multinode-hf-4.44.0-genai` | [v2.4.0] | [v2.4.0+cpu] | [v2.4.0][ccl-v2.4.0] | [v4.44.0]       | [v0.4.0-Beta]   |
 
 Below is an example that shows single node job with the existing [`finetune.py`](../workflows/charts/huggingface-llm/scripts/finetune.py) script.
 
@@ -253,7 +256,7 @@ Below is an example that shows single node job with the existing [`finetune.py`]
 docker run -it \
     -v $PWD/workflows/charts/huggingface-llm/scripts:/workspace/scripts \
     -w /workspace/scripts \
-    intel/intel-extension-for-pytorch:2.3.0-pip-multinode-hf-4.41.2-genai \
+    intel/intel-extension-for-pytorch:2.4.0-pip-multinode-hf-4.44.0-genai \
     bash -c 'python finetune.py <script-args>'
 ```
 
@@ -263,6 +266,7 @@ The images below are [TorchServe*] with CPU Optimizations:
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- |
+| `2.4.0-serving-cpu` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
 | `2.3.0-serving-cpu` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
 | `2.2.0-serving-cpu` | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
 
@@ -274,6 +278,7 @@ The images below are built only with CPU optimizations (GPU acceleration support
 
 | Tag(s)           | Pytorch  | IPEX         | Dockerfile      |
 | ---------------- | -------- | ------------ | --------------- |
+| `2.4.0-idp-base` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
 | `2.3.0-idp-base` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
 | `2.2.0-idp-base` | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
 | `2.1.0-idp-base` | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]        |
@@ -283,6 +288,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- |
+| `2.4.0-idp-jupyter` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
 | `2.3.0-idp-jupyter` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
 | `2.2.0-idp-jupyter` | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
 | `2.1.0-idp-jupyter` | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]        |
@@ -292,6 +298,7 @@ The images below additionally include [Intel® oneAPI Collective Communications 
 
 | Tag(s)                | Pytorch  | IPEX         | oneCCL               | INC       | Dockerfile      |
 | --------------------- | -------- | ------------ | -------------------- | --------- | --------------- |
+| `2.4.0-idp-multinode` | [v2.4.0] | [v2.4.0+cpu] | [v2.4.0][ccl-v2.3.0] | [v3.0]    | [v0.4.0-Beta]   |
 | `2.3.0-idp-multinode` | [v2.3.0] | [v2.3.0+cpu] | [v2.3.0][ccl-v2.3.0] | [v2.6]    | [v0.4.0-Beta]   |
 | `2.2.0-idp-multinode` | [v2.2.0] | [v2.2.0+cpu] | [v2.2.0][ccl-v2.2.0] | [v2.4.1]  | [v0.3.4]        |
 | `2.1.0-idp-mulitnode` | [v2.1.0] | [v2.1.0+cpu] | [v2.1.0][ccl-v2.1.0] | [v2.3.1]  | [v0.2.3]        |
@@ -385,6 +392,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [v2.1.10+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.10%2Bxpu
 [v2.0.110+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.0.110%2Bxpu
 
+[v2.4.0]: https://github.com/pytorch/pytorch/releases/tag/v2.4.0
 [v2.3.0]: https://github.com/pytorch/pytorch/releases/tag/v2.3.0
 [v2.2.2]: https://github.com/pytorch/pytorch/releases/tag/v2.2.2
 [v2.2.0]: https://github.com/pytorch/pytorch/releases/tag/v2.2.0
@@ -393,11 +401,13 @@ It is the image user's responsibility to ensure that any use of The images below
 [v2.0.1]: https://github.com/pytorch/pytorch/releases/tag/v2.0.1
 [v2.0.0]: https://github.com/pytorch/pytorch/releases/tag/v2.0.0
 
+[v3.0]: https://github.com/intel/neural-compressor/releases/tag/v3.0
 [v2.6]: https://github.com/intel/neural-compressor/releases/tag/v2.6
 [v2.4.1]: https://github.com/intel/neural-compressor/releases/tag/v2.4.1
 [v2.3.1]: https://github.com/intel/neural-compressor/releases/tag/v2.3.1
 [v2.1.1]: https://github.com/intel/neural-compressor/releases/tag/v2.1.1
 
+[v2.4.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.4.0%2Bcpu
 [v2.3.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.3.0%2Bcpu
 [v2.2.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.2.0%2Bcpu
 [v2.1.100+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.0%2Bcpu
@@ -405,13 +415,14 @@ It is the image user's responsibility to ensure that any use of The images below
 [v2.0.100+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.0.0%2Bcpu
 [v2.0.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.0.0%2Bcpu
 
+[ccl-v2.4.0]: https://github.com/intel/torch-ccl/releases/tag/v2.4.0%2Bcpu%2Brc0
 [ccl-v2.3.0]: https://github.com/intel/torch-ccl/releases/tag/v2.3.0%2Bcpu
 [ccl-v2.2.0]: https://github.com/intel/torch-ccl/releases/tag/v2.2.0%2Bcpu
 [ccl-v2.1.0]: https://github.com/intel/torch-ccl/releases/tag/v2.1.0%2Bcpu
 [ccl-v2.0.0]: https://github.com/intel/torch-ccl/releases/tag/v2.1.0%2Bcpu
 
 <!-- HuggingFace transformers releases -->
-[v4.41.2]: https://github.com/huggingface/transformers/releases/tag/v4.41.2
+[v4.44.0]: https://github.com/huggingface/transformers/releases/tag/v4.44.0
 
 [914]: https://dgpu-docs.intel.com/releases/stable_914_33_20240730.html
 [803]: https://dgpu-docs.intel.com/releases/LTS_803.29_20240131.html

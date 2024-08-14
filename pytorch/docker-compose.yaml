@@ -25,16 +25,16 @@ services:
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-22.04}
         GITHUB_RUN_NUMBER: ${GITHUB_RUN_NUMBER:-0}
-        IPEX_VERSION: ${IPEX_VERSION:-2.3.0}
+        IPEX_VERSION: ${IPEX_VERSION:-2.4.0}
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Linux-x86_64}
         NO_PROXY: ''
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
-        PYTORCH_VERSION: ${PYTORCH_VERSION:-2.3.0+cpu}
+        PYTORCH_VERSION: ${PYTORCH_VERSION:-2.4.0+cpu}
         REGISTRY: ${REGISTRY}
         REPO: ${REPO}
-        TORCHAUDIO_VERSION: ${TORCHAUDIO_VERSION:-2.3.0+cpu}
-        TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.18.0+cpu}
+        TORCHAUDIO_VERSION: ${TORCHAUDIO_VERSION:-2.4.0}
+        TORCHVISION_VERSION: ${TORCHVISION_VERSION:-0.19.0}
       context: .
       labels:
         dependency.python: ${PYTHON_VERSION:-3.10}
@@ -43,21 +43,21 @@ services:
         org.opencontainers.base.name: "intel/python:3.10-core"
         org.opencontainers.image.name: "intel/intel-optimized-pytorch"
         org.opencontainers.image.title: "Intel® Extension for PyTorch Base Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-base
+        org.opencontainers.image.version: ${IPEX_VERSION:-2.4.0}-${PACKAGE_OPTION:-pip}-base
       target: ipex-base-${PACKAGE_OPTION:-pip}
     command: >
       sh -c "python -c 'import torch; import intel_extension_for_pytorch as ipex; print(\"torch:\", torch.__version__, \" ipex:\",ipex.__version__)'"
     depends_on:
       - ${PACKAGE_OPTION:-pip}
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-base
     pull_policy: always
   jupyter:
     build:
       labels:
         dependency.python.pip: jupyter-requirements.txt
-        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-base"
+        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.4.0}-${PACKAGE_OPTION:-pip}-base"
         org.opencontainers.image.title: "Intel® Extension for PyTorch Jupyter Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-jupyter
+        org.opencontainers.image.version: ${IPEX_VERSION:-2.4.0}-${PACKAGE_OPTION:-pip}-jupyter
       target: jupyter
     command: >
       bash -c "python -m jupyter --version"
@@ -65,7 +65,7 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     extends: ipex-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-jupyter
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-jupyter
     network_mode: host
     ports:
       - 8888:8888
@@ -79,9 +79,9 @@ services:
         dependency.pip.apt.virtualenv: true
         dependency.pip.deepspeed: 0.14.4
         dependency.python.pip: multinode/requirements.txt
-        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-base"
+        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.4.0}-${PACKAGE_OPTION:-pip}-base"
         org.opencontainers.image.title: "Intel® Extension for PyTorch MultiNode Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.2.0}-${PACKAGE_OPTION:-pip}-multinode
+        org.opencontainers.image.version: ${IPEX_VERSION:-2.4.0}-${PACKAGE_OPTION:-pip}-multinode
       target: multinode
     command: >
       bash -c "python -c 'import neural_compressor;import oneccl_bindings_for_pytorch as oneccl;import deepspeed;
@@ -89,7 +89,7 @@ services:
       \"\\nOneCCL:\", oneccl.__version__,
       \"\\nDeepspeed:\", deepspeed.__version__)'"
     extends: ipex-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-oneccl-inc-${INC_VERSION:-2.6}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0}
     shm_size: 2gb
   xpu:
     build:
@@ -169,7 +169,7 @@ services:
         docs: serving
         org.opencontainers.base.name: "intel/python:3.10-core"
         org.opencontainers.image.title: "Intel® Extension for PyTorch Serving Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.2.0}-serving-cpu
+        org.opencontainers.image.version: ${IPEX_VERSION:-2.4.0}-serving-cpu
       target: torchserve
     command: torchserve --version
     entrypoint: ""
@@ -184,14 +184,14 @@ services:
   hf-genai:
     build:
       args:
-        HF_VERSION: ${HF_VERSION:-4.41.2}
+        HF_VERSION: ${HF_VERSION:-4.44.0}
       labels:
         dependency.python.pip: hf-genai-requirements.txt
-        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.3.0}-${PACKAGE_OPTION:-pip}-multinode"
+        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.4.0}-${PACKAGE_OPTION:-pip}-multinode"
         org.opencontainers.image.title: "Intel® Extension for PyTorch MultiNode Huggingface Generative AI Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.3.0}-${PACKAGE_OPTION:-pip}-multinode-hf-${HF_VERSION:-4.41.2}-genai"
+        org.opencontainers.image.version: ${IPEX_VERSION:-2.4.0}-${PACKAGE_OPTION:-pip}-multinode-hf-${HF_VERSION:-4.44.0}-genai"
       target: hf-genai
     extends: ipex-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.0}-hf-${HF_VERSION:-4.41.2}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-hf-${HF_VERSION:-4.44.0}
     command: >
       bash -c "python -c 'import transformers; print(transformers.__version__)'"
