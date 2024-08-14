@@ -242,7 +242,7 @@ spec:
     - grpc-v1
   containers:
     - name: kserve-container
-      image: "intel/intel-extension-for-pytorch:2.2.0-serving-cpu-kserve"
+      image: "intel/intel-extension-for-pytorch:2.4.0-serving-cpu-kserve"
       args:
         - torchserve
         - --start
