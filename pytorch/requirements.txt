@@ -3,4 +3,4 @@ torchvision==0.19.0
 torchaudio==2.4.0
 -f https://download.pytorch.org/whl/cpu/torch_stable.html
 intel_extension_for_pytorch==2.4.0+cpu
---extra-index-url https://developer.intel.com/ipex-whl-stable-cpu
+--extra-index-url https://pytorch-extension.intel.com/release-whl/stable/cpu/us/
