@@ -221,7 +221,7 @@ RUN useradd -m -s /bin/bash model-server && \
     mkdir -p /home/model-server/model-store && \
     chown -R model-server /home/model-server/
 
-FROM torchserve-base AS compile
+FROM torchserve-base AS compile-cpu
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
     g++ \
@@ -253,13 +253,132 @@ else \n\
 fi \n\
 tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh
 
-FROM torchserve-base AS torchserve
+FROM torchserve-base AS compile-xpu
+
+RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
+    g++ \
+    git \
+    wget \
+    python3-dev \
+    python3-distutils \
+    python3-venv && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m venv /home/venv
+
+ENV PATH="/home/venv/bin:$PATH"
+
+WORKDIR /home/model-server
+COPY torchserve-xpu-requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt 
+
+RUN echo -e "#!/bin/bash \n\
+set -e \n\
+if [[ \"\$1\" = "serve" ]]; then \n\
+    shift 1 \n\
+    torchserve --start --ts-config /home/model-server/config.properties --workflow-store /home/model-server/wf-store \n\
+else \n\
+    eval \"\$@\" \n\
+fi \n\
+tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh
+
+FROM torchserve-base AS torchserve-cpu
 
 USER model-server
 WORKDIR /home/model-server
 
-COPY --chown=model-server --from=compile /home/venv /home/venv
-COPY --chown=model-server --chmod=755 --from=compile /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+COPY --chown=model-server --from=compile-cpu /home/venv /home/venv
+COPY --chown=model-server --chmod=755 --from=compile-cpu /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+COPY --chown=model-server serving/config.properties /home/model-server/config.properties
+
+ENV PATH="/home/venv/bin:$PATH"
+ENV TEMP=/home/model-server/tmp
+
+# 8080/8081/8082 REST and 7070/7071 gRPC
+EXPOSE 8080 8081 8082 7070 7071
+
+ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
+CMD ["serve"]
+
+FROM torchserve-base AS torchserve-base-xpu
+
+USER model-server
+WORKDIR /home/model-server
+
+COPY --chown=model-server --from=compile-xpu /home/venv /home/venv
+COPY --chown=model-server --chmod=755 --from=compile-xpu /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+COPY --chown=model-server serving/config.properties /home/model-server/config.properties
+
+ENV PATH="/home/venv/bin:$PATH"
+ENV TEMP=/home/model-server/tmp
+
+# 8080/8081/8082 REST and 7070/7071 gRPC
+EXPOSE 8080 8081 8082 7070 7071
+
+ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
+CMD ["serve"]
+
+FROM torchserve-base-xpu as torchserve-xpu 
+
+USER root
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    apt-utils \
+    build-essential \
+    clinfo \
+    git \
+    gnupg2 \
+    gpg-agent \
+    rsync \
+    unzip && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+    gpg --dearmor --yes --output /usr/share/keyrings/intel-graphics.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
+    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
+
+ARG ICD_VER
+ARG LEVEL_ZERO_GPU_VER
+ARG LEVEL_ZERO_VER
+ARG LEVEL_ZERO_DEV_VER
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    intel-opencl-icd=${ICD_VER} \
+    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
+    libze1=${LEVEL_ZERO_VER} \
+    libze-dev=${LEVEL_ZERO_DEV_VER} && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+RUN no_proxy=$no_proxy wget -q  -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+   | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
+   echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
+   | tee /etc/apt/sources.list.d/oneAPI.list
+
+ARG DPCPP_VER
+ARG MKL_VER
+ARG CCL_VER
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    intel-oneapi-runtime-dpcpp-cpp=${DPCPP_VER} \
+    intel-oneapi-runtime-mkl=${MKL_VER} \
+    intel-oneapi-runtime-ccl=${CCL_VER};
+
+RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
+
+ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
+
+USER model-server
+WORKDIR /home/model-server
+
+COPY --chown=model-server --from=compile-xpu /home/venv /home/venv
+COPY --chown=model-server --chmod=755 --from=compile-xpu /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
 COPY --chown=model-server serving/config.properties /home/model-server/config.properties
 
 ENV PATH="/home/venv/bin:$PATH"
