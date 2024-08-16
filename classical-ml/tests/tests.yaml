@@ -14,13 +14,13 @@
 
 ---
 classical-ml-import-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.5.0}-xgboost-${XGBOOST_VERSION:-2.1.0}-base
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SKLEARN_VERSION:-2024.6.0}-xgboost-${XGBOOST_VERSION:-2.1.0}-base
   cmd: python -c "from sklearnex import patch_sklearn; patch_sklearn();import xgboost as xgb; print(xgb.__version__)"
 classical-ml-import-${PACKAGE_OPTION:-pip}-jupyter:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.5.0}-xgboost-${XGBOOST_VERSION:-2.1.0}-jupyter
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SKLEARN_VERSION:-2024.6.0}-xgboost-${XGBOOST_VERSION:-2.1.0}-jupyter
   cmd: sh -c "python -m jupyter --version"
 classical-ml-performance-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SCIKIT_VERSION:-2024.5.0}-xgboost-${XGBOOST_VERSION:-2.1.0}-base
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SKLEARN_VERSION:-2024.6.0}-xgboost-${XGBOOST_VERSION:-2.1.0}-base
   cmd: python /tests/performance.py
   volumes:
     - src: $PWD/classical-ml/tests
