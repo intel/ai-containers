@@ -33,12 +33,11 @@ ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
     KMP_BLOCKTIME=1 \
     KMP_SETTINGS=1
 
-ARG TF_VERSION
-
 WORKDIR /
 COPY requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    rm -rf requirements.txt
 
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/THIRD-PARTY-PROGRAMS.txt /licenses/
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-program-of-intel-extension-for-tensorflow.txt /licenses/
@@ -53,12 +52,13 @@ ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
 ENV PATH /usr/bin:/root/conda/envs/idp/bin:/root/conda/condabin:~/conda/bin/:${PATH}
 
 ENV TF_ENABLE_ONEDNN_OPTS=1
-ARG TF_VERSION
 
 WORKDIR /
 COPY requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r requirements.txt
+RUN conda run -n idp python -m pip install --no-cache-dir -r requirements.txt && \
+    rm -rf requirements.txt && \
+    conda clean -y --all
 
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/THIRD-PARTY-PROGRAMS.txt /licenses/
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-program-of-intel-extension-for-tensorflow.txt /licenses/
@@ -124,7 +124,7 @@ ARG HOROVOD_WITH_MPI=1
 
 ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64
 
-RUN pip install --no-cache-dir horovod==0.28.1
+RUN python -m pip install --no-cache-dir horovod==0.28.1
 
 ARG PYTHON_VERSION
 
