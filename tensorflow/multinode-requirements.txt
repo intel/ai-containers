@@ -1,3 +1,0 @@
-cython
-tf2onnx
-neural-compressor==3.0

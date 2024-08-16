@@ -69,21 +69,27 @@ services:
   multinode:
     build:
       labels:
+        dependency.apt.build-essential: true
+        dependency.apt.cmake: true
         dependency.apt.gcc: true
+        dependency.apt.g++: true
+        dependency.apt.git: true
         dependency.apt.libgl1-mesa-glx: true
         dependency.apt.libglib2: true
-        dependency.apt.python3-dev: true
-        dependency.pip.apt.virtualenv: true
         dependency.apt.libopenmpi-dev: true
+        dependency.apt.numactl: true
         dependency.apt.openmpi-bin: true
-        dependency.apt.unzip: true
         dependency.apt.openssh-client: true
         dependency.apt.openssh-server: true
-        dependency.python.pip: multinode-requirements.txt
+        dependency.apt.python3-dev: true
+        dependency.apt.unzip: true
+        dependency.pip.apt.virtualenv: true
+        dependency.pip.horovod: 0.28.1
+        dependency.python.pip: multinode/requirements.txt
         org.opencontainers.base.name: "intel/intel-optimized-tensorflow:${TF_VERSION:-2.15.0}-${PACKAGE_OPTION:-pip}-base"
         org.opencontainers.image.title: "Intel® Extension for TensorFlow MultiNode Image"
         org.opencontainers.image.version: ${TF_VERSION:-2.15.0}-${PACKAGE_OPTION:-pip}-multinode
-      target: multinode-${PACKAGE_OPTION:-pip}
+      target: multinode
     command: >
       bash -c "horovodrun --check-build && mpirun --version && python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow;import neural_compressor, tf2onnx; print(\"\\nNeural Compressor Version:\", neural_compressor.__version__, \"\\\nTensorFlow2ONNX Version:\", tf2onnx.__version__)'"
     extends: tf-base
@@ -120,7 +126,7 @@ services:
         org.opencontainers.base.name: "intel/python:3.10-core"
         org.opencontainers.image.title: "Intel® Extension for TensorFlow XPU Base Image"
         org.opencontainers.image.version: ${TF_VER:-2.15.0}-xpu-${PACKAGE_OPTION:-pip}-base
-      target: itex-xpu-base-${PACKAGE_OPTION:-pip}
+      target: itex-xpu-base
     command: >
       sh -c "python -c 'import tensorflow as tf;print(tf.__version__);from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'"
     extends: tf-base

@@ -77,37 +77,43 @@ EXPOSE 8888
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
-FROM tf-base-${PACKAGE_OPTION} AS openmpi
+FROM tf-base-${PACKAGE_OPTION} AS multinode
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
+    build-essential \
+    cmake \
+    g++ \
+    gcc \
+    git \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
     libopenmpi-dev \
+    numactl \
     openmpi-bin \
-    openmpi-common
+    openmpi-common \
+    python3-dev \
+    unzip \
+    virtualenv
+
+ENV SIGOPT_PROJECT=.
 
 WORKDIR /
-COPY ompi-requirements.txt .
+COPY multinode/requirements.txt requirements.txt
 
-RUN python -m pip install --no-cache-dir -r ompi-requirements.txt
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    rm -rf requirements.txt
 
-FROM openmpi AS horovod
-
-ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64
+ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
 
 RUN apt-get install -y --no-install-recommends --fix-missing \
-    unzip \
     openssh-client \
     openssh-server && \
-    rm  /etc/ssh/ssh_host_*_key \
-        /etc/ssh/ssh_host_*_key.pub
+    rm /etc/ssh/ssh_host_*_key \
+    /etc/ssh/ssh_host_*_key.pub && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-ENV OMPI_ALLOW_RUN_AS_ROOT=1
-ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
-
-ENV OMPI_MCA_tl_tcp_if_exclude="lo,docker0"
-
-# Install OpenSSH for MPI to communicate between containers
-RUN mkdir -p /var/run/sshd && \
-    echo 'LoginGraceTime 0' >> /etc/ssh/sshd_config
+RUN mkdir -p /var/run/sshd
 
 # Install Horovod
 ARG HOROVOD_WITH_TENSORFLOW=1
@@ -116,43 +122,32 @@ ARG HOROVOD_WITHOUT_PYTORCH=1
 ARG HOROVOD_WITHOUT_GLOO=1
 ARG HOROVOD_WITH_MPI=1
 
-RUN apt-get install -y --no-install-recommends --fix-missing \
-    build-essential \
-    cmake \
-    g++ \
-    gcc \
-    git \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-    python3-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64
 
-WORKDIR /
-COPY hvd-requirements.txt .
+RUN pip install --no-cache-dir horovod==0.28.1
 
-RUN python -m pip install --no-cache-dir -r hvd-requirements.txt
+ARG PYTHON_VERSION
 
-ENV SIGOPT_PROJECT=.
+COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
+
+# modify generate_ssh_keys to be a helper script
+# print how to use helper script on bash startup
+# Avoids loop for further execution of the startup file
+ARG PACKAGE_OPTION=pip
+ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
+RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then PYPATH="/opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages"; fi && \
+    echo "source ${PYPATH}/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
+    cat '/generate_ssh_keys.sh' >> ~/.startup && \
+    rm -rf /generate_ssh_keys.sh
+
+COPY multinode/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+COPY multinode/sshd_config /etc/ssh/sshd_config
+COPY multinode/ssh_config /etc/ssh/ssh_config
 
 RUN wget --progress=dot:giga --no-check-certificate https://github.com/intel/neural-compressor/raw/master/docker/third-party-programs-tensorflow.txt -O /licenses/inc-third-party-programs-tensorflow.txt && \
     wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licenses/INC_LICENSE
 
-FROM horovod AS multinode-pip
-
-WORKDIR /
-COPY multinode-requirements.txt .
-
-RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
-
-FROM horovod AS multinode-idp
-
-WORKDIR /
-COPY multinode-requirements.txt .
-
-RUN python -m pip install --no-cache-dir -r multinode-requirements.txt
-
-FROM ${PYTHON_BASE} AS itex-xpu-base-pip
+FROM ${PYTHON_BASE} AS itex-xpu-base
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
@@ -219,54 +214,7 @@ ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/maste
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
 
-FROM ${PYTHON_BASE} AS itex-xpu-base-idp
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    apt-utils \
-    build-essential \
-    clinfo \
-    git \
-    gnupg2 \
-    gpg-agent \
-    rsync \
-    unzip \
-    wget && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-ARG ICD_VER
-ARG LEVEL_ZERO_GPU_VER
-ARG LEVEL_ZERO_VER
-ARG LEVEL_ZERO_DEV_VER
-
-RUN no_proxy="" NO_PROXY="" wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-    gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
-    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
-
-RUN no_proxy="" NO_PROXY="" apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    intel-opencl-icd=${ICD_VER} \
-    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
-    level-zero=${LEVEL_ZERO_VER} \
-    level-zero-dev=${LEVEL_ZERO_DEV_VER} && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-ARG ITEX_VER="2.15.0.1"
-
-RUN conda install -n idp -y intel-extension-for-tensorflow=${ITEX_VER}=*xpu* \
-    -c https://software.repos.intel.com/python/conda
-
-ENV LD_LIBRARY_PATH=/opt/conda/envs/idp/lib:$LD_LIBRARY_PATH
-
-ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/THIRD-PARTY-PROGRAMS.txt /licenses/
-ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-program-of-intel-extension-for-tensorflow.txt /licenses/
-ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-programs-of-intel-tensorflow.txt /licenses/
-ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-programs-of-intel-optimization-for-horovod.txt /licenses/
-
-FROM itex-xpu-base-${PACKAGE_OPTION} AS itex-xpu-jupyter
+FROM itex-xpu-base AS itex-xpu-jupyter
 
 WORKDIR /jupyter
 COPY jupyter-requirements.txt .
