@@ -23,6 +23,8 @@ deploy:
   env:
     configMapName: intel-proxy-config
     enabled: true
+  # -- Set token authentication on or off. Checkout the latest [torchserve docs](https://github.com/pytorch/serve/blob/master/docs/token_authorization_api.md) for more details.
+  tokens_disabled: true
   # -- Models to be loaded
   models: all
   # -- Model Server Configuration file location

@@ -148,6 +148,7 @@ if __name__ == "__main__":
         rmtree(args.logs_path)
         os.makedirs(args.logs_path)
     # Set up Logging for test-runner context
+    unique_identifier = args.logs_path.replace("/", "-")
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -173,6 +174,7 @@ if __name__ == "__main__":
     tests = [Test(name=test, **tests_list[test]) for test in tests_list]
     logging.info("Setup Completed - Running Tests")
     summary = []
+    json_summary = []
     ERROR = False
     for idx, test in enumerate(tests):
         if disable_masking:
@@ -190,13 +192,27 @@ if __name__ == "__main__":
         except (DockerException, PerfException, YAMLError) as err:
             logging.error(err)
             summary.append([idx + 1, test.name, "FAIL"])
+            json_summary.append(
+                {"Group": unique_identifier, "Test": test.name, "Status": "FAIL"}
+            )
             ERROR = True
             continue
         except KeyboardInterrupt:
             summary.append([idx + 1, test.name, "FAIL"])
+            json_summary.append(
+                {"Group": unique_identifier, "Test": test.name, "Status": "FAIL"}
+            )
             ERROR = True
             break
         summary.append([idx + 1, test.name, "PASS"])
+        json_summary.append(
+            {"Group": unique_identifier, "Test": test.name, "Status": "PASS"}
+        )
+    json_summary_path = f"test-runner-summary-{unique_identifier}.json"
+
+    with open(json_summary_path, "w", encoding="utf-8") as file:
+        json.dump(json_summary, file, indent=4)
+
     # Switch logging context back to the initial state
     set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
     # Remove remaining containers
@@ -208,6 +224,8 @@ if __name__ == "__main__":
         docker.image.remove(test_images, force=True, prune=False)
         docker.system.prune()
         logging.info("%d Images Removed", len(test_images))
+    # DEBUG
+    logging.info("Saved json summary file in: %s", json_summary_path)
     # Print Summary Table
     logging.info(
         "\n%s", tabulate(summary, headers=["#", "Test", "Status"], tablefmt="orgtbl")

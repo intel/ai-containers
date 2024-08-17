@@ -14,11 +14,12 @@
 
 The images below include support for both CPU and GPU optimizations:
 
-| Tag(s)                 | TensorFlow  | ITEX           | Driver | Dockerfile      |
-| ---------------------- | ----------- | -------------- | ------ | --------------- |
-| `2.15.0.0-xpu`, `xpu`  | [v2.15.0]   | [v2.15.0.0]    | [803]  | [v0.4.0-Beta]   |
-| `2.14.0.1-xpu`         | [v2.14.1]   | [v2.14.0.1]    | [736]  | [v0.3.4]        |
-| `2.13.0.0-xpu`         | [v2.13.0]   | [v2.13.0.0]    | [647]  | [v0.2.3]        |
+| Tag(s)                 | TensorFlow  | ITEX           | Driver  | Dockerfile      |
+| ---------------------- | ----------- | -------------- | ------- | --------------- |
+| `2.15.0.1-xpu`, `xpu`  | [v2.15.1]   | [v2.15.0.1]    | [803.63]| [v0.4.0-Beta]   |
+| `2.15.0.0-xpu`         | [v2.15.0]   | [v2.15.0.0]    | [803]   | [v0.4.0-Beta]   |
+| `2.14.0.1-xpu`         | [v2.14.1]   | [v2.14.0.1]    | [736]   | [v0.3.4]        |
+| `2.13.0.0-xpu`         | [v2.13.0]   | [v2.13.0.0]    | [647]   | [v0.2.3]        |
 
 ### Run the XPU Container
 
@@ -36,6 +37,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)        | TensorFlow  | IPEX          | Driver | Dockerfile      |
 | ------------- | ----------- | ------------- | ------ | --------------- |
+| `2.15.0.1-xpu-jupyter` | [v2.15.1] | [v2.15.0.1]    | [803.63]| [v0.4.0-Beta]   |
 | `xpu-jupyter` | [v2.14.1]   | [v2.14.0.1]   | [736]  | [v0.3.4]   |
 
 ### Run the XPU Jupyter Container
@@ -47,7 +49,7 @@ docker run -it --rm \
     --device /dev/dri \
     -v /dev/dri/by-path:/dev/dri/by-path \
     --ipc=host \
-    intel/intel-extension-for-tensorflow:xpu-jupyter
+    intel/intel-extension-for-tensorflow:2.15.0.1-xpu-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
@@ -103,7 +105,7 @@ docker run -it --rm \
     --net=host \
     -v $PWD/workspace:/workspace \
     -w /workspace \
-    intel/intel-extension-for-tensorflow:xpu-jupyter
+    intel/intel-extension-for-tensorflow:2.15.0-pip-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
@@ -169,6 +171,22 @@ The images below additionally include [Horovod]:
 | `2.14.0-idp-openmpi-multinode` | [v2.14.1]   | [v2.14.0.1]  | [v0.28.1] | [v0.3.4]        |
 | `2.13-idp-openmpi-mulitnode`   | [v2.13.0]   | [v2.13.0.0]  | [v0.28.0] | [v0.2.3]        |
 
+## XPU images with Intel® Distribution for Python*
+
+The images below are built only with CPU and GPU optimizations and include [Intel® Distribution for Python*]:
+
+| Tag(s)           | Pytorch  | ITEX         | Driver | Dockerfile      |
+| ---------------- | -------- | ------------ | -------- | ------ |
+| `2.15.0.1-xpu-idp-base` | [v2.15.1]   | [v2.15.0.1]  | [803]  | [v0.4.0-Beta] |
+| `2.15.0-xpu-idp-base` | [v2.15.0]   | [v2.15.0.0]  | [803]  | [v0.4.0-Beta] |
+
+The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
+
+| Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
+| --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
+| `2.15.0.1-xpu-idp-jupyter` | [v2.15.1] | [v2.15.0.1]  | [803]  | `8888`   | [v0.4.0-Beta]   |
+| `2.15.0-xpu-idp-jupyter` | [v2.1.0] | [v2.15.0.0]  | [803]  | `8888`   | [v0.4.0-Beta]   |
+
 ## Build from Source
 
 To build the images from source, clone the [Intel® AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
@@ -219,10 +237,12 @@ It is the image user's responsibility to ensure that any use of The images below
 [v0.3.4]: https://github.com/intel/ai-containers/blob/v0.3.4/tensorflow/Dockerfile
 [v0.2.3]: https://github.com/intel/ai-containers/blob/v0.2.3/tensorflow/Dockerfile
 
+[v2.15.1]: https://github.com/tensorflow/tensorflow/releases/tag/v2.15.1
 [v2.15.0]: https://github.com/tensorflow/tensorflow/releases/tag/v2.15.0
 [v2.14.1]: https://github.com/tensorflow/tensorflow/releases/tag/v2.14.1
 [v2.13.0]: https://github.com/tensorflow/tensorflow/releases/tag/v2.13.0
 
+[v2.15.0.1]: https://github.com/intel/intel-extension-for-tensorflow/releases/tag/v2.15.0.1
 [v2.15.0.0]: https://github.com/intel/intel-extension-for-tensorflow/releases/tag/v2.15.0.0
 [v2.14.0.1]: https://github.com/intel/intel-extension-for-tensorflow/releases/tag/v2.14.0.1
 [v2.13.0.0]: https://github.com/intel/intel-extension-for-tensorflow/releases/tag/v2.13.0.0
@@ -230,6 +250,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [v0.28.1]: https://github.com/horovod/horovod/releases/tag/v0.28.1
 [v0.28.0]: https://github.com/horovod/horovod/releases/tag/v0.28.0
 
+[803.63]: https://dgpu-docs.intel.com/releases/LTS_803.63_20240617.html
 [803]: https://dgpu-docs.intel.com/releases/LTS_803.29_20240131.html
 [736]: https://dgpu-docs.intel.com/releases/stable_736_25_20231031.html
 [647]: https://dgpu-docs.intel.com/releases/stable_647_21_20230714.html
