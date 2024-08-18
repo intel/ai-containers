@@ -55,7 +55,6 @@ You can find the list of services below for each container in the group:
 | `idp`        | Base image with [Intel® Distribution for Python*]                    |
 | `pip`        | Equivalent python image without [Intel® Distribution for Python*]    |
 
-
 ## License
 
 View the [License](https://github.com/intel/ai-containers/blob/main/LICENSE) for the [Intel® Distribution for Python].
