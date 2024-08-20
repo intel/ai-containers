@@ -24,7 +24,7 @@ The images below include support for both CPU and GPU optimizations:
 
 | Tag(s)                 | Pytorch  | IPEX           | Driver | Dockerfile      |
 | ---------------------- | -------- | -------------- | ------ | --------------- |
-| `2.1.40-xpu`           | [v2.1.0] | [v2.1.40+xpu]  | [914]  | [v0.4.0-Beta]   |
+| `2.1.40-xpu-pip-base`,`2.1.40-xpu`           | [v2.1.0] | [v2.1.40+xpu]  | [914]  | [v0.4.0-Beta]   |
 | `2.1.30-xpu`           | [v2.1.0] | [v2.1.30+xpu]  | [803]  | [v0.4.0-Beta]   |
 | `2.1.20-xpu`           | [v2.1.0] | [v2.1.20+xpu]  | [803]  | [v0.3.4]        |
 | `2.1.10-xpu`           | [v2.1.0] | [v2.1.10+xpu]  | [736]  | [v0.2.3]        |

@@ -1,2 +1,6 @@
 tensorflow==2.15.0
 intel-extension-for-tensorflow[xpu]==2.15.0.1
+idna==3.7
+requests==2.32.0
+tqdm==4.66.3
+urllib3==2.2.2
