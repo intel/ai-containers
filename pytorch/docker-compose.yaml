@@ -185,6 +185,7 @@ services:
     build:
       args:
         PACKAGE_OPTION: pip
+        GID: 109
       labels:
         dependency.apt.numactl: true
         dependency.apt.openjdk-17-jdk: true

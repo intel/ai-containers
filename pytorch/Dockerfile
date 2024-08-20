@@ -370,11 +370,37 @@ RUN apt-get update && \
     intel-oneapi-runtime-mkl=${MKL_VER} \
     intel-oneapi-runtime-ccl=${CCL_VER};
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        libnl-genl-3-200 \
+        intel-gsc \
+        libdrm2 \
+        intel-metrics-discovery \
+        intel-metrics-library && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN wget --no-check-certificate https://github.com/intel/xpumanager/releases/download/V1.2.38/xpu-smi_1.2.38_20240718.060204.0db09695.u22.04_amd64.deb
+
+RUN ldconfig && dpkg -i --force-all *.deb
+
+RUN sed -i 's/KERNEL_MESSAGES_SOURCE = journalctl/KERNEL_MESSAGES_SOURCE = dmesg/' /usr/lib/xpu-smi/config/diagnostics.conf
 RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
 
+ARG model-server
+ARG GID
+ARG GNAME=render
+ARG VNAME=video
+
+# RUN useradd -m -s /bin/bash model-server
+
+RUN groupadd -g $GID $GNAME
+
+RUN usermod -a -G $VNAME,$GNAME model-server
+
 USER model-server
+
 WORKDIR /home/model-server
 
 COPY --chown=model-server --from=compile-xpu /home/venv /home/venv
