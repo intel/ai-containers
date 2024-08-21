@@ -301,25 +301,7 @@ EXPOSE 8080 8081 8082 7070 7071
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
 CMD ["serve"]
 
-FROM torchserve-base AS torchserve-base-xpu
-
-USER model-server
-WORKDIR /home/model-server
-
-COPY --chown=model-server --from=compile-xpu /home/venv /home/venv
-COPY --chown=model-server --chmod=755 --from=compile-xpu /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
-COPY --chown=model-server serving/config.properties /home/model-server/config.properties
-
-ENV PATH="/home/venv/bin:$PATH"
-ENV TEMP=/home/model-server/tmp
-
-# 8080/8081/8082 REST and 7070/7071 gRPC
-EXPOSE 8080 8081 8082 7070 7071
-
-ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
-CMD ["serve"]
-
-FROM torchserve-base-xpu as torchserve-xpu 
+FROM torchserve-base as torchserve-xpu 
 
 USER root
 
@@ -383,8 +365,7 @@ RUN wget --no-check-certificate https://github.com/intel/xpumanager/releases/dow
 
 RUN ldconfig && dpkg -i --force-all *.deb
 
-RUN sed -i 's/KERNEL_MESSAGES_SOURCE = journalctl/KERNEL_MESSAGES_SOURCE = dmesg/' /usr/lib/xpu-smi/config/diagnostics.conf
-RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
+RUN rm -rf xpu-smi*.deb /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
 
@@ -395,17 +376,21 @@ ARG VNAME=video
 
 # RUN useradd -m -s /bin/bash model-server
 
-RUN groupadd -g $GID $GNAME
+RUN groupadd -g ${GID} ${GNAME}
 
-RUN usermod -a -G $VNAME,$GNAME model-server
+RUN usermod -aG ${VNAME},${GNAME} model-server
 
 USER model-server
 
 WORKDIR /home/model-server
 
+RUN git clone https://github.com/pytorch/serve.git
+
 COPY --chown=model-server --from=compile-xpu /home/venv /home/venv
 COPY --chown=model-server --chmod=755 --from=compile-xpu /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
-COPY --chown=model-server serving/config.properties /home/model-server/config.properties
+COPY --chown=model-server serving/config-xpu.properties /home/model-server/config-xpu.properties
+
+ENV TS_CONFIG_FILE=/home/model-server/config-xpu.properties
 
 ENV PATH="/home/venv/bin:$PATH"
 ENV TEMP=/home/model-server/tmp
