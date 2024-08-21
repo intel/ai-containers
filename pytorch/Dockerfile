@@ -271,7 +271,7 @@ ENV PATH="/home/venv/bin:$PATH"
 WORKDIR /home/model-server
 COPY torchserve-xpu-requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt 
+RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt
 
 RUN echo -e "#!/bin/bash \n\
 set -e \n\
@@ -301,7 +301,7 @@ EXPOSE 8080 8081 8082 7070 7071
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
 CMD ["serve"]
 
-FROM torchserve-base as torchserve-xpu 
+FROM torchserve-base as torchserve-xpu
 
 USER root
 
