@@ -16,7 +16,7 @@ Follow the instructions found in the link above depending on whether you are int
 curl -O https://download.pytorch.org/models/squeezenet1_1-b8a52dc0.pth
 docker run --rm -it \
            -v $PWD:/home/model-server \
-           intel/intel-optimized-pytorch:2.2.0-serving-cpu \
+           intel/intel-optimized-pytorch:2.4.0-serving-cpu \
            torch-model-archiver --model-name squeezenet \
             --version 1.0 \
             --model-file model-archive/model.py \
@@ -34,7 +34,7 @@ Test Torchserve with the new archived model. The example below is for the squeez
 docker run -d --rm --name server \
           -v $PWD:/home/model-server/model-store \
           --net=host \
-          intel/intel-optimized-pytorch:2.2.0-serving-cpu
+          intel/intel-optimized-pytorch:2.4.0-serving-cpu
 # Verify that the container has launched successfully
 docker logs server
 # Attempt to register the model and make an inference request
@@ -87,7 +87,7 @@ As demonstrated in the above example, models must be registered before they can 
               -v $PWD:/home/model-server/model-store \
               -v $PWD/config.properties:/home/model-server/config.properties \
               --net=host \
-              intel/intel-optimized-pytorch:2.2.0-serving-cpu
+              intel/intel-optimized-pytorch:2.4.0-serving-cpu
     # Verify that the container has launched successfully
     docker logs server
     # Check the models list

@@ -1,6 +1,5 @@
-#!/bin/bash
-
-# Copyright (c) 2024 Intel Corporation
+#!/usr/bin/env bash
+# Copyright (c) 2023 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,14 +12,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
 
-cd .. || exit
-docker compose pull torchserve
-docker tag "${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-ubuntu-22.04-py3.10-torchserve" intel/torchserve:latest
-git clone https://github.com/pytorch/serve
-cd serve/kubernetes/kserve || exit
-git apply ../../../serving/kfs.patch
-git submodule update --init --recursive
-./build_image.sh
-cd ../../../ || exit
-rm -rf serve/
+function gen_single_key() {
+	ALG_NAME=$1
+	if [[ ! -f /etc/ssh/ssh_host_${ALG_NAME}_key ]]; then
+		ssh-keygen -q -N "" -t "${ALG_NAME}" -f "/etc/ssh/ssh_host_${ALG_NAME}_key"
+	fi
+}
+
+gen_single_key dsa
+gen_single_key rsa
+gen_single_key ecdsa
+gen_single_key ed25519
