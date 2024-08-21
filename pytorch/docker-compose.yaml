@@ -185,7 +185,8 @@ services:
     build:
       args:
         PACKAGE_OPTION: pip
-        GID: 109
+        GID: ${GID:-109}
+        XPU_SMI_BINARY: ${XPU_SMI_BINARY:-https://github.com/intel/xpumanager/releases/download/V1.2.38/xpu-smi_1.2.38_20240718.060204.0db09695.u22.04_amd64.deb}
       labels:
         dependency.apt.numactl: true
         dependency.apt.openjdk-17-jdk: true

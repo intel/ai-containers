@@ -361,7 +361,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
-RUN wget --no-check-certificate https://github.com/intel/xpumanager/releases/download/V1.2.38/xpu-smi_1.2.38_20240718.060204.0db09695.u22.04_amd64.deb
+ARG XPU_SMI_BINARY
+
+RUN wget --progress=dot:giga --no-check-certificate XPU_SMI_BINARY
 
 RUN ldconfig && dpkg -i --force-all *.deb
 
