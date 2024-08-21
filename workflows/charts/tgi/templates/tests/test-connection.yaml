@@ -22,8 +22,16 @@ metadata:
     "helm.sh/hook": test
 spec:
   containers:
-    - name: wget
-      image: busybox
-      command: ['wget']
-      args: ['{{ include "tgi.fullname" . }}:{{ .Values.service.port }}']
-  restartPolicy: Never
+    - name: info
+      image: curlimage/curl
+      command: ['curl']
+      args: ['--noproxy "*" {{ include "tgi.fullname" . }}:{{ .Values.service.port }}/info']
+    - name: health
+      image: curlimage/curl
+      command: ['curl']
+      args: ['--noproxy "*" {{ include "tgi.fullname" . }}:{{ .Values.service.port }}/health']
+    # - name: health
+    #   image: curlimage/curl
+    #   command: ['curl']
+    #   args: ['--noproxy "*" {{ include "tgi.fullname" . }}:{{ .Values.service.port }}/generate_stream -X POST -d "{"inputs":"What is Deep Learning?","parameters":{"max_new_tokens":20}}" -H "Content-Type: application/json"']
+  restartPolicy: OnFailure

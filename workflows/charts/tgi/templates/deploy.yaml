@@ -37,29 +37,39 @@ spec:
             - '--model-id'
             - {{ .Values.deploy.model | quote }}
             {{- if index .Values.deploy.resources.limits "gpu.intel.com/i915" }}
-            - '--num_shards'
+            - '--num-shard'
             - {{ index .Values.deploy.resources.limits "gpu.intel.com/i915" | quote }}
             {{- end }}
             - '-p'
-            - {{ .Values.deploy.port | quote }}
+            - {{ .Values.service.port | quote }}
             {{- if .Values.quantize }}
             - '--quantize'
             - {{ .Values.deploy.quantize | quote }}
             {{- end }}
+            - '--cuda-graphs=0'
           envFrom:
             - configMapRef:
                 name: {{ .Values.deploy.configMapName }}
+            - secretRef:
+                name: hf-config
+          env:
+            - name: NUMBA_CACHE_DIR
+              value: /data/numba_cache
           image: {{ .Values.deploy.image }}
           ports:
             - name: http
-              containerPort: {{ .Values.deploy.port }}
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
           resources:
             {{- toYaml .Values.deploy.resources | nindent 12 }}
           volumeMounts:
             - mountPath: /dev/shm
               name: dshm
+            - mountPath: /data
+              name: hf-data
       volumes:
-         - name: dshm
-           emptyDir:
-              medium: Memory
+        - name: dshm
+          emptyDir:
+            medium: Memory
+        - name: hf-data
+          emptyDir: {}

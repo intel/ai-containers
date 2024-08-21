@@ -22,9 +22,7 @@ deploy:
   # -- Intel TGI Image
   image: ghcr.io/huggingface/text-generation-inference:latest-intel
   # -- Model to be loaded
-  model: Intel/neural-chat-7b-v3-3
-  # -- Container Port
-  port: 8080
+  model: HuggingFaceTB/SmolLM-135M
   # -- Enable Quantization (ex: bitsandbytes-nf4)
   quantize: ""
   # -- Number of pods

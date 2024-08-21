@@ -15,8 +15,7 @@ For more information about how to use Huggingface text-generation-inference with
 |-----|------|---------|-------------|
 | deploy.configMapName | string | `"intel-proxy-config"` | ConfigMap of Environment Variables |
 | deploy.image | string | `"ghcr.io/huggingface/text-generation-inference:latest-intel"` | Intel TGI Image |
-| deploy.model | string | `"Intel/neural-chat-7b-v3-3"` | Model to be loaded |
-| deploy.port | int | `8080` | Container Port |
+| deploy.model | string | `"HuggingFaceTB/SmolLM-135M"` | Model to be loaded |
 | deploy.quantize | string | `""` | Enable Quantization (ex: bitsandbytes-nf4) |
 | deploy.replicaCount | int | `1` | Number of pods |
 | deploy.resources | object | `{"limits":{"cpu":"4000m","gpu.intel.com/i915":1},"requests":{"cpu":"1000m","memory":"1Gi"}}` | Resource configuration |
