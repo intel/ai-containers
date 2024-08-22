@@ -363,8 +363,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ARG XPU_SMI_BINARY
 
-RUN wget --progress=dot:giga --no-check-certificate ${XPU_SMI_BINARY} && \
-    ldconfig && dpkg -i --force-all *.deb && \
+RUN wget -q  --no-check-certificate ${XPU_SMI_BINARY} && \
+    ldconfig && dpkg -i --force-all ${XPU_SMI_BINARY} && \
     rm -rf ${XPU_SMI_BINARY} /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
