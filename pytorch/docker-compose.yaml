@@ -165,7 +165,7 @@ services:
         dependency.apt.openjdk-17-jdk: true
         dependency.idp: false
         dependency.python.ipex: requirements.txt
-        dependency.python.pip: torchserve-requirements.txt
+        dependency.python.pip: serve/torchserve-requirements.txt
         docs: serving
         org.opencontainers.base.name: "intel/python:3.10-core"
         org.opencontainers.image.title: "Intel® Extension for PyTorch Serving Image"
@@ -191,7 +191,7 @@ services:
         dependency.apt.numactl: true
         dependency.apt.openjdk-17-jdk: true
         dependency.idp: false
-        dependency.python.pip: torchserve-xpu-requirements.txt
+        dependency.python.pip: serve/torchserve-xpu-requirements.txt
         docs: serving
         org.opencontainers.base.name: "intel/python:3.10-core"
         org.opencontainers.image.title: "Intel® Extension for PyTorch XPU Serving Image"

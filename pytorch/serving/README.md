@@ -21,8 +21,8 @@ docker run --rm -it \
            -u root \
            -v $PWD:/home/model-server \
            intel/intel-optimized-pytorch:2.4.0-serving-cpu \
-           torch-model-archiver --model-name squeezenet \
-           --version 1.0 \
+           torch-model-archiver --model-name squeezenet1_1 \
+           --version 1.1 \
            --model-file model-archive/model.py \
            --serialized-file squeezenet1_1-b8a52dc0.pth \
            --handler image_classifier \
@@ -41,7 +41,7 @@ docker run --rm -it \
            --device /dev/dri \
            intel/intel-optimized-pytorch:2.1.40-serving-xpu \
            sh -c 'python model-archive/ipex_squeezenet.py && \
-           torch-model-archiver --model-name squeezenet \
+           torch-model-archiver --model-name squeezenet1_1 \
            --version 1.1 \
            --serialized-file squeezenet_jit.pt \
            --handler image_classifier \
