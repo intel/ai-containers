@@ -13,7 +13,7 @@
 # limitations under the License.
 
 apiVersion: v2
-name: intel-tgi
+name: tgi-on-intel
 description: A Rust, Python and gRPC server for text generation inference by huggingface on Intel GPUs.
 
 # A chart can be either an 'application' or a 'library' chart.
