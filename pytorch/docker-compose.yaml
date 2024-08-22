@@ -156,7 +156,7 @@ services:
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.1.40xpu}-xpu-jupyter
     ports:
       - 8888:8888
-  torchserve:
+  torchserve-cpu:
     build:
       args:
         PACKAGE_OPTION: pip
@@ -170,7 +170,7 @@ services:
         org.opencontainers.base.name: "intel/python:3.10-core"
         org.opencontainers.image.title: "Intel® Extension for PyTorch Serving Image"
         org.opencontainers.image.version: ${IPEX_VERSION:-2.4.0}-serving-cpu
-      target: torchserve
+      target: torchserve-cpu
     command: torchserve --version
     entrypoint: ""
     extends: ipex-base
