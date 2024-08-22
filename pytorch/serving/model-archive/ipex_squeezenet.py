@@ -27,8 +27,8 @@
 
 # pylint: skip-file
 
-import torch
 import intel_extension_for_pytorch as ipex
+import torch
 import torchvision.models as models
 
 # load the model
@@ -50,8 +50,8 @@ model = ipex.optimize(model, dtype=torch.bfloat16)
 
 with torch.no_grad():
     with torch.xpu.amp.autocast(enabled=True, dtype=torch.bfloat16):
-    ############################# code changes #####################
+        ############################# code changes #####################
         model = torch.jit.trace(model, data)
         model = torch.jit.freeze(model)
         model(data)
-torch.jit.save(model, 'squeezenet_jit.pt')
+torch.jit.save(model, "squeezenet_jit.pt")
