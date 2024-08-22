@@ -12,33 +12,67 @@ The [Torchserve Model Archiver](https://github.com/pytorch/serve/blob/master/mod
 
 Follow the instructions found in the link above depending on whether you are intending to archive a model or a workflow. Use the provided container rather than installing the archiver with the example command below:
 
+#### For CPU
 ```bash
 curl -O https://download.pytorch.org/models/squeezenet1_1-b8a52dc0.pth
 docker run --rm -it \
+           --entrypoint='' \
+           -u root \
            -v $PWD:/home/model-server \
            intel/intel-optimized-pytorch:2.4.0-serving-cpu \
            torch-model-archiver --model-name squeezenet \
-            --version 1.0 \
-            --model-file model-archive/model.py \
-            --serialized-file squeezenet1_1-b8a52dc0.pth \
-            --handler image_classifier \
-            --export-path /home/model-server
+           --version 1.0 \
+           --model-file model-archive/model.py \
+           --serialized-file squeezenet1_1-b8a52dc0.pth \
+           --handler image_classifier \
+           --export-path /home/model-server
 ```
-
+### For XPU
+Use a squeezenet model [optimized](./model-store/ipex_squeezenet.py) for XPU using Intel® Extension for PyTorch*.
+```bash
+docker run --rm -it \
+           --entrypoint='' \
+           -u root \
+           -v $PWD:/home/model-server \
+           --device /dev/dri \
+           intel/intel-optimized-pytorch:2.1.40-serving-xpu \
+           sh -c 'python model-archive/ipex_squeezenet.py && \
+           torch-model-archiver --model-name squeezenet \
+           --version 1.1 \
+           --serialized-file squeezenet_jit.pt \
+           --handler image_classifier \
+           --export-path /home/model-server'
+```
 ### Test Model
 
 Test Torchserve with the new archived model. The example below is for the squeezenet model.
 
+#### For CPU
 ```bash
 # Assuming that the above pre-archived model is in the current working directory
 docker run -d --rm --name server \
           -v $PWD:/home/model-server/model-store \
+          -v $PWD/wf-store:/home/model-server/wf-store \
           --net=host \
           intel/intel-optimized-pytorch:2.4.0-serving-cpu
+```
+#### For XPU
+```bash
+# Assuming that the above pre-archived model is in the current working directory
+docker run -d --rm --name server \
+          -v $PWD:/home/model-server/model-store \
+          -v $PWD/wf-store:/home/model-server/wf-store \
+          -v $PWD/config-xpu.properties:/home/model-server/config.properties \
+          --net=host \
+          --device /dev/dri \
+          intel/intel-optimized-pytorch:2.1.40-serving-xpu
+```
+After lauching the container, follow the steps below:
+```bash
 # Verify that the container has launched successfully
 docker logs server
 # Attempt to register the model and make an inference request
-curl -X POST "http://localhost:8081/models?initial_workers=1&synchronous=true&url=squeezenet1_1.mar&model_name=squeezenet"
+curl -X POST "http://localhost:8081/models?initial_workers=1&synchronous=true&url=squeezenet.mar&model_name=squeezenet"
 curl -O https://raw.githubusercontent.com/pytorch/serve/master/docs/images/kitten_small.jpg
 curl -X POST http://localhost:8080/v2/models/squeezenet/infer -T kitten_small.jpg
 # Stop the container
