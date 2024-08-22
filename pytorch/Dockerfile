@@ -273,16 +273,6 @@ COPY serving/torchserve-xpu-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt
 
-RUN echo -e "#!/bin/bash \n\
-set -e \n\
-if [[ \"\$1\" = "serve" ]]; then \n\
-    shift 1 \n\
-    torchserve --start --ts-config /home/model-server/config.properties --workflow-store /home/model-server/wf-store \n\
-else \n\
-    eval \"\$@\" \n\
-fi \n\
-tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh
-
 FROM torchserve-base AS torchserve-cpu
 
 USER model-server
