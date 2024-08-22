@@ -237,7 +237,7 @@ RUN python3 -m venv /home/venv
 ENV PATH="/home/venv/bin:$PATH"
 
 WORKDIR /home/model-server
-COPY torchserve-requirements.txt .
+COPY serving/torchserve-requirements.txt .
 COPY requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r requirements.txt && \
@@ -269,7 +269,7 @@ RUN python3 -m venv /home/venv
 ENV PATH="/home/venv/bin:$PATH"
 
 WORKDIR /home/model-server
-COPY torchserve-xpu-requirements.txt .
+COPY serving/torchserve-xpu-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt
 
@@ -363,11 +363,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ARG XPU_SMI_BINARY
 
-RUN wget --progress=dot:giga --no-check-certificate XPU_SMI_BINARY
-
-RUN ldconfig && dpkg -i --force-all *.deb
-
-RUN rm -rf xpu-smi*.deb /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
+RUN wget --progress=dot:giga --no-check-certificate ${XPU_SMI_BINARY} && \
+    ldconfig && dpkg -i --force-all *.deb && \
+    rm -rf ${XPU_SMI_BINARY} /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
 
@@ -375,8 +373,6 @@ ARG model-server
 ARG GID
 ARG GNAME=render
 ARG VNAME=video
-
-# RUN useradd -m -s /bin/bash model-server
 
 RUN groupadd -g ${GID} ${GNAME}
 
@@ -390,9 +386,7 @@ RUN git clone https://github.com/pytorch/serve.git
 
 COPY --chown=model-server --from=compile-xpu /home/venv /home/venv
 COPY --chown=model-server --chmod=755 --from=compile-xpu /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
-COPY --chown=model-server serving/config-xpu.properties /home/model-server/config-xpu.properties
-
-ENV TS_CONFIG_FILE=/home/model-server/config-xpu.properties
+COPY --chown=model-server serving/config-xpu.properties /home/model-server/config.properties
 
 ENV PATH="/home/venv/bin:$PATH"
 ENV TEMP=/home/model-server/tmp
