@@ -14,7 +14,7 @@
 
 apiVersion: v2
 name: intel-tgi
-description: A Rust, Python and gRPC server for text generation inference by huggingface.
+description: A Rust, Python and gRPC server for text generation inference by huggingface on Intel GPUs.
 
 # A chart can be either an 'application' or a 'library' chart.
 #

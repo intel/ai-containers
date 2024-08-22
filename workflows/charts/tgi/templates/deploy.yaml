@@ -53,7 +53,7 @@ spec:
             - secretRef:
                 name: hf-config
           env:
-            - name: NUMBA_CACHE_DIR
+            - name: NUMBA_CACHE_DIR # https://github.com/huggingface/text-generation-inference/pull/2443
               value: /data/numba_cache
           image: {{ .Values.deploy.image }}
           livenessProbe:
