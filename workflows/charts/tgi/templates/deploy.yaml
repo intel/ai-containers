@@ -56,6 +56,12 @@ spec:
             - name: NUMBA_CACHE_DIR
               value: /data/numba_cache
           image: {{ .Values.deploy.image }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 5
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

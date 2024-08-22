@@ -23,15 +23,7 @@ metadata:
 spec:
   containers:
     - name: info
-      image: curlimage/curl
-      command: ['curl']
-      args: ['--noproxy "*" {{ include "tgi.fullname" . }}:{{ .Values.service.port }}/info']
-    - name: health
-      image: curlimage/curl
-      command: ['curl']
-      args: ['--noproxy "*" {{ include "tgi.fullname" . }}:{{ .Values.service.port }}/health']
-    # - name: health
-    #   image: curlimage/curl
-    #   command: ['curl']
-    #   args: ['--noproxy "*" {{ include "tgi.fullname" . }}:{{ .Values.service.port }}/generate_stream -X POST -d "{"inputs":"What is Deep Learning?","parameters":{"max_new_tokens":20}}" -H "Content-Type: application/json"']
+      image: curlimages/curl
+      command: ['sh', '-c']
+      args: ['curl --noproxy "*" -f {{ include "tgi.fullname" . }}:{{ .Values.service.port }}/info']
   restartPolicy: OnFailure
