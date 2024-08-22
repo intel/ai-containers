@@ -111,7 +111,7 @@ As demonstrated in the above example, models must be registered before they can 
 
 ### KServe
 
-Apply Intel Optimizations to KServe by patching the serving runtimes to use Intel Optimized Serving Containers with `kubectl apply -f patch.yaml`
+Apply Intel Optimizations to KServe by patching the serving runtimes to use Serving Containers with Intel Optimizations via `kubectl apply -f patch.yaml`
 
 > [!NOTE]
 > You can modify this `patch.yaml` file to change the serving runtime pod configuration.
