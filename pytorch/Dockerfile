@@ -34,6 +34,7 @@ ARG BASE_IMAGE_TAG
 ARG PACKAGE_OPTION=pip
 ARG PYTHON_VERSION
 ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-base
+ARG TORCHSERVE_BASE=${PYTHON_BASE}
 FROM ${PYTHON_BASE} AS ipex-base-pip
 
 WORKDIR /
@@ -181,11 +182,15 @@ RUN apt-get update && \
     intel-oneapi-runtime-mkl=${MKL_VER} \
     intel-oneapi-runtime-ccl=${CCL_VER};
 
+RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
+
+FROM ipex-xpu-base AS ipex-xpu-base-req
+
 WORKDIR /
 COPY xpu-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
-    rm -rf xpu-requirements.txt /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
+    rm -rf xpu-requirements.txt
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
 
@@ -205,7 +210,8 @@ EXPOSE 8888
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
-FROM ${PYTHON_BASE} as torchserve-base
+
+FROM ${TORCHSERVE_BASE} as torchserve-base
 
 ENV PYTHONUNBUFFERED=TRUE
 
@@ -221,8 +227,6 @@ RUN useradd -m -s /bin/bash model-server && \
     mkdir -p /home/model-server/model-store && \
     chown -R model-server /home/model-server/
 
-FROM torchserve-base AS compile-cpu
-
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
     g++ \
     git \
@@ -237,6 +241,9 @@ RUN python3 -m venv /home/venv
 ENV PATH="/home/venv/bin:$PATH"
 
 WORKDIR /home/model-server
+
+FROM torchserve-base AS compile-cpu
+
 COPY serving/torchserve-requirements.txt .
 COPY requirements.txt .
 
@@ -255,20 +262,6 @@ tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh
 
 FROM torchserve-base AS compile-xpu
 
-RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
-    g++ \
-    git \
-    wget \
-    python3-dev \
-    python3-distutils \
-    python3-venv && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN python3 -m venv /home/venv
-
-ENV PATH="/home/venv/bin:$PATH"
-
-WORKDIR /home/model-server
 COPY serving/torchserve-xpu-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt
@@ -301,20 +294,13 @@ EXPOSE 8080 8081 8082 7070 7071
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
 CMD ["serve"]
 
-FROM torchserve-base as torchserve-xpu
-
-USER root
+FROM torchserve-base AS torchserve-xpu
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
-    apt-utils \
-    build-essential \
-    clinfo \
-    git \
-    gnupg2 \
-    gpg-agent \
-    rsync \
-    unzip && \
+        gnupg2 \
+        gpg-agent \
+        rsync && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
@@ -323,36 +309,8 @@ RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
 RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 
-ARG ICD_VER
-ARG LEVEL_ZERO_GPU_VER
-ARG LEVEL_ZERO_VER
-ARG LEVEL_ZERO_DEV_VER
-
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    intel-opencl-icd=${ICD_VER} \
-    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
-    libze1=${LEVEL_ZERO_VER} \
-    libze-dev=${LEVEL_ZERO_DEV_VER} && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-RUN no_proxy=$no_proxy wget -q  -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
-   | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
-   echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
-   | tee /etc/apt/sources.list.d/oneAPI.list
-
-ARG DPCPP_VER
-ARG MKL_VER
-ARG CCL_VER
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    intel-oneapi-runtime-dpcpp-cpp=${DPCPP_VER} \
-    intel-oneapi-runtime-mkl=${MKL_VER} \
-    intel-oneapi-runtime-ccl=${CCL_VER};
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
+    apt-get install -y --no-install-recommends \
         libnl-genl-3-200 \
         intel-gsc \
         libdrm2 \
@@ -364,8 +322,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ARG XPU_SMI_BINARY
 
 RUN wget -q  --no-check-certificate ${XPU_SMI_BINARY} && \
-    ldconfig && dpkg -i --force-all ${XPU_SMI_BINARY} && \
-    rm -rf ${XPU_SMI_BINARY} /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
+    ldconfig && dpkg -i --force-all *.deb && \
+    rm -rf *.deb /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
 
@@ -376,13 +334,16 @@ ARG VNAME=video
 
 RUN groupadd -g ${GID} ${GNAME}
 
+# RUN useradd -m -s /bin/bash model-server
 RUN usermod -aG ${VNAME},${GNAME} model-server
 
 USER model-server
 
 WORKDIR /home/model-server
 
-RUN wget --progress=dot:giga https://github.com/pytorch/serve/blob/master/examples/intel_extension_for_pytorch/intel_gpu_metric_collector.py
+
+RUN wget --progress=dot:giga https://raw.githubusercontent.com/pytorch/serve/master/examples/intel_extension_for_pytorch/intel_gpu_metric_collector.py && \
+    wget --progress=dot:giga https://raw.githubusercontent.com/pytorch/serve/master/examples/intel_extension_for_pytorch/intel_gpu.py
 
 COPY --chown=model-server --from=compile-xpu /home/venv /home/venv
 COPY --chown=model-server --chmod=755 --from=compile-xpu /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh

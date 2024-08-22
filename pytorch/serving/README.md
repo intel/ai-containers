@@ -82,7 +82,7 @@ After lauching the container, follow the steps below:
 # Verify that the container has launched successfully
 docker logs server
 # Attempt to register the model and make an inference request
-curl -X POST "http://localhost:8081/models?initial_workers=1&synchronous=true&url=squeezenet.mar&model_name=squeezenet"
+curl -X POST "http://localhost:8081/models?initial_workers=1&synchronous=true&url=squeezenet1_1.mar&model_name=squeezenet"
 curl -O https://raw.githubusercontent.com/pytorch/serve/master/docs/images/kitten_small.jpg
 curl -X POST http://localhost:8080/v2/models/squeezenet/infer -T kitten_small.jpg
 # Stop the container
