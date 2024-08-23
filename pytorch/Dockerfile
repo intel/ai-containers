@@ -315,10 +315,12 @@ ARG XPU_SMI_VERSION
 
 ARG API_URL=https://api.github.com/repos/intel/xpumanager/releases/tags/V${XPU_SMI_VERSION}
 
-RUN curl -H "Accept: application/vnd.github.v3+json" -H "User-Agent: MyClient/1.0.0" "$API_URL" >> /tmp/asset_data.txt && \
-    wget -q --no-check-certificate $(cat /tmp/asset_data.txt | jq -r '.assets[] | select(.name | test("^xpu-smi.*u22\\.04_amd64\\.deb$")) | .browser_download_url') && \
-    ldconfig && dpkg -i --force-all *.deb && \
-    rm -rf *.deb /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list /tmp/asset_data.txt
+RUN curl -H "Accept: application/vnd.github.v3+json" -H "User-Agent: MyClient/1.0.0" "$API_URL" > /tmp/asset_data.txt && \
+    jq -r '.assets[] | select(.name | test("^xpu-smi.*u22\\.04_amd64\\.deb$")) | .browser_download_url' < /tmp/asset_data.txt | \
+    while read -r url; do wget -q --no-check-certificate "$url"; done
+
+RUN ldconfig && dpkg -i --force-all -- *.deb && \
+    rm -rf -- *.deb /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list /tmp/asset_data.txt
 
 ARG GID=109
 
