@@ -43,7 +43,7 @@ docker run --rm -it \
            sh -c 'python model-archive/ipex_squeezenet.py && \
            torch-model-archiver --model-name squeezenet1_1 \
            --version 1.1 \
-           --serialized-file squeezenet_jit.pt \
+           --serialized-file squeezenet1_1-jit.pt \
            --handler image_classifier \
            --export-path /home/model-server'
 ```

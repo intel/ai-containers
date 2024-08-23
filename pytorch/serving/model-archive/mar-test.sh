@@ -26,8 +26,18 @@
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
 
-wget https://download.pytorch.org/models/squeezenet1_1-b8a52dc0.pth
-torch-model-archiver --model-name squeezenet1_1 --version 1.1 --model-file /home/model-server/model-archive/model.py --serialized-file squeezenet1_1-b8a52dc0.pth --handler image_classifier --export-path /home/model-server/model-store
+if [[ "$1" == "cpu" ]]; then
+    wget https://download.pytorch.org/models/squeezenet1_1-b8a52dc0.pth
+    torch-model-archiver --model-name squeezenet1_1 --version 1.1 --model-file /home/model-server/model-archive/model.py --serialized-file squeezenet1_1-b8a52dc0.pth --handler image_classifier --export-path /home/model-server/model-store
+    rm -rf squeezenet1_1-b8a52dc0.pth
+elif [[ "$1" == "xpu" ]]; then
+    python /home/model-server/model-archive/ipex_squeezenet.py
+    torch-model-archiver --model-name squeezenet1_1 --version 1.1 --serialized-file squeezenet1_1-jit.pt --handler image_classifier --export-path /home/model-server/model-store
+    rm -rf squeezenet1_1-jit.pt
+else
+    echo "Only cpu and xpu devices supported"
+    exit 1
+fi
+
 [ -f "/home/model-server/model-store/squeezenet1_1.mar" ] && echo "squeezenet1_1.pth Archived Succesfully at /home/model-server/model-store/squeezenet1_1.mar"
-rm -rf squeezenet1_1-b8a52dc0.pth
 find . | grep -E "(/__pycache__$|\.pyc$|\.pyo$)" | xargs rm -rf

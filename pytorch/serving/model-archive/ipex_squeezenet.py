@@ -54,4 +54,4 @@ with torch.no_grad():
         model = torch.jit.trace(model, data)
         model = torch.jit.freeze(model)
         model(data)
-torch.jit.save(model, "squeezenet_jit.pt")
+torch.jit.save(model, "squeezenet1_1-jit.pt")
