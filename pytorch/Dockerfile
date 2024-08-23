@@ -315,16 +315,15 @@ ARG XPU_SMI_VERSION
 
 ARG API_URL=https://api.github.com/repos/intel/xpumanager/releases/tags/V${XPU_SMI_VERSION}
 
-RUN curl -H "Accept: application/vnd.github.v3+json" -H "User-Agent: MyClient/1.0.0" "$API_URL" >> /tmp/asset_data.txt && \
-    wget -q --no-check-certificate $(cat /tmp/asset_data.txt | jq -r '.assets[] | select(.name | test("^xpu-smi.*u22\\.04_amd64\\.deb$")) | .browser_download_url') && \
-    ldconfig && dpkg -i --force-all *.deb && \
-    rm -rf *.deb /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list /tmp/asset_data.txt
+RUN curl -H "Accept: application/vnd.github.v3+json" -H "User-Agent: MyClient/1.0.0" "$API_URL" | tee /tmp/asset_data.txt && \
+    curl -L $(cat /tmp/asset_data.txt | jq -r '.assets[] | select(.name | test("^xpu-smi.*u22\\.04_amd64\\.deb$")) | .browser_download_url') | xargs -I {} dpkg -i --force-all {} && \
+    ldconfig && \
+    rm -rf -- /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list /tmp/asset_data.txt
 
 ARG GID=109
 
-RUN groupadd -g ${GID} render
-
-RUN usermod -aG video,render model-server
+RUN groupadd -g ${GID} render &&\
+    usermod -aG video,render model-server
 
 USER model-server
 
