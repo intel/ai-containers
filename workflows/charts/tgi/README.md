@@ -23,6 +23,7 @@ For more information about how to use Huggingface text-generation-inference with
 | fullnameOverride | string | `""` | Full qualified Domain Name |
 | ingress | object | `{"annotations":{},"className":"","enabled":false,"hosts":[{"host":"chart-example.local","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}],"tls":[]}` | Ingress configuration |
 | nameOverride | string | `""` | Name of the serving service |
+| secret.encodedToken | string | `"nil"` | Base64 Encoded Huggingface Hub API Token |
 | service | object | `{"port":80,"type":"NodePort"}` | Service configuration |
 
 ----------------------------------------------

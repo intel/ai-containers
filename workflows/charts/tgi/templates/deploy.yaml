@@ -51,7 +51,7 @@ spec:
             - configMapRef:
                 name: {{ .Values.deploy.configMapName }}
             - secretRef:
-                name: hf-config
+                name: {{ .Release.Name }}-hf-token
           env:
             - name: NUMBA_CACHE_DIR # https://github.com/huggingface/text-generation-inference/pull/2443
               value: /data/numba_cache
