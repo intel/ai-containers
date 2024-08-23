@@ -41,7 +41,7 @@ deploy:
       memory: "1Gi"
 secret:
   # -- Base64 Encoded Huggingface Hub API Token
-  encodedToken: nil
+  encodedToken: ""
 # -- Service configuration
 service:
   port: 80
