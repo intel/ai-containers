@@ -242,6 +242,16 @@ ENV PATH="/home/venv/bin:$PATH"
 
 WORKDIR /home/model-server
 
+RUN echo -e "#!/bin/bash \n\
+set -e \n\
+if [[ \"\$1\" = "serve" ]]; then \n\
+    shift 1 \n\
+    torchserve --start --ts-config /home/model-server/config.properties --workflow-store /home/model-server/wf-store \n\
+else \n\
+    eval \"\$@\" \n\
+fi \n\
+tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh
+
 FROM torchserve-base AS compile-cpu
 
 COPY serving/torchserve-requirements.txt .
@@ -250,31 +260,11 @@ COPY requirements.txt .
 RUN python -m pip install --no-cache-dir -r requirements.txt && \
     python -m pip install --no-cache-dir -r torchserve-requirements.txt
 
-RUN echo -e "#!/bin/bash \n\
-set -e \n\
-if [[ \"\$1\" = "serve" ]]; then \n\
-    shift 1 \n\
-    torchserve --start --ts-config /home/model-server/config.properties --workflow-store /home/model-server/wf-store \n\
-else \n\
-    eval \"\$@\" \n\
-fi \n\
-tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh
-
 FROM torchserve-base AS compile-xpu
 
 COPY serving/torchserve-xpu-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt
-
-RUN echo -e "#!/bin/bash \n\
-set -e \n\
-if [[ \"\$1\" = "serve" ]]; then \n\
-    shift 1 \n\
-    torchserve --start --ts-config /home/model-server/config.properties --workflow-store /home/model-server/wf-store \n\
-else \n\
-    eval \"\$@\" \n\
-fi \n\
-tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh
 
 FROM torchserve-base AS torchserve-cpu
 
@@ -311,6 +301,8 @@ RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] http
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+        jq \
+        curl \
         libnl-genl-3-200 \
         intel-gsc \
         libdrm2 \
@@ -319,28 +311,24 @@ RUN apt-get update && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
-ARG XPU_SMI_BINARY
+ARG XPU_SMI_VERSION
 
-RUN wget -q  --no-check-certificate ${XPU_SMI_BINARY} && \
+ARG API_URL=https://api.github.com/repos/intel/xpumanager/releases/tags/V${XPU_SMI_VERSION}
+
+RUN curl -H "Accept: application/vnd.github.v3+json" -H "User-Agent: MyClient/1.0.0" "$API_URL" >> /tmp/asset_data.txt && \
+    wget -q --no-check-certificate $(cat /tmp/asset_data.txt | jq -r '.assets[] | select(.name | test("^xpu-smi.*u22\\.04_amd64\\.deb$")) | .browser_download_url') && \
     ldconfig && dpkg -i --force-all *.deb && \
-    rm -rf *.deb /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
+    rm -rf *.deb /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list /tmp/asset_data.txt
 
-ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
+ARG GID=109
 
-ARG model-server
-ARG GID
-ARG GNAME=render
-ARG VNAME=video
+RUN groupadd -g ${GID} render
 
-RUN groupadd -g ${GID} ${GNAME}
-
-# RUN useradd -m -s /bin/bash model-server
-RUN usermod -aG ${VNAME},${GNAME} model-server
+RUN usermod -aG video,render model-server
 
 USER model-server
 
 WORKDIR /home/model-server
-
 
 RUN wget --progress=dot:giga https://raw.githubusercontent.com/pytorch/serve/master/examples/intel_extension_for_pytorch/intel_gpu_metric_collector.py && \
     wget --progress=dot:giga https://raw.githubusercontent.com/pytorch/serve/master/examples/intel_extension_for_pytorch/intel_gpu.py

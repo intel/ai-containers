@@ -165,7 +165,7 @@ services:
         dependency.apt.openjdk-17-jdk: true
         dependency.idp: false
         dependency.python.ipex: requirements.txt
-        dependency.python.pip: serve/torchserve-requirements.txt
+        dependency.python.pip: serving/torchserve-requirements.txt
         docs: serving
         org.opencontainers.base.name: "intel/python:3.10-core"
         org.opencontainers.image.title: "Intel® Extension for PyTorch Serving Image"
@@ -185,14 +185,13 @@ services:
     build:
       args:
         PACKAGE_OPTION: pip
-        GID: ${GID:-109}
-        XPU_SMI_BINARY: ${XPU_SMI_BINARY:-https://github.com/intel/xpumanager/releases/download/V1.2.38/xpu-smi_1.2.38_20240718.060204.0db09695.u22.04_amd64.deb}
+        XPU_SMI_VERSION: ${XPU_SMI_VERSION:-1.2.38}
         TORCHSERVE_BASE: ipex-xpu-base
       labels:
         dependency.apt.numactl: true
         dependency.apt.openjdk-17-jdk: true
         dependency.idp: false
-        dependency.python.pip: serve/torchserve-xpu-requirements.txt
+        dependency.python.pip: serving/torchserve-xpu-requirements.txt
         docs: serving
         org.opencontainers.base.name: "intel/python:3.10-core"
         org.opencontainers.image.title: "Intel® Extension for PyTorch XPU Serving Image"
