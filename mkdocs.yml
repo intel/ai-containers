@@ -51,7 +51,7 @@ plugins:
     - read_csv
 repo_name: intel/ai-containers
 repo_url: https://github.com/intel/ai-containers
-site_name: Intel® AI Containers
+site_name: AI Containers
 #TODO: Get previous container versions in an easy way
 # https://squidfunk.github.io/mkdocs-material/setup/setting-up-versioning/
 theme:

@@ -15,7 +15,7 @@ The images below include variations for only the core packages in the [Intel® D
 
 ## Build from Source
 
-To build the images from source, clone the [Intel® AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
+To build the images from source, clone the [AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
 
 ```bash
 cd python
