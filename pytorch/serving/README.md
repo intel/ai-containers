@@ -64,6 +64,7 @@ docker run -d --rm --name server \
 ```
 
 #### Run Torchserve for XPU device
+
 ```bash
 # Assuming that the above pre-archived model is in the current working directory
 docker run -d --rm --name server \
