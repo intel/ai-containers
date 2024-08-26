@@ -1,6 +1,6 @@
 # Contributing
 
-Thank you for considering contributing to Intel® AI Containers! We welcome your help to make this project better. Contributing to an open source project can be a daunting task, but the Intel AI Containers team is here to help you through the process. If at any point in this process you feel out of your depth or confused by our processes, please don't hesitate to reach out to a maintainer or file an [issue](https://github.com/intel/ai-containers/issues).
+Thank you for considering contributing to AI Containers! We welcome your help to make this project better. Contributing to an open source project can be a daunting task, but the Intel AI Containers team is here to help you through the process. If at any point in this process you feel out of your depth or confused by our processes, please don't hesitate to reach out to a maintainer or file an [issue](https://github.com/intel/ai-containers/issues).
 
 ## Getting Started
 
@@ -138,4 +138,4 @@ commit automatically with `git commit -s`.
 
 ## License
 
-Intel® AI Containers is licensed under the terms in [LICENSE](./LICENSE). By contributing to the project, you agree to the license and copyright terms therein and release your contribution under these terms.
+AI Containers is licensed under the terms in [LICENSE](./LICENSE). By contributing to the project, you agree to the license and copyright terms therein and release your contribution under these terms.

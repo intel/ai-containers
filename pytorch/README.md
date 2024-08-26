@@ -241,8 +241,6 @@ Additionally, if you have a [DeepSpeed* configuration](https://www.deepspeed.ai/
 
 ---
 
-#### Hugging Face Generative AI Container
-
 The image below is an extension of the IPEX Multi-Node Container designed to run Hugging Face Generative AI scripts. The container has the typical installations needed to run and fine tune PyTorch generative text models from Hugging Face. It can be used to run multinode jobs using the same instructions from the [IPEX Multi-Node container](#setup-and-run-ipex-multi-node-container).
 
 | Tag(s)                                | Pytorch  | IPEX         | oneCCL               | HF Transformers | Dockerfile      |
@@ -324,7 +322,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 ## Build from Source
 
-To build the images from source, clone the [Intel® AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
+To build the images from source, clone the [AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
 
 ```bash
 cd pytorch
