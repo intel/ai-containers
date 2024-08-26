@@ -184,15 +184,15 @@ RUN apt-get update && \
 
 RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
 
-FROM ipex-xpu-base AS ipex-xpu-base-req
+ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
+
+FROM ipex-xpu-base AS ipex-xpu-base-wheels
 
 WORKDIR /
 COPY xpu-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
-
-ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
 
 FROM ipex-xpu-base AS ipex-xpu-jupyter
 
@@ -258,13 +258,15 @@ COPY serving/torchserve-requirements.txt .
 COPY requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r requirements.txt && \
-    python -m pip install --no-cache-dir -r torchserve-requirements.txt
+    python -m pip install --no-cache-dir -r torchserve-requirements.txt && \
+    rm -rf requirements.txt torchserve-requirements.txt
 
 FROM torchserve-base AS compile-xpu
 
 COPY serving/torchserve-xpu-requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt
+RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt && \
+    rm -rf torchserve-xpu-requirements.txt
 
 FROM torchserve-base AS torchserve-cpu
 

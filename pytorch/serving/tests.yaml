@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ipex-serving-model-archive:
+ipex-serving-cpu-model-archive:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-torchserve-cpu
   cmd: /home/model-server/model-archive/mar-test.sh cpu
   entrypoint: /bin/bash
@@ -35,7 +35,7 @@ ipex-serving-xpu-model-archive:
     dst: /home/model-server/model-store
   user: root
   workdir: /home/model-server/model-archive
-ipex-serving-workflow-archive:
+ipex-serving-cpu-workflow-archive:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-torchserve-cpu
   cmd: /home/model-server/model-archive/war-test.sh
   entrypoint: /bin/bash
@@ -46,7 +46,7 @@ ipex-serving-workflow-archive:
     dst: /home/model-server/wf-store
   user: root
   workdir: /home/model-server/model-archive
-ipex-serving-rest-workflow:
+ipex-serving-cpu-rest-workflow:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-torchserve-cpu
   cmd: bash /home/model-server/wf-store/rest-test.sh
   serving: True
@@ -72,7 +72,7 @@ ipex-serving-xpu-rest-workflow:
     ENABLE_TORCH_PROFILER: 'true'
   shm_size: 1g
   workdir: /home/model-server/wf-store
-ipex-serving-rest-inference:
+ipex-serving-cpu-rest-inference:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-torchserve-cpu
   cmd: bash /home/model-server/model-store/rest-test.sh
   serving: True
@@ -85,7 +85,7 @@ ipex-serving-rest-inference:
     ENABLE_TORCH_PROFILER: 'true'
   shm_size: 1g
   workdir: /home/model-server/model-store
-ipex-serving-grpc-inference:
+ipex-serving-cpu-grpc-inference:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-torchserve-cpu
   cmd: bash /home/model-server/model-store/grpc-test.sh
   serving: True

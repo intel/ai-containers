@@ -12,7 +12,7 @@ The [Torchserve Model Archiver](https://github.com/pytorch/serve/blob/master/mod
 
 Follow the instructions found in the link above depending on whether you are intending to archive a model or a workflow. Use the provided container rather than installing the archiver with the example command below:
 
-#### For CPU
+#### Create a Model Archive for CPU device
 
 ```bash
 curl -O https://download.pytorch.org/models/squeezenet1_1-b8a52dc0.pth
@@ -29,7 +29,7 @@ docker run --rm -it \
            --export-path /home/model-server
 ```
 
-### For XPU
+### Create a Model Archive for XPU device
 
 Use a squeezenet model [optimized](./model-store/ipex_squeezenet.py) for XPU using Intel® Extension for PyTorch*.
 
@@ -52,7 +52,7 @@ docker run --rm -it \
 
 Test Torchserve with the new archived model. The example below is for the squeezenet model.
 
-#### For CPU
+#### Run Torchserve for CPU device
 
 ```bash
 # Assuming that the above pre-archived model is in the current working directory
@@ -63,8 +63,7 @@ docker run -d --rm --name server \
           intel/intel-optimized-pytorch:2.4.0-serving-cpu
 ```
 
-#### For XPU
-
+#### Run Torchserve for XPU device
 ```bash
 # Assuming that the above pre-archived model is in the current working directory
 docker run -d --rm --name server \
