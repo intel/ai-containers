@@ -12,29 +12,73 @@ The [Torchserve Model Archiver](https://github.com/pytorch/serve/blob/master/mod
 
 Follow the instructions found in the link above depending on whether you are intending to archive a model or a workflow. Use the provided container rather than installing the archiver with the example command below:
 
+#### Create a Model Archive for CPU device
+
 ```bash
 curl -O https://download.pytorch.org/models/squeezenet1_1-b8a52dc0.pth
 docker run --rm -it \
+           --entrypoint='' \
+           -u root \
            -v $PWD:/home/model-server \
            intel/intel-optimized-pytorch:2.4.0-serving-cpu \
-           torch-model-archiver --model-name squeezenet \
-            --version 1.0 \
-            --model-file model-archive/model.py \
-            --serialized-file squeezenet1_1-b8a52dc0.pth \
-            --handler image_classifier \
-            --export-path /home/model-server
+           torch-model-archiver --model-name squeezenet1_1 \
+           --version 1.1 \
+           --model-file model-archive/model.py \
+           --serialized-file squeezenet1_1-b8a52dc0.pth \
+           --handler image_classifier \
+           --export-path /home/model-server
+```
+
+### Create a Model Archive for XPU device
+
+Use a squeezenet model [optimized](./model-store/ipex_squeezenet.py) for XPU using Intel® Extension for PyTorch*.
+
+```bash
+docker run --rm -it \
+           --entrypoint='' \
+           -u root \
+           -v $PWD:/home/model-server \
+           --device /dev/dri \
+           intel/intel-optimized-pytorch:2.1.40-serving-xpu \
+           sh -c 'python model-archive/ipex_squeezenet.py && \
+           torch-model-archiver --model-name squeezenet1_1 \
+           --version 1.1 \
+           --serialized-file squeezenet1_1-jit.pt \
+           --handler image_classifier \
+           --export-path /home/model-server'
 ```
 
 ### Test Model
 
 Test Torchserve with the new archived model. The example below is for the squeezenet model.
 
+#### Run Torchserve for CPU device
+
 ```bash
 # Assuming that the above pre-archived model is in the current working directory
 docker run -d --rm --name server \
           -v $PWD:/home/model-server/model-store \
+          -v $PWD/wf-store:/home/model-server/wf-store \
           --net=host \
           intel/intel-optimized-pytorch:2.4.0-serving-cpu
+```
+
+#### Run Torchserve for XPU device
+
+```bash
+# Assuming that the above pre-archived model is in the current working directory
+docker run -d --rm --name server \
+          -v $PWD:/home/model-server/model-store \
+          -v $PWD/wf-store:/home/model-server/wf-store \
+          -v $PWD/config-xpu.properties:/home/model-server/config.properties \
+          --net=host \
+          --device /dev/dri \
+          intel/intel-optimized-pytorch:2.1.40-serving-xpu
+```
+
+After lauching the container, follow the steps below:
+
+```bash
 # Verify that the container has launched successfully
 docker logs server
 # Attempt to register the model and make an inference request
