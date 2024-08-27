@@ -138,9 +138,11 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     libglib2.0-0 \
     libopenmpi-dev \
     numactl \
-    virtualenv
+    virtualenv && \
+    apt-get clean
 
-RUN apt-get install -y --no-install-recommends --fix-missing \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends  \
     openssh-client \
     openssh-server && \
     rm /etc/ssh/ssh_host_*_key \
@@ -150,18 +152,13 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
 
 RUN mkdir -p /var/run/sshd
 
-ARG PYTHON_VERSION
-
 COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
 
 # modify generate_ssh_keys to be a helper script
 # print how to use helper script on bash startup
 # Avoids loop for further execution of the startup file
 ARG PACKAGE_OPTION=pip
-ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
-RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then PYPATH="/opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages"; fi && \
-    echo "source ${PYPATH}/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
-    cat '/generate_ssh_keys.sh' >> ~/.startup && \
+RUN cat '/generate_ssh_keys.sh' >> ~/.startup && \
     rm -rf /generate_ssh_keys.sh
 
 COPY multinode/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
@@ -177,6 +174,12 @@ RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
 
 FROM multinode as deepspeed-cpu
+
+ARG PYTHON_VERSION
+ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
+
+RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then PYPATH="/opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages"; fi && \
+    echo "source ${PYPATH}/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup
 
 ENV SIGOPT_PROJECT=.
 
@@ -360,5 +363,5 @@ COPY multinode/xpu-requirements.txt xpu-requirements.txt
 RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
 
-RUN python -m pip install --no-cache-dir deepspeed==0.14.4 && \
+RUN python -m pip install --no-cache-dir deepspeed==0.14.2 && \
     echo "Y" | pip uninstall nvidia-ml-py

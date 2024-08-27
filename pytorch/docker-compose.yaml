@@ -226,6 +226,7 @@ services:
         dependency.apt.libglib2: true
         dependency.apt.python3-dev: true
         dependency.pip.apt.virtualenv: true
+        dependency.pip.deepspeed: 0.14.2
         dependency.python.pip: multinode/xpu-requirements.txt
         org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.1.40}-xpu-${PACKAGE_OPTION:-pip}-base"
         org.opencontainers.image.title: "Intel® Extension for PyTorch MultiNode XPU Image"
