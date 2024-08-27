@@ -1,4 +1,4 @@
-tensorflow==2.15.0
+tensorflow==2.17.0
 intel-extension-for-tensorflow[xpu]==2.15.0.1
 idna>=3.7
 requests>=2.32.0
