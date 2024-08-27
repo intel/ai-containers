@@ -1,10 +1,10 @@
-torch==2.1.0.post3+cxx11.abi
-torchvision==0.16.0.post3+cxx11.abi
-torchaudio==2.1.0.post3+cxx11.abi
-intel_extension_for_pytorch==2.1.40+xpu
+torch==2.4.0+cpu
+torchvision==0.19.0+cpu
+torchaudio==2.4.0+cpu
+intel_extension_for_pytorch==2.4.0+cpu
 --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us
-setuptools==69.5.1
-numpy==1.26.4
+setuptools==73.0.1
+numpy==2.1.0
 captum>=0.7.0
 cython>=3.0.10
 pynvml>=11.5.0
