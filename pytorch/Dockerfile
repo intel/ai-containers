@@ -338,8 +338,8 @@ COPY --chown=model-server --from=compile-xpu /home/venv /home/venv
 COPY --chown=model-server --chmod=755 --from=compile-xpu /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
 COPY --chown=model-server serving/config-xpu.properties /home/model-server/config.properties
 
-ENV PATH="/home/venv/bin:$PATH"
-ENV TEMP=/home/model-server/tmp
+ENV PATH="/home/venv/bin:$PATH" \
+    TEMP=/home/model-server/tmp
 
 # 8080/8081/8082 REST and 7070/7071 gRPC
 EXPOSE 8080 8081 8082 7070 7071

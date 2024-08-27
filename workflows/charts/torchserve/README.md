@@ -11,11 +11,12 @@ For more information about how to use TorchServe with Intel Optimizations, check
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | deploy.env | object | `{"configMapName":"intel-proxy-config","enabled":true}` | Add Environment mapping |
-| deploy.image | string | `"intel/intel-optimized-pytorch:2.3.0-serving-cpu"` | Intel Optimized torchserve image |
+| deploy.image | string | `"intel/intel-optimized-pytorch:2.3.0-serving-xpu"` | Torchserve on Intel Image |
 | deploy.modelConfig | string | `"/home/model-server/config.properties"` | Model Server Configuration file location |
 | deploy.models | string | `"all"` | Models to be loaded |
 | deploy.replicas | int | `1` | Number of pods |
-| deploy.resources.limits | object | `{"cpu":"4000m","memory":"1Gi"}` | Maximum resources per pod |
+| deploy.resources.limits | object | `{"cpu":"4000m","gpu.intel.com/i915":1,"memory":"2Gi"}` | Maximum resources per pod |
+| deploy.resources.limits."gpu.intel.com/i915" | int | `1` | Intel GPU Device Configuration |
 | deploy.resources.requests | object | `{"cpu":"1000m","memory":"512Mi"}` | Minimum resources per pod |
 | deploy.storage.nfs | object | `{"enabled":false,"path":"nil","readOnly":true,"server":"nil","subPath":"nil"}` | Network File System (NFS) storage for models |
 | deploy.tokens_disabled | bool | `true` | Set token authentication on or off. Checkout the latest [torchserve docs](https://github.com/pytorch/serve/blob/master/docs/token_authorization_api.md) for more details. |

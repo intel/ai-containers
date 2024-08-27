@@ -165,7 +165,7 @@ services:
         dependency.apt.openjdk-17-jdk: true
         dependency.idp: false
         dependency.python.ipex: requirements.txt
-        dependency.python.pip: serving/torchserve-requirements.txt
+        dependency.python.pip: serving/requirements.txt
         docs: serving
         org.opencontainers.base.name: "intel/python:3.10-core"
         org.opencontainers.image.title: "Intel® Extension for PyTorch Serving Image"
@@ -175,12 +175,6 @@ services:
     entrypoint: ""
     extends: ipex-base
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-torchserve-cpu
-    ports:
-      - 8080:8080
-      - 8081:8081
-      - 8082:8082
-      - 7070:7070
-      - 7071:7071
   torchserve-xpu:
     build:
       args:
@@ -192,13 +186,13 @@ services:
         dependency.apt.openjdk-17-jdk: true
         dependency.apt.xpu-smi: ${XPU_SMI_VERSION:-1.2.38}
         dependency.idp: false
-        dependency.python.pip: serving/torchserve-xpu-requirements.txt
+        dependency.python.pip: serving/xpu-requirements.txt
         docs: serving
         org.opencontainers.base.name: "intel/python:3.10-core"
         org.opencontainers.image.title: "Intel® Extension for PyTorch XPU Serving Image"
         org.opencontainers.image.version: ${IPEX_VERSION:-2.1.40}-serving-xpu
       target: torchserve-xpu
-    command: torchserve --version
+    command: bash -c "torchserve --version && xpu-smi -v"
     entrypoint: ""
     extends: xpu
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-torchserve-xpu
