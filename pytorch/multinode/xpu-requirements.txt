@@ -1,0 +1,4 @@
+intel_extension_for_pytorch_deepspeed==2.1.40
+--extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us
+py-cpuinfo==9.0.0
+mpi4py>=3.1.0
