@@ -39,6 +39,10 @@ import-cpu-deepspeed-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0}
   cmd: ds_report
   shm_size: 2gb
+import-xpu-deepspeed-${PACKAGE_OPTION:-pip}:
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0}-xpu
+  cmd: ds_report
+  shm_size: 2gb
 ipex-cpu-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-base
   cmd: python /tests/ipex-resnet50.py --ipex --device cpu --backend gloo
@@ -64,10 +68,18 @@ oneccl-${PACKAGE_OPTION:-pip}:
   volumes:
   - dst: /tests
     src: $PWD/pytorch/tests
-oneccl-ds-${PACKAGE_OPTION:-pip}:
+oneccl-ds-cpu-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0}
   cmd: ipexrun cpu /tests/ipex-resnet50.py --ipex --device cpu --backend ccl --deepspeed
   privileged: true
+  volumes:
+  - dst: /tests
+    src: $PWD/pytorch/tests
+oneccl-ds-xpu-${PACKAGE_OPTION:-pip}:
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0}-xpu
+  cmd: ipexrun cpu /tests/ipex-resnet50.py --ipex --device xpu --backend ccl --deepspeed
+  privileged: true
+  device: ["/dev/dri"]
   volumes:
   - dst: /tests
     src: $PWD/pytorch/tests
