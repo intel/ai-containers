@@ -1,0 +1,15 @@
+torch==2.1.0.post3+cxx11.abi
+torchvision==0.16.0.post3+cxx11.abi
+torchaudio==2.1.0.post3+cxx11.abi
+intel_extension_for_pytorch==2.1.40+xpu
+--extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us
+setuptools==69.5.1
+numpy==1.26.4
+captum>=0.7.0
+cython>=3.0.10
+pynvml>=11.5.0
+pyyaml>=6.0.1
+-f https://download.pytorch.org/whl/torch_stable.html
+torch-model-archiver==0.11.1
+torch-workflow-archiver==0.2.14
+torchserve==0.11.1

@@ -1,5 +1,4 @@
-#!/bin/bash
-# Copyright (c) 2022 Intel Corporation
+# Copyright (c) 2024 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,18 +25,33 @@
 #       For reference:
 #           https://docs.docker.com/develop/develop-images/build_enhancements/
 
-if [[ "$1" == "cpu" ]]; then
-	wget https://download.pytorch.org/models/squeezenet1_1-b8a52dc0.pth
-	torch-model-archiver --model-name squeezenet1_1 --version 1.1 --model-file /home/model-server/model-archive/model.py --serialized-file squeezenet1_1-b8a52dc0.pth --handler image_classifier --export-path /home/model-server/model-store
-	rm -rf squeezenet1_1-b8a52dc0.pth
-elif [[ "$1" == "xpu" ]]; then
-	python /home/model-server/model-archive/ipex_squeezenet.py
-	torch-model-archiver --model-name squeezenet1_1 --version 1.1 --serialized-file squeezenet1_1-jit.pt --handler image_classifier --export-path /home/model-server/model-store
-	rm -rf squeezenet1_1-jit.pt
-else
-	echo "Only cpu and xpu devices supported"
-	exit 1
-fi
+# pylint: skip-file
 
-[ -f "/home/model-server/model-store/squeezenet1_1.mar" ] && echo "squeezenet1_1.pth Archived Succesfully at /home/model-server/model-store/squeezenet1_1.mar"
-find . | grep -E "(/__pycache__$|\.pyc$|\.pyo$)" | xargs rm -rf
+import intel_extension_for_pytorch as ipex
+import torch
+import torchvision.models as models
+
+# load the model
+model = models.squeezenet1_1(pretrained=True)
+model = model.eval()
+
+# define dummy input tensor to use for the model's forward call to record operations in the model for tracing
+N, C, H, W = 1, 3, 224, 224
+data = torch.randn(N, C, H, W)
+
+model.eval()
+data = torch.rand(1, 3, 224, 224)
+
+#################### code changes #################
+model = model.to("xpu")
+data = data.to("xpu")
+model = ipex.optimize(model, dtype=torch.bfloat16)
+#################### code changes #################
+
+with torch.no_grad():
+    with torch.xpu.amp.autocast(enabled=True, dtype=torch.bfloat16):
+        ############################# code changes #####################
+        model = torch.jit.trace(model, data)
+        model = torch.jit.freeze(model)
+        model(data)
+torch.jit.save(model, "squeezenet1_1-jit.pt")

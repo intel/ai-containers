@@ -34,6 +34,7 @@ ARG BASE_IMAGE_TAG
 ARG PACKAGE_OPTION=pip
 ARG PYTHON_VERSION
 ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-base
+ARG TORCHSERVE_BASE=${PYTHON_BASE}
 FROM ${PYTHON_BASE} AS ipex-base-pip
 
 WORKDIR /
@@ -181,13 +182,17 @@ RUN apt-get update && \
     intel-oneapi-runtime-mkl=${MKL_VER} \
     intel-oneapi-runtime-ccl=${CCL_VER};
 
+RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
+
+ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
+
+FROM ipex-xpu-base AS ipex-xpu-base-wheels
+
 WORKDIR /
 COPY xpu-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
-    rm -rf xpu-requirements.txt /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
-
-ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
+    rm -rf xpu-requirements.txt
 
 FROM ipex-xpu-base AS ipex-xpu-jupyter
 
@@ -205,7 +210,8 @@ EXPOSE 8888
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
-FROM ${PYTHON_BASE} as torchserve-base
+
+FROM ${TORCHSERVE_BASE} as torchserve-base
 
 ENV PYTHONUNBUFFERED=TRUE
 
@@ -221,8 +227,6 @@ RUN useradd -m -s /bin/bash model-server && \
     mkdir -p /home/model-server/model-store && \
     chown -R model-server /home/model-server/
 
-FROM torchserve-base AS compile
-
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
     g++ \
     git \
@@ -237,11 +241,6 @@ RUN python3 -m venv /home/venv
 ENV PATH="/home/venv/bin:$PATH"
 
 WORKDIR /home/model-server
-COPY torchserve-requirements.txt .
-COPY requirements.txt .
-
-RUN python -m pip install --no-cache-dir -r requirements.txt && \
-    python -m pip install --no-cache-dir -r torchserve-requirements.txt
 
 RUN echo -e "#!/bin/bash \n\
 set -e \n\
@@ -253,14 +252,91 @@ else \n\
 fi \n\
 tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh
 
-FROM torchserve-base AS torchserve
+FROM torchserve-base AS compile-cpu
+
+COPY serving/torchserve-requirements.txt .
+COPY requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    python -m pip install --no-cache-dir -r torchserve-requirements.txt && \
+    rm -rf requirements.txt torchserve-requirements.txt
+
+FROM torchserve-base AS compile-xpu
+
+COPY serving/torchserve-xpu-requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt && \
+    rm -rf torchserve-xpu-requirements.txt
+
+FROM torchserve-base AS torchserve-cpu
 
 USER model-server
 WORKDIR /home/model-server
 
-COPY --chown=model-server --from=compile /home/venv /home/venv
-COPY --chown=model-server --chmod=755 --from=compile /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+COPY --chown=model-server --from=compile-cpu /home/venv /home/venv
+COPY --chown=model-server --chmod=755 --from=compile-cpu /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
 COPY --chown=model-server serving/config.properties /home/model-server/config.properties
+
+ENV PATH="/home/venv/bin:$PATH"
+ENV TEMP=/home/model-server/tmp
+
+# 8080/8081/8082 REST and 7070/7071 gRPC
+EXPOSE 8080 8081 8082 7070 7071
+
+ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
+CMD ["serve"]
+
+FROM torchserve-base AS torchserve-xpu
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+        gnupg2 \
+        gpg-agent \
+        rsync && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+    gpg --dearmor --yes --output /usr/share/keyrings/intel-graphics.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
+    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        jq \
+        curl \
+        libnl-genl-3-200 \
+        intel-gsc \
+        libdrm2 \
+        intel-metrics-discovery \
+        intel-metrics-library && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
+
+ARG XPU_SMI_VERSION
+
+ARG API_URL=https://api.github.com/repos/intel/xpumanager/releases/tags/V${XPU_SMI_VERSION}
+
+RUN wget -q --header="Accept: application/vnd.github.v3+json" --header="User-Agent: MyClient/1.0.0" -O - "$API_URL" | tee /tmp/asset_data.txt && \
+    wget -q --no-check-certificate "$(jq -r '.assets[] | select(.name | test("^xpu-smi.*u22\\.04_amd64\\.deb$")) | .browser_download_url' < /tmp/asset_data.txt)" && \
+    ldconfig && dpkg -i --force-all -- *.deb && \
+    rm -rf -- *.deb /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list /tmp/asset_data.txt
+
+ARG GID=109
+
+RUN groupadd -g ${GID} render &&\
+    usermod -aG video,render model-server
+
+USER model-server
+
+WORKDIR /home/model-server
+
+RUN wget --progress=dot:giga https://raw.githubusercontent.com/pytorch/serve/master/examples/intel_extension_for_pytorch/intel_gpu_metric_collector.py && \
+    wget --progress=dot:giga https://raw.githubusercontent.com/pytorch/serve/master/examples/intel_extension_for_pytorch/intel_gpu.py
+
+COPY --chown=model-server --from=compile-xpu /home/venv /home/venv
+COPY --chown=model-server --chmod=755 --from=compile-xpu /usr/local/bin/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+COPY --chown=model-server serving/config-xpu.properties /home/model-server/config.properties
 
 ENV PATH="/home/venv/bin:$PATH"
 ENV TEMP=/home/model-server/tmp
