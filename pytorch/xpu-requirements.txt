@@ -4,7 +4,7 @@ torchaudio==2.1.0.post3+cxx11.abi
 intel_extension_for_pytorch==2.1.40+xpu
 oneccl_bind_pt==2.1.400+xpu
 --extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/us
-setuptools==69.5.1
+setuptools==70.0.0
 numpy>=1.26.4
 idna>=3.7
 requests>=2.32.0
