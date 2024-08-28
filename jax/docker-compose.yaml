@@ -1,0 +1,53 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+services:
+  jax-base:
+    build:
+      args:
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ""
+        BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-intel/oneapi-basekit}
+        BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-2024.2.0-devel-ubuntu22.04}
+      context: .
+      labels:
+        dependency.python: ${PYTHON_VERSION:-3.10}
+        dependency.python.pip: requirements.txt
+        docs: jax
+        org.opencontainers.base.name: "intel/python:3.10-core"
+        org.opencontainers.image.name: "intel/intel-optimized-xla"
+        org.opencontainers.image.title: "Intel® Optimized XLA Base Image"
+        org.opencontainers.image.version: ${INTEL_XLA_VERSION:-v0.4.0}-base
+      target: jax-base
+    command: >
+      bash -c "python -c 'import jax; print(\"Jax Version:\", jax.__version__)'"
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-xla-${INTEL_XLA_VERSION:-v0.4.0}-base
+    pull_policy: always
+  jupyter:
+    build:
+      labels:
+        dependency.python.pip: jupyter-requirements.txt
+        org.opencontainers.base.name: "intel/intel-optimized-xla:${INTEL_XLA_VERSION:-v0.4.0}-base"
+        org.opencontainers.image.title: "Intel® Optimized XLA Jupyter Base Image"
+        org.opencontainers.image.version: ${INTEL_XLA_VERSION:-v0.4.0}-jupyter
+      target: jupyter
+    command: >
+      bash -c "python -m jupyter --version"
+    environment:
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+    extends: jax-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-xla-${INTEL_XLA_VERSION:-v0.4.0}-jupyter
+    network_mode: host
