@@ -201,11 +201,12 @@ COPY hf-genai-requirements.txt .
 RUN python -m pip install --no-cache-dir -r hf-genai-requirements.txt && \
     rm -rf hf-genai-requirements.txt
 
-FROM ipex-xpu-base AS ipex-xpu-jupyter
+FROM ipex-xpu-base-wheels AS ipex-xpu-jupyter
 
 WORKDIR /jupyter
 COPY jupyter-requirements.txt .
-RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
+RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt && \
+    rm -rf jupyter-requirements.txt
 
 RUN if eval "which conda >/dev/null )"; then \
         echo "conda activate idp" >> ~/.bashrc; \
