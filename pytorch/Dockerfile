@@ -141,8 +141,11 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     virtualenv && \
     apt-get clean
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends  \
+ENV SIGOPT_PROJECT=.
+
+ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu":${LD_LIBRARY_PATH}
+
+RUN apt-get install -y --no-install-recommends  \
     openssh-client \
     openssh-server && \
     rm /etc/ssh/ssh_host_*_key \
@@ -181,8 +184,6 @@ ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
 RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then PYPATH="/opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages"; fi && \
     echo "source ${PYPATH}/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup
 
-ENV SIGOPT_PROJECT=.
-
 WORKDIR /
 COPY multinode/requirements.txt requirements.txt
 
@@ -191,7 +192,7 @@ RUN python -m pip install --no-cache-dir -r requirements.txt && \
     echo "Y" | pip uninstall nvidia-ml-py && \
     rm -rf requirements.txt
 
-ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
+ENV LD_LIBRARY_PATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
 
 FROM deepspeed-cpu AS hf-genai
 
