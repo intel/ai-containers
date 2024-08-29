@@ -17,23 +17,16 @@ TensorFlow Serving is a flexible, high-performance serving system for machine le
 | deploy.env | object | `{"configMapName":"intel-proxy-config","enabled":true}` | Add Environment mapping |
 | deploy.image | string | `"intel/intel-extension-for-tensorflow:serving-gpu"` | Intel Extension for Tensorflow Serving image |
 | deploy.modelName | string | `""` | Model Name |
-| deploy.modelPath | string | `"/serving"` | Path to Model Folder |
 | deploy.replicas | int | `1` | Number of pods |
 | deploy.resources.limits | object | `{"cpu":"4000m","gpu.intel.com/i915":1,"memory":"1Gi"}` | Maximum resources per pod |
 | deploy.resources.limits."gpu.intel.com/i915" | int | `1` | Intel GPU Device Configuration |
 | deploy.resources.requests | object | `{"cpu":"1000m","memory":"512Mi"}` | Minimum resources per pod |
-| deploy.storage.nfs | object | `{"enabled":false,"path":"nil","readOnly":true,"server":"nil","subPath":"nil"}` | Network File System (NFS) storage for models |
+| deploy.storage.nfs | object | `{"enabled":false,"path":"nil","readOnly":true,"server":"nil"}` | Network File System (NFS) storage for models |
 | fullnameOverride | string | `""` | Full qualified Domain Name |
-| ingress.annotations | object | `{}` |  |
-| ingress.className | string | `""` |  |
-| ingress.enabled | bool | `false` |  |
-| ingress.hosts[0].host | string | `"chart-example.local"` |  |
-| ingress.hosts[0].paths[0].path | string | `"/"` |  |
-| ingress.hosts[0].paths[0].pathType | string | `"ImplementationSpecific"` |  |
-| ingress.tls | list | `[]` |  |
 | nameOverride | string | `""` | Name of the serving service |
-| pvc.size | string | `"1Gi"` | Size of the storage |
-| service.port | int | `9090` | Port of the service |
+| pvc.size | string | `"5Gi"` | Size of the storage |
+| service.grpcPort | int | `8500` |  |
+| service.restPort | int | `8501` | Port of the service |
 | service.type | string | `"NodePort"` | Type of service |
 
 ----------------------------------------------

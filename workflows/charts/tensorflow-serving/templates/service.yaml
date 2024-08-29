@@ -21,8 +21,11 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - name: serving
-      port: {{ .Values.service.port }}
-      targetPort: serving
+    - name: rest
+      port: {{ .Values.service.restPort }}
+      targetPort: rest
+    - name: grpc
+      port: {{ .Values.service.grpcPort }}
+      targetPort: grpc
   selector:
     {{- include "tensorflow-serving.selectorLabels" . | nindent 4 }}
