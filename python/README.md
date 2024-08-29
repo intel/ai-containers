@@ -40,7 +40,7 @@ python /tests/perf_sample.py
 
 ## Build from Source (Advanced)
 
-To build the images from source, clone the [Intel® AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following commands:
+To build the images from source, clone the [AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
 
 ```bash
 cd python

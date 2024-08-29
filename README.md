@@ -1,4 +1,4 @@
-# Intel® AI Containers
+# AI Containers
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8270/badge)](https://www.bestpractices.dev/projects/8270)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/intel/ai-containers/badge)](https://securityscorecards.dev/viewer/?uri=github.com/intel/ai-containers)
@@ -28,7 +28,7 @@ docker login $REGISTRY
 docker pull $REGISTRY/$REPO:latest
 ```
 
-The maintainers of Intel® AI Containers use Azure to store containers, but an open source container registry like [harbor](https://github.com/goharbor/harbor) is preferred.
+The maintainers of AI Containers use Azure to store containers, but an open source container registry like [harbor](https://github.com/goharbor/harbor) is preferred.
 
 > [!WARNING]
 > You can optionally skip this step and use some placeholder values, however some container groups depend on other images and will pull from a registry that you have not defined and result in an error.

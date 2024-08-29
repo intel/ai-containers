@@ -1,0 +1,5 @@
+cython>=3.0.11
+impi-rt>=2021.12.0
+mpi4py>=3.1.0
+neural-compressor==3.0
+tf2onnx>=1.16.1

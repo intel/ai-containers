@@ -1,8 +1,8 @@
-# Intel TorchServe
+# TorchServe with Intel Optimizations
 
-Intel TorchServe is a performant, flexible and easy to use tool for serving PyTorch models in production.
+TorchServe on Intel is a performant, flexible and easy to use tool for serving PyTorch models in production.
 
-For more information about how to use Intel Optimized TorchServe, check out the [container documentation](../../../pytorch/serving/README.md).
+For more information about how to use TorchServe with Intel Optimizations, check out the [container documentation](../../../pytorch/serving/README.md).
 
 ![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
@@ -18,7 +18,7 @@ For more information about how to use Intel Optimized TorchServe, check out the 
 | deploy.resources.limits | object | `{"cpu":"4000m","memory":"1Gi"}` | Maximum resources per pod |
 | deploy.resources.requests | object | `{"cpu":"1000m","memory":"512Mi"}` | Minimum resources per pod |
 | deploy.storage.nfs | object | `{"enabled":false,"path":"nil","readOnly":true,"server":"nil","subPath":"nil"}` | Network File System (NFS) storage for models |
-| deploy.tokens_disabled | bool | `false` | Set token authentication on or off. Checkout the latest [torchserve docs](https://github.com/pytorch/serve/blob/master/docs/token_authorization_api.md) for more details. |
+| deploy.tokens_disabled | bool | `true` | Set token authentication on or off. Checkout the latest [torchserve docs](https://github.com/pytorch/serve/blob/master/docs/token_authorization_api.md) for more details. |
 | fullnameOverride | string | `""` | Full qualified Domain Name |
 | nameOverride | string | `""` | Name of the serving service |
 | pvc.size | string | `"1Gi"` | Size of the storage |
