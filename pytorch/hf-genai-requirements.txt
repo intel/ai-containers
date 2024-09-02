@@ -2,12 +2,12 @@ accelerate==0.33.0
 datasets==2.21.0
 einops==0.8.0
 evaluate==0.4.2
-onnxruntime-extensions==0.11.0
-onnxruntime==1.18.1
+onnxruntime-extensions==0.12.0
+onnxruntime==1.19.0
 peft==0.12.0
-protobuf==5.27.3
+protobuf==5.28.0
 py-cpuinfo==9.0.0
 scikit-learn==1.5.1
 SentencePiece==0.2.0
-tokenizers==0.19.1
-transformers==4.44.0
+tokenizers==0.20.0
+transformers==4.44.2
