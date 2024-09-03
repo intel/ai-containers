@@ -25,8 +25,6 @@ TensorFlow Serving is a flexible, high-performance serving system for machine le
 | fullnameOverride | string | `""` | Full qualified Domain Name |
 | nameOverride | string | `""` | Name of the serving service |
 | pvc.size | string | `"5Gi"` | Size of the storage |
-| service.grpcPort | int | `8500` |  |
-| service.restPort | int | `8501` | Port of the service |
 | service.type | string | `"NodePort"` | Type of service |
 
 ----------------------------------------------

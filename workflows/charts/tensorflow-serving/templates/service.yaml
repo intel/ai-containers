@@ -22,10 +22,10 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - name: rest
-      port: {{ .Values.service.restPort }}
+      port: 8500
       targetPort: rest
     - name: grpc
-      port: {{ .Values.service.grpcPort }}
+      port: 8501
       targetPort: grpc
   selector:
     {{- include "tensorflow-serving.selectorLabels" . | nindent 4 }}

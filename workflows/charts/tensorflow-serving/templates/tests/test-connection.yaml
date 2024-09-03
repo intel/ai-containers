@@ -25,5 +25,5 @@ spec:
     - name: info
       image: curlimages/curl
       command: ['sh', '-c']
-      args: ['curl -f {{ include "tensorflow-serving.fullname" . }}:{{ .Values.service.restPort }}/v1/model/{{ .Values.deploy.modelName}}']
+      args: ['curl -f {{ include "tensorflow-serving.fullname" . }}:8501/v1/models/{{ .Values.deploy.modelName}}']
   restartPolicy: OnFailure

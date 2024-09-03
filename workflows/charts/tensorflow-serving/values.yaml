@@ -48,9 +48,6 @@ deploy:
 service:
   # -- Type of service
   type: NodePort
-  # -- Port of the service
-  restPort: 8501
-  grpcPort: 8500
 pvc:
   # -- Size of the storage
   size: 5Gi

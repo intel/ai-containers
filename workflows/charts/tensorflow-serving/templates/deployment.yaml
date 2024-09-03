@@ -45,9 +45,16 @@ spec:
               value: {{ .Values.deploy.modelName }}
           ports:
             - name: rest
-              containerPort: {{ .Values.service.restPort }}
+              containerPort: 8500
+              protocol: TCP
             - name: grpc
-              containerPort: {{ .Values.service.grpcPort }}
+              containerPort: 8501
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: rest
+            initialDelay: 15
+            timeoutSeconds: 1
           volumeMounts:
             - mountPath: /dev/shm
               name: dshm
