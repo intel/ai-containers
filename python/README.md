@@ -32,7 +32,7 @@ In the previous command, you should see a result at the bottom like: `Time Consu
 # Use the working directory from the above command
 docker run --rm -it \
     -v $PWD/tests:/tests \
-    python:3.11-slim-bullseye \
+    python:3.10-slim-bullseye \
     bash
 pip install numpy
 python /tests/perf_sample.py
