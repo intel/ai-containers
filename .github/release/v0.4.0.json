@@ -84,13 +84,13 @@
         "tag": "2.15.1-idp-base"
     },
     {
-        "base": "intel/intel-optimized-tensorflow:2.15.1-idp-base",
+        "base": "intel/intel-optimized-tensorflow:2.15.0-idp-base",
         "dockerfile": "tensorflow/Dockerfile",
         "repo": "intel/intel-optimized-tensorflow",
         "tag": "2.15.1-idp-jupyter"
     },
     {
-        "base": "intel/intel-optimized-tensorflow:2.15.1-idp-base",
+        "base": "intel/intel-optimized-tensorflow:2.15.0-idp-base",
         "dockerfile": "tensorflow/Dockerfile",
         "repo": "intel/intel-optimized-tensorflow",
         "tag": "2.15.1-idp-multinode"
