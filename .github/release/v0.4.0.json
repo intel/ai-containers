@@ -181,49 +181,49 @@
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/classical-ml",
+        "dockerfile": "preset/classical-ml/Dockerfile",
         "repo": "intel/classical-ml",
         "tag": "latest-py3.9"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/classical-ml",
+        "dockerfile": "preset/classical-ml/Dockerfile",
         "repo": "intel/classical-ml",
         "tag": "latest-py3.10"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/data-analytics",
+        "dockerfile": "preset/data-analytics/Dockerfile",
         "repo": "intel/data-analytics",
         "tag": "latest-py3.9"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/data-analytics",
+        "dockerfile": "preset/data-analytics/Dockerfile",
         "repo": "intel/data-analytics",
         "tag": "latest-py3.10"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/deep-learning",
+        "dockerfile": "preset/deep-learning/Dockerfile",
         "repo": "intel/deep-learning",
         "tag": "latest-py3.9"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/deep-learning",
+        "dockerfile": "preset/deep-learning/Dockerfile",
         "repo": "intel/deep-learning",
         "tag": "latest-py3.10"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/inference-optimization",
+        "dockerfile": "preset/inference-optimization/Dockerfile",
         "repo": "intel/inference-optimization",
         "tag": "latest-py3.9"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/inference-optimization",
+        "dockerfile": "preset/inference-optimization/Dockerfile",
         "repo": "intel/inference-optimization",
         "tag": "latest-py3.10"
     }
