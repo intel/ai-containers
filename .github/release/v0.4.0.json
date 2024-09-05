@@ -81,19 +81,19 @@
         "base": "intel/python:3.10-core",
         "dockerfile": "tensorflow/Dockerfile",
         "repo": "intel/intel-optimized-tensorflow",
-        "tag": "2.15.1-idp-base"
+        "tag": "2.15.0-idp-base"
     },
     {
         "base": "intel/intel-optimized-tensorflow:2.15.0-idp-base",
         "dockerfile": "tensorflow/Dockerfile",
         "repo": "intel/intel-optimized-tensorflow",
-        "tag": "2.15.1-idp-jupyter"
+        "tag": "2.15.0-idp-jupyter"
     },
     {
         "base": "intel/intel-optimized-tensorflow:2.15.0-idp-base",
         "dockerfile": "tensorflow/Dockerfile",
         "repo": "intel/intel-optimized-tensorflow",
-        "tag": "2.15.1-idp-multinode"
+        "tag": "2.15.0-idp-multinode"
     },
     {
         "base": "ubuntu:22.04",
