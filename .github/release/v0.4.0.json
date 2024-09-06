@@ -81,19 +81,19 @@
         "base": "intel/python:3.10-core",
         "dockerfile": "tensorflow/Dockerfile",
         "repo": "intel/intel-optimized-tensorflow",
-        "tag": "2.15.1-idp-base"
+        "tag": "2.15.0-idp-base"
     },
     {
-        "base": "intel/intel-optimized-tensorflow:2.15.1-idp-base",
+        "base": "intel/intel-optimized-tensorflow:2.15.0-idp-base",
         "dockerfile": "tensorflow/Dockerfile",
         "repo": "intel/intel-optimized-tensorflow",
-        "tag": "2.15.1-idp-jupyter"
+        "tag": "2.15.0-idp-jupyter"
     },
     {
-        "base": "intel/intel-optimized-tensorflow:2.15.1-idp-base",
+        "base": "intel/intel-optimized-tensorflow:2.15.0-idp-base",
         "dockerfile": "tensorflow/Dockerfile",
         "repo": "intel/intel-optimized-tensorflow",
-        "tag": "2.15.1-idp-multinode"
+        "tag": "2.15.0-idp-multinode"
     },
     {
         "base": "ubuntu:22.04",
@@ -181,49 +181,49 @@
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/classical-ml",
+        "dockerfile": "preset/classical-ml/Dockerfile",
         "repo": "intel/classical-ml",
         "tag": "latest-py3.9"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/classical-ml",
+        "dockerfile": "preset/classical-ml/Dockerfile",
         "repo": "intel/classical-ml",
         "tag": "latest-py3.10"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/data-analytics",
+        "dockerfile": "preset/data-analytics/Dockerfile",
         "repo": "intel/data-analytics",
         "tag": "latest-py3.9"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/data-analytics",
+        "dockerfile": "preset/data-analytics/Dockerfile",
         "repo": "intel/data-analytics",
         "tag": "latest-py3.10"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/deep-learning",
+        "dockerfile": "preset/deep-learning/Dockerfile",
         "repo": "intel/deep-learning",
         "tag": "latest-py3.9"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/deep-learning",
+        "dockerfile": "preset/deep-learning/Dockerfile",
         "repo": "intel/deep-learning",
         "tag": "latest-py3.10"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/inference-optimization",
+        "dockerfile": "preset/inference-optimization/Dockerfile",
         "repo": "intel/inference-optimization",
         "tag": "latest-py3.9"
     },
     {
         "base": "ubuntu:22.04",
-        "dockerfile": "preset/inference-optimization",
+        "dockerfile": "preset/inference-optimization/Dockerfile",
         "repo": "intel/inference-optimization",
         "tag": "latest-py3.10"
     }
