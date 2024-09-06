@@ -1,0 +1,50 @@
+services:
+  gaudi-base:
+    build:
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-registry.access.redhat.com/ubi9/ubi}
+        BASE_TAG: ${RHEL_OS:-9.2}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ""
+        ARTIFACTORY_URL: ${ARTIFACTORY_URL:-vault.habana.ai}
+        VERSION: ${VERSION:-1.17.0}
+        REVISION: ${REVISION:-495}
+      context: .
+      target: gaudi-base
+      dockerfile: Dockerfile.rhel${RHEL_OS:-9.2}
+    image: gaudi-base:${RHEL_OS:-9.2}-${VERSION:-1.17.0}-${REVISION:-495}
+  gaudi-pytorch:
+    build:
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-registry.access.redhat.com/ubi9/ubi}
+        BASE_TAG: ${RHEL_OS:-9.2}
+        BASE_NAME: rhel${RHEL_OS:-rhel9.2}
+        PT_VERSION: ${PT_VERSION:-2.3.1}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ""
+        ARTIFACTORY_URL: ${ARTIFACTORY_URL:-vault.habana.ai}
+        VERSION: ${VERSION:-1.17.0}
+        REVISION: ${REVISION:-495}
+      context: .
+      target: gaudi-pytorch
+      dockerfile: Dockerfile.rhel${RHEL_OS:-9.2}
+    image: gaudi-pytorch:${RHEL_OS:-9.2}-${VERSION:-1.17.0}-${REVISION:-495}
+  gaudi-notebooks:
+    build:
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-registry.access.redhat.com/ubi9/ubi}
+        BASE_TAG: ${RHEL_OS:-9.2}
+        BASE_NAME: ${BASE_NAME:-rhel9.2}
+        PT_VERSION: ${PT_VERSION:-2.3.1}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ""
+        ARTIFACTORY_URL: ${ARTIFACTORY_URL:-vault.habana.ai}
+        VERSION: ${VERSION:-1.17.0}
+        REVISION: ${REVISION:-495}
+      context: .
+      target: gaudi-notebooks
+      dockerfile: Dockerfile.rhel${RHEL_OS:-9.2}
+    image: gaudi-notebooks:${RHEL_OS:-9.2}-${VERSION:-1.17.0}-${REVISION:-495}
