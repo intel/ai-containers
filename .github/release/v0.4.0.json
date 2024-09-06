@@ -141,7 +141,7 @@
         "base": "intel/intel-optimized-pytorch:2.4.0-pip-multinode",
         "dockerfile": "pytorch/Dockerfile",
         "repo": "intel/intel-optimized-pytorch",
-        "tag": "2.4.0-pip-multinode-hf-4.44.0-genai"
+        "tag": "2.4.0-pip-hf-4.44.0-genai"
     },
     {
         "base": "intel/python:3.10-core",
@@ -165,7 +165,7 @@
         "base": "intel/intel-optimized-pytorch:2.4.0-idp-multinode",
         "dockerfile": "pytorch/Dockerfile",
         "repo": "intel/intel-optimized-pytorch",
-        "tag": "2.4.0-idp-multinode-hf-4.44.0-genai"
+        "tag": "2.4.0-idp-hf-4.44.0-genai"
     },
     {
         "base": "ubuntu:22.04",
