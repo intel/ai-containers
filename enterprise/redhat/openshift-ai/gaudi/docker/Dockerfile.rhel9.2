@@ -8,8 +8,6 @@ ARG REVISION
 LABEL vendor="Intel Corporation"
 LABEL release="${VERSION}-${REVISION}"
 
-COPY licenses /licenses
-
 ENV HOME="/opt/app-root/src"
 WORKDIR /opt/app-root/src
 
@@ -62,6 +60,9 @@ RUN dnf install -y \
     dnf versionlock add redhat-release* && \
     dnf update -y && \
     dnf clean all && rm -rf /var/cache/yum
+
+RUN mkdir -p /licenses && \
+    wget -O /licenses/LICENSE https://raw.githubusercontent.com/intel/ai-containers/main/LICENSE
 
 ENV PYTHON_VERSION=3.10
 COPY install-python310.sh .
