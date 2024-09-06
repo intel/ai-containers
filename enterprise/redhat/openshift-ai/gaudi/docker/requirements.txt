@@ -31,7 +31,7 @@ jupyter-resource-usage~=0.7.2
 nbdime~=3.2.1
 nbgitpuller~=1.2.0
 
-# pycodestyle is dependency of below packages 
+# pycodestyle is dependency of below packages
 # and to achieve compatible of pycodestyle with python-lsp-server[all]
 # pinned the below packages
 autopep8~=2.0.4
