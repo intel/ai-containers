@@ -1,5 +1,5 @@
 {
     "IDP_VERSION": ["full", "core"],
     "experimental": [true],
-    "runner_label": ["PVC"]
+    "runner_label": ["clx"]
 }
