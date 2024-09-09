@@ -37,7 +37,7 @@ services:
         XGBOOST_VERSION: ${XGBOOST_VERSION:-2.0.3}
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
-        no_proxy: ''
+        no_proxy: ${no_proxy}
       context: .
       target: classical-ml
       labels:
