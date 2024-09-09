@@ -95,3 +95,11 @@ updates:
     package-ecosystem: pip
     schedule:
       interval: weekly
+  - directory: enterprise/redhat/openshift-ai/gaudi/docker
+    groups:
+      preset:
+        patterns:
+          - "requirements.txt"
+    package-ecosystem: pip
+    schedule:
+      interval: weekly
