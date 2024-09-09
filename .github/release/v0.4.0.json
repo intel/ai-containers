@@ -1,0 +1,230 @@
+[
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "python/Dockerfile",
+        "repo": "intel/python",
+        "tag": "3.10-core"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "python/Dockerfile",
+        "repo": "intel/python",
+        "tag": "3.10-full"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "classical-ml/Dockerfile",
+        "repo": "intel/intel-optimized-ml",
+        "tag": "2024.6.0-pip-base"
+    },
+    {
+        "base": "intel/intel-optimized-ml:2024.6.0-pip-base",
+        "dockerfile": "classical-ml/Dockerfile",
+        "repo": "intel/intel-optimized-ml",
+        "tag": "2024.6.0-pip-jupyter"
+    },
+    {
+        "base": "intel/python:3.10-core",
+        "dockerfile": "classical-ml/Dockerfile",
+        "repo": "intel/intel-optimized-ml",
+        "tag": "2024.6.0-idp-base"
+    },
+    {
+        "base": "intel/intel-optimized-ml:2024.6.0-idp-base",
+        "dockerfile": "classical-ml/Dockerfile",
+        "repo": "intel/intel-optimized-ml",
+        "tag": "2024.6.0-idp-jupyter"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "tensorflow/Dockerfile",
+        "repo": "intel/intel-optimized-tensorflow",
+        "tag": "2.15.0.1-xpu-pip-base"
+    },
+    {
+        "base": "intel/intel-optimized-tensorflow:2.15.0.1-xpu-pip-base",
+        "dockerfile": "tensorflow/Dockerfile",
+        "repo": "intel/intel-optimized-tensorflow",
+        "tag": "2.15.0.1-xpu-pip-jupyter"
+    },
+    {
+        "base": "intel/python:3.10-core",
+        "dockerfile": "tensorflow/Dockerfile",
+        "repo": "intel/intel-optimized-tensorflow",
+        "tag": "2.15.0.1-xpu-idp-base"
+    },
+    {
+        "base": "intel/intel-optimized-tensorflow:2.15.0.1-xpu-idp-base",
+        "dockerfile": "tensorflow/Dockerfile",
+        "repo": "intel/intel-optimized-tensorflow",
+        "tag": "2.15.0.1-xpu-idp-jupyter"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "tensorflow/Dockerfile",
+        "repo": "intel/intel-optimized-tensorflow",
+        "tag": "2.15.1-pip-base"
+    },
+    {
+        "base": "intel/intel-optimized-tensorflow:2.15.1-pip-base",
+        "dockerfile": "tensorflow/Dockerfile",
+        "repo": "intel/intel-optimized-tensorflow",
+        "tag": "2.15.1-pip-jupyter"
+    },
+    {
+        "base": "intel/intel-optimized-tensorflow:2.15.1-pip-base",
+        "dockerfile": "tensorflow/Dockerfile",
+        "repo": "intel/intel-optimized-tensorflow",
+        "tag": "2.15.1-pip-multinode"
+    },
+    {
+        "base": "intel/python:3.10-core",
+        "dockerfile": "tensorflow/Dockerfile",
+        "repo": "intel/intel-optimized-tensorflow",
+        "tag": "2.15.0-idp-base"
+    },
+    {
+        "base": "intel/intel-optimized-tensorflow:2.15.0-idp-base",
+        "dockerfile": "tensorflow/Dockerfile",
+        "repo": "intel/intel-optimized-tensorflow",
+        "tag": "2.15.0-idp-jupyter"
+    },
+    {
+        "base": "intel/intel-optimized-tensorflow:2.15.0-idp-base",
+        "dockerfile": "tensorflow/Dockerfile",
+        "repo": "intel/intel-optimized-tensorflow",
+        "tag": "2.15.0-idp-multinode"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.1.40-xpu-pip-base"
+    },
+    {
+        "base": "intel/intel-optimized-pytorch:2.1.40-xpu-pip-base",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.1.40-xpu-pip-jupyter"
+    },
+    {
+        "base": "intel/python:3.10-core",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.1.40-xpu-idp-base"
+    },
+    {
+        "base": "intel/intel-optimized-pytorch:2.1.40-xpu-idp-base",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.1.40-xpu-idp-jupyter"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.4.0-pip-base"
+    },
+    {
+        "base": "intel/intel-optimized-pytorch:2.4.0-pip-base",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.4.0-pip-jupyter"
+    },
+    {
+        "base": "intel/intel-optimized-pytorch:2.4.0-pip-base",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.4.0-pip-multinode"
+    },
+    {
+        "base": "intel/intel-optimized-pytorch:2.4.0-pip-multinode",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.4.0-pip-hf-4.44.0-genai"
+    },
+    {
+        "base": "intel/python:3.10-core",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.4.0-idp-base"
+    },
+    {
+        "base": "intel/intel-optimized-pytorch:2.4.0-idp-base",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.4.0-idp-jupyter"
+    },
+    {
+        "base": "intel/intel-optimized-pytorch:2.4.0-idp-base",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.4.0-idp-multinode"
+    },
+    {
+        "base": "intel/intel-optimized-pytorch:2.4.0-idp-multinode",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.4.0-idp-hf-4.44.0-genai"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.4.0-serving-cpu"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "pytorch/Dockerfile",
+        "repo": "intel/intel-optimized-pytorch",
+        "tag": "2.4.0-serving-xpu"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "preset/classical-ml/Dockerfile",
+        "repo": "intel/classical-ml",
+        "tag": "latest-py3.9"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "preset/classical-ml/Dockerfile",
+        "repo": "intel/classical-ml",
+        "tag": "latest-py3.10"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "preset/data-analytics/Dockerfile",
+        "repo": "intel/data-analytics",
+        "tag": "latest-py3.9"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "preset/data-analytics/Dockerfile",
+        "repo": "intel/data-analytics",
+        "tag": "latest-py3.10"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "preset/deep-learning/Dockerfile",
+        "repo": "intel/deep-learning",
+        "tag": "latest-py3.9"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "preset/deep-learning/Dockerfile",
+        "repo": "intel/deep-learning",
+        "tag": "latest-py3.10"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "preset/inference-optimization/Dockerfile",
+        "repo": "intel/inference-optimization",
+        "tag": "latest-py3.9"
+    },
+    {
+        "base": "ubuntu:22.04",
+        "dockerfile": "preset/inference-optimization/Dockerfile",
+        "repo": "intel/inference-optimization",
+        "tag": "latest-py3.10"
+    }
+]
