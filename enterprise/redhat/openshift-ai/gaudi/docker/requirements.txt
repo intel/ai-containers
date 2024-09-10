@@ -9,7 +9,7 @@ plotly~=5.20.0
 scikit-learn
 scipy~=1.12.0
 skl2onnx~=1.16.0
-codeflare-sdk~=0.18.0
+codeflare-sdk~=0.20.2
 
 # DB connectors
 pymongo~=4.6.2
