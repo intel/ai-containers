@@ -169,7 +169,7 @@ RUN apt-get update && \
 
 RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list
 
-ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
+ENV OCL_ICD_VENDORS=/etc/OpenCL/vendors
 
 FROM ipex-xpu-base AS ipex-xpu-base-wheels-pip
 
