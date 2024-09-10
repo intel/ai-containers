@@ -1,0 +1,236 @@
+ARG BASE_IMAGE
+ARG BASE_TAG
+FROM ${BASE_IMAGE}:${BASE_TAG} AS gaudi-base
+ARG ARTIFACTORY_URL
+ARG VERSION
+ARG REVISION
+
+LABEL vendor="Intel Corporation"
+LABEL release="${VERSION}-${REVISION}"
+
+ENV HOME="/opt/app-root/src"
+WORKDIR /opt/app-root/src
+
+RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
+    dnf clean all && rm -rf /var/cache/yum
+
+RUN echo "[BaseOS]" > /etc/yum.repos.d/CentOS-Linux-BaseOS.repo && \
+    echo "name=CentOS Linux 9 - BaseOS" >> /etc/yum.repos.d/CentOS-Linux-BaseOS.repo && \
+    echo "baseurl=https://mirror.stream.centos.org/9-stream/BaseOS/x86_64/os" >> /etc/yum.repos.d/CentOS-Linux-BaseOS.repo && \
+    echo "gpgkey=https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official-SHA256" >> /etc/yum.repos.d/CentOS-Linux-BaseOS.repo && \
+    echo "gpgcheck=1" >> /etc/yum.repos.d/CentOS-Linux-BaseOS.repo
+
+RUN echo "[centos9]" > /etc/yum.repos.d/CentOS-Linux-AppStream.repo && \
+    echo "name=CentOS Linux 9 - AppStream" >> /etc/yum.repos.d/CentOS-Linux-AppStream.repo && \
+    echo "baseurl=https://mirror.stream.centos.org/9-stream/AppStream/x86_64/os" >> /etc/yum.repos.d/CentOS-Linux-AppStream.repo && \
+    echo "gpgkey=https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official-SHA256" >> /etc/yum.repos.d/CentOS-Linux-AppStream.repo && \
+    echo "gpgcheck=1" >> /etc/yum.repos.d/CentOS-Linux-AppStream.repo
+
+RUN dnf install -y \
+    clang \
+    cmake3 \
+    cpp \
+    gcc \
+    gcc-c++ \
+    glibc \
+    glibc-headers \
+    glibc-devel \
+    jemalloc \
+    libarchive \
+    libksba \
+    unzip \
+    llvm \
+    lsof \
+    python3-devel \
+    openssh-clients \
+    openssl \
+    openssl-devel \
+    libjpeg-devel \
+    openssh-server \
+    lsb_release \
+    wget \
+    git \
+    libffi-devel \
+    bzip2-devel \
+    zlib-devel \
+    mesa-libGL \
+    iproute \
+    python3-dnf-plugin-versionlock && \
+    # update pkgs (except OS version) for resolving potentials CVEs
+    dnf versionlock add redhat-release* && \
+    dnf update -y && \
+    dnf clean all && rm -rf /var/cache/yum
+
+RUN mkdir -p /licenses && \
+    wget -O /licenses/LICENSE https://raw.githubusercontent.com/intel/ai-containers/main/LICENSE
+
+ENV PYTHON_VERSION=3.10
+COPY install-python310.sh .
+RUN ./install-python310.sh rhel9.2 && rm install-python310.sh
+ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+COPY install_efa.sh .
+RUN ./install_efa.sh && rm install_efa.sh && rm -rf /etc/ld.so.conf.d/efa.conf /etc/profile.d/efa.sh
+
+ENV LIBFABRIC_VERSION="1.20.0"
+ENV LIBFABRIC_ROOT="/opt/habanalabs/libfabric-${LIBFABRIC_VERSION}"
+ENV MPI_ROOT=/opt/amazon/openmpi
+ENV LD_LIBRARY_PATH=$LIBFABRIC_ROOT/lib:${MPI_ROOT}/lib:/usr/lib/habanalabs:$LD_LIBRARY_PATH
+ENV PATH=${LIBFABRIC_ROOT}/bin:${MPI_ROOT}/bin:$PATH
+ENV OPAL_PREFIX=${MPI_ROOT}
+ENV MPICC=${MPI_ROOT}/bin/mpicc
+ENV RDMAV_FORK_SAFE=1
+ENV FI_EFA_USE_DEVICE_RDMA=1
+
+RUN echo "[habanalabs]" > /etc/yum.repos.d/habanalabs.repo && \
+    echo "name=Habana RH9 Linux repo" >> /etc/yum.repos.d/habanalabs.repo && \
+    echo "baseurl=https://${ARTIFACTORY_URL}/artifactory/rhel/9/9.2" >> /etc/yum.repos.d/habanalabs.repo && \
+    echo "gpgkey=https://${ARTIFACTORY_URL}/artifactory/rhel/9/9.2/repodata/repomd.xml.key" >> /etc/yum.repos.d/habanalabs.repo && \
+    echo "gpgcheck=1" >> /etc/yum.repos.d/habanalabs.repo
+
+# for Habana GPG key with SHA-1 signature
+RUN update-crypto-policies --set DEFAULT:SHA1
+
+RUN dnf install -y habanalabs-rdma-core-"$VERSION"-"$REVISION".el9 \
+    habanalabs-thunk-"$VERSION"-"$REVISION".el9 \
+    habanalabs-firmware-tools-"$VERSION"-"$REVISION".el9 \
+    habanalabs-graph-"$VERSION"-"$REVISION".el9 && \
+    rm -f /etc/yum.repos.d/habanalabs.repo && rm -f /etc/yum.repos.d/habana.repo && rm -rf /tmp/* && \
+    dnf clean all && rm -rf /var/cache/yum
+
+RUN rpm -V habanalabs-rdma-core && rpm -V habanalabs-thunk && rpm -V habanalabs-firmware-tools && rpm -V habanalabs-graph
+
+# There is no need to store pip installation files inside docker image
+ENV PIP_NO_CACHE_DIR=on
+ENV PIP_DISABLE_PIP_VERSION_CHECK=1
+ENV RDMA_CORE_ROOT=/opt/habanalabs/rdma-core/src
+ENV RDMA_CORE_LIB=${RDMA_CORE_ROOT}/build/lib
+
+RUN wget -nv -O /tmp/libfabric-${LIBFABRIC_VERSION}.tar.bz2 https://github.com/ofiwg/libfabric/releases/download/v${LIBFABRIC_VERSION}/libfabric-${LIBFABRIC_VERSION}.tar.bz2 && \
+    cd /tmp/ && tar xf /tmp/libfabric-${LIBFABRIC_VERSION}.tar.bz2 && \
+    cd /tmp/libfabric-${LIBFABRIC_VERSION} && \
+    ./configure --prefix=$LIBFABRIC_ROOT --enable-psm3-verbs --enable-verbs=yes --with-synapseai=/usr && \
+    make && make install && cd / && rm -rf /tmp/libfabric-${LIBFABRIC_VERSION}.tar.bz2 /tmp/libfabric-${LIBFABRIC_VERSION}
+
+RUN wget -nv -O /tmp/main.zip https://github.com/HabanaAI/hccl_ofi_wrapper/archive/refs/heads/main.zip && \
+    unzip /tmp/main.zip -d /tmp && \
+    cd /tmp/hccl_ofi_wrapper-main && \
+    make && cp -f libhccl_ofi_wrapper.so /usr/lib/habanalabs/libhccl_ofi_wrapper.so && \
+    cd / && \
+    rm -rf /tmp/main.zip /tmp/hccl_ofi_wrapper-main
+
+ENV GC_KERNEL_PATH=/usr/lib/habanalabs/libtpc_kernels.so
+ENV HABANA_LOGS=/opt/app-root/log/habana_logs/
+ENV HABANA_SCAL_BIN_PATH=/opt/habanalabs/engines_fw
+ENV HABANA_PLUGINS_LIB_PATH=/opt/habanalabs/habana_plugins
+
+ENV APP_ROOT="/opt/app-root"
+
+RUN python3.10 -m pip install "pip>=23.3" "setuptools>=70.0.0" "wheel==0.38.4"
+
+WORKDIR ${APP_ROOT}
+
+RUN python3.10 -m venv ${APP_ROOT} && \
+    wget -O ${APP_ROOT}/bin/fix-permissions \
+        https://raw.githubusercontent.com/sclorg/s2i-python-container/master/3.9-minimal/root/usr/bin/fix-permissions && \
+    chown -R 1001:0 ${APP_ROOT} && \
+    chmod +x ${APP_ROOT}/bin/fix-permissions && \
+    ${APP_ROOT}/bin/fix-permissions ${APP_ROOT} -P && \
+    echo "unset BASH_ENV PROMPT_COMMAND ENV" >> ${APP_ROOT}/bin/activate
+
+USER 1001
+
+ENV BASH_ENV="${APP_ROOT}/bin/activate"
+ENV ENV="${APP_ROOT}/bin/activate"
+ENV PROMPT_COMMAND=". ${APP_ROOT}/bin/activate"
+
+SHELL ["/bin/bash", "-c"]
+
+RUN python -m pip install habana_media_loader=="${VERSION}"."${REVISION}"
+
+
+FROM gaudi-base AS gaudi-pytorch
+
+ARG PT_VERSION
+ARG VERSION
+ARG REVISION
+ARG ARTIFACTORY_URL
+ENV BASE_NAME=rhel9.2
+
+LABEL name="PyTorch Installer"
+LABEL summary="Habanalabs PyTorch installer layer for RHEL9.2"
+LABEL description="Image with pre installed Habanalabs packages for PyTorch"
+
+RUN echo "/usr/lib/habanalabs" > $(python -c "import sysconfig; print(sysconfig.get_path('platlib'))")/habanalabs-graph.pth
+
+USER root
+
+RUN echo "[CRB]" > /etc/yum.repos.d/CentOS-Linux-CRB.repo && \
+    echo "name=CentOS Linux 9 - CRB" >> /etc/yum.repos.d/CentOS-Linux-CRB.repo && \
+    echo "baseurl=https://mirror.stream.centos.org/9-stream/CRB/x86_64/os" >> /etc/yum.repos.d/CentOS-Linux-CRB.repo && \
+    echo "gpgkey=https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official-SHA256" >> /etc/yum.repos.d/CentOS-Linux-CRB.repo && \
+    echo "gpgcheck=1" >> /etc/yum.repos.d/CentOS-Linux-CRB.repo
+
+RUN dnf install --allowerasing -y \
+    curl \
+    cairo-devel \
+    numactl-devel \
+    iproute \
+    which \
+    zlib-devel \
+    lapack-devel \
+    openblas-devel \
+    numactl \
+    gperftools-devel && \
+    dnf clean all && rm -rf /var/cache/yum
+
+RUN dnf config-manager --add-repo https://yum.repos.intel.com/mkl/setup/intel-mkl.repo -y && \
+    dnf install --allowerasing -y intel-mkl-64bit-2020.4-912 && \
+    dnf clean all && rm -rf /var/cache/yum
+
+# Set LD_PRELOAD after all required installations to
+# avoid warnings during docker creation
+ENV LD_PRELOAD=/lib64/libtcmalloc.so.4
+ENV TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=7516192768
+
+RUN rm -rf /tmp/*
+
+USER 1001
+
+COPY --chown=1001:0 install_packages.sh .
+RUN ./install_packages.sh && rm -f install_packages.sh
+
+USER root
+
+RUN /sbin/ldconfig && echo "source /etc/profile.d/habanalabs.sh" >> ~/.bashrc && \
+    chown 1001:0 ~/.bashrc
+
+USER 1001
+
+FROM gaudi-pytorch AS gaudi-notebooks
+
+WORKDIR ${APP_ROOT}/src
+
+COPY --chown=1001:0 requirements.txt requirements.txt
+COPY --chown=1001:0 start-notebook.sh /opt/app-root/bin
+COPY --chown=1001:0 builder /opt/app-root/builder
+COPY --chown=1001:0 utils /opt/app-root/bin/utils
+
+USER 1001
+
+RUN python -m pip install -r requirements.txt && \
+    chmod -R g+w ${APP_ROOT}/lib/python3.10/site-packages && \
+    fix-permissions ${APP_ROOT} -P && \
+    chmod -R g+w /opt/app-root/src && \
+    sed -i -e "s/Python.*/$(python --version | cut -d '.' -f-2)\",/" /opt/app-root/share/jupyter/kernels/python3/kernel.json && \
+    jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+
+RUN cd ${APP_ROOT}/ && \
+    git clone https://github.com/HabanaAI/vllm-fork.git && \
+    cd vllm-fork && \
+    VLLM_TARGET_DEVICE=hpu pip install -e .
+
+WORKDIR ${APP_ROOT}/src
+ENV NOTEBOOK_SAMPLE_LINK="https://raw.githubusercontent.com/sharvil10/ai-containers/main/enterprise/redhat/openshift-ai/gaudi/demo/Getting-started.ipynb"
+
+ENTRYPOINT ["bash", "-c", "/opt/app-root/builder/run"]
