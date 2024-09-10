@@ -29,7 +29,7 @@ jupyterlab-lsp~=4.2.0
 jupyterlab-widgets~=3.0.10
 jupyter-resource-usage~=0.7.2
 nbdime~=3.2.1
-nbgitpuller~=1.2.0
+nbgitpuller~=1.2.1
 
 # pycodestyle is dependency of below packages
 # and to achieve compatible of pycodestyle with python-lsp-server[all]
