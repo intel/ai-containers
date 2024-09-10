@@ -97,7 +97,7 @@ updates:
       interval: weekly
   - directory: enterprise/redhat/openshift-ai/gaudi/docker
     groups:
-      preset:
+      gaudi-openshift:
         patterns:
           - "requirements.txt"
     package-ecosystem: pip
