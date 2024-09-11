@@ -272,6 +272,13 @@ The images below are [TorchServe*] with CPU Optimizations:
 
 For more details, follow the procedure in the [TorchServe](https://github.com/pytorch/serve/blob/master/examples/intel_extension_for_pytorch/README.md) instructions.
 
+The images below are [TorchServe*] with XPU Optimizations:
+
+| Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
+| ------------------- | -------- | ------------ | --------------- |
+| `2.3.110-serving-xpu` | [v2.3.1] | [v2.3.110+xpu] | [v0.4.0-Beta]   |
+
+
 ## CPU only images with Intel® Distribution for Python*
 
 The images below are built only with CPU optimizations (GPU acceleration support was deliberately excluded) and include [Intel® Distribution for Python*]:
