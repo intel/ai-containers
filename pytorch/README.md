@@ -24,7 +24,7 @@ The images below include support for both CPU and GPU optimizations:
 
 | Tag(s)                 | Pytorch  | IPEX           | Driver | Dockerfile      |
 | ---------------------- | -------- | -------------- | ------ | --------------- |
-| `2.3.110-xpu-pip-base`,`2.3.110-xpu` | [v2.3.1] | [v2.3.110+xpu] | [950]  | [v0.4.0-Beta]   |
+| `2.3.110-xpu-pip-base`,`2.3.110-xpu` | [V2.3.1] | [v2.3.110+xpu] | [950]  | [v0.4.0-Beta]   |
 | `2.1.40-xpu-pip-base`,`2.1.40-xpu`   | [v2.1.0] | [v2.1.40+xpu]  | [914]  | [v0.4.0-Beta]   |
 | `2.1.30-xpu`           | [v2.1.0] | [v2.1.30+xpu]  | [803]  | [v0.4.0-Beta]   |
 | `2.1.20-xpu`           | [v2.1.0] | [v2.1.20+xpu]  | [803]  | [v0.3.4]        |
@@ -47,7 +47,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
 | --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
-| `2.3.110-xpu-pip-jupyter` | [v2.3.1] | [v2.3.110+xpu] | [950]  | `8888`     | [v0.4.0-Beta]   |
+| `2.3.110-xpu-pip-jupyter` | [V2.3.1] | [v2.3.110+xpu] | [950]  | `8888`     | [v0.4.0-Beta]   |
 | `2.1.40-xpu-pip-jupyter` | [v2.1.0] | [v2.1.40+xpu] | [914]  | `8888`     | [v0.4.0-Beta]   |
 | `2.1.20-xpu-pip-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`    | [v0.3.4]        |
 | `2.1.10-xpu-pip-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`    | [v0.2.3]        |
@@ -276,8 +276,7 @@ The images below are [TorchServe*] with XPU Optimizations:
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- |
-| `2.3.110-serving-xpu` | [v2.3.1] | [v2.3.110+xpu] | [v0.4.0-Beta]   |
-
+| `2.3.110-serving-xpu` | [V2.3.1] | [v2.3.110+xpu] | [v0.4.0-Beta]   |
 
 ## CPU only images with Intel® Distribution for Python*
 
@@ -317,7 +316,7 @@ The images below are built only with CPU and GPU optimizations and include [Inte
 
 | Tag(s)           | Pytorch  | IPEX         | Driver | Dockerfile      |
 | ---------------- | -------- | ------------ | -------- | ------ |
-| `2.3.110-xpu-idp-base` | [v2.3.1] | [v2.3.110+xpu] | [950]  | [v0.4.0-Beta] |
+| `2.3.110-xpu-idp-base` | [V2.3.1] | [v2.3.110+xpu] | [950]  | [v0.4.0-Beta] |
 | `2.1.40-xpu-idp-base` | [v2.1.0] | [v2.1.40+xpu] | [914]  | [v0.4.0-Beta] |
 | `2.1.30-xpu-idp-base` | [v2.1.0] | [v2.1.30+xpu]  | [803]  | [v0.4.0-Beta] |
 | `2.1.10-xpu-idp-base` | [v2.1.0] | [v2.1.10+xpu]  | [736]  | [v0.2.3] |
@@ -326,7 +325,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
 | --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
-| `2.3.110-xpu-idp-jupyter` | [v2.3.1] | [v2.3.110+xpu] | [950]  | [v0.4.0-Beta] |
+| `2.3.110-xpu-idp-jupyter` | [V2.3.1] | [v2.3.110+xpu] | [950]  | `8888` | [v0.4.0-Beta] |
 | `2.1.40-xpu-idp-jupyter` | [v2.1.0] | [v2.1.40+xpu] | [914]  | `8888`   | [v0.4.0-Beta]   |
 | `2.1.20-xpu-idp-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`   | [v0.3.4]        |
 | `2.1.10-xpu-idp-jupyter` | [v2.1.0] | [v2.1.10+xpu] | [736]  | `8888`   | [v0.2.3]        |
@@ -404,7 +403,7 @@ It is the image user's responsibility to ensure that any use of The images below
 
 [v2.4.0]: https://github.com/pytorch/pytorch/releases/tag/v2.4.0
 [v2.3.0]: https://github.com/pytorch/pytorch/releases/tag/v2.3.0
-[v2.3.1]: https://github.com/pytorch/pytorch/tree/v2.3.1
+[V2.3.1]: https://github.com/pytorch/pytorch/tree/v2.3.1
 [v2.2.2]: https://github.com/pytorch/pytorch/releases/tag/v2.2.2
 [v2.2.0]: https://github.com/pytorch/pytorch/releases/tag/v2.2.0
 [v2.1.2]: https://github.com/pytorch/pytorch/releases/tag/v2.1.2
