@@ -39,7 +39,7 @@ docker run --rm -it \
            -u root \
            -v $PWD:/home/model-server \
            --device /dev/dri \
-           intel/intel-optimized-pytorch:2.1.40-serving-xpu \
+           intel/intel-optimized-pytorch:2.3.110-serving-xpu \
            sh -c 'python model-archive/ipex_squeezenet.py && \
            torch-model-archiver --model-name squeezenet1_1 \
            --version 1.1 \
@@ -73,7 +73,7 @@ docker run -d --rm --name server \
           -v $PWD/config-xpu.properties:/home/model-server/config.properties \
           --net=host \
           --device /dev/dri \
-          intel/intel-optimized-pytorch:2.1.40-serving-xpu
+          intel/intel-optimized-pytorch:2.3.110-serving-xpu
 ```
 
 After lauching the container, follow the steps below:
