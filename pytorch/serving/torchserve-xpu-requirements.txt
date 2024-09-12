@@ -12,5 +12,3 @@ pyyaml>=6.0.1
 torch-model-archiver==0.11.1
 torch-workflow-archiver==0.2.14
 torchserve==0.11.1
-pip==23.3
-setuptools==70.0.0
