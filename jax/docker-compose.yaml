@@ -51,3 +51,21 @@ services:
     extends: jax-base
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-xla-${INTEL_XLA_VERSION:-v0.4.0}-jupyter
     network_mode: host
+  multinode:
+    build:
+      labels:
+        # dependency.apt.gcc: true
+        # dependency.apt.libgl1-mesa-glx: true
+        # dependency.apt.libglib2: true
+        dependency.apt.python3-dev: true
+        dependency.pip.apt.virtualenv: true
+        dependency.python.pip: multinode/requirements.txt
+        org.opencontainers.base.name: "intel/intel-optimized-xla:${INTEL_XLA_VERSION:-v0.4.0}-base"
+        org.opencontainers.image.title: "Intel® Optimized XLA MultiNode Image"
+        org.opencontainers.image.version: ${INTEL_XLA_VERSION:-v0.4.0}-multinode
+      target: jax-multinode
+    command: >
+      bash -c "mpirun --version && python -c 'from mpi4py import MPI; import mpi4jax'"
+    extends: jax-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-xla-${INTEL_XLA_VERSION:-v0.4.0}-inc-${INC_VERSION:-3.0}
+    shm_size: 2gb

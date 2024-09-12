@@ -66,3 +66,58 @@ RUN mkdir /.local && chmod a+rwx /.local
 EXPOSE 8888
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
+
+FROM jax-base AS jax-multinode
+
+RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
+    # python3-dev \
+    gcc \
+    # g++ \
+    # libgl1-mesa-glx \
+    # libglib2.0-0 \
+    libopenmpi-dev \
+    numactl \
+    virtualenv
+
+ENV SIGOPT_PROJECT=. \
+    MPI4JAX_USE_SYCL_MPI=1 \
+    MPI4PY_BUILD_BACKEND=scikit-build-core
+
+WORKDIR /
+COPY multinode/requirements.txt requirements.txt
+
+
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    rm -rf requirements.txt
+
+ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
+
+RUN apt-get install -y --no-install-recommends --fix-missing \
+    openssh-client \
+    openssh-server && \
+    rm /etc/ssh/ssh_host_*_key \
+    /etc/ssh/ssh_host_*_key.pub && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /var/run/sshd
+
+ARG PYTHON_VERSION
+
+COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
+
+# modify generate_ssh_keys to be a helper script
+# print how to use helper script on bash startup
+# Avoids loop for further execution of the startup file
+ARG PACKAGE_OPTION=pip
+ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
+RUN cat '/generate_ssh_keys.sh' >> ~/.startup && \
+    rm -rf /generate_ssh_keys.sh
+
+COPY multinode/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+COPY multinode/sshd_config /etc/ssh/sshd_config
+COPY multinode/ssh_config /etc/ssh/ssh_config
+
+RUN mkdir -p /licensing
+
+ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
