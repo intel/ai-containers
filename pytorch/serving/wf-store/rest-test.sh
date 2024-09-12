@@ -33,13 +33,13 @@ apt-get -y install curl
 
 curl --fail -X GET http://localhost:8080/ping
 
-cd ../model-store || exit
+cd /home/model-server/model-store || exit
 curl --fail -O https://torchserve.pytorch.org/mar_files/cat_dog_classification.mar
 curl --fail -O https://torchserve.pytorch.org/mar_files/dog_breed_classification.mar
 curl --fail -X POST "http://127.0.0.1:8081/models?url=cat_dog_classification.mar"
 curl --fail -X POST "http://127.0.0.1:8081/models?url=dog_breed_classification.mar"
 
-cd ../wf-store || exit
+cd /home/model-server/wf-store || exit
 curl --fail -X POST "http://127.0.0.1:8081/workflows?url=dog_breed_wf.war"
 
 curl --fail -O https://raw.githubusercontent.com/pytorch/serve/master/examples/Workflows/dog_breed_classification/model_input/Cat.jpg
