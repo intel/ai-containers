@@ -229,7 +229,12 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     python3-venv && \
     rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m venv /home/venv
+COPY venv-requirements.txt .
+
+RUN python3 -m venv /home/venv && \
+    /home/venv/bin/python -m pip install --no-cache-dir --upgrade pip && \
+    /home/venv/bin/python -m pip install --no-cache-dir -r venv-requirements.txt && \
+    rm -rf venv-requirements.txt
 
 ENV PATH="/home/venv/bin:$PATH"
 
@@ -319,8 +324,6 @@ ARG GID=109
 
 RUN groupadd -g ${GID} render &&\
     usermod -aG video,render model-server
-
-RUN python -m pip install pip==23.3 setuptools==70.0.0
 
 USER model-server
 
