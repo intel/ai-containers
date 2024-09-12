@@ -229,6 +229,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     python3-venv && \
     rm -rf /var/lib/apt/lists/*
 
+WORKDIR /
 COPY venv-requirements.txt .
 
 RUN python3 -m venv /home/venv && \
