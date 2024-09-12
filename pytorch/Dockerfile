@@ -320,6 +320,8 @@ ARG GID=109
 RUN groupadd -g ${GID} render &&\
     usermod -aG video,render model-server
 
+RUN python -m pip install pip==23.3 setuptools==70.0.0
+
 USER model-server
 
 WORKDIR /home/model-server
