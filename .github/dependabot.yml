@@ -83,13 +83,21 @@ updates:
     groups:
       preset:
         patterns:
-          - "*requirements.txt"
+          - "*"
     package-ecosystem: pip
     schedule:
       interval: weekly
   - directory: /apptainer/python
     groups:
       apptainer:
+        patterns:
+          - "*"
+    package-ecosystem: pip
+    schedule:
+      interval: weekly
+  - directory: enterprise/redhat/openshift-ai/gaudi/docker
+    groups:
+      gaudi-openshift:
         patterns:
           - "*"
     package-ecosystem: pip
