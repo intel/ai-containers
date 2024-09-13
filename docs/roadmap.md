@@ -10,7 +10,7 @@
 
 - Granite Rapids Support
 - CLS Support
-- Intel Developer Cloud Support
+- Intel Tiber Developer Cloud Support
 - AI Tools 2024.3/2025.0 Support
 
 ## Q4'24
