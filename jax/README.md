@@ -16,7 +16,6 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 | ------------------- | --------- | ----------------- | -------- | --------------- |
 | `0.4.0-pip-jupyter` | [v0.4.32] | [v0.4.0-jax]      | [v0.9.0] | [v0.4.0]        |
 
-
 ### Run the Jupyter Container
 
 ```bash
@@ -37,7 +36,6 @@ The images below include [Intel® Distribution for Python*]:
 | Tag(s)           | [JAX\*]   | [Intel OpenXLA\*] | [Flax]   | Dockerfile      |
 | ---------------- | --------- | ----------------- | -------- | --------------- |
 | `0.4.0-idp-base` | [v0.4.32] | [v0.4.0-jax]      | [v0.9.0] | [v0.4.0]        |
-
 
 The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
 
