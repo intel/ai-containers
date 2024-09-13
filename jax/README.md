@@ -6,13 +6,13 @@ Transformable numerical computing at scale combined with [Intel® Extension for 
 
 The images below include [JAX\*] and [Intel® Extension for OpenXLA\*].
 
-| Tag(s)                     | [JAX\*]   | [Intel OpenXLA\*] | [Flax]   | Dockerfile      |
+| Tag(s)                     | [JAX\*]   | [Intel® Extension for OpenXLA\*] | [Flax]   | Dockerfile      |
 | -------------------------- | --------- | ----------------- | -------- | --------------- |
 | `0.4.0-pip-base`, `latest` | [v0.4.32] | [v0.4.0-jax]      | [v0.9.0] | [v0.4.0]        |
 
 The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
 
-| Tag(s)              | [JAX\*]   | [Intel OpenXLA\*] | [Flax]   | Dockerfile      |
+| Tag(s)              | [JAX\*]   | [Intel® Extension for OpenXLA\*] | [Flax]   | Dockerfile      |
 | ------------------- | --------- | ----------------- | -------- | --------------- |
 | `0.4.0-pip-jupyter` | [v0.4.32] | [v0.4.0-jax]      | [v0.9.0] | [v0.4.0]        |
 
@@ -33,13 +33,13 @@ After running the command above, copy the URL (something like `http://127.0.0.1:
 
 The images below include [Intel® Distribution for Python*]:
 
-| Tag(s)           | [JAX\*]   | [Intel OpenXLA\*] | [Flax]   | Dockerfile      |
+| Tag(s)           | [JAX\*]   | [Intel® Extension for OpenXLA\*] | [Flax]   | Dockerfile      |
 | ---------------- | --------- | ----------------- | -------- | --------------- |
 | `0.4.0-idp-base` | [v0.4.32] | [v0.4.0-jax]      | [v0.9.0] | [v0.4.0]        |
 
 The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
 
-| Tag(s)              | [JAX\*]   | [Intel OpenXLA\*] | [Flax]   | Dockerfile      |
+| Tag(s)              | [JAX\*]   | [Intel® Extension for OpenXLA\*] | [Flax]   | Dockerfile      |
 | ------------------- | --------- | ----------------- | -------- | --------------- |
 | `0.4.0-idp-jupyter` | [v0.4.32] | [v0.4.0-jax]      | [v0.9.0] | [v0.4.0]        |
 
@@ -72,7 +72,7 @@ It is the image user's responsibility to ensure that any use of The images below
 
 <!--Below are links used in these document. They are not rendered: -->
 
-[Intel® Distribution for Python]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/distribution-for-python.html#gs.9bos9m
+[Intel® Distribution for Python*]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/distribution-for-python.html#gs.9bos9m
 [Intel® Extension for OpenXLA\*]: https://github.com/intel/intel-extension-for-openxla
 [JAX\*]: https://github.com/google/jax
 [Flax]: https://github.com/google/flax
