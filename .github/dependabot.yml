@@ -83,7 +83,7 @@ updates:
     groups:
       preset:
         patterns:
-          - "*requirements.txt"
+          - "*"
     package-ecosystem: pip
     schedule:
       interval: weekly
@@ -99,7 +99,7 @@ updates:
     groups:
       gaudi-openshift:
         patterns:
-          - "requirements.txt"
+          - "*"
     package-ecosystem: pip
     schedule:
       interval: weekly

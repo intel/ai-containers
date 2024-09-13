@@ -167,26 +167,11 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
-RUN no_proxy=$no_proxy wget -q  -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
-   | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
-   echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
-   | tee /etc/apt/sources.list.d/oneAPI.list
+RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list
 
-ARG DPCPP_VER
-ARG MKL_VER
-ARG CCL_VER
+ENV OCL_ICD_VENDORS=/etc/OpenCL/vendors
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    intel-oneapi-runtime-dpcpp-cpp=${DPCPP_VER} \
-    intel-oneapi-runtime-mkl=${MKL_VER} \
-    intel-oneapi-runtime-ccl=${CCL_VER};
-
-RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
-
-ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
-
-FROM ipex-xpu-base AS ipex-xpu-base-wheels
+FROM ipex-xpu-base AS ipex-xpu-base-wheels-pip
 
 WORKDIR /
 COPY xpu-requirements.txt .
@@ -194,7 +179,15 @@ COPY xpu-requirements.txt .
 RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
 
-FROM ipex-xpu-base AS ipex-xpu-jupyter
+FROM ipex-xpu-base AS ipex-xpu-base-wheels-idp
+
+WORKDIR /
+COPY xpu-requirements.txt .
+
+RUN conda run -n idp python -m pip install --no-cache-dir -r xpu-requirements.txt && \
+    rm -rf xpu-requirements.txt
+
+FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} AS ipex-xpu-jupyter
 
 WORKDIR /jupyter
 COPY jupyter-requirements.txt .
@@ -236,7 +229,13 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     python3-venv && \
     rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m venv /home/venv
+WORKDIR /
+COPY venv-requirements.txt .
+
+RUN python3 -m venv /home/venv && \
+    /home/venv/bin/python -m pip install --no-cache-dir --upgrade pip && \
+    /home/venv/bin/python -m pip install --no-cache-dir -r venv-requirements.txt && \
+    rm -rf venv-requirements.txt
 
 ENV PATH="/home/venv/bin:$PATH"
 
