@@ -13,22 +13,16 @@
 # limitations under the License.
 
 ---
-jax-import:
+jax-import-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-xla-${INTEL_XLA_VERSION:-v0.4.0}-base
-  cmd: python -c 'import jax; print("Jax Version:", jax.__version__)'
-jax-import-jupyter:
+  cmd: python -c 'import jax; print("Jax Version:", jax.__version__); print(jax.devices())'
+  device: ["/dev/dri"]
+jax-import-jupyter-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-xla-${INTEL_XLA_VERSION:-v0.4.0}-jupyter
   cmd: sh -c "python -m jupyter --version"
-jax-xpu-example:
+jax-xpu-example-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-xla-${INTEL_XLA_VERSION:-v0.4.0}-base
   cmd: python /tests/example.py
-  device: ["/dev/dri"]
-  volumes:
-    - src: $PWD/jax/tests
-      dst: /tests
-jax-multinode-example:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-xla-${INTEL_XLA_VERSION:-v0.4.0}-inc-${INC_VERSION:-3.0}
-  cmd: python /tests/multinode-ex.py
   device: ["/dev/dri"]
   volumes:
     - src: $PWD/jax/tests

@@ -18,38 +18,74 @@
 # throughout. Please refer to the TensorFlow dockerfiles documentation
 # for more information.
 
-ARG BASE_IMAGE_NAME=${BASE_IMAGE_NAME}
-ARG BASE_IMAGE_TAG=${BASE_IMAGE_TAG}
-FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} AS xpu-base
+ARG REGISTRY
+ARG REPO
+ARG GITHUB_RUN_NUMBER
+ARG BASE_IMAGE_NAME
+ARG BASE_IMAGE_TAG
+ARG PACKAGE_OPTION=pip
+ARG PYTHON_VERSION
+ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-base
+ARG TORCHSERVE_BASE=${PYTHON_BASE}
+FROM ${PYTHON_BASE} AS xpu-base
 
-RUN wget -q -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | gpg --dearmor | tee /usr/share/keyrings/intel-oneapi-archive-keyring.gpg > /dev/null && \
-    echo "deb [signed-by=/usr/share/keyrings/intel-oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main " | tee /etc/apt/sources.list.d/oneAPI.list && \
-    chmod 644 /usr/share/keyrings/intel-oneapi-archive-keyring.gpg && \
-    rm /etc/apt/sources.list.d/intel-graphics.list && \
-    wget -q -O- https://repositories.intel.com/graphics/intel-graphics.key | gpg --dearmor | tee /usr/share/keyrings/intel-graphics.gpg > /dev/null && \
-    echo "deb [arch=amd64,i386 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/graphics/ubuntu jammy arc" | tee /etc/apt/sources.list.d/intel.gpu.jammy.list && \
-    chmod 644 /usr/share/keyrings/intel-graphics.gpg
-
-RUN apt-get update -y && \
+RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
+    apt-utils \
+    build-essential \
+    clinfo \
     git \
-    # libsndfile1 \
-    # lsb-release \
-    numactl \
-    python3 \
-    python3-dev \
-    python3-pip
+    gnupg2 \
+    gpg-agent \
+    rsync \
+    unzip && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
 
-RUN ln -sf "$(which python3)" /usr/local/bin/python && \
-    ln -sf "$(which python3)" /usr/bin/python
+RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+    gpg --dearmor --yes --output /usr/share/keyrings/intel-graphics.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
+    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
+
+ARG ICD_VER
+ARG LEVEL_ZERO_GPU_VER
+ARG LEVEL_ZERO_VER
+ARG LEVEL_ZERO_DEV_VER
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    intel-opencl-icd=${ICD_VER} \
+    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
+    libze1=${LEVEL_ZERO_VER} \
+    libze-dev=${LEVEL_ZERO_DEV_VER} && \
+    rm -rf  /var/lib/apt/lists/*
+
+RUN no_proxy="" NO_PROXY="" wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+    | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
+    echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
+    | tee /etc/apt/sources.list.d/oneAPI.list
+
+ARG DPCPP_VER
+ARG MKL_VER
+ARG CCL_VER
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    intel-oneapi-runtime-dpcpp-cpp=${DPCPP_VER} \
+    intel-oneapi-runtime-mkl=${MKL_VER} \
+    intel-oneapi-runtime-ccl=${CCL_VER} && \
+    rm -rf  /var/lib/apt/lists/*
+
+RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
+
+ENV OCL_ICD_VENDORS=/etc/OpenCL/vendors
 
 FROM xpu-base AS jax-base
 
 WORKDIR /
 COPY requirements.txt .
 
-RUN python -m pip install --no-cache-dir \
-    --ignore-installed -r requirements.txt && \
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
     rm -rf requirements.txt
 
 FROM jax-base AS jupyter
@@ -66,58 +102,3 @@ RUN mkdir /.local && chmod a+rwx /.local
 EXPOSE 8888
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
-
-FROM jax-base AS jax-multinode
-
-RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
-    # python3-dev \
-    gcc \
-    # g++ \
-    # libgl1-mesa-glx \
-    # libglib2.0-0 \
-    libopenmpi-dev \
-    numactl \
-    virtualenv
-
-ENV SIGOPT_PROJECT=. \
-    MPI4JAX_USE_SYCL_MPI=1 \
-    MPI4PY_BUILD_BACKEND=scikit-build-core
-
-WORKDIR /
-COPY multinode/requirements.txt requirements.txt
-
-
-RUN python -m pip install --no-cache-dir -r requirements.txt && \
-    rm -rf requirements.txt
-
-ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}"
-
-RUN apt-get install -y --no-install-recommends --fix-missing \
-    openssh-client \
-    openssh-server && \
-    rm /etc/ssh/ssh_host_*_key \
-    /etc/ssh/ssh_host_*_key.pub && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /var/run/sshd
-
-ARG PYTHON_VERSION
-
-COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
-
-# modify generate_ssh_keys to be a helper script
-# print how to use helper script on bash startup
-# Avoids loop for further execution of the startup file
-ARG PACKAGE_OPTION=pip
-ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
-RUN cat '/generate_ssh_keys.sh' >> ~/.startup && \
-    rm -rf /generate_ssh_keys.sh
-
-COPY multinode/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
-COPY multinode/sshd_config /etc/ssh/sshd_config
-COPY multinode/ssh_config /etc/ssh/ssh_config
-
-RUN mkdir -p /licensing
-
-ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
