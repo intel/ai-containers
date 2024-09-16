@@ -35,7 +35,6 @@ ARG PACKAGE_OPTION=pip
 ARG PYTHON_VERSION
 ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-base
 ARG TORCHSERVE_BASE=${PYTHON_BASE}
-ARG MULTINODE_BASE=ipex-base-${PACKAGE_OPTION}
 FROM ${PYTHON_BASE} AS ipex-base-pip
 
 WORKDIR /
@@ -66,6 +65,73 @@ RUN mkdir /.local && chmod a+rwx /.local
 EXPOSE 8888
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
+
+FROM ipex-base-${PACKAGE_OPTION} AS multinode
+
+RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
+    python3-dev \
+    gcc \
+    g++ \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libopenmpi-dev \
+    numactl \
+    virtualenv
+
+ENV SIGOPT_PROJECT=.
+
+WORKDIR /
+COPY multinode/requirements.txt requirements.txt
+
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    DS_BUILD_OPS=1 python -m pip install --no-cache-dir deepspeed==0.14.4 && \
+    echo "Y" | pip uninstall nvidia-ml-py && \
+    rm -rf requirements.txt
+
+ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
+
+RUN apt-get install -y --no-install-recommends --fix-missing \
+    openssh-client \
+    openssh-server && \
+    rm /etc/ssh/ssh_host_*_key \
+    /etc/ssh/ssh_host_*_key.pub && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /var/run/sshd
+
+ARG PYTHON_VERSION
+
+COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
+
+# modify generate_ssh_keys to be a helper script
+# print how to use helper script on bash startup
+# Avoids loop for further execution of the startup file
+ARG PACKAGE_OPTION=pip
+ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
+RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then PYPATH="/opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages"; fi && \
+    echo "source ${PYPATH}/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
+    cat '/generate_ssh_keys.sh' >> ~/.startup && \
+    rm -rf /generate_ssh_keys.sh
+
+COPY multinode/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+COPY multinode/sshd_config /etc/ssh/sshd_config
+COPY multinode/ssh_config /etc/ssh/ssh_config
+
+RUN mkdir -p /licensing
+
+RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
+    wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
+    wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
+
+ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
+
+FROM multinode AS hf-genai
+
+COPY hf-genai-requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r hf-genai-requirements.txt && \
+    rm -rf hf-genai-requirements.txt
 
 FROM ${PYTHON_BASE} AS ipex-xpu-base
 
@@ -101,26 +167,11 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
 
-RUN no_proxy=$no_proxy wget -q  -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
-   | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
-   echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
-   | tee /etc/apt/sources.list.d/oneAPI.list
+RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list
 
-ARG DPCPP_VER
-ARG MKL_VER
-ARG CCL_VER
+ENV OCL_ICD_VENDORS=/etc/OpenCL/vendors
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    intel-oneapi-runtime-dpcpp-cpp=${DPCPP_VER} \
-    intel-oneapi-runtime-mkl=${MKL_VER} \
-    intel-oneapi-runtime-ccl=${CCL_VER};
-
-RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
-
-ENV LD_LIBRARY_PATH=/opt/intel/oneapi/redist/lib:$LD_LIBRARY_PATH
-
-FROM ipex-xpu-base AS ipex-xpu-base-wheels
+FROM ipex-xpu-base AS ipex-xpu-base-wheels-pip
 
 WORKDIR /
 COPY xpu-requirements.txt .
@@ -128,85 +179,19 @@ COPY xpu-requirements.txt .
 RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
 
-FROM ${MULTINODE_BASE} AS multinode
-
-RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
-    python3-dev \
-    gcc \
-    g++ \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-    libopenmpi-dev \
-    numactl \
-    virtualenv && \
-    apt-get clean
-
-ENV SIGOPT_PROJECT=.
-
-ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu":${LD_LIBRARY_PATH}
-
-RUN apt-get install -y --no-install-recommends  \
-    openssh-client \
-    openssh-server && \
-    rm /etc/ssh/ssh_host_*_key \
-    /etc/ssh/ssh_host_*_key.pub && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /var/run/sshd
-
-COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
-
-# modify generate_ssh_keys to be a helper script
-# print how to use helper script on bash startup
-# Avoids loop for further execution of the startup file
-ARG PACKAGE_OPTION=pip
-RUN cat '/generate_ssh_keys.sh' >> ~/.startup && \
-    rm -rf /generate_ssh_keys.sh
-
-COPY multinode/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
-COPY multinode/sshd_config /etc/ssh/sshd_config
-COPY multinode/ssh_config /etc/ssh/ssh_config
-
-RUN mkdir -p /licensing
-
-RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
-    wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
-    wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
-
-ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
-
-FROM multinode as deepspeed-cpu
-
-ARG PYTHON_VERSION
-ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
-
-RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then PYPATH="/opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages"; fi && \
-    echo "source ${PYPATH}/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup
+FROM ipex-xpu-base AS ipex-xpu-base-wheels-idp
 
 WORKDIR /
-COPY multinode/requirements.txt requirements.txt
+COPY xpu-requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r requirements.txt && \
-    DS_BUILD_OPS=1 python -m pip install --no-cache-dir deepspeed==0.14.4 && \
-    echo "Y" | pip uninstall nvidia-ml-py && \
-    rm -rf requirements.txt
+RUN conda run -n idp python -m pip install --no-cache-dir -r xpu-requirements.txt && \
+    rm -rf xpu-requirements.txt
 
-ENV LD_LIBRARY_PATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
-
-FROM deepspeed-cpu AS hf-genai
-
-COPY hf-genai-requirements.txt .
-
-RUN python -m pip install --no-cache-dir -r hf-genai-requirements.txt && \
-    rm -rf hf-genai-requirements.txt
-
-FROM ipex-xpu-base-wheels AS ipex-xpu-jupyter
+FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} AS ipex-xpu-jupyter
 
 WORKDIR /jupyter
 COPY jupyter-requirements.txt .
-RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt && \
-    rm -rf jupyter-requirements.txt
+RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
 
 RUN if eval "which conda >/dev/null )"; then \
         echo "conda activate idp" >> ~/.bashrc; \
@@ -244,7 +229,13 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missin
     python3-venv && \
     rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m venv /home/venv
+WORKDIR /
+COPY venv-requirements.txt .
+
+RUN python3 -m venv /home/venv && \
+    /home/venv/bin/python -m pip install --no-cache-dir --upgrade pip && \
+    /home/venv/bin/python -m pip install --no-cache-dir -r venv-requirements.txt && \
+    rm -rf venv-requirements.txt
 
 ENV PATH="/home/venv/bin:$PATH"
 
@@ -354,16 +345,3 @@ EXPOSE 8080 8081 8082 7070 7071
 
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
 CMD ["serve"]
-
-FROM multinode as deepspeed-xpu
-
-ENV SIGOPT_PROJECT=.
-
-WORKDIR /
-COPY multinode/xpu-requirements.txt xpu-requirements.txt
-
-RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
-    rm -rf xpu-requirements.txt
-
-RUN python -m pip install --no-cache-dir deepspeed==0.14.2 && \
-    echo "Y" | pip uninstall nvidia-ml-py
