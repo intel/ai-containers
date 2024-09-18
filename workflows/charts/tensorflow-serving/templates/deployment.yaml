@@ -1,0 +1,84 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+{{- $name := .Values.deploy.modelName | required ".Values.deploy.modelName is required." -}}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "tensorflow-serving.fullname" . }}
+  labels:
+    {{- include "tensorflow-serving.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.deploy.replicas }}
+  selector:
+    matchLabels:
+      {{- include "tensorflow-serving.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "tensorflow-serving.labels" . | nindent 8 }}
+    spec:
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      containers:
+        - name: tensorflow-serving
+          image: {{ .Values.deploy.image }}
+          {{- if eq .Values.deploy.env.enabled true }}
+          envFrom:
+          - configMapRef:
+              name: {{ .Values.deploy.env.configMapName }}
+          {{- end }}
+          env:
+            - name: MODEL_NAME
+              value: {{ .Values.deploy.modelName }}
+          ports:
+            - name: rest
+              containerPort: 8500
+              protocol: TCP
+            - name: grpc
+              containerPort: 8501
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: rest
+            initialDelay: 15
+            timeoutSeconds: 1
+          volumeMounts:
+            - mountPath: /dev/shm
+              name: dshm
+          {{- if .Values.deploy.storage.nfs.enabled }}
+            - name: model
+              mountPath: /models/{{ .Values.deploy.modelName }}
+          {{- else }}
+            - name: model
+              mountPath: /models/{{ .Values.deploy.modelName }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.deploy.resources | nindent 12 }}
+      volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
+      {{- if .Values.deploy.storage.nfs.enabled }}
+        - name: model
+          nfs:
+            server: {{ .Values.deploy.storage.nfs.server }}
+            path: {{ .Values.deploy.storage.nfs.path }}
+            readOnly: {{ .Values.deploy.storage.nfs.readOnly }}
+      {{- else }}
+        - name: model
+          persistentVolumeClaim:
+            claimName: {{ include "tensorflow-serving.fullname" . }}-model-dir
+      {{- end }}
