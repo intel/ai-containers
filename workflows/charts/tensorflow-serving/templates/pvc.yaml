@@ -12,18 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+---
+{{- if not .Values.deploy.storage.nfs.enabled }}
 apiVersion: v1
-kind: Pod
+kind: PersistentVolumeClaim
 metadata:
-  name: "{{ include "tgi.fullname" . }}-test-connection"
+  name: {{ include "tensorflow-serving.fullname" . }}-model-dir
   labels:
-    {{- include "tgi.labels" . | nindent 4 }}
-  annotations:
-    "helm.sh/hook": test
+    {{- include "tensorflow-serving.labels" . | nindent 4 }}
 spec:
-  containers:
-    - name: info
-      image: curlimages/curl
-      command: ['sh', '-c']
-      args: ['curl -f {{ include "tgi.fullname" . }}:{{ .Values.service.port }}/info']
-  restartPolicy: OnFailure
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.pvc.size }}
+{{- end }}
