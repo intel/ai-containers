@@ -1,0 +1,14 @@
+apiVersion: aitools.intel/v1
+kind: GaudiAIToolsContainer
+metadata:
+  name: intel-gaudi-1.17.0-495
+spec:
+  nameOverride: ""
+  fullnameOverride: ""
+  imagespec:
+    registry: registry.connect.redhat.com
+    repo: intel/gaudi-notebooks
+    tags:
+      - gaudi_software: "1.17.0-495"
+        rhel_os: "9.2"
+  namespace: redhat-ods-applications
