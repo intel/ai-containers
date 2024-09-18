@@ -13,17 +13,19 @@
 # limitations under the License.
 
 apiVersion: v1
-kind: Pod
+kind: Service
 metadata:
-  name: "{{ include "tgi.fullname" . }}-test-connection"
+  name: {{ include "tensorflow-serving.fullname" . }}
   labels:
-    {{- include "tgi.labels" . | nindent 4 }}
-  annotations:
-    "helm.sh/hook": test
+    {{- include "tensorflow-serving.labels" . | nindent 4 }}
 spec:
-  containers:
-    - name: info
-      image: curlimages/curl
-      command: ['sh', '-c']
-      args: ['curl -f {{ include "tgi.fullname" . }}:{{ .Values.service.port }}/info']
-  restartPolicy: OnFailure
+  type: {{ .Values.service.type }}
+  ports:
+    - name: rest
+      port: 8500
+      targetPort: rest
+    - name: grpc
+      port: 8501
+      targetPort: grpc
+  selector:
+    {{- include "tensorflow-serving.selectorLabels" . | nindent 4 }}
