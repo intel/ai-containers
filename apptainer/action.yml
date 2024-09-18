@@ -35,7 +35,7 @@ runs:
     - name: Build Apptainer
       shell: bash
       run: |
-        apptainer build "${{ inputs.group_dir }}.sif" apptainer.def
+        apptainer build --fakeroot "${{ inputs.group_dir }}.sif" apptainer.def
       working-directory: apptainer/${{ inputs.group_dir }}
     - name: Push Apptainer
       shell: bash
