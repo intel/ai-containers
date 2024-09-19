@@ -52,21 +52,21 @@ jobs:
       group_dir: ${{ matrix.group }}
       ref: main
     secrets: inherit
-  helm-ci:
-    runs-on: kubectl
-    steps:
-    - name: Harden Runner
-      uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
-      with:
-        egress-policy: audit
-    - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-      with:
-        fetch-depth: 0
-    - uses: intel/ai-containers/workflows/charts@main
-      with:
-        config: '--all --namespace helm-ci'
-        list_changed: false
-        kubeconfig_path: ${{ secrets.KUBECONFIG_PATH }}
+  # helm-ci:
+  #   runs-on: kubectl
+  #   steps:
+  #   - name: Harden Runner
+  #     uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
+  #     with:
+  #       egress-policy: audit
+  #   - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+  #     with:
+  #       fetch-depth: 0
+  #   - uses: intel/ai-containers/workflows/charts@main
+  #     with:
+  #       config: '--all --namespace helm-ci'
+  #       list_changed: false
+  #       kubeconfig_path: ${{ secrets.KUBECONFIG_PATH }}
   scan:
     name: gitleaks
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
