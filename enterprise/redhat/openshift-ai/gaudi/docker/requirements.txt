@@ -3,41 +3,41 @@ deepspeed @ git+https://github.com/HabanaAI/DeepSpeed.git@1.17.0
 
 # Datascience and useful extensions
 kafka-python~=2.0.2
-matplotlib~=3.8.3
-pandas~=2.2.0
-plotly~=5.20.0
+matplotlib~=3.9.2
+pandas~=2.2.3
+plotly~=5.24.1
 scikit-learn
-scipy~=1.12.0
-skl2onnx~=1.16.0
-codeflare-sdk~=0.18.0
+scipy~=1.14.1
+skl2onnx~=1.17.0
+codeflare-sdk~=0.20.2
 
 # DB connectors
-pymongo~=4.6.2
-psycopg~=3.1.18
+pymongo~=4.9.1
+psycopg~=3.2.2
 pyodbc~=5.1.0
-mysql-connector-python~=8.3.0
+mysql-connector-python~=9.0.0
 
 # JupyterLab packages
 odh-elyra~=3.16.7
-jupyterlab~=3.6.7 # Wait on upgrade till plugins are ready
-jupyter-bokeh~=3.0.7 # Upgrade would bring in jupyterlab 4
-jupyter-server~=2.14.1
-jupyter-server-proxy~=4.2.0 # Upgrade would bring in jupyterlab 4
+jupyterlab~=4.2.5 # Wait on upgrade till plugins are ready
+jupyter-bokeh~=4.0.5 # Upgrade would bring in jupyterlab 4
+jupyter-server~=2.14.2
+jupyter-server-proxy~=4.4.0 # Upgrade would bring in jupyterlab 4
 jupyter-server-terminals~=0.5.3
-jupyterlab-git~=0.44.0
-jupyterlab-lsp~=4.2.0
-jupyterlab-widgets~=3.0.10
-jupyter-resource-usage~=0.7.2
-nbdime~=3.2.1
-nbgitpuller~=1.2.0
+jupyterlab-git~=0.50.1
+jupyterlab-lsp~=5.1.0
+jupyterlab-widgets~=3.0.13
+jupyter-resource-usage~=1.1.0
+nbdime~=4.0.2
+nbgitpuller~=1.2.1
 
 # pycodestyle is dependency of below packages
 # and to achieve compatible of pycodestyle with python-lsp-server[all]
 # pinned the below packages
-autopep8~=2.0.4
-flake8~=7.0.0
+autopep8~=2.3.1
+flake8~=7.1.1
 # Base packages
-wheel~=0.43.0
+wheel~=0.44.0
 setuptools>=70.0.0
 pip>=23.3
-aiohttp==3.10.2
+aiohttp==3.10.5
