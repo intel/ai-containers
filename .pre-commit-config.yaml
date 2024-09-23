@@ -47,7 +47,7 @@ repos:
   - args: ["--config-file", ".github/linters/actionlint.yml"]
     id: actionlint
   repo: https://github.com/rhysd/actionlint
-  rev: v1.7.1
+  rev: v1.7.2
 - hooks:
   - id: helm-docs-container
   repo: https://github.com/norwoodj/helm-docs
