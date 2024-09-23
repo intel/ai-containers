@@ -5,9 +5,9 @@ evaluate==0.4.3
 onnxruntime-extensions==0.12.0
 onnxruntime==1.19.2
 peft==0.12.0
-protobuf==5.28.1
+protobuf==5.28.2
 py-cpuinfo==9.0.0
 scikit-learn==1.5.2
 SentencePiece==0.2.0
-tokenizers==0.19.1
+tokenizers==0.20.0
 transformers==4.44.2
