@@ -7,8 +7,8 @@ Transformable numerical computing at scale combined with [Intel® Extension for 
 The images below include [JAX\*] and [Intel® Extension for OpenXLA\*].
 
 | Tag(s)                     | [JAX\*]   | [Intel® Extension for OpenXLA\*] | [Flax]   | Dockerfile      |
-| -------------------------- | --------- | ----------------- | -------- | --------------- |
-| `0.4.0-pip-base`, `latest` | [v0.4.32] | [v0.4.0-jax]      | [v0.9.0] | [v0.4.0]        |
+| -------------------------- | --------- | -------------------------------- | -------- | --------------- |
+| `0.4.0-pip-base`, `latest` | [v0.4.32] | [v0.4.0-jax]                     | [v0.9.0] | [v0.4.0]        |
 
 The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
 
