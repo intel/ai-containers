@@ -25,7 +25,7 @@ echo ''
 
 echo 'Test if oneapi-sample was downloaded'
 if [[ $(curl --fail -s -X GET http://localhost:8888/api/contents | jq -r '.content[] | select(.name=="oneapi-sample.ipynb")') ]]; then
-    echo 'oneapi-sample.ipynb was downloaded'
+	echo 'oneapi-sample.ipynb was downloaded'
 else
-    echo 'oneapi-sample.ipynb was not downloaded'
+	echo 'oneapi-sample.ipynb was not downloaded'
 fi
