@@ -43,6 +43,10 @@
         {
             "fname": "./workflows/README.md",
             "repo-name": "intel/ai-workflows"
+        },
+        {
+            "fname": "./jax/README.md",
+            "repo-name": "intel/intel-optimized-xla"
         }
     ]
 }
