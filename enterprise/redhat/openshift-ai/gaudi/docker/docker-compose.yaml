@@ -27,7 +27,10 @@ services:
       context: .
       target: gaudi-base
       dockerfile: Dockerfile.rhel${RHEL_OS:-9.2}
-    image: gaudi-base:${RHEL_OS:-9.2}-${VERSION:-1.17.0}-${REVISION:-495}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-gaudi-base-${VERSION:-1.17.0}-${REVISION:-495}-rhel-${RHEL_OS:-9.2}
+    entrypoint: ["/bin/bash", "-c"]
+    command: >
+      "hl-smi"
   gaudi-pytorch:
     build:
       args:
@@ -44,7 +47,10 @@ services:
       context: .
       target: gaudi-pytorch
       dockerfile: Dockerfile.rhel${RHEL_OS:-9.2}
-    image: gaudi-pytorch:${RHEL_OS:-9.2}-${VERSION:-1.17.0}-${REVISION:-495}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-gaudi-pytorch-${VERSION:-1.17.0}-${REVISION:-495}-rhel-${RHEL_OS:-9.2}
+    entrypoint: ["/bin/bash", "-c"]
+    command: >
+      "python -c 'import torch'"
   gaudi-notebooks:
     build:
       args:
@@ -61,4 +67,7 @@ services:
       context: .
       target: gaudi-notebooks
       dockerfile: Dockerfile.rhel${RHEL_OS:-9.2}
-    image: gaudi-notebooks:${RHEL_OS:-9.2}-${VERSION:-1.17.0}-${REVISION:-495}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-gaudi-notebook-${VERSION:-1.17.0}-${REVISION:-495}-rhel-${RHEL_OS:-9.2}
+    entrypoint: ["/bin/bash", "-c"]
+    command: >
+      "python -m jupyter notebook --version"
