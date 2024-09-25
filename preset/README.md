@@ -18,7 +18,7 @@ AI Tools Selector Preset Containers provides data scientists and developers with
 2. Pull a Preset Container of your choice from the [AI Tools Selector](https://www.intel.com/content/www/us/en/developer/tools/oneapi/ai-tools-selector.html) or from the [table](#preset-containers). The commands below use the `deep-learning` preset as an example.
 
 ```bash
-docker pull intel/deep-learning:latest-py3.9
+docker pull intel/deep-learning:latest-py<version>
 ```
 
 ## Run Preset Container
@@ -40,9 +40,9 @@ This mode allows running the container in an interactive shell. This enables the
 
 ```bash
 docker run -it --rm \
-    --shm-size=12G \
+    -p 8888:8888 --shm-size=12G \
     -v ${PWD}:/home/dev/workdir \
-    intel/deep-learning:latest-py3.9 bash
+    intel/deep-learning:latest-py<version> bash
 ```
 
 > [!NOTE]
@@ -64,10 +64,10 @@ docker run -it --rm \
     ${RENDER_GROUP} \
     ${VIDEO_GROUP} \
     --device=/dev/dri \
-    --shm-size=12G \
+    -p 8888:8888 --shm-size=12G \
     -v ${PWD}:/home/dev/workdir \
     -v /dev/dri/by-path:/dev/dri/by-path \
-    intel/deep-learning:latest-py3.9 bash
+    intel/deep-learning:latest-py<version> bash
 ```
 
 > [!NOTE]
@@ -100,9 +100,9 @@ This mode launches a jupyterlab notebook server. The command below will start th
 
 ```bash
 docker run -it --rm \
-    --shm-size=12G \
+    -p 8888:8888 --shm-size=12G \
     -v ${PWD}:/home/dev/workdir \
-    intel/deep-learning:latest-py3.9
+    intel/deep-learning:latest-py<version>
 ```
 
 > [!NOTE]
@@ -124,10 +124,10 @@ docker run -it --rm \
     ${RENDER_GROUP} \
     ${VIDEO_GROUP} \
     --device=/dev/dri \
-    --shm-size=12G \
+    -p 8888:8888  --shm-size=12G \
     -v ${PWD}:/home/dev/workdir \
     -v /dev/dri/by-path:/dev/dri/by-path \
-    intel/deep-learning:latest-py3.9
+    intel/deep-learning:latest-py<version>
 ```
 
 > [!NOTE]
@@ -146,7 +146,7 @@ docker run -it --rm \
 Modify your notebook server command by using the default example below to change the network (port/ip) and security (privilege) settings by appending it to the docker run commands above:
 
 ```bash
-docker run ... intel/deep-learning:latest-py3.9 \
+docker run ... intel/deep-learning:latest-py<version> \
     bash -c "jupyter notebook --notebook-dir=~/jupyter \
             --port 8888 \
             --ip 0.0.0.0 \
