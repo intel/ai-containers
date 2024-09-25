@@ -17,7 +17,7 @@ test-jupyter-server:
   cmd: bash /opt/app-root/notebook-test.sh
   serving: True
   volumes:
-  - src: $PWD/enterprise/redhat/openshift-ai/gaudi/tests/notebook-test.sh
+  - src: $PWD/enterprise/redhat/openshift-ai/gaudi/docker/tests/notebook-test.sh
     dst: /opt/app-root/notebook-test.sh
   env:
     NOTEBOOK_ARGS: "--ServerApp.token='' --ServerApp.PasswordIdentityProvider.hashed_password=''"

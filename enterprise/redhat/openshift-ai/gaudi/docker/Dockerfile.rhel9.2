@@ -231,6 +231,6 @@ RUN cd ${APP_ROOT}/ && \
     VLLM_TARGET_DEVICE=hpu pip install -e .
 
 WORKDIR ${APP_ROOT}/src
-ENV NOTEBOOK_SAMPLES_LINK="https://raw.githubusercontent.com/sharvil10/ai-containers/main/enterprise/redhat/openshift-ai/gaudi/demo/Getting-started.ipynb"
+ENV NOTEBOOK_SAMPLES_LINK="https://raw.githubusercontent.com/intel/ai-containers/refs/heads/main/enterprise/redhat/openshift-ai/gaudi/demo/oneapi-sample.ipynb"
 
 ENTRYPOINT ["bash", "-c", "/opt/app-root/builder/run"]
