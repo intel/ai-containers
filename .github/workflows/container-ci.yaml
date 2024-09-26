@@ -63,7 +63,7 @@ jobs:
   setup-build:
     outputs:
       matrix: ${{ steps.build-matrix.outputs.matrix }}
-    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
@@ -112,7 +112,7 @@ jobs:
   setup-scan:
     needs: [build-containers]
     if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.scan-matrix.outputs.matrix }}
     steps:
@@ -165,7 +165,7 @@ jobs:
       ####################################################################################################
   setup-test:
     needs: [build-containers]
-    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.test-matrix.outputs.matrix }}
     steps:
