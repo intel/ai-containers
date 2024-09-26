@@ -15,56 +15,56 @@
 ---
 inference-optimization-inc-ipex-quantization-notebook-${PYTHON_VERSION:-3.9}-cpu:
   cmd: papermill --log-output jupyter/inc-ipex-quantization/quantize_with_inc.ipynb result.ipynb -k pytorch-cpu --cwd jupyter/inc-ipex-quantization
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   notebook: True
 inference-optimization-inc-ipex-quantization-notebook-${PYTHON_VERSION:-3.9}-gpu:
   cmd: papermill --log-output jupyter/inc-ipex-quantization/quantize_with_inc.ipynb result.ipynb -k pytorch-gpu --cwd jupyter/inc-ipex-quantization
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   notebook: True
   device: ["/dev/dri"]
 
 inference-optimization-inc-itex-notebook-${PYTHON_VERSION:-3.9}-cpu:
   cmd: papermill --log-output jupyter/inc-itex/inc_sample_tensorflow.ipynb result.ipynb -k tensorflow-cpu --cwd jupyter/inc-itex
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   notebook: True
 
 # Status: Commented due to out of resources error
 # inference-optimization-inc-itex-notebook-${PYTHON_VERSION:-3.9}-gpu:
 #   cmd: papermill --log-output jupyter/inc-itex/inc_sample_tensorflow.ipynb result.ipynb -k tensorflow-gpu --cwd jupyter/inc-itex
-#   img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+#   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
 #   notebook: True
 
 inference-optimization-inc-tensorflow-${PYTHON_VERSION:-3.9}-cpu:
   cmd: conda run -n tensorflow-cpu sample-tests/neural_compressor/tensorflow/run.sh cpu
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
 inference-optimization-inc-tensorflow-${PYTHON_VERSION:-3.9}-gpu:
   cmd: conda run -n tensorflow-gpu sample-tests/neural_compressor/tensorflow/run.sh gpu
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   device: ["/dev/dri"]
 
 inference-optimization-inc-torch-${PYTHON_VERSION:-3.9}-cpu:
   cmd: conda run -n pytorch-cpu sample-tests/neural_compressor/torch/run.sh cpu
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
 
 inference-optimization-ipex-${PYTHON_VERSION:-3.9}-cpu:
   cmd: conda run -n pytorch-cpu python -W ignore sample-tests/intel_extension_for_pytorch/test_ipex.py --device cpu --ipex
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
 inference-optimization-ipex-${PYTHON_VERSION:-3.9}-gpu:
   cmd: conda run -n pytorch-gpu python -W ignore sample-tests/intel_extension_for_pytorch/test_ipex.py --device xpu --ipex
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   device: ["/dev/dri"]
 
 inference-optimization-itex-${PYTHON_VERSION:-3.9}-cpu:
   cmd: conda run -n tensorflow-cpu python -W ignore sample-tests/intel_extension_for_tensorflow/test_itex.py
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
 inference-optimization-itex-${PYTHON_VERSION:-3.9}-gpu:
   cmd: conda run -n tensorflow-gpu python -W ignore sample-tests/intel_extension_for_tensorflow/test_itex.py
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   device: ["/dev/dri"]
 
 inference-optimization-itex-inference-notebook-${PYTHON_VERSION:-3.9}-cpu:
   cmd: papermill --log-output jupyter/itex-inference/tutorial_optimize_TensorFlow_pretrained_model.ipynb result.ipynb -k tensorflow-cpu --cwd jupyter/itex-inference
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   notebook: True
 
 # Need update from TensorFlow v1 to V2
@@ -75,24 +75,24 @@ inference-optimization-itex-inference-notebook-${PYTHON_VERSION:-3.9}-cpu:
 
 inference-optimization-onnx-${PYTHON_VERSION:-3.9}-cpu:
   cmd: conda run -n tensorflow-cpu sample-tests/onnx/run.sh
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
 inference-optimization-onnx-${PYTHON_VERSION:-3.9}-gpu:
   cmd: conda run -n tensorflow-gpu sample-tests/onnx/run.sh
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   device: ["/dev/dri"]
 
 inference-optimization-tensorflow-dataset-librarian-${PYTHON_VERSION:-3.9}-cpu:
   cmd: conda run -n tensorflow-cpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
 inference-optimization-tensorflow-dataset-librarian-${PYTHON_VERSION:-3.9}-gpu:
   cmd: conda run -n tensorflow-gpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   device: ["/dev/dri"]
 
 inference-optimization-torch-dataset-librarian-${PYTHON_VERSION:-3.9}-cpu:
   cmd: conda run -n pytorch-cpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
 inference-optimization-torch-dataset-librarian-${PYTHON_VERSION:-3.9}-gpu:
   cmd: conda run -n pytorch-gpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   device: ["/dev/dri"]
