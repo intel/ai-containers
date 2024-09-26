@@ -26,10 +26,14 @@ permissions: read-all
 
 jobs:
   group-diff:
-    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     outputs:
       groups: ${{ steps.group-list.outputs.FOLDERS }}
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
+        with:
+          egress-policy: audit
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           fetch-depth: 0
@@ -59,7 +63,7 @@ jobs:
           DOCKER_COMPOSE_PATHS_JSON=$(printf '%s\n' "${DOCKER_COMPOSE_PATHS[@]}" | jq -R '.' | jq -sc 'unique_by(.)')
           echo "FOLDERS=$DOCKER_COMPOSE_PATHS_JSON" >> $GITHUB_OUTPUT
 
-  setup-build:
+  build:
     needs: [group-diff]
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     if: needs.group-diff.outputs.groups != '[""]'
@@ -69,6 +73,10 @@ jobs:
         experimental: [true]
       fail-fast: false
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
+        with:
+          egress-policy: audit
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       - uses: eWaterCycle/setup-apptainer@4bb22c52d4f63406c49e94c804632975787312b3 # v2.0.0
         with:

@@ -19,7 +19,7 @@ on:
 permissions: read-all
 jobs:
   setup-matrix:
-    runs-on: intel-ubuntu-latest
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
