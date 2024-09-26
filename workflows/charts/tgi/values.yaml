@@ -17,7 +17,8 @@ nameOverride: ""
 # -- Full qualified Domain Name
 fullnameOverride: ""
 deploy:
-  # -- ConfigMap of Environment Variables
+  # -- ConfigMap of Environment Variables  HF_HUB_DISABLE_PROGRESS_BARS: "1"
+  HF_HUB_ENABLE_HF_TRANSFER: "0"
   configMap:
     enabled: true
     name: tgi-config

@@ -9,11 +9,80 @@ For more information about how to use Huggingface text-generation-inference with
 
 ![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
+## Serving with TGI on Intel XPU
+
+This chart is configured to work with Intel Flex and Max cards by default. Before deploying this chart, configure the model server with information like, what model to use and how many max tokens to use.
+
+```yaml
+# cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tgi-config
+data:
+  HABANA_LOGS: "/data/habana_logs"
+  NUMBA_CACHE_DIR: "/data"
+  HF_HOME: "/data/.cache/huggingface"
+  MAX_INPUT_LENGTH: "4096"
+  MAX_TOTAL_TOKENS: "8192"
+  MODEL_ID: "meta-llama/Meta-Llama-3-8B-Instruct"
+  HF_HUB_DISABLE_PROGRESS_BARS: "1"
+  HF_HUB_ENABLE_HF_TRANSFER: "0"
+```
+
+```bash
+kubectl apply -f cm.yaml
+helm install llama3 tgi/
+```
+
+## Serving with TEI on Intel XPU
+
+```yaml
+# cm.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tei-config
+data:
+  HABANA_LOGS: "/data/habana_logs"
+  NUMBA_CACHE_DIR: "/data"
+  HF_HOME: "/data/.cache/huggingface"
+  MAX_INPUT_LENGTH: "4096"
+  MAX_TOTAL_TOKENS: "8192"
+  MODEL_ID: "thenlper/gte-base"
+  HF_HUB_DISABLE_PROGRESS_BARS: "1"
+  HF_HUB_ENABLE_HF_TRANSFER: "0"
+```
+
+```bash
+kubectl apply -f cm.yaml
+helm install gte-tei \
+    --set deploy.configMap=tei-config \
+    --set deploy.image
+    tgi/
+```
+
+## Serving with TGI/TEI on Gaudi2
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gaudi-config
+data:
+  HABANA_VISIBLE_DEVICES: "all"
+  OMPI_MCA_btl_vader_single_copy_mechanism: "none"
+  PT_HPU_ENABLE_LAZY_COLLECTIVES: "true"
+  ...
+```
+
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| deploy.configMap | object | `{"enabled":true,"name":"tgi-config"}` | ConfigMap of Environment Variables |
+| deploy.HF_HUB_ENABLE_HF_TRANSFER | string | `"0"` | ConfigMap of Environment Variables  HF_HUB_DISABLE_PROGRESS_BARS: "1" |
+| deploy.configMap.enabled | bool | `true` |  |
+| deploy.configMap.name | string | `"tgi-config"` |  |
 | deploy.image | string | `"ghcr.io/huggingface/text-generation-inference:latest-intel"` | Intel TGI Image |
 | deploy.replicaCount | int | `1` | Number of pods |
 | deploy.resources | object | `{"limits":{"cpu":"4000m","gpu.intel.com/i915":1},"requests":{"cpu":"1000m","memory":"1Gi"}}` | Resource configuration |
