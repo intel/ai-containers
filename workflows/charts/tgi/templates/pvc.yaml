@@ -12,12 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-{{- $name := .Values.secret.encodedToken | required ".Values.secret.encodedToken is required in Base64 Format." -}}
----
 apiVersion: v1
-kind: Secret
+kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Release.Name }}-hf-token
-type: Opaque
-data:
-  HF_TOKEN: {{ .Values.secret.encodedToken }}
+  name: {{ include "tgi.fullname" . }}-cache
+  labels:
+    {{- include "tgi.labels" . | nindent 4 }}
+spec:
+  {{- if .Values.pvc.storageClassName }}
+  storageClassName: {{ .Values.pvc.storageClassName }}
+  {{- end }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.pvc.size }}
