@@ -18,13 +18,11 @@ nameOverride: ""
 fullnameOverride: ""
 deploy:
   # -- ConfigMap of Environment Variables
-  configMapName: intel-proxy-config
+  configMap:
+    enabled: true
+    name: tgi-config
   # -- Intel TGI Image
   image: ghcr.io/huggingface/text-generation-inference:latest-intel
-  # -- Model to be loaded
-  model: HuggingFaceTB/SmolLM-135M
-  # -- Enable Quantization (ex: bitsandbytes-nf4)
-  quantize: ""
   # -- Number of pods
   replicaCount: 1
   # -- Resource configuration
@@ -39,6 +37,8 @@ deploy:
     requests:
       cpu: 1000m
       memory: "1Gi"
+# -- Security Context Configuration
+securityContext: {}
 secret:
   # -- Base64 Encoded Huggingface Hub API Token
   encodedToken: ""
@@ -62,3 +62,6 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+pvc:
+  storageClassName: nil
+  size: 15Gi

@@ -28,54 +28,62 @@ spec:
       labels:
         {{- include "tgi.selectorLabels" . | nindent 8 }}
     spec:
-      securityContext:
-        fsGroup: 1000
-        runAsUser: 1000
+      hostIPC: true
       containers:
         - name: {{ .Chart.Name }}
           args:
-            - '--model-id'
-            - {{ .Values.deploy.model | quote }}
-            {{- if index .Values.deploy.resources.limits "gpu.intel.com/i915" }}
-            - '--num-shard'
-            - {{ index .Values.deploy.resources.limits "gpu.intel.com/i915" | quote }}
-            {{- end }}
             - '-p'
             - {{ .Values.service.port | quote }}
-            {{- if .Values.quantize }}
-            - '--quantize'
-            - {{ .Values.deploy.quantize | quote }}
-            {{- end }}
             - '--cuda-graphs=0'
           envFrom:
+            {{- if eq .Values.deploy.configMap.enabled true }}
             - configMapRef:
-                name: {{ .Values.deploy.configMapName }}
+                name: {{ .Values.deploy.configMap.name }}
+            {{- end }}
             - secretRef:
                 name: {{ .Release.Name }}-hf-token
-          env:
-            - name: NUMBA_CACHE_DIR # https://github.com/huggingface/text-generation-inference/pull/2443
-              value: /data/numba_cache
+          # env:
+          #   - name: NUMBA_CACHE_DIR # https://github.com/huggingface/text-generation-inference/pull/2443
+          #     value: /data/numba_cache
           image: {{ .Values.deploy.image }}
           livenessProbe:
-            httpGet:
-              path: /health
-              port: {{ .Values.service.port }}
+            failureThreshold: 10
             initialDelaySeconds: 5
             periodSeconds: 5
+            tcpSocket:
+              port: http
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            tcpSocket:
+              port: http
+          startupProbe:
+            failureThreshold: 120
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            tcpSocket:
+              port: http
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           resources:
             {{- toYaml .Values.deploy.resources | nindent 12 }}
+          securityContext:
+            {{ toYaml .Values.securityContext | nindent 12 }}
           volumeMounts:
             - mountPath: /dev/shm
               name: dshm
             - mountPath: /data
               name: hf-data
+            - mountPath: /tmp
+              name: tmp
       volumes:
         - name: dshm
           emptyDir:
             medium: Memory
         - name: hf-data
+          persistentVolumeClaim:
+            claimName: {{ include "tgi.fullname" . }}-cache
+        - name: tmp
           emptyDir: {}
