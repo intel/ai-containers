@@ -89,11 +89,16 @@ jobs:
     - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
       if: ${{ !inputs.no_build }}
-    - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+    - uses: azure/docker-login@15c4aadf093404726ab2ff205b2cdd33fa6d054c # v2
       with:
-        registry: ${{ secrets.REGISTRY }}
+        login-server: ${{ secrets.REGISTRY }}
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
+    # - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+    #   with:
+    #     registry: ${{ secrets.REGISTRY }}
+    #     username: ${{ secrets.REGISTRY_USER }}
+    #     password: ${{ secrets.REGISTRY_TOKEN }}
       if: ${{ !inputs.no_build }}
     - name: Build Container Group
       if: ${{ !inputs.no_build }}
@@ -140,11 +145,16 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-    - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+    - uses: azure/docker-login@15c4aadf093404726ab2ff205b2cdd33fa6d054c # v2
       with:
-        registry: ${{ secrets.REGISTRY }}
+        login-server: ${{ secrets.REGISTRY }}
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
+    # - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+    #   with:
+    #     registry: ${{ secrets.REGISTRY }}
+    #     username: ${{ secrets.REGISTRY_USER }}
+    #     password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Pull Image
       run: docker pull ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
     - name: Scan Container
@@ -191,11 +201,16 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
-    - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+    - uses: azure/docker-login@15c4aadf093404726ab2ff205b2cdd33fa6d054c # v2
       with:
-        registry: ${{ secrets.REGISTRY }}
+        login-server: ${{ secrets.REGISTRY }}
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
+    # - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+    #   with:
+    #     registry: ${{ secrets.REGISTRY }}
+    #     username: ${{ secrets.REGISTRY_USER }}
+    #     password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Test Container Group
       uses: intel/ai-containers/test-runner@main
       with:
