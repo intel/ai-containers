@@ -87,7 +87,8 @@ docker run -it --rm \
     python sample-tests/intel_extension_for_tensorflow/test_itex.py
     ```
 
-    Note: The `sample-tests` folder may differ in each container, and some tests use a bash script.
+> [!NOTE]
+> The `sample-tests` folder may differ in each container, and some tests use a bash script.
 
 ### Run using Jupyter Notebook
 
