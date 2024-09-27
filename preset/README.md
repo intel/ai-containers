@@ -75,7 +75,7 @@ docker run -it --rm \
 
 #### Next Steps
 
-1. For Deep Learning and Inference Optimization containers there will be separate conda environments for each AI framework: `pytorch-cpu`, `pytorch-gpu` and `tensorflow`. Use the command below to activate one environment:
+1. For Deep Learning and Inference Optimization containers there will be separate conda environments for each AI framework: `pytorch-cpu`, `pytorch-gpu`, `tensorflow-cpu` and `tensorflow-gpu`. Use the command below to activate one environment:
 
     ```bash
     conda activate <env-name>
@@ -84,10 +84,11 @@ docker run -it --rm \
 2. Select a test from the `sample-tests` folder and run it using the following command as an example:
 
     ```bash
-    bash sample-tests/onnx/run.sh
-    # or if no bash script is found
     python sample-tests/intel_extension_for_tensorflow/test_itex.py
     ```
+
+> [!NOTE]
+> The `sample-tests` folder may differ in each container, and some tests use a bash script.
 
 ### Run using Jupyter Notebook
 
