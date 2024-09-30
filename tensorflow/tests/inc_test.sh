@@ -17,14 +17,14 @@
 # Prepare dataset
 git clone https://github.com/intel/neural-compressor.git
 cd neural-compressor/examples/tensorflow/nlp/bert_large_squad/quantization/ptq || exit
-bash prepare_dataset.sh --output_dir=./data
+bash prepare_dataset.sh --output_dir=./data >/dev/null 2>&1
 
 # Preprocess the dataset
-python create_tf_record.py --vocab_file=./data/vocab.txt --predict_file=./data/dev-v1.1.json --output_file=./data/eval.tf_record
+python create_tf_record.py --vocab_file=./data/vocab.txt --predict_file=./data/dev-v1.1.json --output_file=./data/eval.tf_record >/dev/null 2>&1
 
 # Download model
-bash prepare_model.sh --output_dir=./model
-python freeze_estimator_to_pb.py --input_model=./model --output_model=./bert_fp32.pb
+bash prepare_model.sh --output_dir=./model >/dev/null 2>&1
+python freeze_estimator_to_pb.py --input_model=./model --output_model=./bert_fp32.pb >/dev/null 2>&1
 
 #Run quantization using INC
 bash run_quant.sh --input_model=./bert_fp32.pb --output_model=./bert_int8.pb --dataset_location=./data
