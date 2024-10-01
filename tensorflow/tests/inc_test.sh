@@ -15,17 +15,23 @@
 # limitations under the License.
 
 # Prepare dataset
+rm -rf neural-compressor || true
 git clone https://github.com/intel/neural-compressor.git
-cd neural-compressor/examples/tensorflow/nlp/bert_large_squad/quantization/ptq || exit
+cd neural-compressor/examples/tensorflow/nlp/bert_large_squad/quantization/ptq || exit 1
 
-echo "Preparing the model"
-bash prepare_model.sh --output_dir=./model 2>&1
 echo "Preparing the dataset"
-bash prepare_dataset.sh --output_dir=./data 2>&1
+bash prepare_dataset.sh --output_dir="$PWD"/data
+
 # Preprocess the dataset
 echo "Preprocessing the dataset"
 python create_tf_record.py --vocab_file=data/vocab.txt --predict_file=data/dev-v1.1.json --output_file=./eval.tf_record
 
+echo "Preparing the model"
+bash prepare_model.sh --output_dir="$PWD"/model
+
 # Run quantization using INC
 echo "Running quantization"
 bash run_quant.sh --input_model=./bert_fp32.pb --output_model=./bert_int8.pb --dataset_location=./eval.tf_record
+
+cd - || exit 1
+rm -rf neural-compressor || true
