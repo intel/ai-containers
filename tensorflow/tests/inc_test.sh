@@ -24,7 +24,7 @@ python create_tf_record.py --vocab_file=./data/vocab.txt --predict_file=./data/d
 
 # Download model
 bash prepare_model.sh --output_dir=./model >/dev/null 2>&1
-python freeze_estimator_to_pb.py --input_model=./model --output_model=./bert_fp32.pb >/dev/null 2>&1
+python freeze_estimator_to_pb.py --input_model=./model --output_model=./bert_fp32.pb
 
 #Run quantization using INC
 bash run_quant.sh --input_model=./bert_fp32.pb --output_model=./bert_int8.pb --dataset_location=./data
