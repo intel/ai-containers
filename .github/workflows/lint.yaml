@@ -42,6 +42,14 @@ jobs:
     - uses: super-linter/super-linter/slim@b92721f792f381cedc002ecdbb9847a15ece5bb8 # v7.1.0
       env:
         # To report GitHub Actions status checks
+        FIX_HTML_PRETTIER: false
+        FIX_JSON: true
+        FIX_MARKDOWN_PRETTIER: false
+        FIX_PYTHON_BLACK: true
+        FIX_PYTHON_PINK: false
+        FIX_PYTHON_RUST: false
+        FIX_SHELL_SHFMT: true
+        FIX_YAML_PRETTIER: true
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_ACTIONS_COMMAND_ARGS: '-ignore SC.*'
         VALIDATE_BASH_EXEC: false
