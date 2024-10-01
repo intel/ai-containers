@@ -56,7 +56,7 @@ jobs:
       if: >
         github.event_name == 'pull_request' &&
         github.ref_name != github.event.repository.default_branch
-      uses: stefanzweifel/git-auto-commit-action@v8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
+      uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
       with:
         branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
         commit_message: "chore: fix linting issues"
