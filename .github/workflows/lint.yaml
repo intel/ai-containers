@@ -26,8 +26,8 @@ jobs:
     name: Lint
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     permissions:
-      contents: read
-      # statuses: write
+      contents: write
+      statuses: write
     steps:
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
@@ -52,3 +52,13 @@ jobs:
         VALIDATE_PYTHON_FLAKE8: false
         VALIDATE_PYTHON_MYPY: false
         VALIDATE_PYTHON_RUFF: false
+    - name: Commit and push linting fixes
+      if: >
+        github.event_name == 'pull_request' &&
+        github.ref_name != github.event.repository.default_branch
+      uses: stefanzweifel/git-auto-commit-action@v8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
+      with:
+        branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
+        commit_message: "chore: fix linting issues"
+        commit_user_name: super-linter
+        commit_user_email: super-linter@super-linter.dev
