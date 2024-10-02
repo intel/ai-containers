@@ -73,14 +73,7 @@ jobs:
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
       with:
-        egress-policy: block
-        allowed-endpoints: >
-          api.github.com:443
-          coveralls.io:443
-          files.pythonhosted.org:443
-          github.com:443
-          objects.githubusercontent.com:443
-          pypi.org:443
+        egress-policy: audit
     - uses: coverallsapp/github-action@643bc377ffa44ace6394b2b5d0d3950076de9f63 # v2.3.0
       with:
         parallel-finished: true
