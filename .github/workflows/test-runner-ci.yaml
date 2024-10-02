@@ -40,11 +40,16 @@ jobs:
     - uses: docker/setup-buildx-action@988b5a0280414f521da01fcc63a27aeeb4b104db # v3.6.1
       with:
         driver: docker
-    - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+    - uses: azure/docker-login@15c4aadf093404726ab2ff205b2cdd33fa6d054c # v2
       with:
-        registry: ${{ secrets.REGISTRY }}
+        login-server: ${{ secrets.REGISTRY }}
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
+    # - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+    #   with:
+    #     registry: ${{ secrets.REGISTRY }}
+    #     username: ${{ secrets.REGISTRY_USER }}
+    #     password: ${{ secrets.REGISTRY_TOKEN }}
     - uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5.2.0
       with:
         python-version: ${{ matrix.python }}
@@ -90,11 +95,16 @@ jobs:
     - uses: docker/setup-buildx-action@988b5a0280414f521da01fcc63a27aeeb4b104db # v3.6.1
       with:
         driver: docker
-    - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+    - uses: azure/docker-login@15c4aadf093404726ab2ff205b2cdd33fa6d054c # v2
       with:
-        registry: ${{ secrets.REGISTRY }}
+        login-server: ${{ secrets.REGISTRY }}
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_TOKEN }}
+    # - uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+    #   with:
+    #     registry: ${{ secrets.REGISTRY }}
+    #     username: ${{ secrets.REGISTRY_USER }}
+    #     password: ${{ secrets.REGISTRY_TOKEN }}
     - uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5.2.0
       with:
         python-version: "3.8"
