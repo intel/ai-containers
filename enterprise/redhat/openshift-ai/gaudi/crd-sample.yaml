@@ -15,7 +15,9 @@
 apiVersion: aitools.intel/v1
 kind: GaudiAIToolsContainer
 metadata:
-  name: intel-gaudi-1.17.1-40
+  labels:
+    gaudi-software-version: '1.17.1-40'
+  name: intel-gaudi
 spec:
   nameOverride: ""
   fullnameOverride: ""
