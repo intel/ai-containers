@@ -74,6 +74,7 @@ jobs:
   merge-logs:
     # download all artifacts across containers
     needs: [pipeline-ci]
+    if: success() || failure()
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
