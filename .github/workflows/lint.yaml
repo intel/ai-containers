@@ -50,18 +50,23 @@ jobs:
         FIX_PYTHON_RUST: false
         FIX_SHELL_SHFMT: true
         FIX_YAML_PRETTIER: true
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_ACTIONS_COMMAND_ARGS: '-ignore SC.*'
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         VALIDATE_BASH_EXEC: false
         VALIDATE_CHECKOV: false
+        VALIDATE_HTML_PRETTIER: false
         VALIDATE_HTML: false
+        VALIDATE_JSON_PRETTIER: false
         VALIDATE_KUBERNETES_KUBECONFORM: false
+        VALIDATE_MARKDOWN_PRETTIER: false
         VALIDATE_NATURAL_LANGUAGE: false
         VALIDATE_PYTHON_FLAKE8: false
         VALIDATE_PYTHON_MYPY: false
+        VALIDATE_PYTHON_PYINK: false
         VALIDATE_PYTHON_RUFF: false
     - name: Commit and push linting fixes
       if: >
+        always() &&
         github.event_name == 'pull_request' &&
         github.ref_name != github.event.repository.default_branch
       uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
