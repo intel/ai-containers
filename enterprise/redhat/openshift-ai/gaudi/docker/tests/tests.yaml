@@ -13,7 +13,7 @@
 # limitations under the License.
 
 test-jupyter-server:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-gaudi-base-${VERSION:-1.17.0}-${REVISION:-495}-rhel-${RHEL_OS:-9.2}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-gaudi-base-${VERSION:-1.17.1}-${REVISION:-40}-rhel-${RHEL_OS:-9.2}
   cmd: bash /opt/app-root/notebook-test.sh
   serving: True
   volumes:

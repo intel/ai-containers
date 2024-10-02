@@ -22,12 +22,12 @@ services:
         https_proxy: ${https_proxy}
         no_proxy: ""
         ARTIFACTORY_URL: ${ARTIFACTORY_URL:-vault.habana.ai}
-        VERSION: ${VERSION:-1.17.0}
-        REVISION: ${REVISION:-495}
+        VERSION: ${VERSION:-1.17.1}
+        REVISION: ${REVISION:-40}
       context: .
       target: gaudi-base
       dockerfile: Dockerfile.rhel${RHEL_OS:-9.2}
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-gaudi-base-${VERSION:-1.17.0}-${REVISION:-495}-rhel-${RHEL_OS:-9.2}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-gaudi-base-${VERSION:-1.17.1}-${REVISION:-40}-rhel-${RHEL_OS:-9.2}
     entrypoint: ["/bin/bash", "-c"]
     command: >
       "hl-smi"
@@ -42,12 +42,12 @@ services:
         https_proxy: ${https_proxy}
         no_proxy: ""
         ARTIFACTORY_URL: ${ARTIFACTORY_URL:-vault.habana.ai}
-        VERSION: ${VERSION:-1.17.0}
-        REVISION: ${REVISION:-495}
+        VERSION: ${VERSION:-1.17.1}
+        REVISION: ${REVISION:-40}
       context: .
       target: gaudi-pytorch
       dockerfile: Dockerfile.rhel${RHEL_OS:-9.2}
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-gaudi-pytorch-${VERSION:-1.17.0}-${REVISION:-495}-rhel-${RHEL_OS:-9.2}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-gaudi-pytorch-${VERSION:-1.17.1}-${REVISION:-40}-rhel-${RHEL_OS:-9.2}
     entrypoint: ["/bin/bash", "-c"]
     command: >
       "python -c 'import torch'"
@@ -62,12 +62,12 @@ services:
         https_proxy: ${https_proxy}
         no_proxy: ""
         ARTIFACTORY_URL: ${ARTIFACTORY_URL:-vault.habana.ai}
-        VERSION: ${VERSION:-1.17.0}
-        REVISION: ${REVISION:-495}
+        VERSION: ${VERSION:-1.17.1}
+        REVISION: ${REVISION:-40}
       context: .
       target: gaudi-notebooks
       dockerfile: Dockerfile.rhel${RHEL_OS:-9.2}
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-gaudi-notebook-${VERSION:-1.17.0}-${REVISION:-495}-rhel-${RHEL_OS:-9.2}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-gaudi-notebook-${VERSION:-1.17.1}-${REVISION:-40}-rhel-${RHEL_OS:-9.2}
     entrypoint: ["/bin/bash", "-c"]
     command: >
       "python -m jupyter notebook --version"
