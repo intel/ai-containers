@@ -15,20 +15,23 @@
 # limitations under the License.
 
 # Prepare dataset
+rm -rf neural-compressor || true
 git clone https://github.com/intel/neural-compressor.git
-cd neural-compressor/examples/tensorflow/nlp/bert_large_squad/quantization/ptq || exit
-bash prepare_dataset.sh --output_dir=./data
+cd neural-compressor/examples/tensorflow/nlp/bert_large_squad/quantization/ptq || exit 1
+
+echo "Preparing the dataset"
+bash prepare_dataset.sh --output_dir="$PWD"/data
 
 # Preprocess the dataset
-python create_tf_record.py --vocab_file=./data/vocab.txt --predict_file=./data/dev-v1.1.json --output_file=./data/eval.tf_record
+echo "Preprocessing the dataset"
+python create_tf_record.py --vocab_file=data/vocab.txt --predict_file=data/dev-v1.1.json --output_file=./eval.tf_record
 
-# Download model
-bash prepare_model.sh --output_dir=./model
-python freeze_estimator_to_pb.py --input_model=./model --output_model=./bert_fp32.pb
+echo "Preparing the model"
+bash prepare_model.sh --output_dir="$PWD"/model
 
-#Run quantization using INC
-bash run_quant.sh --input_model=./bert_fp32.pb --output_model=./bert_int8.pb --dataset_location=./data
+# Run quantization using INC
+echo "Running quantization"
+bash run_quant.sh --input_model=./bert_fp32.pb --output_model=./bert_int8.pb --dataset_location=./eval.tf_record
 
-#Run tests on quantized model
-# bash run_benchmark.sh --input_model=./bert_squad_int8.pb --mode=performance --dataset_location=./data --batch_size=64
-# bash run_benchmark.sh --input_model=./bert_int8.pb --mode=accuracy --dataset_location=./data --batch_size=64
+cd - || exit 1
+rm -rf neural-compressor || true
