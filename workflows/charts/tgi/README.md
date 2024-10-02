@@ -21,7 +21,9 @@ For more information about how to use Huggingface text-generation-inference with
 | fullnameOverride | string | `""` | Full qualified Domain Name |
 | ingress | object | `{"annotations":{},"className":"","enabled":false,"hosts":[{"host":"chart-example.local","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}],"tls":[]}` | Ingress configuration |
 | nameOverride | string | `""` | Name of the serving service |
-| pvc | object | `{"create":true,"name":"model-server-cache","size":"15Gi","storageClassName":"nil"}` | Choose to either use an existing PVC or create a new one |
+| pvc | object | `{"create":true,"name":"model-server-cache","size":"15Gi","storageClassName":"nil"}` | Configure Storage Volume |
+| pvc.create | bool | `true` | Create a new PVC |
+| pvc.name | string | `"model-server-cache"` | Specify the name of either an existing or new PVC |
 | secret.encodedToken | string | `""` | Base64 Encoded Huggingface Hub API Token |
 | securityContext | object | `{}` | Security Context Configuration |
 | service | object | `{"port":80,"type":"NodePort"}` | Service configuration |

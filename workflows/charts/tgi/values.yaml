@@ -62,9 +62,11 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
-# -- Choose to either use an existing PVC or create a new one
+# -- Configure Storage Volume
 pvc:
+  # -- Specify the name of either an existing or new PVC
   name: model-server-cache
+  # -- Create a new PVC
   create: true
   storageClassName: nil
   size: 15Gi
