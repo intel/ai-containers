@@ -89,7 +89,7 @@ services:
       \"\\nOneCCL:\", oneccl.__version__,
       \"\\nDeepspeed:\", deepspeed.__version__)'"
     extends: ipex-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0.2}
     shm_size: 2gb
   xpu:
     build:

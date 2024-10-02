@@ -28,7 +28,7 @@ jobs:
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     permissions:
       contents: read
-      # id-token: write
+      id-token: write
       pages: write
     steps:
     - name: Harden Runner

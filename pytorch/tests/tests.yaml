@@ -27,16 +27,16 @@ import-xpu-jupyter-${PACKAGE_OPTION:-pip}:
   cmd: python -m jupyter --version
   device: ["/dev/dri"]
 import-cpu-oneccl-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0.2}
   cmd: python -c "'import oneccl_bindings_for_pytorch as oneccl;print(oneccl.__version__)'"
 import-cpu-transformers-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-hf-${HF_VERSION:-4.44.0}
   cmd: python -c "import transformers;print(f'transformers {transformers.__version__}');assert transformers.utils.import_utils.is_ipex_available()"
 import-cpu-inc-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0.2}
   cmd: python -c "'import neural_compressor as inc;print(inc.__version__)'"
 import-cpu-deepspeed-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0.2}
   cmd: ds_report
   shm_size: 2gb
 ipex-cpu-${PACKAGE_OPTION:-pip}:
@@ -58,21 +58,21 @@ ipex-xpu-jupyter-${PACKAGE_OPTION:-pip}:
   device: ["/dev/dri"]
   notebook: True
 oneccl-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0.2}
   cmd: ipexrun cpu /tests/ipex-resnet50.py --ipex --device cpu --backend ccl
   privileged: true
   volumes:
   - dst: /tests
     src: $PWD/pytorch/tests
 oneccl-ds-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0.2}
   cmd: ipexrun cpu /tests/ipex-resnet50.py --ipex --device cpu --backend ccl --deepspeed
   privileged: true
   volumes:
   - dst: /tests
     src: $PWD/pytorch/tests
 inc-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0.2}
   cmd: python /tests/inc-quant.py
   volumes:
   - dst: /tests
