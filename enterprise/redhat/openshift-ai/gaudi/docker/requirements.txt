@@ -18,7 +18,7 @@ pyodbc~=5.1.0
 mysql-connector-python~=9.0.0
 
 # JupyterLab packages
-odh-elyra~=3.16.7
+odh-elyra~=4.0.0
 jupyterlab~=4.2.5 # Wait on upgrade till plugins are ready
 jupyter-bokeh~=4.0.5 # Upgrade would bring in jupyterlab 4
 jupyter-server~=2.14.2
@@ -30,11 +30,12 @@ jupyterlab-widgets~=3.0.13
 jupyter-resource-usage~=1.1.0
 nbdime~=4.0.2
 nbgitpuller~=1.2.1
+notebook~=7.2.2
 
 # pycodestyle is dependency of below packages
 # and to achieve compatible of pycodestyle with python-lsp-server[all]
 # pinned the below packages
-autopep8~=2.3.1
+autopep8>=1.5.0
 flake8~=7.1.1
 # Base packages
 wheel~=0.44.0
