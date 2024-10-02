@@ -26,7 +26,7 @@ jobs:
     name: Lint
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     permissions:
-      contents: write
+      contents: read
       statuses: write
     steps:
     - name: Harden Runner
@@ -41,15 +41,6 @@ jobs:
         fetch-depth: 0
     - uses: super-linter/super-linter/slim@b92721f792f381cedc002ecdbb9847a15ece5bb8 # v7.1.0
       env:
-        # To report GitHub Actions status checks
-        FIX_HTML_PRETTIER: false
-        FIX_JSON: true
-        FIX_MARKDOWN_PRETTIER: false
-        FIX_PYTHON_BLACK: true
-        FIX_PYTHON_PINK: false
-        FIX_PYTHON_RUST: false
-        FIX_SHELL_SHFMT: true
-        FIX_YAML_PRETTIER: true
         GITHUB_ACTIONS_COMMAND_ARGS: '-ignore SC.*'
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         VALIDATE_BASH_EXEC: false
@@ -64,14 +55,4 @@ jobs:
         VALIDATE_PYTHON_MYPY: false
         VALIDATE_PYTHON_PYINK: false
         VALIDATE_PYTHON_RUFF: false
-    - name: Commit and push linting fixes
-      if: >
-        always() &&
-        github.event_name == 'pull_request' &&
-        github.ref_name != github.event.repository.default_branch
-      uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5.0.1
-      with:
-        branch: ${{ github.event.pull_request.head.ref || github.head_ref || github.ref }}
-        commit_message: "chore: fix linting issues"
-        commit_user_name: super-linter
-        commit_user_email: super-linter@super-linter.dev
+        VALIDATE_YAML_PRETTIER: false
