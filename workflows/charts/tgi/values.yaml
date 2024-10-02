@@ -63,5 +63,7 @@ ingress:
   #    hosts:
   #      - chart-example.local
 pvc:
+  name: model-server-cache
+  create: true
   storageClassName: nil
   size: 15Gi
