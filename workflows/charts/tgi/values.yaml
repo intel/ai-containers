@@ -62,6 +62,7 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+# -- Choose to either use an existing PVC or create a new one
 pvc:
   name: model-server-cache
   create: true
