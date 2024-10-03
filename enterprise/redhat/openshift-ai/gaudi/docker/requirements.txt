@@ -1,5 +1,5 @@
 # LLM Packages
-deepspeed @ git+https://github.com/HabanaAI/DeepSpeed.git@1.17.0
+deepspeed @ git+https://github.com/HabanaAI/DeepSpeed.git@1.17.1
 
 # Datascience and useful extensions
 kafka-python~=2.0.2
