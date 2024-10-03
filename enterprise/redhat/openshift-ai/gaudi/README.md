@@ -6,7 +6,8 @@ Intel® Gaudi AI Software Tools for OpenShift AI(RedHat OpenShift Data Science/R
 
 | Notebook Container Name | Tools | Image Name |
 | -----------------------------| ------------- | ------------- |
-| Intel Gaudi Notebook Container | [Intel® Gaudi Software Stack*](https://docs.habana.ai/en/latest/Installation_Guide/Bare_Metal_Fresh_OS.html), [Intel® Gaudi PyTorch](https://docs.habana.ai/en/latest/PyTorch/index.html), [Intel® Gaudi vLLM](https://github.com/HabanaAI/vllm-fork.git), [Intel® Gaudi DeepSpeed](https://github.com/HabanaAI/DeepSpeed) | [`registry.connect.redhat.com/intel/gaudi-notebooks:1.17.0-495-rhel-9.2`](registry.connect.redhat.com/intel/gaudi-notebooks@sha256:a62baf968caa7dd23b7f4cdcddc26e109d894f1436e247b4ea1e2fb4a5c94d54) |
+| Intel Gaudi Notebook Container 1.17.0-495 | [Intel® Gaudi Software Stack*](https://docs.habana.ai/en/latest/Installation_Guide/Bare_Metal_Fresh_OS.html), [Intel® Gaudi PyTorch](https://docs.habana.ai/en/latest/PyTorch/index.html), [Intel® Gaudi vLLM](https://github.com/HabanaAI/vllm-fork.git), [Intel® Gaudi DeepSpeed](https://github.com/HabanaAI/DeepSpeed) | [`registry.connect.redhat.com/intel/gaudi-notebooks:1.17.0-495-rhel-9.2`](registry.connect.redhat.com/intel/gaudi-notebooks@sha256:a62baf968caa7dd23b7f4cdcddc26e109d894f1436e247b4ea1e2fb4a5c94d54) |
+| Intel Gaudi Notebook Container 1.17.1-40 | [Intel® Gaudi Software Stack*](https://docs.habana.ai/en/latest/Installation_Guide/Bare_Metal_Fresh_OS.html), [Intel® Gaudi PyTorch](https://docs.habana.ai/en/latest/PyTorch/index.html), [Intel® Gaudi vLLM](https://github.com/HabanaAI/vllm-fork.git), [Intel® Gaudi DeepSpeed](https://github.com/HabanaAI/DeepSpeed) | [`registry.connect.redhat.com/intel/gaudi-notebooks:1.17.1-40-rhel-9.2`](registry.connect.redhat.com/intel/gaudi-notebooks@sha256:00ca535956b7fcdd91e71bc4a3cd4493ddcaceea9b8d7bb95a7edc0e1cb0bac4) |
 
 ## Run Gaudi Notebook Containers
 
