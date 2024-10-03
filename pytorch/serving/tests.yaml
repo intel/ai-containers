@@ -58,9 +58,9 @@ ipex-serving-cpu-rest-workflow:
   env:
     ENABLE_TORCH_PROFILER: 'true'
   shm_size: 1g
-ipex-serving-xpu-rest-workflow:
+ipex-serving-xpu-rest-inference:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-torchserve-xpu
-  cmd: bash /home/model-server/wf-store/rest-test.sh
+  cmd: bash /home/model-server/model-store/rest-test.sh
   serving: True
   device: ["/dev/dri"]
   volumes:
@@ -71,7 +71,7 @@ ipex-serving-xpu-rest-workflow:
   env:
     ENABLE_TORCH_PROFILER: 'true'
   shm_size: 1g
-  workdir: /home/model-server/wf-store
+  workdir: /home/model-server/model-store
 ipex-serving-cpu-rest-inference:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-torchserve-cpu
   cmd: bash /home/model-server/model-store/rest-test.sh
