@@ -28,11 +28,11 @@
 
 if [[ "$1" == "cpu" ]]; then
 	wget https://download.pytorch.org/models/squeezenet1_1-b8a52dc0.pth
-	torch-model-archiver --model-name squeezenet1_1 --version 1.1 --model-file /home/model-server/model-archive/model.py --serialized-file squeezenet1_1-b8a52dc0.pth --handler image_classifier --export-path /home/model-server/model-store
+	torch-model-archiver --model-name squeezenet1_1 --version 1.1 --model-file /home/model-server/model-archive/model.py --serialized-file squeezenet1_1-b8a52dc0.pth --handler image_classifier --export-path /home/model-server/model-store --force
 	rm -rf squeezenet1_1-b8a52dc0.pth
 elif [[ "$1" == "xpu" ]]; then
 	python /home/model-server/model-archive/ipex_squeezenet.py
-	torch-model-archiver --model-name squeezenet1_1 --version 1.1 --serialized-file squeezenet1_1-jit.pt --handler image_classifier --export-path /home/model-server/model-store
+	torch-model-archiver --model-name squeezenet1_1 --version 1.1 --serialized-file squeezenet1_1-jit.pt --handler image_classifier --export-path /home/model-server/model-store --force
 	rm -rf squeezenet1_1-jit.pt
 else
 	echo "Only cpu and xpu devices supported"
