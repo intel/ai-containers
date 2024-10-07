@@ -112,9 +112,9 @@ jobs:
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         number: ${{ github.event.pull_request.number }}
-        header: test-runner combined summary
+        header: 'Integration Tests Summary'
         path: output.txt
-        recreate: true
+        delete: true
   status-check:
     needs: [group-diff, pipeline-ci, merge-logs]
     runs-on: ubuntu-latest
