@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+{{- if .Values.pvc.create -}}
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "tgi.fullname" . }}-cache
+  name: {{ .Values.pvc.name }}
   labels:
     {{- include "tgi.labels" . | nindent 4 }}
 spec:
@@ -27,3 +29,4 @@ spec:
   resources:
     requests:
       storage: {{ .Values.pvc.size }}
+{{- end }}

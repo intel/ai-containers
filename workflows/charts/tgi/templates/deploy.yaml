@@ -84,6 +84,6 @@ spec:
             medium: Memory
         - name: hf-data
           persistentVolumeClaim:
-            claimName: {{ include "tgi.fullname" . }}-cache
+            claimName: {{ .Values.pvc.name }}
         - name: tmp
           emptyDir: {}
