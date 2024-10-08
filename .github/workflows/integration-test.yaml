@@ -67,7 +67,7 @@ jobs:
         group: ${{ fromJson(needs.group-diff.outputs.groups) }}
         experimental: [true]
       fail-fast: false
-    uses: intel/ai-containers/.github/workflows/container-ci.yaml@main
+    uses: intel/ai-containers/.github/workflows/container-ci.yaml@dependabot/pip/enterprise/redhat/openshift-ai/gaudi/docker/gaudi-openshift-4095d7a8fc
     with:
       group_dir: ${{ matrix.group }}
     secrets: inherit
