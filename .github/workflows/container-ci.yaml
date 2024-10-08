@@ -140,6 +140,7 @@ jobs:
         container: ${{ fromJSON(needs.setup-scan.outputs.matrix) }}
       fail-fast: false
     steps:
+    - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
       with:
