@@ -14,7 +14,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-
+# TODO: Refactor
 apiVersion: v2
 name: Hugging Face PyTorch Distributed Training
 description: This Helm chart deploys a distributed training job using the Kubeflow PyTorchJob training operator.

@@ -19,6 +19,7 @@ secret:
   # -- Hugging Face token encoded using base64.
   encodedToken:
 
+#TODO: Use Genai Image as base, rewrite dockerfile
 image:
   # -- Name of the image to use for the PyTorch job. The container should include the fine tuning script and all the dependencies required to run the job.
   name: intel/ai-workflows
