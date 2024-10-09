@@ -131,6 +131,9 @@ The images below additionally include [Horovod]:
 
 #### Setup and Run ITEX Multi-Node Container
 
+> [!IMPORTANT]
+> Maintainence, Bug Fixes, and Releases of [Intel® Extension for TensorFlow*] Multi-Node Container for Xeon Processors have ceased development. The last supported version is `2.15.1`. For future releases, please use the [Intel® Extension for TensorFlow*] Multi-Node Container for XPU.
+
 Some additional assembly is required to utilize this container with OpenSSH. To perform any kind of DDP (Distributed Data Parallel) execution, containers are assigned the roles of launcher and worker respectively:
 
 SSH Server (Worker)
