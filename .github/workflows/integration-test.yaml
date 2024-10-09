@@ -107,14 +107,14 @@ jobs:
           echo "# Integration Test Results"
           if jq -e 'all(.[]; .Status == "PASS")' combined.json > /dev/null; then
             echo "<details>"
-            echo "  <summary>Results ✅</summary>"
+            echo -e "  <summary>Results ✅</summary>\n"
           else
-            echo "  <summary>Results ❌</summary>"
+            echo -e "  <summary>Results ❌</summary>\n"
           fi
           echo "  | Test-Group    | Test        | Status   |"
           echo "  |:----:|:---:|:---:|"
           jq -r '.[] | "  | \(.Group) | \(.Test) | \(.Status) |"' combined.json
-          echo "</details>"
+          echo -e "\n</details>"
         } >> output.txt
     - name: PR-comment
       if: ${{ steps.check_matching_json_files.outputs.has_matching_json_files == 'true' }}
