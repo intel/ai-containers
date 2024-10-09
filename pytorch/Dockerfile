@@ -169,8 +169,6 @@ RUN apt-get update && \
 
 RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list
 
-ENV OCL_ICD_VENDORS=/etc/OpenCL/vendors
-
 FROM ipex-xpu-base AS ipex-xpu-base-wheels-pip
 
 WORKDIR /
@@ -186,6 +184,8 @@ COPY xpu-requirements.txt .
 
 RUN conda run -n idp python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
+
+RUN echo 'export OCL_ICD_VENDORS="/etc/OpenCL/vendors"' >> ~/.bashrc
 
 FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} AS ipex-xpu-jupyter
 
