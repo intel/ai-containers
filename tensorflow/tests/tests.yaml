@@ -48,4 +48,3 @@ itex-xpu-jupyter-${PACKAGE_OPTION:-pip}:
   cmd: papermill --log-output  /jupyter/xpu.ipynb -k python3 -
   notebook: True
   device: ["/dev/dri"]
-
