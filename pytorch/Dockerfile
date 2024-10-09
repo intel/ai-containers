@@ -185,6 +185,8 @@ COPY xpu-requirements.txt .
 RUN conda run -n idp python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
 
+RUN echo 'export OCL_ICD_VENDORS="/etc/OpenCL/vendors"' >> ~/.bashrc
+
 FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} AS ipex-xpu-jupyter
 
 WORKDIR /jupyter
@@ -193,7 +195,6 @@ RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
 
 RUN if eval "which conda >/dev/null )"; then \
         echo "conda activate idp" >> ~/.bashrc; \
-        echo 'export OCL_ICD_VENDORS="/etc/OpenCL/vendors"' >> ~/.bashrc; \
     fi
 
 COPY --chown=root notebooks/ipex-xpu.ipynb /jupyter/xpu.ipynb
