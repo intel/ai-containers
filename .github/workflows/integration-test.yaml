@@ -104,17 +104,19 @@ jobs:
       if: ${{ steps.check_matching_json_files.outputs.has_matching_json_files == 'true' }}
       run: |
         {
-          echo "# Integration Test Results"
-          if jq -e 'all(.[]; .Status == "PASS")' combined.json > /dev/null; then
-            echo "<details>"
-            echo -e "  <summary>Results ✅</summary>\n"
-          else
-            echo -e "  <summary>Results ❌</summary>\n"
-          fi
+          echo "### Integration Test Results"
+          echo "Groups Tested: $(jq -r 'map(.Group) | unique | join(", ")' combined.json)"
+          echo -e "\n<details>"
+          echo -e "  <summary>Results</summary>\n"
           echo "  | Test-Group    | Test        | Status   |"
           echo "  |:----:|:---:|:---:|"
           jq -r '.[] | "  | \(.Group) | \(.Test) | \(.Status) |"' combined.json
-          echo -e "\n</details>"
+          echo -e "\n</details>\n"
+          if jq -e 'all(.[]; .Status == "PASS")' combined.json > /dev/null; then
+            echo "#### Overall Result: PASS ✅"
+          else
+            echo "#### Overall Result: FAIL ❌"
+          fi
         } >> output.txt
     - name: PR-comment
       if: ${{ steps.check_matching_json_files.outputs.has_matching_json_files == 'true' }}
