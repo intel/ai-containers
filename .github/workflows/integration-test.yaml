@@ -106,10 +106,10 @@ jobs:
         {
           echo "# Integration Test Results"
           if jq -e 'all(.[]; .Status == "PASS")' combined.json > /dev/null; then
-        echo "<details>"
-        echo "  <summary>Results ✅</summary>"
+            echo "<details>"
+            echo "  <summary>Results ✅</summary>"
           else
-        echo "  <summary>Results ❌</summary>"
+            echo "  <summary>Results ❌</summary>"
           fi
           echo "  | Test-Group    | Test        | Status   |"
           echo "  |:----:|:---:|:---:|"
