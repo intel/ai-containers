@@ -69,28 +69,6 @@ services:
     network_mode: host
     ports:
       - 8888:8888
-  multinode:
-    build:
-      labels:
-        dependency.apt.gcc: true
-        dependency.apt.libgl1-mesa-glx: true
-        dependency.apt.libglib2: true
-        dependency.apt.python3-dev: true
-        dependency.pip.apt.virtualenv: true
-        dependency.pip.deepspeed: 0.14.4
-        dependency.python.pip: multinode/requirements.txt
-        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.4.0}-${PACKAGE_OPTION:-pip}-base"
-        org.opencontainers.image.title: "Intel® Extension for PyTorch MultiNode Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.4.0}-${PACKAGE_OPTION:-pip}-multinode
-      target: multinode
-    command: >
-      bash -c "python -c 'import neural_compressor;import oneccl_bindings_for_pytorch as oneccl;import deepspeed;
-      print(\"Neural Compressor:\", neural_compressor.__version__,
-      \"\\nOneCCL:\", oneccl.__version__,
-      \"\\nDeepspeed:\", deepspeed.__version__)'"
-    extends: ipex-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-oneccl-inc-${INC_VERSION:-3.0.2}
-    shm_size: 2gb
   xpu:
     build:
       args:
@@ -193,17 +171,3 @@ services:
     entrypoint: ""
     extends: xpu
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-torchserve-xpu
-  hf-genai:
-    build:
-      args:
-        HF_VERSION: ${HF_VERSION:-4.44.0}
-      labels:
-        dependency.python.pip: hf-genai-requirements.txt
-        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.4.0}-${PACKAGE_OPTION:-pip}-multinode"
-        org.opencontainers.image.title: "Intel® Extension for PyTorch MultiNode Huggingface Generative AI Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.4.0}-${PACKAGE_OPTION:-pip}-multinode-hf-${HF_VERSION:-4.44.0}-genai"
-      target: hf-genai
-    extends: ipex-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.4.0}-hf-${HF_VERSION:-4.44.0}
-    command: >
-      bash -c "python -c 'import transformers; print(transformers.__version__)'"
