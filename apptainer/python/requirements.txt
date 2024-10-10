@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 numpy==2.1.0
 setuptools==73.0.1
 psutil==6.0.0
 mkl==2024.2.1
 mkl-include==2024.2.1
+=======
+numpy==2.1.1
+setuptools==75.1.0
+psutil==6.0.0
+mkl==2024.2.2
+mkl-include==2024.2.2
+>>>>>>> main
 intel-openmp==2024.2.1

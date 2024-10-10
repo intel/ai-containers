@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 daal4py==2024.6.0
+=======
+daal4py==2024.7.0
+>>>>>>> main
 matplotlib==3.9.2
 numpy==1.26.4
-scikit-learn-intelex==2024.6.0
+scikit-learn-intelex==2024.7.0
 threadpoolctl==3.5.0
 xgboost==2.1.1
-pandas==2.2.2
+pandas==2.2.3
 nbconvert==7.16.4

@@ -18,6 +18,7 @@ nameOverride: ""
 fullnameOverride: ""
 deploy:
   # -- ConfigMap of Environment Variables
+<<<<<<< HEAD
   configMapName: intel-proxy-config
   # -- Intel TGI Image
   image: ghcr.io/huggingface/text-generation-inference:latest-intel
@@ -25,6 +26,13 @@ deploy:
   model: HuggingFaceTB/SmolLM-135M
   # -- Enable Quantization (ex: bitsandbytes-nf4)
   quantize: ""
+=======
+  configMap:
+    enabled: true
+    name: tgi-config
+  # -- Intel TGI Image
+  image: ghcr.io/huggingface/text-generation-inference:latest-intel
+>>>>>>> main
   # -- Number of pods
   replicaCount: 1
   # -- Resource configuration
@@ -39,6 +47,11 @@ deploy:
     requests:
       cpu: 1000m
       memory: "1Gi"
+<<<<<<< HEAD
+=======
+# -- Security Context Configuration
+securityContext: {}
+>>>>>>> main
 secret:
   # -- Base64 Encoded Huggingface Hub API Token
   encodedToken: ""
@@ -62,3 +75,14 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+<<<<<<< HEAD
+=======
+# -- Configure Storage Volume
+pvc:
+  # -- Specify the name of either an existing or new PVC
+  name: model-server-cache
+  # -- Create a new PVC
+  create: true
+  storageClassName: nil
+  size: 15Gi
+>>>>>>> main

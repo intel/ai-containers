@@ -1,12 +1,12 @@
 *                @tylertitsworth @jitendra42
-/.github/        @tylertitsworth @sharvil10 @jitendra42
-/apptainer/      @sramakintel
+/.github/        @tylertitsworth @sharvil10 @jitendra42 @sramakintel
+/apptainer/      @sramakintel @tylertitsworth
 /classical-ml/   @tylertitsworth @jitendra42 @sramakintel @sharvil10
 /docs/           @tylertitsworth @jitendra42
-/enterprise/     @sharvil10
-/preset/         @ma-pineda @jafraustro
+/enterprise/     @sharvil10 @tylertitsworth
+/preset/         @ma-pineda @jafraustro @tylertitsworth
 /python/         @tylertitsworth @jitendra42 @sramakintel @sharvil10
 /pytorch/        @tylertitsworth @jitendra42 @sramakintel @sharvil10
 /tensorflow/     @tylertitsworth @jitendra42 @sramakintel @sharvil10
-/test-runner/    @tylertitsworth
-/workflows/      @tylertitsworth @dmsuehir
+/test-runner/    @tylertitsworth @jitendra42
+/workflows/      @tylertitsworth @dmsuehir @sharvil10

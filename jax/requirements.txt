@@ -1,0 +1,5 @@
+flax==0.8.2
+intel-extension-for-openxla==0.4.0
+jax==0.4.26
+jaxlib==0.4.26
+cython==3.0.11

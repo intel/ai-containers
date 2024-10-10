@@ -25,5 +25,9 @@ spec:
     - name: info
       image: curlimages/curl
       command: ['sh', '-c']
+<<<<<<< HEAD
       args: ['curl --noproxy "*" -f {{ include "tgi.fullname" . }}:{{ .Values.service.port }}/info']
+=======
+      args: ['curl -f {{ include "tgi.fullname" . }}:{{ .Values.service.port }}/info']
+>>>>>>> main
   restartPolicy: OnFailure

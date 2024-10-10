@@ -7,23 +7,40 @@ For more information about how to use Huggingface text-generation-inference with
 > [!TIP]
 > For Gaudi-related documentation, check out [tgi-gaudi](https://github.com/huggingface/tgi-gaudi).
 
+<<<<<<< HEAD
 ![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+=======
+![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+>>>>>>> main
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+<<<<<<< HEAD
 | deploy.configMapName | string | `"intel-proxy-config"` | ConfigMap of Environment Variables |
 | deploy.image | string | `"ghcr.io/huggingface/text-generation-inference:latest-intel"` | Intel TGI Image |
 | deploy.model | string | `"HuggingFaceTB/SmolLM-135M"` | Model to be loaded |
 | deploy.quantize | string | `""` | Enable Quantization (ex: bitsandbytes-nf4) |
+=======
+| deploy.configMap | object | `{"enabled":true,"name":"tgi-config"}` | ConfigMap of Environment Variables |
+| deploy.image | string | `"ghcr.io/huggingface/text-generation-inference:latest-intel"` | Intel TGI Image |
+>>>>>>> main
 | deploy.replicaCount | int | `1` | Number of pods |
 | deploy.resources | object | `{"limits":{"cpu":"4000m","gpu.intel.com/i915":1},"requests":{"cpu":"1000m","memory":"1Gi"}}` | Resource configuration |
 | deploy.resources.limits."gpu.intel.com/i915" | int | `1` | Intel GPU Device Configuration |
 | fullnameOverride | string | `""` | Full qualified Domain Name |
 | ingress | object | `{"annotations":{},"className":"","enabled":false,"hosts":[{"host":"chart-example.local","paths":[{"path":"/","pathType":"ImplementationSpecific"}]}],"tls":[]}` | Ingress configuration |
 | nameOverride | string | `""` | Name of the serving service |
+<<<<<<< HEAD
 | secret.encodedToken | string | `""` | Base64 Encoded Huggingface Hub API Token |
+=======
+| pvc | object | `{"create":true,"name":"model-server-cache","size":"15Gi","storageClassName":"nil"}` | Configure Storage Volume |
+| pvc.create | bool | `true` | Create a new PVC |
+| pvc.name | string | `"model-server-cache"` | Specify the name of either an existing or new PVC |
+| secret.encodedToken | string | `""` | Base64 Encoded Huggingface Hub API Token |
+| securityContext | object | `{}` | Security Context Configuration |
+>>>>>>> main
 | service | object | `{"port":80,"type":"NodePort"}` | Service configuration |
 
 ----------------------------------------------

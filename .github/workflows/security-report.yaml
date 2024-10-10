@@ -26,10 +26,13 @@ jobs:
   report:
     runs-on: ubuntu-latest
     steps:
+<<<<<<< HEAD
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
       with:
         egress-policy: audit
+=======
+>>>>>>> main
     - uses: rsdmike/github-security-report-action@a149b24539044c92786ec39af8ba38c93496495d # v3.0.4
       with:
         sarifReportDir: ${{ github.workspace }}

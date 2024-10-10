@@ -28,6 +28,7 @@ spec:
       labels:
         {{- include "tgi.selectorLabels" . | nindent 8 }}
     spec:
+<<<<<<< HEAD
       securityContext:
         fsGroup: 1000
         runAsUser: 1000
@@ -62,20 +63,73 @@ spec:
               port: {{ .Values.service.port }}
             initialDelaySeconds: 5
             periodSeconds: 5
+=======
+      hostIPC: true
+      containers:
+        - name: {{ .Chart.Name }}
+          args:
+            - '-p'
+            - {{ .Values.service.port | quote }}
+            - '--cuda-graphs=0'
+          envFrom:
+            {{- if eq .Values.deploy.configMap.enabled true }}
+            - configMapRef:
+                name: {{ .Values.deploy.configMap.name }}
+            {{- end }}
+            - secretRef:
+                name: {{ .Release.Name }}-hf-token
+          # env:
+          #   - name: NUMBA_CACHE_DIR # https://github.com/huggingface/text-generation-inference/pull/2443
+          #     value: /data/numba_cache
+          image: {{ .Values.deploy.image }}
+          livenessProbe:
+            failureThreshold: 10
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            tcpSocket:
+              port: http
+          readinessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            tcpSocket:
+              port: http
+          startupProbe:
+            failureThreshold: 120
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            tcpSocket:
+              port: http
+>>>>>>> main
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           resources:
             {{- toYaml .Values.deploy.resources | nindent 12 }}
+<<<<<<< HEAD
+=======
+          securityContext:
+            {{ toYaml .Values.securityContext | nindent 12 }}
+>>>>>>> main
           volumeMounts:
             - mountPath: /dev/shm
               name: dshm
             - mountPath: /data
               name: hf-data
+<<<<<<< HEAD
+=======
+            - mountPath: /tmp
+              name: tmp
+>>>>>>> main
       volumes:
         - name: dshm
           emptyDir:
             medium: Memory
         - name: hf-data
+<<<<<<< HEAD
+=======
+          persistentVolumeClaim:
+            claimName: {{ .Values.pvc.name }}
+        - name: tmp
+>>>>>>> main
           emptyDir: {}

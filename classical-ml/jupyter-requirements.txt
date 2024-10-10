@@ -1,4 +1,8 @@
 jupyterlab==4.2.5
+<<<<<<< HEAD
 jupyterhub==5.1.0
+=======
+jupyterhub==5.2.0
+>>>>>>> main
 notebook==7.2.2
 jupyter-server-proxy>=4.1.2

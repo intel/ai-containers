@@ -18,7 +18,6 @@ services:
       args:
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Linux-x86_64}
         no_proxy: ""
-        NO_PROXY: ""
       context: .
       labels:
         dependency.apt.wget: true

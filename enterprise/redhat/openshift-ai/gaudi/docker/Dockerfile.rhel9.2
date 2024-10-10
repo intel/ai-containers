@@ -85,7 +85,11 @@ ENV FI_EFA_USE_DEVICE_RDMA=1
 RUN echo "[habanalabs]" > /etc/yum.repos.d/habanalabs.repo && \
     echo "name=Habana RH9 Linux repo" >> /etc/yum.repos.d/habanalabs.repo && \
     echo "baseurl=https://${ARTIFACTORY_URL}/artifactory/rhel/9/9.2" >> /etc/yum.repos.d/habanalabs.repo && \
+<<<<<<< HEAD
     echo "gpgkey=https://${ARTIFACTORY_URL}/artifactory/rhel/9/9.2/repodata/repomd.xml.key" >> /etc/yum.repos.d/habanalabs.repo && \
+=======
+    echo "gpgkey=https://${ARTIFACTORY_URL}/artifactory/api/v2/repositories/rhel/keyPairs/primary/public" >> /etc/yum.repos.d/habanalabs.repo && \
+>>>>>>> main
     echo "gpgcheck=1" >> /etc/yum.repos.d/habanalabs.repo
 
 # for Habana GPG key with SHA-1 signature
@@ -231,6 +235,10 @@ RUN cd ${APP_ROOT}/ && \
     VLLM_TARGET_DEVICE=hpu pip install -e .
 
 WORKDIR ${APP_ROOT}/src
+<<<<<<< HEAD
 ENV NOTEBOOK_SAMPLE_LINK="https://raw.githubusercontent.com/sharvil10/ai-containers/main/enterprise/redhat/openshift-ai/gaudi/demo/Getting-started.ipynb"
+=======
+ENV NOTEBOOK_SAMPLES_LINK="https://raw.githubusercontent.com/intel/ai-containers/refs/heads/main/enterprise/redhat/openshift-ai/gaudi/demo/oneapi-sample.ipynb"
+>>>>>>> main
 
 ENTRYPOINT ["bash", "-c", "/opt/app-root/builder/run"]
