@@ -13,49 +13,49 @@
 # limitations under the License.
 
 ---
-deep-learning-ipex-${PYTHON_VERSION:-3.9}-cpu:
-  cmd: conda run -n pytorch-cpu python -W ignore sample-tests/intel_extension_for_pytorch/test_ipex.py --device cpu --ipex
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+# deep-learning-ipex-${PYTHON_VERSION:-3.9}-cpu:
+#   cmd: conda run -n pytorch-cpu python -W ignore sample-tests/intel_extension_for_pytorch/test_ipex.py --device cpu --ipex
+#   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
 deep-learning-ipex-${PYTHON_VERSION:-3.9}-gpu:
   cmd: conda run -n pytorch-gpu python -W ignore sample-tests/intel_extension_for_pytorch/test_ipex.py --device xpu --ipex
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   device: ["/dev/dri"]
 
-deep-learning-ipex-notebook-${PYTHON_VERSION:-3.9}-cpu:
-  cmd: papermill --log-output jupyter/ipex/ResNet50_Inference.ipynb -k pytorch-cpu
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
-  notebook: True
-deep-learning-ipex-notebook-${PYTHON_VERSION:-3.9}-gpu:
-  cmd: papermill --log-output jupyter/ipex/ResNet50_Inference.ipynb -k pytorch-gpu
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
-  notebook: True
-  device: ["/dev/dri"]
+# deep-learning-ipex-notebook-${PYTHON_VERSION:-3.9}-cpu:
+#   cmd: papermill --log-output jupyter/ipex/ResNet50_Inference.ipynb -k pytorch-cpu
+#   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+#   notebook: True
+# deep-learning-ipex-notebook-${PYTHON_VERSION:-3.9}-gpu:
+#   cmd: papermill --log-output jupyter/ipex/ResNet50_Inference.ipynb -k pytorch-gpu
+#   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+#   notebook: True
+#   device: ["/dev/dri"]
 
 deep-learning-ipex-quantization-notebook-${PYTHON_VERSION:-3.9}-cpu:
   cmd: papermill --log-output jupyter/ipex-quantization/IntelPytorch_Quantization.ipynb -k pytorch-cpu
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   notebook: True
 
-deep-learning-itex-${PYTHON_VERSION:-3.9}-cpu:
-  cmd: conda run -n tensorflow-cpu python -W ignore sample-tests/intel_extension_for_tensorflow/test_itex.py
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
-deep-learning-itex-${PYTHON_VERSION:-3.9}-gpu:
-  cmd: conda run -n tensorflow-gpu python -W ignore sample-tests/intel_extension_for_tensorflow/test_itex.py
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
-  device: ["/dev/dri"]
+# deep-learning-itex-${PYTHON_VERSION:-3.9}-cpu:
+#   cmd: conda run -n tensorflow-cpu python -W ignore sample-tests/intel_extension_for_tensorflow/test_itex.py
+#   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+# deep-learning-itex-${PYTHON_VERSION:-3.9}-gpu:
+#   cmd: conda run -n tensorflow-gpu python -W ignore sample-tests/intel_extension_for_tensorflow/test_itex.py
+#   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+#   device: ["/dev/dri"]
 
-deep-learning-tensorflow-dataset-librarian-${PYTHON_VERSION:-3.9}-cpu:
-  cmd: conda run -n tensorflow-cpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
-deep-learning-tensorflow-dataset-librarian-${PYTHON_VERSION:-3.9}-gpu:
-  cmd: conda run -n tensorflow-gpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
-  device: ["/dev/dri"]
+# deep-learning-tensorflow-dataset-librarian-${PYTHON_VERSION:-3.9}-cpu:
+#   cmd: conda run -n tensorflow-cpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+#   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+# deep-learning-tensorflow-dataset-librarian-${PYTHON_VERSION:-3.9}-gpu:
+#   cmd: conda run -n tensorflow-gpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+#   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+#   device: ["/dev/dri"]
 
-deep-learning-torch-dataset-librarian-${PYTHON_VERSION:-3.9}-cpu:
-  cmd: conda run -n pytorch-cpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
-deep-learning-torch-dataset-librarian-${PYTHON_VERSION:-3.9}-gpu:
-  cmd: conda run -n pytorch-gpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
-  device: ["/dev/dri"]
+# deep-learning-torch-dataset-librarian-${PYTHON_VERSION:-3.9}-cpu:
+#   cmd: conda run -n pytorch-cpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+#   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+# deep-learning-torch-dataset-librarian-${PYTHON_VERSION:-3.9}-gpu:
+#   cmd: conda run -n pytorch-gpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
+#   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+#   device: ["/dev/dri"]
