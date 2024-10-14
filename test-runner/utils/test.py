@@ -24,6 +24,7 @@ from typing import Dict, List, Optional
 from expandvars import expandvars
 from pydantic import BaseModel
 from python_on_whales import DockerException, docker
+import yaml
 
 
 class PerfException(Exception):
@@ -44,6 +45,13 @@ class Volume(BaseModel):
     src: str
     dst: str
 
+    def to_yaml(self):
+        return {'src': self.src, 'dst': self.dst}
+
+def volume_representer(dumper, data):
+    return dumper.represent_dict(data.to_yaml())
+
+yaml.add_representer(Volume, volume_representer)
 
 class Test(BaseModel):
     "Runs the test command."
@@ -67,6 +75,11 @@ class Test(BaseModel):
     user: Optional[str] = None
     shm_size: Optional[str] = None
     workdir: Optional[str] = None
+
+    def __init__(self, **data):
+        super().__init__(**data)
+        if self.volumes:
+            self.volumes = [Volume(**vol) if isinstance(vol, dict) else vol for vol in self.volumes]
 
     def get_path(self, name):
         """Given a filename, find that file from the users current working directory

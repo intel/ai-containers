@@ -39,6 +39,7 @@ from expandvars import expandvars
 from python_on_whales import DockerException, docker
 from tabulate import tabulate
 from utils.test import PerfException, Test
+from utils.debug import TestRunnerDebugger
 from yaml import YAMLError, full_load
 
 
@@ -63,6 +64,9 @@ def parse_args(args: list):
     )
     parser.add_argument(
         "-l", "--logs", dest="logs_path", default="output", help="-l /path/to/logs"
+    )
+    parser.add_argument(
+        "-d", "--debug", dest="debug", action="store_true", help="Debug Mode"
     )
 
     return parser.parse_args(args)
@@ -158,7 +162,7 @@ if __name__ == "__main__":
         ],
     )
     # Set Debug if -v
-    if args.log_level:
+    if args.log_level or args.debug:
         logging.getLogger().setLevel("DEBUG")
         os.environ["PYTHON_ON_WHALES_DEBUG"] = "1"
     logging.debug("Reading Test File")
@@ -172,10 +176,15 @@ if __name__ == "__main__":
     logging.debug("Creating Test Objects from: %s", tests_list)
     # For each test, create a Test Object with the test name is the key of the test in yaml
     tests = [Test(name=test, **tests_list[test]) for test in tests_list]
-    logging.info("Setup Completed - Running Tests")
+    if not args.debug:
+        logging.info("Setup Completed - Running Tests")
     summary = []
     json_summary = []
     ERROR = False
+    if args.debug:
+        set_log_filename(logging.getLogger(), "test-runner", args.logs_path)
+        TestRunnerDebugger(tests, args).cmdloop()
+        sys.exit(0)
     for idx, test in enumerate(tests):
         if disable_masking:
             test.mask = []
