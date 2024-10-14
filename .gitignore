@@ -14,5 +14,4 @@ logs/
 models-perf/
 output/
 site
-test-runner-summary-output.json
 venv/
