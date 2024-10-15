@@ -34,6 +34,7 @@ ARG BASE_IMAGE_TAG
 ARG PACKAGE_OPTION=pip
 ARG PYTHON_VERSION
 ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-base
+ARG PYTHON_XPU_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-xpu-base
 ARG TORCHSERVE_BASE=${PYTHON_BASE}
 FROM ${PYTHON_BASE} AS ipex-base-pip
 
@@ -66,43 +67,7 @@ EXPOSE 8888
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
-FROM ${PYTHON_BASE} AS ipex-xpu-base
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    apt-utils \
-    build-essential \
-    clinfo \
-    git \
-    gnupg2 \
-    gpg-agent \
-    rsync \
-    unzip && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-    gpg --dearmor --yes --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
-    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
-
-ARG ICD_VER
-ARG LEVEL_ZERO_GPU_VER
-ARG LEVEL_ZERO_VER
-ARG LEVEL_ZERO_DEV_VER
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    intel-opencl-icd=${ICD_VER} \
-    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
-    libze1=${LEVEL_ZERO_VER} \
-    libze-dev=${LEVEL_ZERO_DEV_VER} && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list
-
-FROM ipex-xpu-base AS ipex-xpu-base-wheels-pip
+FROM ${PYTHON_XPU_BASE} AS ipex-xpu-base-wheels-pip
 
 WORKDIR /
 COPY xpu-requirements.txt .
@@ -110,7 +75,7 @@ COPY xpu-requirements.txt .
 RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
 
-FROM ipex-xpu-base AS ipex-xpu-base-wheels-idp
+FROM ${PYTHON_XPU_BASE} AS ipex-xpu-base-wheels-idp
 
 WORKDIR /
 COPY xpu-requirements.txt .
