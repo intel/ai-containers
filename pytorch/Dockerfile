@@ -88,6 +88,7 @@ FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} AS ipex-xpu-jupyter
 
 WORKDIR /jupyter
 COPY jupyter-requirements.txt .
+
 RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
 
 RUN if eval "which conda >/dev/null )"; then \

@@ -81,20 +81,18 @@ services:
     command: >
       sh -c "python -c 'import tensorflow as tf;print(tf.__version__);from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'"
     extends: tf-base
+    depends_on: 
+      - xpu
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.1}-itex-xpu-base
   xpu-jupyter:
     build:
-      args:
-        ITEX_VER: ${ITEX_VER:-2.15.0.1}
-        no_proxy: ''
-        NO_PROXY: ''
       labels:
         dependency.python.pip: jupyter-requirements.txt
         org.opencontainers.base.name: "intel/intel-optimized-tensorflow:${TF_VERSION:-2.15.1}-xpu-${PACKAGE_OPTION:-pip}-base"
         org.opencontainers.image.title: "Intel® Extension for TensorFlow XPU Jupyter Image"
         org.opencontainers.image.version: ${TF_VER:-2.15.0}-xpu-${PACKAGE_OPTION:-pip}-jupyter
       target: itex-xpu-jupyter
-    extends: tf-base
+    extends: itex-xpu-base
     command: >
       bash -c "python -m jupyter --version"
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.1}-itex-xpu-jupyter
