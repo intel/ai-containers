@@ -34,7 +34,6 @@ ARG BASE_IMAGE_TAG
 ARG PACKAGE_OPTION=pip
 ARG PYTHON_VERSION
 ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-base
-ARG PYTHON_XPU_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-xpu-base
 ARG TORCHSERVE_BASE=${PYTHON_BASE}
 FROM ${PYTHON_BASE} AS ipex-base-pip
 
@@ -67,7 +66,7 @@ EXPOSE 8888
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
-FROM ${PYTHON_XPU_BASE} AS ipex-xpu-base-wheels-pip
+FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels-pip
 
 WORKDIR /
 COPY xpu-requirements.txt .
@@ -75,7 +74,7 @@ COPY xpu-requirements.txt .
 RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
 
-FROM ${PYTHON_XPU_BASE} AS ipex-xpu-base-wheels-idp
+FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels-idp
 
 WORKDIR /
 COPY xpu-requirements.txt .
