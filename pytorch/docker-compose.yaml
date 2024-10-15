@@ -88,7 +88,7 @@ services:
       {torch.xpu.get_device_properties(i)}') for i in
       range(torch.xpu.device_count())];"
     extends: ipex-base
-    depends_on: 
+    depends_on:
       - xpu
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.110xpu}-xpu-base
   xpu-jupyter:
