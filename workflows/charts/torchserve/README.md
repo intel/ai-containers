@@ -1,6 +1,6 @@
 # TorchServe with Intel Optimizations
 
-TorchServe on Intel is a performant, flexible and easy to use tool for serving PyTorch models in production.
+TorchServe is a performant, flexible and easy to use tool for serving PyTorch models in production on Intel GPUs.
 
 For more information about how to use TorchServe with Intel Optimizations, check out the [container documentation](../../../pytorch/serving/README.md).
 
