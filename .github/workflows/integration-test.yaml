@@ -90,12 +90,12 @@ jobs:
       run: |
         SUMMARY=$(find . -maxdepth 1 -name '*summary.json' -print)
         if [[ -n "$SUMMARY" ]]; then
-          echo "Files matching the pattern test-runner-summary*.json"
+          echo "Files matching the pattern ./*summary.json"
           jq -s '[.[] | .[]]' ./*summary.json > combined.json
           echo "Files found in the directory"
         else
           echo "summary=false" >> "$GITHUB_OUTPUT"
-          echo "No files matching the pattern test-runner-summary*.json found in the directory"
+          echo "No files matching the pattern ./*summary.json"
         fi
     - name: Generate TXT file
       if: ${{ steps.summary.outputs.summary != 'false' }}

@@ -22,12 +22,9 @@ inputs:
   output:
     description: 'writes results to a file with the specified file name'
     required: true
-  registry:
-    description: 'Container Registry URL'
-    required: true
 runs:
   using: 'docker'
-  image: "docker://{{ inputs.registry }}/cache/library/trivy"
+  image: "docker://intelaicontainers.azurecr.io/cache/library/trivy"
   entrypoint: trivy
   args:
     - '--timeout=30m'

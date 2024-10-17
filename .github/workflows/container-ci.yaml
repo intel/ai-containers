@@ -166,7 +166,6 @@ jobs:
       uses: intel/ai-containers/.github/scan@tylertitsworth/trivy-cache
       with:
         image-ref: ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
-        registry: ${{ secrets.REGISTRY }}
         output: ${{ matrix.container }}-scan.sarif
     - name: Cleanup
       if: always()
