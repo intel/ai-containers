@@ -103,13 +103,15 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
     rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*list
 
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash dev
-ARG GID=110
-RUN groupadd -g ${GID} render &&\
-    usermod -aG root,sudo,video,render dev
 RUN echo 'dev:password' | chpasswd
+
 USER dev
 WORKDIR /home/dev
 
+ARG GID=110
+RUN groupadd -g ${GID} render &&\
+    usermod -aG root,sudo,video,render dev
+    
 ENV CONDA_ROOT=/home/dev/conda
 ARG MINIFORGE_VERSION
 ARG PYTHON_VERSION
