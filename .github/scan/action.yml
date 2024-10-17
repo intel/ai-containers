@@ -22,9 +22,12 @@ inputs:
   output:
     description: 'writes results to a file with the specified file name'
     required: true
+  registry:
+    description: 'Container Registry URL'
+    required: true
 runs:
   using: 'docker'
-  image: "docker://ghcr.io/aquasecurity/trivy"
+  image: "docker://{{ inputs.registry }}/cache/library/trivy"
   entrypoint: trivy
   args:
     - '--timeout=30m'
