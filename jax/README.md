@@ -35,13 +35,13 @@ The images below include [Intel® Distribution for Python*]:
 
 | Tag(s)           | [JAX\*]   | [Intel® Extension for OpenXLA\*] | [Flax]   | Dockerfile      |
 | ---------------- | --------- | ----------------- | -------- | --------------- |
-| `0.4.0-idp-base` | [v0.4.32] | [v0.4.0-jax]      | [v0.9.0] | [v0.4.0]        |
+| `0.4.0-idp-base` | [v0.4.32] | [v0.4.0-jax]      | [v0.9.0] | [v0.4.1]        |
 
 The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
 
 | Tag(s)              | [JAX\*]   | [Intel® Extension for OpenXLA\*] | [Flax]   | Dockerfile      |
 | ------------------- | --------- | ----------------- | -------- | --------------- |
-| `0.4.0-idp-jupyter` | [v0.4.32] | [v0.4.0-jax]      | [v0.9.0] | [v0.4.0]        |
+| `0.4.0-idp-jupyter` | [v0.4.32] | [v0.4.0-jax]      | [v0.9.0] | [v0.4.1]        |
 
 ## Build from Source
 
@@ -83,4 +83,4 @@ It is the image user's responsibility to ensure that any use of The images below
 
 [v0.9.0]: https://github.com/google/Flax/releases/tag/v0.9.0
 
-[v0.4.0]: https://github.com/intel/ai-containers/blob/v0.4.0/jax/Dockerfile
+[v0.4.0]: https://github.com/intel/ai-containers/blob/main/jax/Dockerfile
