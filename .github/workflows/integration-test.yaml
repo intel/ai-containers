@@ -88,12 +88,10 @@ jobs:
       id: summary
       shell: bash
       run: |
-        SUMMARY=$(find . -maxdepth 3 -name '*summary.json' -print)
+        SUMMARY=$(find . -maxdepth 1 -name '*summary.json' -print)
         if [[ -n "$SUMMARY" ]]; then
-          echo "summary=$SUMMARY" >> "$GITHUB_OUTPUT"
-          echo "Files matching the pattern test-runner-summary*.json found in the directory"
-          summary_dir=$(dirname "$SUMMARY")
-          jq -s '[.[] | .[]]' $summary_dir/*summary.json > combined.json
+          echo "Files matching the pattern test-runner-summary*.json"
+          jq -s '[.[] | .[]]' ./*summary.json > combined.json
           echo "Files found in the directory"
         else
           echo "summary=false" >> "$GITHUB_OUTPUT"
