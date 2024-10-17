@@ -111,7 +111,7 @@ WORKDIR /home/dev
 ARG GID=110
 RUN groupadd -g ${GID} render &&\
     usermod -aG root,sudo,video,render dev
-    
+
 ENV CONDA_ROOT=/home/dev/conda
 ARG MINIFORGE_VERSION
 ARG PYTHON_VERSION
