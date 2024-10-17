@@ -49,7 +49,7 @@ jobs:
         group: ${{ fromJson(needs.get-groups.outputs.groups) }}
         experimental: [true]
       fail-fast: false
-    uses: intel/ai-containers/.github/workflows/container-ci.yaml@main
+    uses: intel/ai-containers/.github/workflows/container-ci.yaml@tylertitsworth/trivy-cache
     with:
       group_dir: ${{ matrix.group }}
     secrets: inherit
