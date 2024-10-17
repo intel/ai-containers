@@ -166,6 +166,7 @@ jobs:
         github-pat: ${{ secrets.GITHUB_TOKEN }}
         image-ref: ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
         output: ${{ matrix.container }}-scan.sarif
+        timeout: 30m0s
     - name: Cleanup
       if: always()
       run: docker rmi -f ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}

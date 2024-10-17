@@ -90,11 +90,12 @@ jobs:
       run: |
         SUMMARY=$(find . -maxdepth 1 -name '*summary.json' -print)
         if [[ -n "$SUMMARY" ]]; then
+          echo "summary=true" >> $GITHUB_OUTPUT
           echo "Files matching the pattern ./*summary.json"
           jq -s '[.[] | .[]]' ./*summary.json > combined.json
           echo "Files found in the directory"
         else
-          echo "summary=false" >> "$GITHUB_OUTPUT"
+          echo "summary=false" >> $GITHUB_OUTPUT
           echo "No files matching the pattern ./*summary.json"
         fi
     - name: Generate TXT file
@@ -116,7 +117,7 @@ jobs:
           fi
         } >> output.txt
     - name: PR-comment
-      if: ${{ steps.summary.outputs.summary == 'true' }}
+      if: ${{ steps.summary.outputs.summary != 'false' }}
       uses: marocchino/sticky-pull-request-comment@331f8f5b4215f0445d3c07b4967662a32a2d3e31 # v2.9.0
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
