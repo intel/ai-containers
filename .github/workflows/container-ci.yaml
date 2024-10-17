@@ -158,13 +158,12 @@ jobs:
     #     password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Pull Image
       run: docker pull ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
-    - uses: actions/cache@3624ceb22c1c5a301c8db4169662070a689d9ea8 # v4.1.1
-      with:
-        path: ${{ github.workspace }}/trivy
-        key: trivy-cache
     - name: Scan Container
-      uses: intel/ai-containers/.github/scan@tylertitsworth/trivy-cache
+      uses: aquasecurity/trivy-action@915b19bbe73b92a6cf82a1bc12b087c9a19a5fe2 # v0.28.0
       with:
+        cache: true
+        format: sarif
+        github-pat: ${{ secrets.GITHUB_TOKEN }}
         image-ref: ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
         output: ${{ matrix.container }}-scan.sarif
     - name: Cleanup
