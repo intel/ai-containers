@@ -206,7 +206,7 @@ if __name__ == "__main__":
             break
         summary.append([idx + 1, test.name, "PASS"])
         json_summary.append({"Group": test_group, "Test": test.name, "Status": "PASS"})
-    json_summary_path = f"test-runner-summary-{test_group}.json"
+    json_summary_path = f"{args.logs_path}/{test_group.replace('/', '-')}-summary.json"
 
     with open(json_summary_path, "w", encoding="utf-8") as file:
         json.dump(json_summary, file, indent=4)
