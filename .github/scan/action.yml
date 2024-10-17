@@ -29,6 +29,8 @@ runs:
   args:
     - '--timeout=30m'
     - image
+    - '--cache-dir'
+    - '/github/workspace/trivy'
     - '--format=sarif'
     - '--no-progress'
     - '--output=${{ inputs.output }}'
