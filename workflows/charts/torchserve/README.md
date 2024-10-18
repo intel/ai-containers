@@ -2,9 +2,18 @@
 
 TorchServe is a performant, flexible and easy to use tool for serving PyTorch models in production on Intel GPUs.
 
-For more information about how to use TorchServe with Intel Optimizations, check out the [container documentation](../../../pytorch/serving/README.md).
+For more information about how to use TorchServe with Intel Optimizations, check out the [container documentation](https://github.com/intel/ai-containers/blob/main/pytorch/serving/README.md).
 
 ![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+
+## Installation
+
+```bash
+helm repo add intel https://intel.github.io/helm-charts
+helm install my-tgi intel/text-generation-inference
+```
+
+Then, follow the installation notes to test the deployment
 
 ## Values
 
