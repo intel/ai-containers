@@ -42,6 +42,7 @@ inference-optimization-inc-tensorflow-${PYTHON_VERSION:-3.9}-gpu:
   cmd: conda run -n tensorflow-gpu sample-tests/neural_compressor/tensorflow/run.sh gpu
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   device: ["/dev/dri"]
+  user: root
 
 inference-optimization-inc-torch-${PYTHON_VERSION:-3.9}-cpu:
   cmd: conda run -n pytorch-cpu sample-tests/neural_compressor/torch/run.sh cpu
