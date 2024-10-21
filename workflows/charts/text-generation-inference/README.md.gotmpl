@@ -9,7 +9,14 @@ For more information about how to use Huggingface text-generation-inference with
 
 {{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
 
-{{ template "chart.requirementsSection" . }}
+## Installation
+
+```bash
+helm repo add intel https://intel.github.io/helm-charts
+helm install my-tgi intel/text-generation-inference
+```
+
+Then, follow the installation notes to test the deployment
 
 {{ template "chart.valuesSection" . }}
 
