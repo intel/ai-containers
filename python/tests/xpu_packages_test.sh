@@ -25,7 +25,7 @@ fi
 ## checks for the presence of MKL,DPCPP and CCL/MPI Packages in OneAPI directory
 list=("/opt/intel/oneapi/redist/lib" "/opt/intel/oneapi/redist/lib/ccl" "/opt/intel/oneapi/redist/lib/mpi")
 
-for i in "${list[@]}";do
+for i in "${list[@]}"; do
 	if [[ ! -d "${i}" ]]; then
 		echo "OneAPI libraries not found/installed!"
 		exit 1
