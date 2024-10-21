@@ -9,16 +9,16 @@ plotly~=5.24.1
 scikit-learn
 scipy~=1.14.1
 skl2onnx~=1.17.0
-codeflare-sdk~=0.21.1
+codeflare-sdk~=0.22.0
 
 # DB connectors
 pymongo~=4.10.1
 psycopg~=3.2.3
-pyodbc~=5.1.0
-mysql-connector-python~=9.0.0
+pyodbc~=5.2.0
+mysql-connector-python~=9.1.0
 
 # JupyterLab packages
-odh-elyra~=4.0.3
+odh-elyra~=4.1.1
 jupyterlab~=4.2.5 # Wait on upgrade till plugins are ready
 jupyter-bokeh~=4.0.5 # Upgrade would bring in jupyterlab 4
 jupyter-server~=2.14.2
@@ -41,4 +41,4 @@ flake8~=7.1.1
 wheel~=0.44.0
 setuptools>=70.0.0
 pip>=23.3
-aiohttp==3.10.9
+aiohttp==3.10.10
