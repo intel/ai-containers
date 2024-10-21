@@ -189,9 +189,9 @@ Run the following command on the launcher nodes in a shell to launch the contain
         -v $PWD/ssh_launcher:/home/dev/.ssh/ \
         --name=launcher \
         --network=host  \
-        -w /tests intel/deep-learning:2024.0-py3.10 \
+        -w /tests intel/deep-learning:2024.2.0-py3.10 \
         conda run --no-capture-output \
-            -n tensorflow horovodrun --verbose \
+            -n tensorflow-cpu horovodrun --verbose \
             -np 2 \
             -H localhost:1,worker:1 \
             python tensorflow2_keras_mnist.py
@@ -225,7 +225,7 @@ docker run --rm -t \
     -v $PWD/ssh_launcher:/home/dev/.ssh/ \
     --name=launcher \
     --network=host  \
-    -w /tests intel/deep-learning:2024.0-py3.10 \
+    -w /tests intel/deep-learning:2024.2.0-py3.10 \
     conda run --no-capture-output \
         -n tensorflow-cpu bash -c 'export ITEX_ENABLE_NEXTPLUGGABLE_DEVICE=0 && \
         horovodrun --verbose \

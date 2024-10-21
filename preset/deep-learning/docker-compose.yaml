@@ -156,7 +156,6 @@ services:
         dependency.conda.mamba: '==1.5.8'
         dependency.conda.matplotlib-base: '>=3.8.4'
         dependency.conda.mpi: '==1.0'
-        dependency.conda.mpich: '==4.2.2'
         dependency.conda.networkx: '==3.3'
         dependency.conda.notebook: '==7.2.1'
         dependency.conda.oneccl_bind_pt_cpu: '=2.3.0'
