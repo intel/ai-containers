@@ -1,5 +1,5 @@
 numpy==2.1.2
-pillow==10.4.0
+pillow==11.0.0
 requests==2.32.3
 tensorflow==2.17.0
 tensorflow-serving-api==2.17.0
