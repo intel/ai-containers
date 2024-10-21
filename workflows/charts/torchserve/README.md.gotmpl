@@ -2,11 +2,18 @@
 
 {{ template "chart.description" . }}
 
-For more information about how to use TorchServe with Intel Optimizations, check out the [container documentation](../../../pytorch/serving/README.md).
+For more information about how to use TorchServe with Intel Optimizations, check out the [container documentation](https://github.com/intel/ai-containers/blob/main/pytorch/serving/README.md).
 
 {{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
 
-{{ template "chart.requirementsSection" . }}
+## Installation
+
+```bash
+helm repo add intel https://intel.github.io/helm-charts
+helm install my-tgi intel/text-generation-inference
+```
+
+Then, follow the installation notes to test the deployment
 
 {{ template "chart.valuesSection" . }}
 
