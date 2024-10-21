@@ -13,8 +13,8 @@
 # limitations under the License.
 
 apiVersion: v2
-name: torchserve-on-intel
-description: TorchServe on Intel is a performant, flexible and easy to use tool for serving PyTorch models in production.
+name: torchserve
+description: TorchServe is a performant, flexible and easy to use tool for serving PyTorch models in production on Intel GPUs.
 
 # A chart can be either an 'application' or a 'library' chart.
 #

@@ -9,6 +9,15 @@ For more information about how to use Huggingface text-generation-inference with
 
 ![Version: 0.2.1](https://img.shields.io/badge/Version-0.2.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
+## Installation
+
+```bash
+helm repo add intel https://intel.github.io/helm-charts
+helm install my-tgi intel/text-generation-inference
+```
+
+Then, follow the installation notes to test the deployment
+
 ## Values
 
 | Key | Type | Default | Description |
