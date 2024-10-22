@@ -2,7 +2,7 @@
 
 TensorFlow Serving is a flexible, high-performance serving system for machine learning models, designed for production environments. TensorFlow Serving makes it easy to deploy new algorithms and experiments, while keeping the same server architecture and APIs. TensorFlow Serving provides out-of-the-box integration with TensorFlow models, but can be easily extended to serve other types of models and data.
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
 ## Installation
 
@@ -24,10 +24,12 @@ Then, follow the installation notes to test the deployment
 | deploy.resources.limits | object | `{"cpu":"4000m","gpu.intel.com/i915":1,"memory":"1Gi"}` | Maximum resources per pod |
 | deploy.resources.limits."gpu.intel.com/i915" | int | `1` | Intel GPU Device Configuration |
 | deploy.resources.requests | object | `{"cpu":"1000m","memory":"512Mi"}` | Minimum resources per pod |
-| deploy.storage.nfs | object | `{"enabled":false,"path":"nil","readOnly":true,"server":"nil"}` | Network File System (NFS) storage for models |
 | fullnameOverride | string | `""` | Full qualified Domain Name |
 | nameOverride | string | `""` | Name of the serving service |
+| pvc.create | bool | `false` | Create PVC instead of reuse |
+| pvc.name | string | `""` | Name of the PVC |
 | pvc.size | string | `"5Gi"` | Size of the storage |
+| pvc.storageClassName | string | `""` | Storage class name |
 | service.type | string | `"NodePort"` | Type of service |
 
 ----------------------------------------------

@@ -58,27 +58,14 @@ spec:
           volumeMounts:
             - mountPath: /dev/shm
               name: dshm
-          {{- if .Values.deploy.storage.nfs.enabled }}
             - name: model
               mountPath: /models/{{ .Values.deploy.modelName }}
-          {{- else }}
-            - name: model
-              mountPath: /models/{{ .Values.deploy.modelName }}
-          {{- end }}
           resources:
             {{- toYaml .Values.deploy.resources | nindent 12 }}
       volumes:
         - name: dshm
           emptyDir:
             medium: Memory
-      {{- if .Values.deploy.storage.nfs.enabled }}
-        - name: model
-          nfs:
-            server: {{ .Values.deploy.storage.nfs.server }}
-            path: {{ .Values.deploy.storage.nfs.path }}
-            readOnly: {{ .Values.deploy.storage.nfs.readOnly }}
-      {{- else }}
         - name: model
           persistentVolumeClaim:
-            claimName: {{ include "tensorflow-serving.fullname" . }}-model-dir
-      {{- end }}
+            claimName: {{ .Values.pvc.name }}

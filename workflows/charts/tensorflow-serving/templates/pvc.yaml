@@ -12,15 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+{{- if .Values.pvc.create -}}
 ---
-{{- if not .Values.deploy.storage.nfs.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "tensorflow-serving.fullname" . }}-model-dir
+  name: {{ .Values.pvc.name }}
   labels:
     {{- include "tensorflow-serving.labels" . | nindent 4 }}
 spec:
+  {{- if .Values.pvc.storageClassName }}
+  storageClassName: {{ .Values.pvc.storageClassName }}
+  {{- end }}
   accessModes:
     - ReadWriteMany
   resources:

@@ -38,16 +38,15 @@ deploy:
     requests:
       cpu: 1000m
       memory: 512Mi
-  storage:
-    # -- Network File System (NFS) storage for models
-    nfs:
-      enabled: false
-      server: nil
-      path: nil
-      readOnly: true
 service:
   # -- Type of service
   type: NodePort
 pvc:
+  # -- Create PVC instead of reuse
+  create: false
+  # -- Name of the PVC
+  name: ""
+  # -- Storage class name
+  storageClassName: ""
   # -- Size of the storage
   size: 5Gi
