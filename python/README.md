@@ -2,7 +2,7 @@
 
 [Intel® Distribution for Python*] enhances performance and can improve your program speed from 10 to 100 times faster. It is a Python* distribution that includes the [Intel® Math Kernel Library] (oneMKL) and other Intel performance libraries to enable near-native performance through acceleration of core numerical and machine learning packages.
 
-Intel® Distribution for Python* is also available for Intel® dGPUs, that includes the latest driver packages and Intel® OneAPI runtime libraries that enables Machine Learning frameworks leverage the XPU device plugin.
+Intel® Distribution for Python* is also available for Intel® dGPUs, that includes the latest [Intel® dGPU drivers] and Intel® OneAPI runtime libraries such as [Intel® Math Kernel Library], [Intel® DPC++ Compiler Library] and [Intel® Collective Communications Library] that enable Machine Learning frameworks leverage the XPU device plugin.
 
 ## Images
 
@@ -12,7 +12,8 @@ The images below include variations for only the core packages in the [Intel® D
 | ---------------------- | ---------- |
 | `3.10-full`, `latest`  | `2024.2.0` |
 | `3.10-core`            | `2024.2.0` |
-| `3.10-xpu-idp`         | `2024.2.1` |
+| `3.10-xpu-core`        | `2024.2.1` |
+| `3.10-xpu-full`        | `2024.2.1` |
 
 ## Run a Performance Sample
 
@@ -50,7 +51,7 @@ Use the following command to check the availability of Intel dGPU devices on you
 docker run --rm -it \
     -v $PWD/tests:/tests \
     --device /dev/dri \
-    intel/python:3.10-xpu-idp \
+    intel/python:3.10-xpu-full \
     bash /tests/xpu_base_layers_test.sh
 ```
 
@@ -78,7 +79,7 @@ You can find the list of services below for each container in the group:
 | ------------ | ------------------------------------------------------------------- |
 | `idp`        | Base image with [Intel® Distribution for Python*]                    |
 | `pip`        | Equivalent python image without [Intel® Distribution for Python*]    |
-| `xpu`        | Base Image for Intel XPU plugin with and without [Intel® Distribution for Python*] |
+| `xpu`        | Base Image for Intel XPU plugin with [Intel® Distribution for Python*] |
 
 ## License
 
@@ -94,4 +95,4 @@ It is the image user's responsibility to ensure that any use of The images below
 [Intel® Math Kernel Library]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html
 [Intel® DPC++ Compiler Library]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/dpc-compiler-download.html
 [Intel® Collective Communications Library]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/oneccl.html
-[Intel® dGPU driver releases ]: https://dgpu-docs.intel.com/releases/releases.html
+[Intel® dGPU drivers]: https://dgpu-docs.intel.com/releases/releases.html
