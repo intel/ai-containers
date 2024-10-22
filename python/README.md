@@ -2,7 +2,7 @@
 
 [Intel® Distribution for Python*] enhances performance and can improve your program speed from 10 to 100 times faster. It is a Python* distribution that includes the [Intel® Math Kernel Library] (oneMKL) and other Intel performance libraries to enable near-native performance through acceleration of core numerical and machine learning packages.
 
-Intel® Distribution for Python* is also available for Intel® dGPUs, that includes the latest [Intel® dGPU drivers] and Intel® OneAPI runtime libraries such as [Intel® Math Kernel Library], [Intel® DPC++ Compiler Library] and [Intel® Collective Communications Library] that enable Machine Learning frameworks leverage the XPU device plugin.
+Intel® Distribution for Python* is also available for Intel® dGPUs, that include the latest [Intel® dGPU drivers] and Intel® OneAPI runtime libraries such as [Intel® Math Kernel Library], [Intel® DPC++ Compiler Library] and [Intel® Collective Communications Library] that enable Machine Learning frameworks leverage the XPU device plugin.
 
 ## Images
 
