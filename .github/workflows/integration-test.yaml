@@ -84,24 +84,22 @@ jobs:
       with:
         pattern: test-runner-summary*
         merge-multiple: true
-    - name: Check for JSON files
+    - name: Find Summary
+      id: summary
       shell: bash
       run: |
-        if [[ -n "$(find . -maxdepth 1 -name 'test-runner-summary*.json' -print -quit)" ]]; then
-          echo "has_matching_json_files=true" >> "$GITHUB_OUTPUT"
-          echo "Files matching the pattern test-runner-summary*.json found in the directory"
+        SUMMARY=$(find . -maxdepth 1 -name '*summary.json' -print)
+        if [[ -n "$SUMMARY" ]]; then
+          echo "summary=true" >> $GITHUB_OUTPUT
+          echo "Files matching the pattern ./*summary.json"
+          jq -s '[.[] | .[]]' ./*summary.json > combined.json
+          echo "Files found in the directory"
         else
-          echo "has_matching_json_files=false" >> "$GITHUB_OUTPUT"
-          echo "No files matching the pattern test-runner-summary*.json found in the directory"
+          echo "summary=false" >> $GITHUB_OUTPUT
+          echo "No files matching the pattern ./*summary.json"
         fi
-      id: check_matching_json_files
-    - name: Combine JSON files
-      if: ${{ steps.check_matching_json_files.outputs.has_matching_json_files == 'true' }}
-      run: |
-        jq -s '[.[] | .[]]' *.json > combined.json
-        echo "Files found in the directory"
     - name: Generate TXT file
-      if: ${{ steps.check_matching_json_files.outputs.has_matching_json_files == 'true' }}
+      if: ${{ steps.summary.outputs.summary != 'false' }}
       run: |
         {
           echo "### Integration Test Results"
@@ -119,7 +117,7 @@ jobs:
           fi
         } >> output.txt
     - name: PR-comment
-      if: ${{ steps.check_matching_json_files.outputs.has_matching_json_files == 'true' }}
+      if: ${{ steps.summary.outputs.summary != 'false' }}
       uses: marocchino/sticky-pull-request-comment@331f8f5b4215f0445d3c07b4967662a32a2d3e31 # v2.9.0
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
