@@ -59,21 +59,12 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda init --all && \
     conda install -y \
-        'colorama==0.4.6' \
-        'conda==24.5.0' \
-        'jupyterhub==5.1.0' \
-        'jupyter-server-proxy==4.3.0' \
-        'mamba==1.5.8' \
-        'networkx==3.3' \
-        'notebook==7.2.1' \
-        'pip==24.0' \
-        'python==3.10.14' \
-        'idna>=3.7' \
-        'requests>=2.32.0' \
-        'setuptools>=70.0.0' \
-        'tqdm>=4.66.3' \
-        'urllib3>=2.2.2' \
-        'nodejs==22.5.1' \
+        'conda==24.9.2' \
+        'jupyterlab==4.2.5' \
+        'jupyterhub==5.2.1' \
+        'notebook==7.2.2' \
+        'jupyter-server-proxy==4.4.0' \
+        'nb_conda_kernels==2.5.1' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -98,22 +89,22 @@ RUN conda create -yn classical-ml \
         "dpnp=${DPNP_VERSION}" \
         'ipykernel==6.29.5' \
         'kernda==0.3.0' \
-        'matplotlib-base==3.8.4' \
+        'matplotlib-base==3.9.2' \
         "modin-ray=${MODIN_VERSION}" \
         'python-dotenv==1.0.1' \
         "scikit-learn-intelex=${SKLEARNEX_VERSION}" \
-        'tqdm==4.66.4' \
+        'tqdm==4.66.5' \
         "xgboost=${XGBOOST_VERSION}" \
-        'idna>=3.7' \
-        'requests>=2.32.0' \
-        'setuptools>=70.0.0' \
-        'tqdm>=4.66.3' \
-        'urllib3>=2.2.2' \
+        "setuptools>=70.0.0" \
         && \
     conda clean -y --all
 
-RUN conda run -n classical-ml python -m pip install --no-deps --no-cache-dir \
-    'dataset-librarian==1.0.4'
+# PyPI packages
+COPY requirements.txt .
+RUN conda run -n 'classical-ml' python -m pip install --no-deps --no-cache-dir -r requirements.txt && \
+    conda clean -y --all
+
+RUN rm -rf requirements.txt
 
 ENV PYTHONSTARTUP=~/.patch_sklearn.py
 COPY base/.patch_sklearn.py ~/.patch_sklearn.py
