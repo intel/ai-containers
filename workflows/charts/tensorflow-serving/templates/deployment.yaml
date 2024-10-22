@@ -59,7 +59,8 @@ spec:
             - mountPath: /dev/shm
               name: dshm
             - name: model
-              mountPath: /models
+              mountPath: /models/
+              subPath: {{ .Values.deploy.modelName }}/saved_model
           resources:
             {{- toYaml .Values.deploy.resources | nindent 12 }}
       volumes:
