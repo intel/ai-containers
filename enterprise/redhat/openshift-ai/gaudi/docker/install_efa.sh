@@ -27,28 +27,28 @@ pushd "$tmp_dir"/aws-efa-installer
 # shellcheck disable=SC1091
 . /etc/os-release
 case $ID in
-    rhel)
-        # we cannot install dkms packages on RHEL images due to OCP rules
-        find RPMS/ -name 'dkms*.rpm' -exec rm -f {} \;
-        find RPMS/ -name 'efa-*.rpm' -exec rm -f {} \;
-        case $VERSION_ID in
-            8*)
-                dnf install -y RPMS/ROCKYLINUX8/x86_64/rdma-core/*.rpm
-            ;;
-            9*)
-                dnf install -y RPMS/ROCKYLINUX9/x86_64/rdma-core/*.rpm
-            ;;
-            *)
-                echo "Unsupported RHEL version: $VERSION_ID"
-                exit 1
-            ;;
-        esac
-        RUN_EFA_INSTALLER="echo 'Skipping EFA installer on RHEL'"
-    ;;
-    tencentos)
-        dnf install -y RPMS/ROCKYLINUX8/x86_64/rdma-core/*.rpm
-        patch -f -p1 -i /tmp/tencentos_efa_patch.txt --reject-file=tencentos_efa_patch.rej --no-backup-if-mismatch
-    ;;
+rhel)
+	# we cannot install dkms packages on RHEL images due to OCP rules
+	find RPMS/ -name 'dkms*.rpm' -exec rm -f {} \;
+	find RPMS/ -name 'efa-*.rpm' -exec rm -f {} \;
+	case $VERSION_ID in
+	8*)
+		dnf install -y RPMS/ROCKYLINUX8/x86_64/rdma-core/*.rpm
+		;;
+	9*)
+		dnf install -y RPMS/ROCKYLINUX9/x86_64/rdma-core/*.rpm
+		;;
+	*)
+		echo "Unsupported RHEL version: $VERSION_ID"
+		exit 1
+		;;
+	esac
+	RUN_EFA_INSTALLER="echo 'Skipping EFA installer on RHEL'"
+	;;
+tencentos)
+	dnf install -y RPMS/ROCKYLINUX8/x86_64/rdma-core/*.rpm
+	patch -f -p1 -i /tmp/tencentos_efa_patch.txt --reject-file=tencentos_efa_patch.rej --no-backup-if-mismatch
+	;;
 esac
 eval "$RUN_EFA_INSTALLER"
 popd
