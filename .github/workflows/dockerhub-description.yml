@@ -34,7 +34,7 @@ jobs:
       id: changed-files
       run: |
         # Get the list of files changed in the latest commit(s)
-        git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changed_files.txt
+        git diff --name-only ${{ github.event.before }} ${{ github.sha }} | tee changed_files.txt
         cat changed_files.txt
     - name: Set matrix data
       id: set-matrix
