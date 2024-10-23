@@ -64,7 +64,7 @@ services:
         dependency.conda.daal4py: '=2024.5.0'
         dependency.conda.dpnp: '=0.15.0'
         dependency.conda.ipykernel: '==6.29.5'
-        dependency.conda.jupyterhub: '==5.1.0'
+        dependency.conda.jupyterhub: '==5.2.1'
         dependency.conda.jupyter-server-proxy: '==4.4.0'
         dependency.conda.kernda: '==0.3.0'
         dependency.conda.matplotlib-base: '==3.9/2'
