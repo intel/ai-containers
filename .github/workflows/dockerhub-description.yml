@@ -14,14 +14,8 @@
 
 name: Docker Description Publish
 on:
-  # push:
-  #   branches: ["main"]
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to run the workflow on'
-        required: true
-        default: 'main'
+  push:
+    branches: ["main"]
 permissions: read-all
 jobs:
   setup-matrix:
