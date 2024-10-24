@@ -103,7 +103,8 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
     rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*list
 
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash dev
-RUN groupadd -g 109 render
+ARG GID=109
+RUN groupadd -g ${GID} render
 RUN usermod -aG root,sudo,video,render dev
 RUN echo 'dev:password' | chpasswd
 USER dev
