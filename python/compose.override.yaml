@@ -27,6 +27,7 @@ services:
   xpu:
     build:
       labels:
+        org.opencontainers.image.version: 3.10-xpu-${IDP_VERSION:-core}
         org.opencontainers.image.title: "Intel® Distribution for Python XPU Base Image"
     extends: idp
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-${IDP_VERSION:-core}-py${PYTHON_VERSION:-3.10}-xpu-base
