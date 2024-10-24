@@ -26,6 +26,7 @@ ARG BASE_IMAGE_TAG
 ARG PACKAGE_OPTION=pip
 ARG PYTHON_VERSION
 ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-base
+
 FROM ${PYTHON_BASE} AS tf-base-pip
 
 # Intel Optimizations specific Envs
@@ -78,59 +79,6 @@ EXPOSE 8888
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
 FROM ${PYTHON_BASE} AS itex-xpu-base
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    apt-utils \
-    build-essential \
-    clinfo \
-    git \
-    gnupg2 \
-    gpg-agent \
-    rsync \
-    unzip \
-    wget && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-ARG ICD_VER
-ARG LEVEL_ZERO_GPU_VER
-ARG LEVEL_ZERO_VER
-ARG LEVEL_ZERO_DEV_VER
-ARG DPCPP_VER
-ARG MKL_VER
-ARG CCL_VER
-
-RUN no_proxy="" NO_PROXY="" wget --no-check-certificate -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-    gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
-    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
-
-RUN no_proxy="" NO_PROXY="" apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    intel-opencl-icd=${ICD_VER} \
-    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
-    level-zero=${LEVEL_ZERO_VER} \
-    level-zero-dev=${LEVEL_ZERO_DEV_VER} && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-RUN no_proxy="" NO_PROXY="" wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
-   | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
-   echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
-   | tee /etc/apt/sources.list.d/oneAPI.list
-
-ARG DPCPP_VER
-ARG MKL_VER
-ARG CCL_VER
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    intel-oneapi-runtime-dpcpp-cpp=${DPCPP_VER} \
-    intel-oneapi-runtime-mkl=${MKL_VER} \
-    intel-oneapi-runtime-ccl=${CCL_VER} && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
 
 WORKDIR /
 COPY xpu-requirements.txt .

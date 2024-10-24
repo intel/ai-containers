@@ -28,6 +28,7 @@
 
 ARG BASE_IMAGE_NAME=ubuntu
 ARG BASE_IMAGE_TAG=22.04
+ARG PACKAGE_OPTION=pip
 
 FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG} AS base
 
@@ -103,3 +104,59 @@ WORKDIR /
 COPY requirements.txt .
 
 RUN python -m pip --no-cache-dir install -r requirements.txt
+
+FROM ${PACKAGE_OPTION} as xpu-base
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+        apt-utils \
+        build-essential \
+        clinfo \
+        git \
+        gnupg2 \
+        gpg-agent \
+        rsync \
+        unzip && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+    gpg --dearmor --yes --output /usr/share/keyrings/intel-graphics.gpg
+RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
+    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
+
+ARG ICD_VER
+ARG LEVEL_ZERO_GPU_VER
+ARG LEVEL_ZERO_VER
+ARG LEVEL_ZERO_DEV_VER
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+        intel-opencl-icd=${ICD_VER} \
+        intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
+        libze1=${LEVEL_ZERO_VER} \
+        libze-dev=${LEVEL_ZERO_DEV_VER} && \
+        apt-get clean && \
+    rm -rf  /var/lib/apt/lists/*
+
+RUN no_proxy="" NO_PROXY="" wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
+    | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
+    echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
+    | tee /etc/apt/sources.list.d/oneAPI.list
+
+ARG DPCPP_VER
+ARG MKL_VER
+ARG CCL_VER
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends --fix-missing \
+    intel-oneapi-runtime-dpcpp-cpp=${DPCPP_VER} \
+    intel-oneapi-runtime-mkl=${MKL_VER} \
+    intel-oneapi-runtime-ccl=${CCL_VER} && \
+    rm -rf  /var/lib/apt/lists/*
+
+RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
+
+RUN if eval "which conda >/dev/null"; then \
+        echo 'export OCL_ICD_VENDORS="/etc/OpenCL/vendors"' >> ~/.bashrc; \
+    fi
