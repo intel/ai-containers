@@ -66,43 +66,7 @@ EXPOSE 8888
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
-FROM ${PYTHON_BASE} AS ipex-xpu-base
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    apt-utils \
-    build-essential \
-    clinfo \
-    git \
-    gnupg2 \
-    gpg-agent \
-    rsync \
-    unzip && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-    gpg --dearmor --yes --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
-    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
-
-ARG ICD_VER
-ARG LEVEL_ZERO_GPU_VER
-ARG LEVEL_ZERO_VER
-ARG LEVEL_ZERO_DEV_VER
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    intel-opencl-icd=${ICD_VER} \
-    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
-    libze1=${LEVEL_ZERO_VER} \
-    libze-dev=${LEVEL_ZERO_DEV_VER} && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list
-
-FROM ipex-xpu-base AS ipex-xpu-base-wheels-pip
+FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels-pip
 
 WORKDIR /
 COPY xpu-requirements.txt .
@@ -110,7 +74,7 @@ COPY xpu-requirements.txt .
 RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
 
-FROM ipex-xpu-base AS ipex-xpu-base-wheels-idp
+FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels-idp
 
 WORKDIR /
 COPY xpu-requirements.txt .
@@ -118,15 +82,14 @@ COPY xpu-requirements.txt .
 RUN conda run -n idp python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
 
-RUN echo 'export OCL_ICD_VENDORS="/etc/OpenCL/vendors"' >> ~/.bashrc
-
 FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} AS ipex-xpu-jupyter
 
 WORKDIR /jupyter
 COPY jupyter-requirements.txt .
+
 RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
 
-RUN if eval "which conda >/dev/null )"; then \
+RUN if eval "which conda >/dev/null"; then \
         echo "conda activate idp" >> ~/.bashrc; \
     fi
 
