@@ -36,7 +36,7 @@ jobs:
         # Get the list of files changed in the latest commit(s)
         changed_files=$(git diff --name-only HEAD~1 ${{ github.sha }} | sed 's|^|./|' | jq -R . | jq -s .)
         echo "Changed files: $changed_files"
-        
+
         # If there are changed files, filter the JSON using jq
         matrix=$(jq -c --argjson changed "$changed_files" \
           '.readmes |= map(select(.fname as $fname | any($changed[]; . == $fname)))' \
