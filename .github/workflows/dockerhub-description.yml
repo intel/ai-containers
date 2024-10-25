@@ -23,17 +23,27 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-    - name: Harden Runner
-      uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
-      with:
-        egress-policy: audit
     - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
-    - name: Set matrix data
+      with:
+          fetch-depth: 2
+    - name: Set Matrix data
       id: set-matrix
-      run: echo "matrix=$(jq -c . < .github/dockerhub-readmes.json)" >> $GITHUB_OUTPUT
+      run: |
+        # Get the list of files changed in the latest commit(s)
+        changed_files=$(git diff --name-only HEAD~1 ${{ github.sha }} | sed 's|^|./|' | jq -R . | jq -s .)
+        echo "Changed files: $changed_files"
+        
+        # If there are changed files, filter the JSON using jq
+        matrix=$(jq -c --argjson changed "$changed_files" \
+          '.readmes |= map(select(.fname as $fname | any($changed[]; . == $fname)))' \
+          .github/dockerhub-readmes.json)
+        echo "Filtered matrix:"
+        echo $matrix
+        echo "matrix=$matrix" >> $GITHUB_OUTPUT
   publish-dockerhub-description:
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     needs: setup-matrix
+    if: ${{ needs.setup-matrix.outputs.matrix != '{"readmes":[]}' }}
     strategy:
       matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
       fail-fast: false
