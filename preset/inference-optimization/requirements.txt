@@ -1,5 +1,5 @@
 dataset-librarian==1.0.4
-evaluate==0.4.2
+evaluate==0.4.3
 git+https://github.com/huggingface/optimum-intel.git
 tf2onnx==1.16.1
-onnxruntime==1.19.0
+onnxruntime==1.19.2
