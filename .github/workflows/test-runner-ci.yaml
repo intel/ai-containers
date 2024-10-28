@@ -50,7 +50,7 @@ jobs:
     #     registry: ${{ secrets.REGISTRY }}
     #     username: ${{ secrets.REGISTRY_USER }}
     #     password: ${{ secrets.REGISTRY_TOKEN }}
-    - uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5.2.0
+    - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
       with:
         python-version: ${{ matrix.python }}
     - name: Install requirements
@@ -74,7 +74,7 @@ jobs:
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
       with:
         egress-policy: audit
-    - uses: coverallsapp/github-action@4cdef0b2dbe0c9aa26bed48edb868db738625e79 # v2.3.3
+    - uses: coverallsapp/github-action@cfd0633edbd2411b532b808ba7a8b5e04f76d2c8 # v2.3.4
       with:
         parallel-finished: true
   integration-test:
@@ -98,7 +98,7 @@ jobs:
     #     registry: ${{ secrets.REGISTRY }}
     #     username: ${{ secrets.REGISTRY_USER }}
     #     password: ${{ secrets.REGISTRY_TOKEN }}
-    - uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5.2.0
+    - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
       with:
         python-version: "3.8"
     - name: Test Container Group
