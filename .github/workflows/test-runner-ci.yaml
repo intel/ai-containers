@@ -74,7 +74,7 @@ jobs:
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
       with:
         egress-policy: audit
-    - uses: coverallsapp/github-action@4cdef0b2dbe0c9aa26bed48edb868db738625e79 # v2.3.3
+    - uses: coverallsapp/github-action@cfd0633edbd2411b532b808ba7a8b5e04f76d2c8 # v2.3.4
       with:
         parallel-finished: true
   integration-test:
