@@ -51,6 +51,7 @@ RUN dnf install -y \
     wget \
     git \
     libffi-devel \
+    bzip2 \
     bzip2-devel \
     zlib-devel \
     mesa-libGL \
@@ -59,7 +60,8 @@ RUN dnf install -y \
     # update pkgs (except OS version) for resolving potentials CVEs
     dnf versionlock add redhat-release* && \
     dnf update -y && \
-    dnf clean all && rm -rf /var/cache/yum
+    dnf clean all && rm -rf /var/cache/yum && \
+    rm -f /etc/ssh/ssh_host_*_key*
 
 RUN mkdir -p /licenses && \
     wget -O /licenses/LICENSE https://raw.githubusercontent.com/intel/ai-containers/main/LICENSE
@@ -72,20 +74,22 @@ ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 COPY install_efa.sh .
 RUN ./install_efa.sh && rm install_efa.sh && rm -rf /etc/ld.so.conf.d/efa.conf /etc/profile.d/efa.sh
 
+ENV OPENMPI_VERSION=4.1.6
 ENV LIBFABRIC_VERSION="1.20.0"
 ENV LIBFABRIC_ROOT="/opt/habanalabs/libfabric-${LIBFABRIC_VERSION}"
-ENV MPI_ROOT=/opt/amazon/openmpi
+ENV MPI_ROOT=/opt/habanalabs/openmpi
 ENV LD_LIBRARY_PATH=$LIBFABRIC_ROOT/lib:${MPI_ROOT}/lib:/usr/lib/habanalabs:$LD_LIBRARY_PATH
 ENV PATH=${LIBFABRIC_ROOT}/bin:${MPI_ROOT}/bin:$PATH
 ENV OPAL_PREFIX=${MPI_ROOT}
 ENV MPICC=${MPI_ROOT}/bin/mpicc
 ENV RDMAV_FORK_SAFE=1
-ENV FI_EFA_USE_DEVICE_RDMA=1
+ENV FI_EFA_USE_DEVICE_RDMA=0
+ENV OMPI_MCA_btl=^openib
 
 RUN echo "[habanalabs]" > /etc/yum.repos.d/habanalabs.repo && \
     echo "name=Habana RH9 Linux repo" >> /etc/yum.repos.d/habanalabs.repo && \
     echo "baseurl=https://${ARTIFACTORY_URL}/artifactory/rhel/9/9.2" >> /etc/yum.repos.d/habanalabs.repo && \
-    echo "gpgkey=https://${ARTIFACTORY_URL}/artifactory/api/v2/repositories/rhel/keyPairs/primary/public" >> /etc/yum.repos.d/habanalabs.repo && \
+    echo "gpgkey=https://${ARTIFACTORY_URL}/artifactory/rhel/9/9.2/repodata/repomd.xml.key" >> /etc/yum.repos.d/habanalabs.repo && \
     echo "gpgcheck=1" >> /etc/yum.repos.d/habanalabs.repo
 
 # for Habana GPG key with SHA-1 signature
@@ -112,6 +116,12 @@ RUN wget -nv -O /tmp/libfabric-${LIBFABRIC_VERSION}.tar.bz2 https://github.com/o
     ./configure --prefix=$LIBFABRIC_ROOT --enable-psm3-verbs --enable-verbs=yes --with-synapseai=/usr && \
     make && make install && cd / && rm -rf /tmp/libfabric-${LIBFABRIC_VERSION}.tar.bz2 /tmp/libfabric-${LIBFABRIC_VERSION}
 
+RUN wget -q -O /tmp/openmpi-${OPENMPI_VERSION}.tar.gz https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-${OPENMPI_VERSION}.tar.gz && \
+    tar -xzf /tmp/openmpi-${OPENMPI_VERSION}.tar.gz -C /tmp && \
+    cd /tmp/openmpi-${OPENMPI_VERSION} && \
+    ./configure --prefix=${MPI_ROOT} --with-libfabric=$LIBFABRIC_ROOT --with-verbs && \
+    make -j$(nproc) && make install && cd / && rm -rf /tmp/openmpi-${OPENMPI_VERSION}.tar.gz /tmp/openmpi-${OPENMPI_VERSION}
+
 RUN wget -nv -O /tmp/main.zip https://github.com/HabanaAI/hccl_ofi_wrapper/archive/refs/heads/main.zip && \
     unzip /tmp/main.zip -d /tmp && \
     cd /tmp/hccl_ofi_wrapper-main && \
@@ -126,7 +136,7 @@ ENV HABANA_PLUGINS_LIB_PATH=/opt/habanalabs/habana_plugins
 
 ENV APP_ROOT="/opt/app-root"
 
-RUN python3.10 -m pip install "pip>=23.3" "setuptools>=70.0.0" "wheel==0.38.4"
+RUN python3.10 -m pip install "pip==24.2" "setuptools==75.1.0" "wheel==0.44.0"
 
 WORKDIR ${APP_ROOT}
 
