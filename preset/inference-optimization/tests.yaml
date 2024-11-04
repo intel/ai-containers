@@ -22,6 +22,7 @@ inference-optimization-inc-ipex-quantization-notebook-${PYTHON_VERSION:-3.9}-gpu
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   notebook: True
   device: ["/dev/dri"]
+  user: root
 
 inference-optimization-inc-itex-notebook-${PYTHON_VERSION:-3.9}-cpu:
   cmd: papermill --log-output jupyter/inc-itex/inc_sample_tensorflow.ipynb result.ipynb -k tensorflow-cpu --cwd jupyter/inc-itex
@@ -53,6 +54,7 @@ inference-optimization-ipex-${PYTHON_VERSION:-3.9}-gpu:
   cmd: conda run -n pytorch-gpu python -W ignore sample-tests/intel_extension_for_pytorch/test_ipex.py --device xpu --ipex
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   device: ["/dev/dri"]
+  user: root
 
 inference-optimization-itex-${PYTHON_VERSION:-3.9}-cpu:
   cmd: conda run -n tensorflow-cpu python -W ignore sample-tests/intel_extension_for_tensorflow/test_itex.py
@@ -61,6 +63,7 @@ inference-optimization-itex-${PYTHON_VERSION:-3.9}-gpu:
   cmd: conda run -n tensorflow-gpu python -W ignore sample-tests/intel_extension_for_tensorflow/test_itex.py
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   device: ["/dev/dri"]
+  user: root
 
 inference-optimization-itex-inference-notebook-${PYTHON_VERSION:-3.9}-cpu:
   cmd: papermill --log-output jupyter/itex-inference/tutorial_optimize_TensorFlow_pretrained_model.ipynb result.ipynb -k tensorflow-cpu --cwd jupyter/itex-inference
@@ -80,6 +83,7 @@ inference-optimization-onnx-${PYTHON_VERSION:-3.9}-gpu:
   cmd: conda run -n tensorflow-gpu sample-tests/onnx/run.sh
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   device: ["/dev/dri"]
+  user: root
 
 inference-optimization-tensorflow-dataset-librarian-${PYTHON_VERSION:-3.9}-cpu:
   cmd: conda run -n tensorflow-cpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
@@ -88,6 +92,7 @@ inference-optimization-tensorflow-dataset-librarian-${PYTHON_VERSION:-3.9}-gpu:
   cmd: conda run -n tensorflow-gpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   device: ["/dev/dri"]
+  user: root
 
 inference-optimization-torch-dataset-librarian-${PYTHON_VERSION:-3.9}-cpu:
   cmd: conda run -n pytorch-cpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
@@ -96,3 +101,4 @@ inference-optimization-torch-dataset-librarian-${PYTHON_VERSION:-3.9}-gpu:
   cmd: conda run -n pytorch-gpu bash -c 'yes | python -m dataset_librarian.dataset -n msmarco --download -d ~/msmarco'
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-inference-optimization-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
   device: ["/dev/dri"]
+  user: root
