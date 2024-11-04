@@ -151,3 +151,30 @@ services:
     entrypoint: ""
     extends: ipex-xpu-base
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.10}-torchserve-xpu
+  multinode-xpu:
+    build:
+      args:
+        PACKAGE_OPTION: pip
+        PYTHON_BASE: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-xpu-base
+        MPI_VER: 2021.14.0-790
+        CCL_VER: 2021.14.0-505
+      labels:
+        dependency.apt.gcc: true
+        dependency.apt.libgl1-mesa-glx: true
+        dependency.apt.libglib2: true
+        dependency.apt.python3-dev: true
+        dependency.pip.apt.virtualenv: true
+        dependency.pip.deepspeed: 0.14.2
+        dependency.python.pip: multinode/xpu-requirements.txt
+        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.1.40}-xpu-${PACKAGE_OPTION:-pip}-base"
+        org.opencontainers.image.title: "Intel® Extension for PyTorch MultiNode XPU Image"
+        org.opencontainers.image.version: ${IPEX_VERSION:-2.1.40}-${PACKAGE_OPTION:-pip}-multinode-xpu
+      target: deepspeed-xpu
+    command: >
+      bash -c "python -c 'import neural_compressor;import oneccl_bindings_for_pytorch as oneccl;import deepspeed;
+      print(\"Neural Compressor:\", neural_compressor.__version__,
+      \"\\nOneCCL:\", oneccl.__version__,
+      \"\\nDeepspeed:\", deepspeed.__version__)'"
+    extends: ipex-xpu-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.110}-oneccl-inc-${INC_VERSION:-3.0}-xpu
+    shm_size: 2gb
