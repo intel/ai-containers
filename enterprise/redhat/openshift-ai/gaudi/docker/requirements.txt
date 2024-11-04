@@ -15,7 +15,7 @@ codeflare-sdk~=0.21.1
 pymongo~=4.10.1
 psycopg~=3.2.3
 pyodbc~=5.1.0
-mysql-connector-python~=9.0.0
+mysql-connector-python~=9.1.0
 
 # JupyterLab packages
 odh-elyra~=4.0.3
