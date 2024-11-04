@@ -242,10 +242,9 @@ EXPOSE 8080 8081 8082 7070 7071
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
 CMD ["serve"]
 
+FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} as deepspeed-xpu
 
-FROM ipex-xpu-base-wheels-pip as deepspeed-xpu
-
-RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
+RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
         python3-dev \
         gcc \
         g++ \
@@ -284,40 +283,41 @@ WORKDIR /
 COPY multinode/requirements.txt requirements.txt
 
 RUN python -m pip install --no-cache-dir -r requirements.txt && \
-    rm -rf requirements.txt
+    rm -rf requirements.txt && \
+    apt-get clean
 
-RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
-    openssh-client \
-    openssh-server && \
-    rm /etc/ssh/ssh_host_*_key \
-    /etc/ssh/ssh_host_*_key.pub && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get upgrade && apt-get dist-upgrade && apt-get install -y \
+#     openssh-client \
+#     openssh-server && \
+#     rm /etc/ssh/ssh_host_*_key \
+#     /etc/ssh/ssh_host_*_key.pub && \
+#     apt-get clean && \
+#     rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /var/run/sshd
+# RUN mkdir -p /var/run/sshd
 
-ARG PYTHON_VERSION
+# ARG PYTHON_VERSION
 
-COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
+# COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
 
 # modify generate_ssh_keys to be a helper script
 # print how to use helper script on bash startup
 # Avoids loop for further execution of the startup file
-ARG PACKAGE_OPTION=pip
-ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
-RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then PYPATH="/opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages"; fi && \
-    echo "source ${PYPATH}/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
-    cat '/generate_ssh_keys.sh' >> ~/.startup && \
-    rm -rf /generate_ssh_keys.sh
+# ARG PACKAGE_OPTION=pip
+# ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
+# RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then PYPATH="/opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages"; fi && \
+#     echo "source ${PYPATH}/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
+#     cat '/generate_ssh_keys.sh' >> ~/.startup && \
+#     rm -rf /generate_ssh_keys.sh
 
-COPY multinode/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
-COPY multinode/sshd_config /etc/ssh/sshd_config
-COPY multinode/ssh_config /etc/ssh/ssh_config
+# COPY multinode/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
+# COPY multinode/sshd_config /etc/ssh/sshd_config
+# COPY multinode/ssh_config /etc/ssh/ssh_config
 
-RUN mkdir -p /licensing
+# RUN mkdir -p /licensing
 
-RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
-    wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
-    wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
+# RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
+#     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
+#     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
 
-ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
+# ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
