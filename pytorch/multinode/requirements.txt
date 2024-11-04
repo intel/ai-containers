@@ -1,0 +1,4 @@
+neural-compressor==3.0
+py-cpuinfo==9.0.0
+mpi4py>=3.1.0
+deepspeed==0.14.4
