@@ -318,7 +318,7 @@ ENV FI_PROVIDER_PATH=/opt/intel/oneapi/mpi/2021.14/opt/mpi/libfabric/lib/prov
 
 FROM multinode-xpu as deepspeed-xpu-pip
 
-RUN apt-get update && apt-get install python3-mpi4py 
+RUN apt-get update && apt-get install python3-mpi4py
 
 WORKDIR /
 COPY multinode/requirements.txt requirements.txt
