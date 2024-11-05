@@ -242,7 +242,7 @@ EXPOSE 8080 8081 8082 7070 7071
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
 CMD ["serve"]
 
-FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} as deepspeed-xpu
+FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} as multinode-xpu
 
 RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
         python3-dev \
@@ -268,7 +268,8 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
         intel-oneapi-mpi-devel=${MPI_VER} \
-        intel-oneapi-ccl=${CCL_VER} && \
+        intel-oneapi-ccl=${CCL_VER} \
+        python3-mpi4py && \
     rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/oneAPI.list
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/mpi/2021.14/opt/mpi/libfabric/lib:/opt/intel/oneapi/mpi/2021.14/lib:$LD_LIBRARY_PATH
@@ -278,13 +279,6 @@ ENV CCL_ROOT=/opt/intel/oneapi/ccl/2021.14
 ENV CPATH=/opt/intel/oneapi/mpi/2021.14/include
 ENV I_MPI_ROOT=/opt/intel/oneapi/mpi/2021.14
 ENV FI_PROVIDER_PATH=/opt/intel/oneapi/mpi/2021.14/opt/mpi/libfabric/lib/prov
-
-WORKDIR /
-COPY multinode/requirements.txt requirements.txt
-
-RUN python -m pip install --no-cache-dir -r requirements.txt && \
-    rm -rf requirements.txt && \
-    apt-get clean
 
 # RUN apt-get update && apt-get upgrade && apt-get dist-upgrade && apt-get install -y \
 #     openssh-client \
@@ -321,3 +315,25 @@ RUN python -m pip install --no-cache-dir -r requirements.txt && \
 #     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
 
 # ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
+
+FROM multinode-xpu as deepspeed-xpu-pip
+
+RUN apt-get update && apt-get install python3-mpi4py 
+
+WORKDIR /
+COPY multinode/requirements.txt requirements.txt
+
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    rm -rf requirements.txt && \
+    apt-get clean
+
+FROM multinode-xpu as deepspeed-xpu-idp
+
+RUN conda run -n idp && pip install mpi4py==4.0.1
+
+WORKDIR /
+COPY multinode/requirements.txt requirements.txt
+
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    rm -rf requirements.txt && \
+    apt-get clean
