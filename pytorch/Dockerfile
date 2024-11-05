@@ -272,7 +272,7 @@ RUN apt-get update && \
         python3-mpi4py && \
     rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/oneAPI.list
 
-RUN apt-get update && apt-get upgrade && apt-get install -y \
+RUN apt-get update && apt-get upgrade && apt-get install -y --no-install-recommends \
         openssh-client \
         openssh-server && \
     rm /etc/ssh/ssh_host_*_key \
@@ -320,7 +320,7 @@ ARG PACKAGE_OPTION
 RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then \
         conda run -n idp && python -m pip install --no-cache-dir mpi4py==4.0.1; \
     elif [ "${PACKAGE_OPTION}" = "pip" ]; then \
-        apt-get update && apt-get install -y python3-mpi4py; \
+        apt-get update && apt-get install -y --no-install-recommends python3-mpi4py; \
     fi
 
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
