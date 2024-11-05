@@ -242,7 +242,7 @@ EXPOSE 8080 8081 8082 7070 7071
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
 CMD ["serve"]
 
-FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} as multinode-xpu
+FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} as deepspeed-xpu
 
 RUN apt-get update && apt-get install -y --no-install-recommends --fix-missing \
         python3-dev \
@@ -272,6 +272,14 @@ RUN apt-get update && \
         python3-mpi4py && \
     rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/oneAPI.list
 
+RUN apt-get update && apt-get upgrade && apt-get install -y \
+        openssh-client \
+        openssh-server && \
+    rm /etc/ssh/ssh_host_*_key \
+    /etc/ssh/ssh_host_*_key.pub && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/mpi/2021.14/opt/mpi/libfabric/lib:/opt/intel/oneapi/mpi/2021.14/lib:$LD_LIBRARY_PATH
 ENV PATH=/opt/intel/oneapi/mpi/2021.14/opt/mpi/libfabric/bin:/opt/intel/oneapi/mpi/2021.14/bin:$PATH
 ENV PKG_CONFIG_PATH=/opt/intel/oneapi/mpi/2021.14/lib/pkgconfig:/opt/intel/oneapi/ccl/2021.14/lib/
@@ -279,16 +287,6 @@ ENV CCL_ROOT=/opt/intel/oneapi/ccl/2021.14
 ENV CPATH=/opt/intel/oneapi/mpi/2021.14/include
 ENV I_MPI_ROOT=/opt/intel/oneapi/mpi/2021.14
 ENV FI_PROVIDER_PATH=/opt/intel/oneapi/mpi/2021.14/opt/mpi/libfabric/lib/prov
-
-FROM multinode-xpu as deepspeed-xpu-pip
-
-RUN apt-get update && apt-get upgrade && apt-get dist-upgrade && apt-get install -y \
-    openssh-client \
-    openssh-server && \
-    rm /etc/ssh/ssh_host_*_key \
-    /etc/ssh/ssh_host_*_key.pub && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /var/run/sshd
 
@@ -311,24 +309,18 @@ RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
     wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
 
+WORKDIR /
+COPY multinode/requirements.txt requirements.txt
+
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
+    rm -rf requirements.txt && \
+    apt-get clean
+
+ARG PACKAGE_OPTION
+RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then \
+        conda run -n idp && python -m pip install --no-cache-dir mpi4py==4.0.1; \
+    elif [ "${PACKAGE_OPTION}" = "pip" ]; then \
+        apt-get update && apt-get install -y python3-mpi4py; \
+    fi
+
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
-
-RUN apt-get update && apt-get install -y python3-mpi4py
-
-WORKDIR /
-COPY multinode/requirements.txt requirements.txt
-
-RUN python -m pip install --no-cache-dir -r requirements.txt && \
-    rm -rf requirements.txt && \
-    apt-get clean
-
-FROM multinode-xpu as deepspeed-xpu-idp
-
-WORKDIR /
-COPY multinode/requirements.txt requirements.txt
-
-RUN conda run -n idp && python -m pip install --no-cache-dir mpi4py==4.0.1
-
-RUN python -m pip install --no-cache-dir -r requirements.txt && \
-    rm -rf requirements.txt && \
-    apt-get clean
