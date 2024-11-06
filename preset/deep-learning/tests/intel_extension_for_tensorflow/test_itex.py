@@ -25,6 +25,7 @@ def print_script_description():
     """
     print(description)
 
+
 print_script_description()
 
 import tensorflow as tf
@@ -34,6 +35,7 @@ print("TensorFlow version {}".format(tf.__version__))
 import numpy as np
 import tensorflow_hub as hub
 from tensorflow.keras.applications.imagenet_utils import preprocess_input
+
 
 def load_data():
     x = np.random.rand(1, 224, 224, 3)
@@ -72,5 +74,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

@@ -12,15 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 # pylint: skip-file
 def print_script_description():
     description = """
-    This script utilizes PyTorch to classify images with a pre-trained ResNet-50 model. 
-    Users can specify whether to run the script on a CPU or XPU, and there is an option to apply optimizations using Intel Extension for PyTorch (IPEX). 
+    This script utilizes PyTorch to classify images with a pre-trained ResNet-50 model.
+    Users can specify whether to run the script on a CPU or XPU, and there is an option to apply optimizations using Intel Extension for PyTorch (IPEX).
     Transfers both the model and data to the chosen device, and then measures the average inference time over 100 runs, excluding the initial warm-up phase.
     Finally, the script prints the average inference time.
     """
     print(description)
+
 
 print_script_description()
 
