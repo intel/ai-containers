@@ -25,70 +25,12 @@ docker pull intel/deep-learning:latest-py<version>
 
 There are 3 modes to run these containers:
 
-* [Interactive](#run-in-interactive-mode)
 * [Jupyter](#run-using-jupyter-notebook)
+* [Interactive](#run-in-interactive-mode)
 * [Multi-Node Distributed Training](#run-in-multi-node-distributed-mode-advanced) (Deep Learning and Inference Optimization)
 
 > [!NOTE]
 > Modify the commands below to fit your use case, especially the image, environment variables, and GPU device path.
-
-### Run in Interactive Mode
-
-This mode allows running the container in an interactive shell. This enables the ability to interact with the container's bash shell. Below is the command to start the container in interactive mode:
-
-#### Run on CPU
-
-```bash
-docker run -it --rm \
-    -p 8888:8888 --shm-size=12G \
-    -v ${PWD}:/home/dev/workdir \
-    intel/deep-learning:latest-py<version> bash
-```
-
-> [!NOTE]
-> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications (Ex. Modin*). Docker recommends increasing shared memory size using `--shm-size`.
-
-#### Run on GPU
-
-Find your machine's `RENDER` and `VIDEO` group values to enable [Intel® Flex/Max GPU](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu.html).
-
-```bash
-RENDER=$(getent group render | sed -E 's,^render:[^:]*:([^:]*):.*$,\1,')
-VIDEO=$(getent group video | sed -E 's,^video:[^:]*:([^:]*):.*$,\1,')
-test -z "$RENDER" || RENDER_GROUP="--group-add ${RENDER}"
-test -z "$VIDEO" || VIDEO_GROUP="--group-add ${VIDEO}"
-```
-
-```bash
-docker run -it --rm \
-    ${RENDER_GROUP} \
-    ${VIDEO_GROUP} \
-    --device=/dev/dri \
-    -p 8888:8888 --shm-size=12G \
-    -v ${PWD}:/home/dev/workdir \
-    -v /dev/dri/by-path:/dev/dri/by-path \
-    intel/deep-learning:latest-py<version> bash
-```
-
-> [!NOTE]
-> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications(Ex. Modin). Docker recommends increasing shared memory size using `--shm-size`.
-
-#### Next Steps
-
-1. For Deep Learning and Inference Optimization containers there will be separate conda environments for each AI framework: `pytorch-cpu`, `pytorch-gpu`, `tensorflow-cpu` and `tensorflow-gpu`. Use the command below to activate one environment:
-
-    ```bash
-    conda activate <env-name>
-    ```
-
-2. Select a test from the `sample-tests` folder and run it using the following command as an example:
-
-    ```bash
-    python sample-tests/intel_extension_for_tensorflow/test_itex.py
-    ```
-
-> [!NOTE]
-> The `sample-tests` folder may differ in each container, and some tests use a bash script.
 
 ### Run using Jupyter Notebook
 
@@ -154,6 +96,68 @@ docker run ... intel/deep-learning:latest-py<version> \
             --no-browser \
             --allow-root"
 ```
+### Run in Interactive Mode
+
+This mode allows running the container in an interactive shell. This enables the ability to interact with the container's bash shell. Below is the command to start the container in interactive mode:
+
+#### Run on CPU
+
+```bash
+docker run -it --rm \
+    -p 8888:8888 --shm-size=12G \
+    -v ${PWD}:/home/dev/workdir \
+    intel/deep-learning:latest-py<version> bash
+```
+
+> [!NOTE]
+> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications (Ex. Modin*). Docker recommends increasing shared memory size using `--shm-size`.
+
+#### Run on GPU
+
+Find your machine's `RENDER` and `VIDEO` group values to enable [Intel® Flex/Max GPU](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu.html).
+
+```bash
+RENDER=$(getent group render | sed -E 's,^render:[^:]*:([^:]*):.*$,\1,')
+VIDEO=$(getent group video | sed -E 's,^video:[^:]*:([^:]*):.*$,\1,')
+test -z "$RENDER" || RENDER_GROUP="--group-add ${RENDER}"
+test -z "$VIDEO" || VIDEO_GROUP="--group-add ${VIDEO}"
+```
+
+```bash
+docker run -it --rm \
+    ${RENDER_GROUP} \
+    ${VIDEO_GROUP} \
+    --device=/dev/dri \
+    -p 8888:8888 --shm-size=12G \
+    -v ${PWD}:/home/dev/workdir \
+    -v /dev/dri/by-path:/dev/dri/by-path \
+    intel/deep-learning:latest-py<version> bash
+```
+
+> [!NOTE]
+> Certain applications use shared memory to share data between processes. But the default shared memory segment size is 64M for docker containers, and is not enough for multithreaded applications(Ex. Modin). Docker recommends increasing shared memory size using `--shm-size`.
+
+#### Next Steps
+
+1. For Deep Learning and Inference Optimization containers there will be separate conda environments for each AI framework: `pytorch-cpu`, `pytorch-gpu`, `tensorflow-cpu` and `tensorflow-gpu`. Use the command below to activate one environment:
+
+    ```bash
+    conda activate <env-name>
+    ```
+
+2. Select a test from the `sample-tests` folder and run it using the following command as an example:
+
+    ```bash
+    python sample-tests/intel_extension_for_tensorflow/test_itex.py
+    ```
+    
+    The `test_itex.py` script uses TensorFlow to classify images with a pre-trained ResNet model from TensorFlow Hub.
+    It creates a random image, preprocesses it, and then runs the model 100 times to measure the average inference time, excluding the first 10 runs which are considered warm-up iterations.
+    Additionally, the script identifies and lists the available GPUs and CPUs, and prints the version of TensorFlow being used.
+
+
+> [!NOTE]
+> The `sample-tests` folder may differ in each container, and some tests use a bash script.
 
 ## Run in Multi-Node Distributed Mode [Advanced]
 
