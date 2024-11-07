@@ -70,7 +70,8 @@ The images below are built only with CPU optimizations (GPU acceleration support
 
 | Tag(s)                     | Pytorch  | IPEX         | Dockerfile      |
 | -------------------------- | -------- | ------------ | --------------- |
-| `2.4.0-pip-base`, `latest` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
+| `2.5.0-pip-base`, `latest` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
+| `2.4.0-pip-base`           | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
 | `2.3.0-pip-base`           | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
 | `2.2.0-pip-base`           | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
 | `2.1.0-pip-base`           | [v2.1.0] | [v2.1.0+cpu] | [v0.2.3]        |
@@ -88,6 +89,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- |
+| `2.5.0-pip-jupyter` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
 | `2.4.0-pip-jupyter` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
 | `2.3.0-pip-jupyter` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
 | `2.2.0-pip-jupyter` | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
@@ -269,6 +271,7 @@ The images below are [TorchServe*] with CPU Optimizations:
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- |
+| `2.5.0-serving-cpu` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
 | `2.4.0-serving-cpu` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
 | `2.3.0-serving-cpu` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
 | `2.2.0-serving-cpu` | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
@@ -287,6 +290,7 @@ The images below are built only with CPU optimizations (GPU acceleration support
 
 | Tag(s)           | Pytorch  | IPEX         | Dockerfile      |
 | ---------------- | -------- | ------------ | --------------- |
+| `2.5.0-idp-base` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
 | `2.4.0-idp-base` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
 | `2.3.0-idp-base` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
 | `2.2.0-idp-base` | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
@@ -297,6 +301,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- |
+| `2.5.0-idp-jupyter` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
 | `2.4.0-idp-jupyter` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
 | `2.3.0-idp-jupyter` | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
 | `2.2.0-idp-jupyter` | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
@@ -404,6 +409,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [v2.1.10+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.10%2Bxpu
 [v2.0.110+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.0.110%2Bxpu
 
+[v2.5.0]: https://github.com/pytorch/pytorch/releases/tag/v2.5.0
 [v2.4.0]: https://github.com/pytorch/pytorch/releases/tag/v2.4.0
 [v2.3.0]: https://github.com/pytorch/pytorch/releases/tag/v2.3.0
 [v2.2.2]: https://github.com/pytorch/pytorch/releases/tag/v2.2.2
@@ -421,6 +427,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [v2.3.1]: https://github.com/intel/neural-compressor/releases/tag/v2.3.1
 [v2.1.1]: https://github.com/intel/neural-compressor/releases/tag/v2.1.1
 
+[v2.5.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.5.0%2Bcpu
 [v2.4.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.4.0%2Bcpu
 [v2.3.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.3.0%2Bcpu
 [v2.2.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.2.0%2Bcpu
