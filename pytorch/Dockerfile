@@ -48,7 +48,7 @@ FROM ${PYTHON_BASE} AS ipex-base-idp
 WORKDIR /
 COPY requirements.txt .
 
-RUN conda run -n idp python -m pip install --no-cache-dir -r requirements.txt && \
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
     apt-get clean && conda clean -y --all
 
 FROM ipex-base-${PACKAGE_OPTION} AS jupyter
@@ -79,7 +79,7 @@ FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels-idp
 WORKDIR /
 COPY xpu-requirements.txt .
 
-RUN conda run -n idp python -m pip install --no-cache-dir -r xpu-requirements.txt && \
+RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
 
 FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} AS ipex-xpu-jupyter
@@ -116,12 +116,14 @@ RUN useradd -m -s /bin/bash model-server && \
     mkdir -p /home/model-server/model-store && \
     chown -R model-server /home/model-server/
 
+ARG PYTHON_VERSION
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
     g++ \
     git \
     wget \
     python3-dev \
     python3-distutils \
+    python${PYTHON_VERSION}-venv \
     python3-venv && \
     rm -rf /var/lib/apt/lists/*
 
@@ -272,13 +274,20 @@ RUN apt-get update && \
         python3-mpi4py && \
     rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/oneAPI.list
 
-RUN apt-get update && apt-get upgrade && apt-get install -y --no-install-recommends \
-        openssh-client \
-        openssh-server && \
-    rm /etc/ssh/ssh_host_*_key \
-    /etc/ssh/ssh_host_*_key.pub && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get upgrade && apt-get install -y --no-install-recommends \
+#         && \
+#     apt-get clean && \
+#     rm -rf /var/lib/apt/lists/*
+
+ARG PACKAGE_OPTION
+RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then \
+        conda install -yc conda-forge openssh; \
+    elif [ "${PACKAGE_OPTION}" = "pip" ]; then \
+        apt-get update && apt-get upgrade && apt-get install -y --no-install-recommends openssh-client openssh-server; \
+        rm /etc/ssh/ssh_host_*_key \
+        /etc/ssh/ssh_host_*_key.pub; \
+        apt-get clean && rm -rf /var/lib/apt/lists/*; \
+    fi
 
 ENV LD_LIBRARY_PATH=/opt/intel/oneapi/mpi/2021.14/opt/mpi/libfabric/lib:/opt/intel/oneapi/mpi/2021.14/lib:$LD_LIBRARY_PATH
 ENV PATH=/opt/intel/oneapi/mpi/2021.14/opt/mpi/libfabric/bin:/opt/intel/oneapi/mpi/2021.14/bin:$PATH
@@ -318,9 +327,9 @@ RUN python -m pip install --no-cache-dir -r requirements.txt && \
 
 ARG PACKAGE_OPTION
 RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then \
-        conda run -n idp && python -m pip install --no-cache-dir mpi4py==4.0.1; \
+        python -m pip install --no-cache-dir mpi4py==4.0.1; \
     elif [ "${PACKAGE_OPTION}" = "pip" ]; then \
-        apt-get update && apt-get install -y --no-install-recommends python3-mpi4py; \
+    apt-get update && apt-get install -y --no-install-recommends python3-mpi4py; \
     fi
 
 ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
