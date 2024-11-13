@@ -96,6 +96,7 @@ docker run ... intel/deep-learning:latest-py<version> \
             --no-browser \
             --allow-root"
 ```
+
 ### Run in Interactive Mode
 
 This mode allows running the container in an interactive shell. This enables the ability to interact with the container's bash shell. Below is the command to start the container in interactive mode:
