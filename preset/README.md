@@ -156,7 +156,6 @@ docker run -it --rm \
     It creates a random image, preprocesses it, and then runs the model 100 times to measure the average inference time, excluding the first 10 runs which are considered warm-up iterations.
     Additionally, the script identifies and lists the available GPUs and CPUs, and prints the version of TensorFlow being used.
 
-
 > [!NOTE]
 > The `sample-tests` folder may differ in each container, and some tests use a bash script.
 
