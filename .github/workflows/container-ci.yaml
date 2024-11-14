@@ -116,7 +116,7 @@ jobs:
         ####################################################################################################
   setup-scan:
     needs: [build-containers]
-    if: ${{ github.event_name == 'pull_request' }}
+ #   if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.scan-matrix.outputs.matrix }}
@@ -133,7 +133,7 @@ jobs:
       run: echo "matrix=$(cat matrix/*-${{ needs.build-containers.outputs.group }}/*.txt | jq -R '.' | jq -sc '. | unique')" >> $GITHUB_OUTPUT
   scan-containers:
     needs: [setup-scan]
-    if: ${{ !inputs.no_build && github.event_name == 'pull_request' }}
+#    if: ${{ !inputs.no_build && github.event_name == 'pull_request' }}
     runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     strategy:
       matrix:
