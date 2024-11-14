@@ -125,7 +125,7 @@ jobs:
       run: echo "TRIVY_CACHE_DIR=$GITHUB_WORKSPACE/trivy-cache" >> $GITHUB_ENV
     - name: Restore Trivy cache
       id: cache-trivy-db
-      uses: actions/cache@v3
+      uses: actions/cache@v4.1.2
       with:
         path: ${{ github.workspace }}/trivy-cache
         key: ${{ runner.os }}-trivy-db-${{ hashFiles('**/Dockerfile') }}
@@ -138,7 +138,7 @@ jobs:
               mkdir -p $GITHUB_WORKSPACE/trivy-cache
               mv ~/.cache/trivy/db $GITHUB_WORKSPACE/trivy-cache
     - name: Save Trivy cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4.1.2
       with:
         path: ${{ github.workspace }}/trivy-cache
         key: ${{ runner.os }}-trivy-db-${{ hashFiles('**/Dockerfile') }}
@@ -164,7 +164,7 @@ jobs:
     - name: Set up Trivy cache directory
       run: echo "TRIVY_CACHE_DIR=$GITHUB_WORKSPACE/trivy-cache" >> $GITHUB_ENV
     - name: Restore Trivy cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4.1.2
       with:
         path: ${{ github.workspace }}/trivy-cache
         key: ${{ runner.os }}-trivy-db-${{ hashFiles('**/Dockerfile') }}
