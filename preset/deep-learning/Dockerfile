@@ -128,7 +128,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
         'jupyterlab>=4.2.4' \
         'jupyterhub>=5.1.0' \
         'notebook>=7.1.3' \
-        'jupyter-server-proxy>=4.1.2' \
+        'jupyter-server-proxy>=4.4.0' \
         'nb_conda_kernels>=2.5.1' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \

@@ -153,16 +153,14 @@ services:
         dependency.conda.intel-optimization-for-horovod: '=0.28.1.5'
         dependency.conda.ipykernel: '==6.29.5'
         dependency.conda.jupyterhub: '==5.1.0'
-        dependency.conda.jupyter-server-proxy: '==4.3.0'
+        dependency.conda.jupyter-server-proxy: '==4.4.0'
         dependency.conda.kernda: '==0.3.0'
-        dependency.conda.ld_impl_linux-64: '==2.40'
-        dependency.conda.mamba: '==1.5.8'
+        dependency.conda.ld_impl_linux-64: '==2.43'
         dependency.conda.matplotlib-base: '>=3.8.4'
         dependency.conda.mpi: '==1.0'
-        dependency.conda.mpich: '==4.2.2'
         dependency.conda.networkx: '==3.3'
         dependency.conda.neural-compressor: '=2.5.1'
-        dependency.conda.notebook: '==7.2.1'
+        dependency.conda.notebook: '==7.2.2'
         dependency.conda.oneccl_bind_pt_cpu: '=2.3.0'
         dependency.conda.oneccl_bind_pt_xpu: '=2.1.400'
         dependency.conda.onnx: '>=1.14.1'
@@ -180,7 +178,7 @@ services:
         dependency.conda.torchaudio_xpu: '=2.1.0'
         dependency.conda.torchvision_cpu: '=0.18.1'
         dependency.conda.torchvision_xpu: '=0.16.0'
-        dependency.conda.tqdm: '==4.66.4'
+        dependency.conda.tqdm: '==4.7.0'
     depends_on:
       - dl-base
     extends: dl-base
