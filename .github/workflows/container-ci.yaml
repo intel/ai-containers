@@ -128,7 +128,7 @@ jobs:
       uses: actions/cache@v4.1.2
       with:
         path: ${{ github.workspace }}/trivy-cache
-        key: ${{ runner.os }}-trivy-db-${{ hashFiles('**/Dockerfile') }}
+        key: ${{ runner.os }}-trivy-db-${{ env.DATE }}
         restore-keys: |
           ${{ runner.os }}-trivy-db-
             - name: Download Trivy database if not cached
@@ -141,7 +141,7 @@ jobs:
       uses: actions/cache@v4.1.2
       with:
         path: ${{ github.workspace }}/trivy-cache
-        key: ${{ runner.os }}-trivy-db-${{ hashFiles('**/Dockerfile') }}
+        key: ${{ runner.os }}-trivy-db-${{ env.DATE }}
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
       with:
@@ -167,7 +167,7 @@ jobs:
       uses: actions/cache@v4.1.2
       with:
         path: ${{ github.workspace }}/trivy-cache
-        key: ${{ runner.os }}-trivy-db-${{ hashFiles('**/Dockerfile') }}
+        key: ${{ runner.os }}-trivy-db-${{ env.DATE }}
     - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
