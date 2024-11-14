@@ -121,20 +121,28 @@ jobs:
     outputs:
       matrix: ${{ steps.scan-matrix.outputs.matrix }}
     steps:
-    - name: Set up date for cache key
-      run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-    - name: Set up Trivy cache directory
-      run: echo "TRIVY_CACHE_DIR=$GITHUB_WORKSPACE/trivy-cache" >> $GITHUB_ENV
-    - name: Download Trivy database
+    - name: Setup oras
+      uses: oras-project/setup-oras@v1
+    - name: Get current date
+      id: date
+      run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+    - name: Download and extract the vulnerability DB
       run: |
-          trivy --download-db-only
-          mkdir -p $GITHUB_WORKSPACE/trivy-cache
-          mv ~/.cache/trivy/db $GITHUB_WORKSPACE/trivy-cache
-    - name: Save Trivy cache
-      uses: actions/cache@v4.1.2
+        mkdir -p $GITHUB_WORKSPACE/.cache/trivy/db
+        oras pull ghcr.io/aquasecurity/trivy-db:2
+        tar -xzf db.tar.gz -C $GITHUB_WORKSPACE/.cache/trivy/db
+        rm db.tar.gz
+    - name: Download and extract the Java DB
+      run: |
+        mkdir -p $GITHUB_WORKSPACE/.cache/trivy/java-db
+        oras pull ghcr.io/aquasecurity/trivy-java-db:1
+        tar -xzf javadb.tar.gz -C $GITHUB_WORKSPACE/.cache/trivy/java-db
+        rm javadb.tar.gz
+    - name: Cache DBs
+      uses: actions/cache/save@v4
       with:
-        path: ${{ github.workspace }}/trivy-cache
-        key: ${{ runner.os }}-trivy-db-${{ env.DATE }}
+        path: ${{ github.workspace }}/.cache/trivy
+        key: cache-trivy-${{ steps.date.outputs.date }}
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
       with:
@@ -154,13 +162,6 @@ jobs:
         container: ${{ fromJSON(needs.setup-scan.outputs.matrix) }}
       fail-fast: false
     steps:
-    - name: Set up Trivy cache directory
-      run: echo "TRIVY_CACHE_DIR=$GITHUB_WORKSPACE/trivy-cache" >> $GITHUB_ENV
-    - name: Restore Trivy cache
-      uses: actions/cache@v4.1.2
-      with:
-        path: ${{ github.workspace }}/trivy-cache
-        key: ${{ runner.os }}-trivy-db-${{ env.DATE }}
     - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
     - name: Harden Runner
       uses: step-security/harden-runner@91182cccc01eb5e619899d80e4e971d6181294a7 # v2.10.1
@@ -192,6 +193,9 @@ jobs:
         image-ref: ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
         output: ${{ matrix.container }}-scan.sarif
         timeout: 30m0s
+      env:
+        TRIVY_SKIP_DB_UPDATE: true
+        TRIVY_SKIP_JAVA_DB_UPDATE: true
     - name: Cleanup
       if: always()
       run: docker rmi -f ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
