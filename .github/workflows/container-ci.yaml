@@ -125,20 +125,11 @@ jobs:
       run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
     - name: Set up Trivy cache directory
       run: echo "TRIVY_CACHE_DIR=$GITHUB_WORKSPACE/trivy-cache" >> $GITHUB_ENV
-    - name: Restore Trivy cache
-      id: cache-trivy-db
-      uses: actions/cache@v4.1.2
-      with:
-        path: ${{ github.workspace }}/trivy-cache
-        key: ${{ runner.os }}-trivy-db-${{ env.DATE }}
-        restore-keys: |
-          ${{ runner.os }}-trivy-db-
-            - name: Download Trivy database if not cached
-            if: steps.cache-trivy-db.outputs.cache-hit != 'true'
-            run: |
-              trivy --download-db-only
-              mkdir -p $GITHUB_WORKSPACE/trivy-cache
-              mv ~/.cache/trivy/db $GITHUB_WORKSPACE/trivy-cache
+    - name: Download Trivy database
+      run: |
+          trivy --download-db-only
+          mkdir -p $GITHUB_WORKSPACE/trivy-cache
+          mv ~/.cache/trivy/db $GITHUB_WORKSPACE/trivy-cache
     - name: Save Trivy cache
       uses: actions/cache@v4.1.2
       with:
