@@ -130,7 +130,7 @@ jobs:
         path: ${{ github.workspace }}/trivy-cache
         key: ${{ runner.os }}-trivy-db-${{ env.DATE }}
         restore-keys: |
-          ${{ runner.os }}-trivy-db-
+          ${{ runner.os }}-trivy-db-${{ env.DATE }}
             - name: Download Trivy database if not cached
             if: steps.cache-trivy-db.outputs.cache-hit != 'true'
             run: |
