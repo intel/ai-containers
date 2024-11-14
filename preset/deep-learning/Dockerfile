@@ -221,7 +221,7 @@ RUN conda create -yn 'pytorch-gpu' \
         'tqdm>=4.66.3' \
         'urllib3>=2.2.2' \
         'zipp>=3.19.1' \
-        'setuptools>=70.0.0' \
+        # 'setuptools>=70.0.0' \
         && \
     conda clean -y --all
 
