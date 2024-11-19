@@ -124,25 +124,12 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda init --all && \
     conda install -y \
-        'colorama==0.4.6' \
-        'conda==24.5.0' \
-        'jupyter-server-proxy==4.3.0' \
-        'jupyterhub==5.1.0' \
-        'ld_impl_linux-64==2.40' \
-        'mamba==1.5.8' \
-        'networkx==3.3' \
-        'notebook==7.2.1' \
-        'python==3.10.14' \
-        'aiohttp>=3.9.4' \
-        'certifi>=2024.07.04' \
-        'idna>=3.7' \
-        'jinja2>=3.1.4' \
-        'requests>=2.32.0' \
-        'setuptools>=70.0.0' \
-        'tqdm>=4.66.3' \
-        'urllib3>=2.2.2' \
-        'zipp>=3.19.1' \
-        'nodejs==22.5.1' \
+        ##########################
+        'jupyterlab>=4.2.4' \
+        'jupyterhub>=5.1.0' \
+        'notebook>=7.1.3' \
+        'jupyter-server-proxy>=4.4.0' \
+        'nb_conda_kernels>=2.5.1' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -181,11 +168,13 @@ RUN conda create -yn 'pytorch-cpu' \
         'certifi>=2024.07.04' \
         'idna>=3.7' \
         'jinja2>=3.1.4' \
-        'onnx>=1.16.0' \
+        'jinja2>=3.1.4' \
+        'onnx>=1.17.0 ' \
         'requests>=2.32.0' \
         'tqdm>=4.66.3' \
         'urllib3>=2.2.2' \
         'zipp>=3.19.1' \
+        'setuptools>=70.0.0' \
         && \
     conda clean -y --all
 
@@ -227,11 +216,12 @@ RUN conda create -yn 'pytorch-gpu' \
         'certifi>=2024.07.04' \
         'idna>=3.7' \
         'jinja2>=3.1.4' \
-        'onnx>=1.16.0' \
+        'onnx>=1.17.0 ' \
         'requests>=2.32.0' \
         'tqdm>=4.66.3' \
         'urllib3>=2.2.2' \
         'zipp>=3.19.1' \
+        # 'setuptools>=70.0.0' \
         && \
     conda clean -y --all
 
@@ -270,7 +260,7 @@ RUN conda create -yn 'tensorflow-cpu' \
         'py-cpuinfo==9.0.0' \
         "tensorflow=${TF_VERSION}" \
         'tensorflow-hub==0.16.1' \
-        'tqdm==4.66.4' \
+        'tqdm>=4.66.4' \
         'python-dotenv==1.0.1' \
         'aiohttp>=3.9.4' \
         'certifi>=2024.07.04' \
@@ -279,6 +269,8 @@ RUN conda create -yn 'tensorflow-cpu' \
         'urllib3>=2.2.2' \
         'werkzeug>=3.0.3' \
         'zipp>=3.19.1' \
+        'setuptools>=70.0.0' \
+        'werkzeug>=3.1.2' \
         && \
     conda clean -y --all
 
@@ -307,6 +299,8 @@ RUN conda create -yn 'tensorflow-gpu' \
         'requests>=2.32.0' \
         'urllib3>=2.2.2' \
         'zipp>=3.19.1' \
+        'setuptools>=70.0.0' \
+        'werkzeug>=3.1.2' \
         && \
     conda clean -y --all
 

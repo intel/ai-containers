@@ -17,7 +17,16 @@
 
 #!/usr/bin/env python
 # coding: utf-8
+def print_script_description():
+    description = """
+    This script uses TensorFlow to classify images with a pre-trained ResNet model from TensorFlow Hub.
+    It creates a random image, preprocesses it, and then runs the model 100 times to measure the average inference time, excluding the first 10 runs which are considered warm-up iterations.
+    Additionally, the script identifies and lists the available GPUs and CPUs, and prints the version of TensorFlow being used.
+    """
+    print(description)
 
+
+print_script_description()
 
 import tensorflow as tf
 
