@@ -41,4 +41,4 @@ flake8~=7.1.1
 wheel~=0.44.0
 setuptools>=70.0.0
 pip>=23.3
-aiohttp==3.10.9
+aiohttp==3.10.11
