@@ -38,7 +38,7 @@ repos:
   - args: ["--config", ".github/linters/.markdown-lint.yml"]
     id: markdownlint
   repo: https://github.com/igorshubovych/markdownlint-cli
-  rev: v0.42.0
+  rev: v0.43.0
 - hooks:
   - id: shellcheck
   repo: https://github.com/koalaman/shellcheck-precommit
