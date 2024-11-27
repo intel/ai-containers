@@ -23,7 +23,7 @@ services:
       args:
         BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
         BASE_TAG: ${BASE_TAG:-22.04}
-        DEEPSPEED_VERSION: ${DEEPSPEED_VERSION:-0.14.2}
+        DEEPSPEED_VERSION: ${DEEPSPEED_VERSION:-0.15.2}
         DEVICE: ${DEVICE:-flex}
         DPNP_VERSION: ${DPNP_VERSION:-0.15.0}
         HOROVOD_VERSION: ${HOROVOD_VERSION:-0.28.1.5}
@@ -139,9 +139,8 @@ services:
         dependency.apt.vainfo: true
         dependency.apt.wget: true
         dependency.apt.xz-utils: true
-        dependency.conda.accelerate: '==0.32.1'
-        dependency.conda.colorama: '==0.4.6'
-        dependency.conda.conda: '==24.5.0'
+        dependency.conda.accelerate: '==0.32.'
+        dependency.conda.conda: '==24.9.0'
         dependency.conda.dpnp: '=0.15.0'
         dependency.conda.intel-extension-for-pytorch_cpu: '=2.3.100'
         dependency.conda.intel-extension-for-pytorch_xpu: '=2.1.40'
@@ -158,7 +157,6 @@ services:
         dependency.conda.notebook: '==7.2.2 '
         dependency.conda.oneccl_bind_pt_cpu: '=2.3.0'
         dependency.conda.oneccl_bind_pt_xpu: '=2.1.400'
-        dependency.conda.onnx: '>=1.14.1'
         dependency.conda.py-cpuinfo: '==9.0.0'
         dependency.conda.python: '==3.10.14'
         dependency.conda.pytorch_cpu: '=2.3.1'

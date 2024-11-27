@@ -126,9 +126,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     conda install -y \
         ##########################
         'jupyterlab>=4.2.4' \
-        'jupyterhub>=5.1.0' \
         'notebook>=7.1.3' \
-        'jupyter-server-proxy>=4.4.0' \
         'nb_conda_kernels>=2.5.1' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
@@ -139,6 +137,10 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 RUN conda config --set pip_interop_enabled True
+
+COPY jupyter_requirements.txt .
+RUN python -m pip install --no-cache-dir -r jupyter_requirements.txt
+RUN rm -rf jupyter_requirements.txt
 
 ARG DPNP_VERSION
 ARG NUMPY_VERSION
@@ -152,39 +154,27 @@ ARG DEEPSPEED_VERSION
 RUN conda create -yn 'pytorch-cpu' \
     -c huggingface \
         "python=${PYTHON_VERSION}" \
-        'accelerate==0.32.1' \
+        'accelerate>=0.32.1' \
         "dpnp=${DPNP_VERSION}" \
         "intel-extension-for-pytorch=${IPEX_CPU_VERSION}" \
-        'ipykernel==6.29.5' \
-        'kernda==0.3.0'  \
+        'ipykernel>=6.29.5' \
+        'kernda>=0.3.0'  \
         'matplotlib-base>=3.8.4' \
         "oneccl_bind_pt=${ONECCL_CPU_VERSION}" \
         "pytorch=${TORCH_CPU_VERSION}" \
-        'tensorboardx==2.6.2.2' \
+        'tensorboardx>=2.6.2.2' \
         "torchaudio=${TORCHAUDIO_CPU_VERSION}" \
         "torchvision=${TORCHVISION_CPU_VERSION}" \
-        'python-dotenv==1.0.1' \
-        'aiohttp>=3.9.4' \
-        'certifi>=2024.07.04' \
-        'idna>=3.7' \
-        'jinja2>=3.1.4' \
-        'jinja2>=3.1.4' \
-        'onnx>=1.17.0 ' \
-        'requests>=2.32.0' \
-        'tqdm>=4.66.3' \
-        'urllib3>=2.2.2' \
-        'zipp>=3.19.1' \
-        'setuptools>=70.0.0' \
+        'python-dotenv>=1.0.1' \
         && \
     conda clean -y --all
 
-RUN conda run -n 'pytorch-cpu' pip install --no-deps --no-cache-dir \
-        'dataset-librarian==1.0.4' \
-        && \
-    conda run -n 'pytorch-cpu' pip install --no-cache-dir \
-        'evaluate==0.4.2' \
-        "git+https://github.com/huggingface/optimum-intel.git" \
-        && \
+COPY requirements.txt .
+RUN conda run -n 'pytorch-cpu' python -m pip install --no-deps --no-cache-dir -r requirements.txt && \
+    conda clean -y --all
+
+COPY venv_requirements.txt .
+RUN conda run -n 'pytorch-cpu' python -m pip install --no-cache-dir -r venv_requirements.txt && \
     conda clean -y --all
 
 ARG IDP_VERSION
@@ -200,39 +190,27 @@ ARG IDEX_VERSION
 RUN conda create -yn 'pytorch-gpu' \
     -c huggingface \
         "python=${PYTHON_VERSION}" \
-        'accelerate==0.32.1' \
+        'accelerate>=0.32.1' \
         "dpnp=${DPNP_VERSION}" \
         "intel-extension-for-pytorch=${IPEX_XPU_VERSION}" \
-        'ipykernel==6.29.5' \
-        'kernda==0.3.0' \
+        'ipykernel>=6.29.5' \
+        'kernda>=0.3.0' \
         'matplotlib-base>=3.8.4' \
         "oneccl_bind_pt=${ONECCL_XPU_VERSION}" \
         "pytorch=${TORCH_XPU_VERSION}" \
-        'tensorboardx==2.6.2.2' \
+        'tensorboardx>=2.6.2.2' \
         "torchaudio=${TORCHAUDIO_XPU_VERSION}" \
         "torchvision=${TORCHVISION_XPU_VERSION}" \
-        'python-dotenv==1.0.1' \
-        'aiohttp>=3.9.4' \
-        'certifi>=2024.07.04' \
-        'idna>=3.7' \
-        'jinja2>=3.1.4' \
-        'onnx>=1.17.0 ' \
-        'requests>=2.32.0' \
-        'tqdm>=4.66.3' \
-        'urllib3>=2.2.2' \
-        'zipp>=3.19.1' \
-        # 'setuptools>=70.0.0' \
+        'python-dotenv>=1.0.1' \
         && \
     conda clean -y --all
 
-RUN conda run -n 'pytorch-gpu' pip install --no-deps --no-cache-dir \
-        'dataset-librarian==1.0.4' \
-        && \
-    conda run -n 'pytorch-gpu' pip install --no-cache-dir \
-        'evaluate==0.4.2' \
-        "git+https://github.com/huggingface/optimum-intel.git" \
-        && \
+RUN conda run -n 'pytorch-cpu' python -m pip install --no-deps --no-cache-dir -r requirements.txt && \
     conda clean -y --all
+
+RUN conda run -n 'pytorch-cpu' python -m pip install --no-cache-dir -r venv_requirements.txt && \
+    conda clean -y --all
+RUN rm -rf venv_requirements.txt
 
 ARG IDP_VERSION
 ARG DPNP_VERSION
@@ -253,61 +231,41 @@ RUN conda create -yn 'tensorflow-cpu' \
         "dpnp=${DPNP_VERSION}" \
         "intel-extension-for-tensorflow=${ITEX_CPU_VERSION}=*cpu*" \
         "intel-optimization-for-horovod=${HOROVOD_VERSION}" \
-        'ipykernel==6.29.5' \
-        'kernda==0.3.0' \
+        'ipykernel>=6.29.5' \
+        'kernda>=0.3.0' \
         'matplotlib-base>=3.8.4' \
-        'onnx>=1.14.1' \
-        'py-cpuinfo==9.0.0' \
+        'py-cpuinfo>=9.0.0' \
         "tensorflow=${TF_VERSION}" \
-        'tensorflow-hub==0.16.1' \
+        'tensorflow-hub>=0.16.1' \
         'tqdm>=4.66.4' \
-        'python-dotenv==1.0.1' \
-        'aiohttp>=3.9.4' \
-        'certifi>=2024.07.04' \
-        'idna>=3.7' \
-        'requests>=2.32.0' \
-        'urllib3>=2.2.2' \
-        'werkzeug>=3.0.3' \
-        'zipp>=3.19.1' \
-        'setuptools>=70.0.0' \
-        'werkzeug>=3.1.2' \
+        'python-dotenv>=1.0.1' \
+        'aiohttp>=3.11' \
         && \
     conda clean -y --all
 
-RUN conda run -n 'tensorflow-cpu' pip install --no-deps --no-cache-dir \
-        'dataset-librarian==1.0.4' \
-        && \
+RUN conda run -n 'tensorflow-cpu' python -m pip install --no-deps --no-cache-dir -r requirements.txt && \
     conda clean -y --all
-
+    
 RUN conda create -yn 'tensorflow-gpu' \
         "python=${PYTHON_VERSION}" \
         "dpnp=${DPNP_VERSION}" \
         "intel-extension-for-tensorflow=${ITEX_XPU_VERSION}=*xpu*" \
         "intel-optimization-for-horovod=${HOROVOD_VERSION}" \
-        'ipykernel==6.29.5' \
-        'kernda==0.3.0' \
+        'ipykernel>=6.29.5' \
+        'kernda>=0.3.0' \
         'matplotlib-base>=3.8.4' \
-        'onnx>=1.14.1' \
-        'py-cpuinfo==9.0.0' \
+        'py-cpuinfo>=9.0.0' \
         "tensorflow=${TF_VERSION}" \
-        'tensorflow-hub==0.16.1' \
-        'tqdm==4.66.4' \
-        'python-dotenv==1.0.1' \
-        'aiohttp>=3.9.4' \
-        'certifi>=2024.07.04' \
-        'idna>=3.7' \
-        'requests>=2.32.0' \
-        'urllib3>=2.2.2' \
-        'zipp>=3.19.1' \
-        'setuptools>=70.0.0' \
-        'werkzeug>=3.1.2' \
+        'tensorflow-hub>=0.16.1' \
+        'tqdm>=4.66.4' \
+        'python-dotenv>=1.0.1' \
+        'aiohttp>=3.11' \
         && \
     conda clean -y --all
 
-RUN conda run -n 'tensorflow-gpu' pip install --no-deps --no-cache-dir \
-        'dataset-librarian==1.0.4' \
-        && \
-    conda clean -y --all
+RUN conda run -n 'tensorflow-gpu' python -m pip install --no-deps --no-cache-dir -r requirements.txt && \
+conda clean -y --all
+RUN rm -rf requirements.txt
 
 EXPOSE 8888
 

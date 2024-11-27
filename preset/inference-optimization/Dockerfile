@@ -36,7 +36,6 @@ RUN ENVS_LIST=('tensorflow-cpu' 'tensorflow-gpu') && \
     for i in "${!ENVS_LIST[@]}"; do \
         CONDA_ENV="${ENVS_LIST[i]}" && \
         conda run -n "$CONDA_ENV" python -m pip install --no-deps --no-cache-dir \
-        'tf2onnx>=1.16.1' \
         'onnxruntime>=1.18.1' \
         ; \
     done && \

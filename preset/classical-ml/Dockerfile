@@ -58,13 +58,14 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
     ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge" && \
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda init --all && \
+    conda update -y conda && \
     conda install -y \
-        'conda==24.9.2' \
-        'jupyterlab==4.2.5' \
-        'jupyterhub==5.2.1' \
-        'notebook==7.2.2' \
-        'jupyter-server-proxy==4.4.0' \
-        'nb_conda_kernels==2.5.1' \
+        'jupyterlab>=4.2.6' \
+        # 'jupyterhub==5.2.1' \
+        'notebook>=7.2.2' \
+        # 'jupyter-server-proxy==4.4.0' \
+        'nb_conda_kernels>=2.5.1' \
+        'idna>=3.10' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -74,6 +75,10 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 RUN conda config --set pip_interop_enabled True
+
+COPY jupyter_requirements.txt .
+RUN python -m pip install --no-cache-dir -r jupyter_requirements.txt
+RUN rm -rf jupyter_requirements.txt
 
 ARG IDP_VERSION
 ARG DAAL4PY_VERSION
@@ -87,15 +92,16 @@ RUN conda create -yn classical-ml \
         "python=${PYTHON_VERSION}" \
         "daal4py=${DAAL4PY_VERSION}" \
         "dpnp=${DPNP_VERSION}" \
-        'ipykernel==6.29.5' \
-        'kernda==0.3.0' \
-        'matplotlib-base==3.9.2' \
+        'ipykernel>=6.29.5' \
+        'kernda>=0.3.0' \
+        'matplotlib-base>=3.9.2' \
         "modin-ray=${MODIN_VERSION}" \
-        'python-dotenv==1.0.1' \
+        'python-dotenv>=1.0.1' \
         "scikit-learn-intelex=${SKLEARNEX_VERSION}" \
-        'tqdm==4.66.5' \
+        'tqdm>=4.66.5' \
         "xgboost=${XGBOOST_VERSION}" \
         "setuptools>=70.0.0" \
+        'aiohttp>=3.10.11' \
         && \
     conda clean -y --all
 
