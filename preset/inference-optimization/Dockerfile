@@ -28,10 +28,12 @@ RUN ENVS_LIST=('pytorch-cpu' 'pytorch-gpu' 'tensorflow-cpu' 'tensorflow-gpu') &&
         conda install -yn "$CONDA_ENV" \
             "neural-compressor=${NEURAL_COMPRESSOR_VERSION}" \
             'scikit-learn>=1.5.0' \
-            'onnxruntime>=1.18.1'
+            'onnxruntime>=1.18.1' \
         ; \
     done && \
     conda clean -y --all
+
+
 
 COPY --chown=dev notebooks /home/dev/jupyter
 COPY --chown=dev tests /home/dev/sample-tests
