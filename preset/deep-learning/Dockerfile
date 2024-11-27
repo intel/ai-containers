@@ -245,7 +245,7 @@ RUN conda create -yn 'tensorflow-cpu' \
 
 RUN conda run -n 'tensorflow-cpu' python -m pip install --no-deps --no-cache-dir -r requirements.txt && \
     conda clean -y --all
-    
+
 RUN conda create -yn 'tensorflow-gpu' \
         "python=${PYTHON_VERSION}" \
         "dpnp=${DPNP_VERSION}" \
