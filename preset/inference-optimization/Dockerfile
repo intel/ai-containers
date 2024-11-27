@@ -28,15 +28,7 @@ RUN ENVS_LIST=('pytorch-cpu' 'pytorch-gpu' 'tensorflow-cpu' 'tensorflow-gpu') &&
         conda install -yn "$CONDA_ENV" \
             "neural-compressor=${NEURAL_COMPRESSOR_VERSION}" \
             'scikit-learn>=1.5.0' \
-        ; \
-    done && \
-    conda clean -y --all
-
-RUN ENVS_LIST=('tensorflow-cpu' 'tensorflow-gpu') && \
-    for i in "${!ENVS_LIST[@]}"; do \
-        CONDA_ENV="${ENVS_LIST[i]}" && \
-        conda run -n "$CONDA_ENV" python -m pip install --no-deps --no-cache-dir \
-        'onnxruntime>=1.18.1' \
+            'onnxruntime>=1.18.1'
         ; \
     done && \
     conda clean -y --all
