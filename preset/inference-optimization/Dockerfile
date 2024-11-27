@@ -33,7 +33,5 @@ RUN ENVS_LIST=('pytorch-cpu' 'pytorch-gpu' 'tensorflow-cpu' 'tensorflow-gpu') &&
     done && \
     conda clean -y --all
 
-
-
 COPY --chown=dev notebooks /home/dev/jupyter
 COPY --chown=dev tests /home/dev/sample-tests
