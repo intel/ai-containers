@@ -205,10 +205,10 @@ RUN conda create -yn 'pytorch-gpu' \
         && \
     conda clean -y --all
 
-RUN conda run -n 'pytorch-cpu' python -m pip install --no-deps --no-cache-dir -r requirements.txt && \
+RUN conda run -n 'pytorch-gpu' python -m pip install --no-deps --no-cache-dir -r requirements.txt && \
     conda clean -y --all
 
-RUN conda run -n 'pytorch-cpu' python -m pip install --no-cache-dir -r venv_requirements.txt && \
+RUN conda run -n 'pytorch-gpu' python -m pip install --no-cache-dir -r venv_requirements.txt && \
     conda clean -y --all
 RUN rm -rf venv_requirements.txt
 
