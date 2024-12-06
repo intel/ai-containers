@@ -96,6 +96,7 @@ RUN conda create -yn data-analytics \
         'setuptools>=70.0.0' \
         'tqdm>=4.66.5' \
         'aiohttp>=3.10.11' \
+        'ray-core>2.9' \
         && \
     conda clean -y --all
 
