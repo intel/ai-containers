@@ -102,6 +102,7 @@ RUN conda create -yn classical-ml \
         "xgboost=${XGBOOST_VERSION}" \
         "setuptools>=70.0.0" \
         'aiohttp>=3.10.11' \
+        'ray-core>2.9' \
         && \
     conda clean -y --all
 
