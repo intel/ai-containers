@@ -39,7 +39,7 @@ jobs:
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       with:
         fetch-depth: 0
-    - uses: super-linter/super-linter/slim@b92721f792f381cedc002ecdbb9847a15ece5bb8 # v7.1.0
+    - uses: super-linter/super-linter/slim@e1cb86b6e8d119f789513668b4b30bf17fe1efe4 # v7.2.0
       env:
         GITHUB_ACTIONS_COMMAND_ARGS: '-ignore SC.*'
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
