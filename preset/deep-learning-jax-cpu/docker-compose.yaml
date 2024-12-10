@@ -42,7 +42,7 @@ services:
     shm_size: 12GB
     command: >
       bash -c " conda --version "
-      
+
   deep-learning:
     build:
       target: deep-learning
