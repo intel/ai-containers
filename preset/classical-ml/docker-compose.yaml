@@ -15,26 +15,21 @@
 # -*- coding: utf-8 -*-
 #
 
-
-version: '3'
 services:
   classical-ml:
     build:
       args:
         BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
         BASE_TAG: ${BASE_TAG:-22.04}
-        DAAL4PY_VERSION: ${DAAL4PY_VERSION:-2024.5.0}
-        DPNP_VERSION: ${DPNP_VERSION:-0.15.0}
-        IDP_VERSION: ${IDP_VERSION:-2024.2}
+        DPNP_VERSION: ${DPNP_VERSION:-0.16.0}
+        IDP_VERSION: ${IDP_VERSION:-2025.0.0}
         INTEL_CHANNEL: ${INTEL_CHANNEL:-https://software.repos.intel.com/python/conda/}
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Miniforge3-Linux-x86_64}
-        MODIN_VERSION: ${MODIN_VERSION:-0.30.0}
-        MPI_VERSION: ${MPI_VERSION:-2021.13}
-        NUMBA_DPEX_VERSION: ${NUMBA_DPEX_VERSION:-0.23.0}
-        NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4}
-        PYTHON_VERSION: ${PYTHON_VERSION:-3.9}
-        SKLEARNEX_VERSION: ${SKLEARNEX_VERSION:-2024.5.0}
-        XGBOOST_VERSION: ${XGBOOST_VERSION:-2.0.3}
+        MODIN_VERSION: ${MODIN_VERSION:-0.32.0}
+        NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4=py311h689*}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.11}
+        SKLEARNEX_VERSION: ${SKLEARNEX_VERSION:-2025.0}
+        XGBOOST_VERSION: ${XGBOOST_VERSION:-2.1.1}
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
         no_proxy: ''
@@ -42,41 +37,36 @@ services:
       target: classical-ml
       labels:
         docs: classical_ml
-        org.opencontainers.image.title: "Intel® AI Tools Selector Preset Containers - Classical ML"
+        org.opencontainers.image.title: "AI Tools Selector Preset Containers - Classical Machine Learning"
         org.opencontainers.base.name: "ubuntu:22.04"
         org.opencontainers.image.name: "intel/classical-ml"
-        org.opencontainers.image.version: 2024.2.0-py${PYTHON_VERSION:-3.9}
-        dependency.python: ${PYTHON_VERSION:-3.9}
+        org.opencontainers.image.version: 2025.0.0-py${PYTHON_VERSION:-3.11}
+        dependency.python: ${PYTHON_VERSION:-3.11}
         dependency.python.pip: requirements.txt
         dependency.apt.bzip2: true
         dependency.apt.ca-certificates: true
-        dependency.apt.diffutils: true
         dependency.apt.gcc: true
         dependency.apt.git: true
         dependency.apt.gzip: true
         dependency.apt.make: true
-        dependency.apt.patch: true
         dependency.apt.rsync: true
         dependency.apt.unzip: true
         dependency.apt.wget: true
         dependency.apt.xz-utils: true
-        dependency.conda.conda: '==24.9.2'
-        dependency.conda.daal4py: '=2024.5.0'
-        dependency.conda.dpnp: '=0.15.0'
+        dependency.conda.conda: '==24.11.0'
+        dependency.conda.dpnp: '=0.16.0'
         dependency.conda.ipykernel: '==6.29.5'
         dependency.conda.jupyterhub: '==5.2.1'
         dependency.conda.jupyter-server-proxy: '==4.4.0'
         dependency.conda.kernda: '==0.3.0'
-        dependency.conda.matplotlib-base: '==3.9/2'
-        dependency.conda.modin-ray: '=0.30.0'
+        dependency.conda.matplotlib-base: '==3.9.2'
+        dependency.conda.modin-ray: '=0.32.0'
         dependency.conda.nb_conda_kernels: '==2.5.1'
         dependency.conda.notebook: '==7.2.2'
-        dependency.conda.python: '==3.10.14'
-        dependency.conda.python-dotenv: '==1.0.1'
-        dependency.conda.scikit-learn-intelex: '=2024.5.0'
-        dependency.conda.tqdm: '==4.66.5'
-        dependency.conda.xgboost: '=2.0.3'
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${RELEASE:-2024.2.0}-py${PYTHON_VERSION:-3.9}
+        dependency.conda.python: '==3.11.9'
+        dependency.conda.scikit-learn-intelex: '=2025.0.0'
+        dependency.conda.xgboost: '=2.1.1'  
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
     environment:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
