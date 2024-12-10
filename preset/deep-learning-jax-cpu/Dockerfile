@@ -103,19 +103,14 @@ EXPOSE 8888
 RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
     mkdir ~/.local && chmod a+rwx ~/.local
 
-RUN \
-ENVS_LIST=('jax-cpu') && \
-KERNEL_NAMES=('JAX CPU') && \
-for i in "${!ENVS_LIST[@]}"; do \
-    CONDA_ENV="${ENVS_LIST[i]}" && \
-    KERNEL_NAME="${KERNEL_NAMES[i]}" && \
+RUN CONDA_ENV="jax-cpu" && \ 
+    KERNEL_NAME="JAX CPU" && \
     KERNEL_DIR="${CONDA_ROOT}/share/jupyter/kernels/$CONDA_ENV" && \
     conda run -n "$CONDA_ENV" python -m ipykernel install --prefix "$CONDA_ROOT" --name "$CONDA_ENV" --display-name "$KERNEL_NAME" && \
     conda run -n "$CONDA_ENV" kernda -o -y "$KERNEL_DIR/kernel.json" && \
-    conda run -n base jupyter kernelspec list \
-; done
+    conda run -n base jupyter kernelspec list 
 
-CMD ["bash", "-c", "jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source activate jax-cpu && jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
 ENV BASH_ENV ~/.bash_profile
 RUN echo "conda activate jax-cpu" >> ~/.bashrc
