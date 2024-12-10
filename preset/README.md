@@ -30,7 +30,6 @@ There are three modes to run these containers:
 * [Jupyter Notebook](#run-using-jupyter-notebook)
 * [Interactive](#run-in-interactive-mode)
 * [Multi-Node Distributed Training](#run-in-multi-node-distributed-mode-advanced) (Deep Learning PyTorch GPU Deep Learning TensorFlow GPU)
-)
 
 > [!NOTE]
 > Modify the commands below to fit your use case, including the image, environment variables, and GPU device path.
