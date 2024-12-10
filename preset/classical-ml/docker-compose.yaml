@@ -72,8 +72,6 @@ services:
       https_proxy: ${https_proxy}
     network_mode: host
     shm_size: 12GB
-    volumes:
-      - /dev/dri/by-path:/dev/dri/by-path
     command: >
       bash -c " conda run -n classical-ml python -c 'import sklearn;import xgboost;print(\"SciKit:\",
       sklearn.__version__, \" XGBoost:\", xgboost.__version__)' &&
