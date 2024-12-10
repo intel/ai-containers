@@ -1,17 +1,17 @@
 # AI Tools Preset Containers
 
-AI Tools Preset Containers provide data scientists and developers with ready-to-use environments for tasks like data analysis, data processing, machine learning, and deep learning. Each container includes Python* packages and tools tailored to specific tasks. More details are provided in the table below.
+AI Tools Preset Containers provide data scientists and developers with ready-to-use environments for tasks like data analysis, data processing, machine learning, and deep learning. Each container includes Python\* packages and tools tailored to specific tasks. More details are provided in the table below.
 
 ## Preset Containers
 
 | Preset Container Name | Purpose | Tools | Image Name |
 | -----------------------------| ------------- | ------------- | ----------------- |
-| Classical Machine Learning | Accelerate your machine learning and data science pipelines with the power of open libraries optimized for Intel® architectures | <li>[Intel® Extension for Scikit-learn*](https://github.com/intel/scikit-learn-intelex),<br /> <li>[Intel® Optimization for XGBoost*](https://github.com/dmlc/xgboost),<br /> <li>[Modin*](https://github.com/modin-project/modin) | [`intel/classical-ml:latest-py3.11`](https://hub.docker.com/r/intel/classical-ml/tags) |
-| Deep Learning PyTorch* CPU | Boost the performance of your workloads, reduce model size, and improve the speed of your Deep Learning deployments on Intel® Xeon® processors with Intel® Extension for PyTorch* | <li>[Intel® Extension for PyTorch](https://github.com/intel/intel-extension-for-pytorch), <br /> <li>[Intel® Neural Compressor](https://github.com/intel/neural-compressor),<br /> <li>[ONNX Runtime*](https://github.com/microsoft/onnxruntime) | [`intel/deep-learning:pytorch-latest-py3.11`](https://hub.docker.com/r/intel/deep-learning/tags) |
-| Deep Learning PyTorch* GPU | Boost the performance of your workloads, reduce model size, and improve the speed of your Deep Learning deployments on Intel® Data Center GPU Max Series with Intel® Extension for PyTorch* | <li>[Intel® Extension for PyTorch](https://github.com/intel/intel-extension-for-pytorch), <br /> <li>[Intel® Neural Compressor](https://github.com/intel/neural-compressor), <br /> <li>[DeepSpeed*](https://github.com/microsoft/DeepSpeed)  | [`intel/deep-learning:pytorch-gpu-latest-py3.11`](https://hub.docker.com/r/intel/deep-learning/tags) |
-| Deep Learning TensorFlow* CPU| Boost the performance of your workloads, reduce model size, and improve the speed of your Deep Learning deployments on Intel® Xeon® processors with Intel® Extension for TensorFlow* | <li>[Intel® Extension for Tensorflow](https://github.com/intel/intel-extension-for-tensorflow),<br /> <li>[Intel® Neural Compressor](https://github.com/intel/neural-compressor),<br /> <li>[ONNX Runtime*](https://github.com/microsoft/onnxruntime) | [`intel/deep-learning:tensorflow-latest-py3.11`](https://hub.docker.com/r/intel/deep-learning/tags) |
-| Deep Learning TensorFlow* GPU| Boost the performance of your workloads, reduce model size, and improve the speed of your Deep Learning deployments on Intel® Data Center GPU Max Series with Intel® Extension for TensorFlow* | <li>[Intel® Extension for Tensorflow](https://github.com/intel/intel-extension-for-tensorflow),<br /> <li>[Intel® Optimization for Horovod*](https://github.com/intel/intel-optimization-for-horovod),<br /> <li>[Intel® Neural Compressor](https://github.com/intel/neural-compressor) | [`intel/deep-learning:tensorflow-gpu-latest-py3.11`](https://hub.docker.com/r/intel/deep-learning/tags) |
-| Deep Learning JAX* CPU| Reduce model size and improve the speed of your Deep Learning deployments on Intel® Xeon® processors with JAX* | <li>[JAX*](https://github.com/jax-ml/jax),<br /> <li>[Intel® Distribution of Python](https://github.com/IntelPython/) | [`intel/deep-learning:jax-latest-py3.11`](https://hub.docker.com/r/intel/deep-learning/tags) |
+| Classical Machine Learning | Accelerate your machine learning and data science pipelines with the power of open libraries optimized for Intel® architectures | <li>[Intel® Extension for Scikit-learn\*](https://github.com/intel/scikit-learn-intelex),<br /> <li>[Intel® Optimization for XGBoost*](https://github.com/dmlc/xgboost),<br /> <li>[Modin\*](https://github.com/modin-project/modin) | [`intel/classical-ml:latest-py3.11`](https://hub.docker.com/r/intel/classical-ml/tags) |
+| Deep Learning PyTorch\* CPU | Boost the performance of your workloads, reduce model size, and improve the speed of your Deep Learning deployments on Intel® Xeon® processors with Intel® Extension for PyTorch* | <li>[Intel® Extension for PyTorch](https://github.com/intel/intel-extension-for-pytorch), <br /> <li>[Intel® Neural Compressor](https://github.com/intel/neural-compressor),<br /> <li>[ONNX Runtime\*](https://github.com/microsoft/onnxruntime) | [`intel/deep-learning:pytorch-latest-py3.11`](https://hub.docker.com/r/intel/deep-learning/tags) |
+| Deep Learning PyTorch\* GPU | Boost the performance of your workloads, reduce model size, and improve the speed of your Deep Learning deployments on Intel® Data Center GPU Max Series with Intel® Extension for PyTorch\* | <li>[Intel® Extension for PyTorch](https://github.com/intel/intel-extension-for-pytorch), <br /> <li>[Intel® Neural Compressor](https://github.com/intel/neural-compressor), <br /> <li>[DeepSpeed\*](https://github.com/microsoft/DeepSpeed)  | [`intel/deep-learning:pytorch-gpu-latest-py3.11`](https://hub.docker.com/r/intel/deep-learning/tags) |
+| Deep Learning TensorFlow\* CPU| Boost the performance of your workloads, reduce model size, and improve the speed of your Deep Learning deployments on Intel® Xeon® processors with Intel® Extension for TensorFlow\* | <li>[Intel® Extension for Tensorflow](https://github.com/intel/intel-extension-for-tensorflow),<br /> <li>[Intel® Neural Compressor](https://github.com/intel/neural-compressor),<br /> <li>[ONNX Runtime*](https://github.com/microsoft/onnxruntime) | [`intel/deep-learning:tensorflow-latest-py3.11`](https://hub.docker.com/r/intel/deep-learning/tags) |
+| Deep Learning TensorFlow\* GPU| Boost the performance of your workloads, reduce model size, and improve the speed of your Deep Learning deployments on Intel® Data Center GPU Max Series with Intel® Extension for TensorFlow\* | <li>[Intel® Extension for Tensorflow](https://github.com/intel/intel-extension-for-tensorflow),<br /> <li>[Intel® Optimization for Horovod\*](https://github.com/intel/intel-optimization-for-horovod),<br /> <li>[Intel® Neural Compressor](https://github.com/intel/neural-compressor) | [`intel/deep-learning:tensorflow-gpu-latest-py3.11`](https://hub.docker.com/r/intel/deep-learning/tags) |
+| Deep Learning JAX\* CPU| Reduce model size and improve the speed of your Deep Learning deployments on Intel® Xeon® processors with JAX\* | <li>[JAX\*](https://github.com/jax-ml/jax),<br /> <li>[Intel® Distribution of Python](https://github.com/IntelPython/) | [`intel/deep-learning:jax-latest-py3.11`](https://hub.docker.com/r/intel/deep-learning/tags) |
 
 ## Prerequisites
 
@@ -135,11 +135,11 @@ docker run -it --rm \
 ```
 
 > [!NOTE]
-> Some applications use shared memory to share data between processes. The default shared memory segment size for Docker containers is 64MB, which may be insufficient for multithreaded applications (for example, Modin*). Increase the shared memory size using `--shm-size`.
+> Some applications use shared memory to share data between processes. The default shared memory segment size for Docker containers is 64MB, which may be insufficient for multithreaded applications (for example, Modin\*). Increase the shared memory size using `--shm-size`.
 
 #### Next Steps
 
-1. For each container, there is a kernel with the environment name: `classical-ml`, `jax`, `pytorch-cpu`, `pytorch-gpu`, `tensorflow-cpu`, and  `tensorflow-gpu`. Use the command below to activate the `pytorch-cpu` environment in the Deep Learning PyTorch* CPU preset:
+1. For each container, there is a kernel with the environment name: `classical-ml`, `jax`, `pytorch-cpu`, `pytorch-gpu`, `tensorflow-cpu`, and  `tensorflow-gpu`. Use the command below to activate the `pytorch-cpu` environment in the Deep Learning PyTorch\* CPU preset:
 
     ```bash
     conda activate pytorch-cpu
@@ -151,8 +151,8 @@ docker run -it --rm \
     python sample-tests/intel_extension_for_pytorch/test_ipex.py
     ```
 
-    The `test_ipex.py` script utilizes PyTorch* to classify images with a pre-trained ResNet-50 model.
-    Users can specify whether to run the script on a CPU or XPU, and there is an option to apply optimizations using Intel® Extension for PyTorch*.
+    The `test_ipex.py` script utilizes PyTorch\* to classify images with a pre-trained ResNet-50 model.
+    Users can specify whether to run the script on a CPU or XPU, and there is an option to apply optimizations using Intel® Extension for PyTorch\*.
     The script transfers both the model and data to the chosen device, and then measures the average inference time over 100 runs, excluding the initial warm-up phase.
     Finally, the script prints the average inference time.
 
@@ -161,7 +161,7 @@ docker run -it --rm \
 
 ## Run in Multi-Node Distributed Mode [Advanced]
 
-Follow the instructions provided for [Intel® Extension for TensorFlow*](https://github.com/intel/ai-containers/tree/main/preset/deep-learning/demo/tensorflow-distributed/README.md) or [Intel® Extension for PyTorch*](https://github.com/intel/ai-containers/tree/main/preset/deep-learning/demo/pytorch-distributed/README.md) using the Deep Learning TensorFlow* GPU or Deep Learning PyTorch* GPU presets, respectively.
+Follow the instructions provided for [Intel® Extension for TensorFlow\*](https://github.com/intel/ai-containers/tree/main/preset/deep-learning/demo/tensorflow-distributed/README.md) or [Intel® Extension for PyTorch\*](https://github.com/intel/ai-containers/tree/main/preset/deep-learning/demo/pytorch-distributed/README.md) using the Deep Learning TensorFlow\* GPU or Deep Learning PyTorch\* GPU presets, respectively.
 
 ## Troubleshooting and Support
 
@@ -169,4 +169,4 @@ If you face any issues while using the container, refer to the [troubleshooting 
 
 ---
 
-*Other names and brands may be claimed as the property of others. [Trademarks](http://www.intel.com/content/www/us/en/legal/trademarks.html)
+\*Other names and brands may be claimed as the property of others. [Trademarks](http://www.intel.com/content/www/us/en/legal/trademarks.html)
