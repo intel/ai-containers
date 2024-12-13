@@ -1,0 +1,31 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+deep-learning-itex-${PYTHON_VERSION:-3.11}-cpu:
+  cmd: conda run -n tensorflow-cpu python -W ignore sample-tests/intel_extension_for_tensorflow/test_itex.py
+  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+import-itex-${PYTHON_VERSION:-3.11}-cpu:
+  cmd: conda run -n tensorflow-cpu python -c "from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())"
+  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+inference-optimization-inc-tensorflow-${PYTHON_VERSION:-3.11}-cpu:
+  cmd: conda run -n tensorflow-cpu sample-tests/neural_compressor/run.sh cpu
+  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+inference-optimization-inc-itex-notebook-${PYTHON_VERSION:-3.11}-cpu:
+  cmd: papermill --log-output jupyter/inc-itex/inc_sample_tensorflow.ipynb result.ipynb -k tensorflow-cpu --cwd jupyter/inc-itex
+  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  notebook: True
+inference-optimization-onnx-${PYTHON_VERSION:-3.11}-cpu:
+  cmd: conda run -n tensorflow-cpu sample-tests/onnx/run.sh
+  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}

@@ -1,0 +1,107 @@
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# Copyright (c) 2023 Intel Corporation
+#
+# -*- coding: utf-8 -*-
+#
+
+# ERASE COMMENTS FROM HERE
+
+services:
+  dl-base:
+    build:
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
+        BASE_TAG: ${BASE_TAG:-22.04}
+        DPNP_VERSION: ${DPNP_VERSION:-0.16.0}
+        HOROVOD_VERSION: ${HOROVOD_VERSION:-0.28.1.6}
+        IDP_VERSION: ${IDP_VERSION:-2025.0.0}
+        IMPI_VERSION: ${IMPI_VERSION:-2021.14.*}
+        INTEL_CHANNEL: ${INTEL_CHANNEL:-https://software.repos.intel.com/python/conda/}
+        ITEX_CPU_VERSION: ${ITEX_CPU_VERSION:-2.15.0.0}
+        MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Miniforge3-Linux-x86_64}
+        MPI_VERSION: ${MPI_VERSION:-2021.14.0}
+        NEURAL_COMPRESSOR_VERSION: ${NEURAL_COMPRESSOR_VERSION:-3.1.1}
+        NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4=py311h689*}
+        ONNXRUNTIME_VERSION: ${ONNXRUNTIME_VERSION:-1.19.2}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.11}
+        TF_VERSION: ${TF_VERSION:-2.15.1}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ''
+      context: .
+      labels:
+        docs: false
+      target: deep-learning-base
+    environment:
+      http_proxy: ${http_proxy}
+      https_proxy: ${https_proxy}
+    network_mode: host
+    shm_size: 12GB
+    command: >
+      bash -c "
+      conda run -n tensorflow-cpu python -c 'import tensorflow as tf;print(tf.__version__)'
+      "
+
+
+  deep-learning:
+    build:
+      target: deep-learning
+      labels:
+        docs: deep_learning
+        org.opencontainers.image.title: "AI Tools Selector Preset Containers - Deep Learning TensorFlow CPU"
+        org.opencontainers.base.name: "ubuntu:22.04"
+        org.opencontainers.image.name: "intel/deep-learning.-tensorflow-cpu"
+        org.opencontainers.image.version: 2025.0.0-py${PYTHON_VERSION:-3.11}
+        dependency.python: ${PYTHON_VERSION:-3.11}
+        dependency.python.pip: requirements.txt
+        dependency.apt.apt-utils: true
+        dependency.apt.build-essential: true
+        dependency.apt.bzip2: true
+        dependency.apt.ca-certificates: true
+        dependency.apt.cmake: true
+        dependency.apt.g++: true
+        dependency.apt.gcc: true
+        dependency.apt.git: true
+        dependency.apt.gnupg2: true
+        dependency.apt.gpg-agent: true
+        dependency.apt.gzip: true
+        dependency.apt.make: true
+        dependency.apt.numactl: true
+        dependency.apt.patch: true
+        dependency.apt.rsync: true
+        dependency.apt.unzip: true
+        dependency.apt.wget: true
+        dependency.apt.xz-utils: true
+        dependency.conda.conda: '==24.11.0'
+        dependency.conda.dpnp: '=0.16.0'
+        dependency.conda.intel-extension-for-tensorflow_cpu: '=2.15.0.0'
+        dependency.conda.ipykernel: '==6.29.5'
+        dependency.conda.jupyterhub: '==5.1.0'
+        dependency.conda.jupyter-server-proxy: '==4.4.0'
+        dependency.conda.kernda: '==0.3.0'
+        dependency.conda.notebook: '==7.3.1 '
+        dependency.conda.python: '==3.11.9'
+        dependency.conda.tensorflow: '=2.15.1'
+        dependency.conda.tensorflow-hub: '==0.16.1'
+        dependency.conda.neural-compressor: '=3.1.1'
+    depends_on:
+      - dl-base
+    extends: dl-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+    command: >
+      bash -c "
+      conda run -n tensorflow-cpu python -c 'import tensorflow;print(tensorflow.__version__);import intel_extension_for_tensorflow as itex;print(itex.__version__)'
+      "
+      
+
