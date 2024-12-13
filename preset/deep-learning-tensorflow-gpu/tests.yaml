@@ -1,0 +1,31 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+---
+deep-learning-itex-${PYTHON_VERSION:-3.11}-gpu:
+  cmd: conda run -n tensorflow-gpu python -W ignore sample-tests/intel_extension_for_tensorflow/test_itex.py
+  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:deep-learning-tensorflow-gpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  device: ["/dev/dri"]
+import-itex-${PYTHON_VERSION:-3.11}-gpu:
+  cmd: conda run -n tensorflow-gpu python -c "from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())"
+  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:deep-learning-tensorflow-gpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  device: ["/dev/dri"]
+inference-optimization-inc-tensorflow-${PYTHON_VERSION:-3.11}-gpu:
+  cmd: conda run -n tensorflow-gpu sample-tests/neural_compressor/run.sh cpu
+  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:deep-learning-tensorflow-gpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+inference-optimization-inc-itex-notebook-${PYTHON_VERSION:-3.11}-gpu:
+  cmd: papermill --log-output jupyter/inc-itex/inc_sample_tensorflow.ipynb result.ipynb -k tensorflow-gpu --cwd jupyter/inc-itex
+  img: amr-registry.caas.intel.com/aiops/aikit-products-dev:deep-learning-tensorflow-gpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  notebook: True
+  device: ["/dev/dri"]

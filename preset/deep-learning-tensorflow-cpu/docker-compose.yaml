@@ -61,8 +61,8 @@ services:
         docs: deep_learning
         org.opencontainers.image.title: "AI Tools Selector Preset Containers - Deep Learning TensorFlow CPU"
         org.opencontainers.base.name: "ubuntu:22.04"
-        org.opencontainers.image.name: "intel/deep-learning.-tensorflow-cpu"
-        org.opencontainers.image.version: 2025.0.0-py${PYTHON_VERSION:-3.11}
+        org.opencontainers.image.name: "intel/deep-learning"
+        org.opencontainers.image.version: tensorflow-2025.0.0-py${PYTHON_VERSION:-3.11}
         dependency.python: ${PYTHON_VERSION:-3.11}
         dependency.python.pip: requirements.txt
         dependency.apt.apt-utils: true
@@ -90,11 +90,11 @@ services:
         dependency.conda.jupyterhub: '==5.1.0'
         dependency.conda.jupyter-server-proxy: '==4.4.0'
         dependency.conda.kernda: '==0.3.0'
+        dependency.conda.neural-compressor: '=3.1.1'
         dependency.conda.notebook: '==7.3.1 '
         dependency.conda.python: '==3.11.9'
         dependency.conda.tensorflow: '=2.15.1'
         dependency.conda.tensorflow-hub: '==0.16.1'
-        dependency.conda.neural-compressor: '=3.1.1'
     depends_on:
       - dl-base
     extends: dl-base
