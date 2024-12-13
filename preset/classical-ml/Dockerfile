@@ -99,6 +99,7 @@ RUN conda create -yn classical-ml \
         'ray-core>2.9' \
         'aiohttp>=3.10.11' \
         "libtiff>=4.7" \
+        "scikit-learn<1.6" \
         && \
     conda clean -y --all
 
