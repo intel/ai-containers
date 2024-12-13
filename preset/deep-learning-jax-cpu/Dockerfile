@@ -103,6 +103,9 @@ EXPOSE 8888
 RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
     mkdir ~/.local && chmod a+rwx ~/.local
 
+WORKDIR /home/dev
+COPY --chown=dev tests /home/dev/sample-tests
+
 RUN CONDA_ENV="jax-cpu" && \
     KERNEL_NAME="JAX CPU" && \
     KERNEL_DIR="${CONDA_ROOT}/share/jupyter/kernels/$CONDA_ENV" && \
