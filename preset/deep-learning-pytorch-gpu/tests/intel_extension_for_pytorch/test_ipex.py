@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 # pylint: skip-file
 def print_script_description():
     description = """
@@ -21,6 +22,7 @@ def print_script_description():
     Finally, the script prints the average inference time.
     """
     print(description)
+
 
 print_script_description()
 

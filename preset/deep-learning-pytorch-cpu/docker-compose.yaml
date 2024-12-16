@@ -53,7 +53,7 @@ services:
       - /dev/dri/by-path:/dev/dri/by-path
     command: >
       bash -c "
-      conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);' 
+      conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);'
       "
 
 
@@ -109,10 +109,10 @@ services:
       bash -c "
       conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);'
       &&
-      
+
       conda run -n pytorch-cpu bash -c 'mpirun --version'
       &&
 
       conda run -n pytorch-cpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\nOneCCL:\", oneccl.__version__)'
       "
-      
+
