@@ -31,6 +31,11 @@
         {{ read_csv('assets/deep_learning.csv') }}
     === "[Inference Optimization](https://hub.docker.com/r/intel/inference-optimization)"
         {{ read_csv('assets/inference_optimization.csv') }}
+        {{ read_csv('assets/classical_ml.csv') }}
+    === "[Deep Learning Pytorch* CPU](https://hub.docker.com/r/intel/deep-learning)"
+        {{ read_csv('assets/deep_learning_pytorch-cpu.csv') }}
+    === "[Deep Learning PyTorch* GPU](https://hub.docker.com/r/intel/deep-learning)"
+        {{ read_csv('assets/deep_learning_pytorch-gpu.csv') }}
 
 === "[Workflows](https://hub.docker.com/r/intel/ai-workflows)"
     === "[TorchServe](https://github.com/intel/ai-containers/tree/main/workflows/charts/torchserve)"
