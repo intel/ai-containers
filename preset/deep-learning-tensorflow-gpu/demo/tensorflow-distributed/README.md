@@ -1,6 +1,6 @@
 # Intel® Extension for Tensorflow Distributed Execution in Containers
 
-The Deep Learning TensorFlow GPU AI Tools Selector Preset Containers can be used to execute multi-node [Tensorflow](https://www.tensorflow.org) workloads using [Intel® Extension for Tensorflow](https://github.com/intel/intel-extension-for-tensorflow), [Intel® MPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/mpi-library.html) and [horovod](https://horovod.ai/). In this tutorial we use the [`horovodrun`](https://horovod.readthedocs.io/en/stable/running_include.html) utility to execute a [simple script](https://github.com/horovod/horovod/blob/master/examples/tensorflow2/tensorflow2_keras_mnist.py) that trains MNIST on multiple node. Here we use the Intel® AI Tools Selector Preset Container for Deep Learning to demonstrate the distributed workflow in a Tensorflow environment.
+The Deep Learning TensorFlow GPU AI Tools Selector Preset Containers can be used to execute multi-node [Tensorflow](https://www.tensorflow.org) workloads using [Intel® Extension for Tensorflow](https://github.com/intel/intel-extension-for-tensorflow), [Intel® MPI](https://www.intel.com/content/www/us/en/developer/tools/oneapi/mpi-library.html) and [horovod](https://horovod.ai/). In this tutorial we use the [`horovodrun`](https://horovod.readthedocs.io/en/stable/running_include.html) utility to execute a [simple script](https://github.com/horovod/horovod/blob/master/examples/tensorflow2/tensorflow2_keras_mnist.py) that trains MNIST on multiple node. Here we use the AI Tools Selector Preset Container for Deep Learning to demonstrate the distributed workflow in a Tensorflow environment.
 
 ## Overall Workflow
 
@@ -14,7 +14,7 @@ Following are the prerequisites before starting with distributed execution on In
 
 * Make sure all nodes can communicate with each other using networking. One way to check this is to use the `ping` utility to test the connection.
 * SSH is set up correctly to communicate securely between the containers. Instructions to setup SSH correctly with the container are provided in [Setup SSH](#setup-ssh)
-* If you want to run the workload on GPU machine, please make sure you've installed correct drivers on all nodes. You can follow the instructions provided [here](https://dgpu-docs.intel.com/driver/installation.html) to install the stable drivers.
+* To run the workload on GPU machine, please make sure you've installed correct drivers on all nodes. You can follow the instructions provided [here](https://dgpu-docs.intel.com/driver/installation.html) to install the stable drivers.
 
 ## Setup
 
@@ -125,7 +125,7 @@ wget -O workload/tensorflow2_keras_mnist.py https://raw.githubusercontent.com/in
 
 ## Run containers
 
-Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) has been completed, following commands(in order) can be used to launch the script on all nodes. In the following example, 2 instances are launched of a script: 1 on the launcher node(localhost) and 1 on a worker node. You can run the workload on [Intel® Flex/Max GPUs](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu.html) or [Intel® CPUs](https://www.intel.com/content/www/us/en/products/details/processors.html). Please follow instructions in [GPU section](#run-on-intel-flexmax-gpus-machines) for running the workload on Intel® Flex/Max GPUs and [CPU section](#run-on-intel-cpus-machines) for running the workload on Intel® CPUs.
+Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) has been completed, following commands(in order) can be used to launch the script on all nodes. In the following example, 2 instances are launched of a script: 1 on the launcher node(localhost) and 1 on a worker node. You can run the workload on [Intel® Flex/Max GPUs](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu.html). 
 
 ### Run on [Intel Flex/Max GPUs](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu.html) machines
 
@@ -195,43 +195,6 @@ Run the following command on the launcher nodes in a shell to launch the contain
             -np 2 \
             -H localhost:1,worker:1 \
             python tensorflow2_keras_mnist.py
-
-### Run on [Intel CPUs](https://www.intel.com/content/www/us/en/products/details/processors.html) machines
-
-### Run on worker nodes
-
-Please, run the following command on all worker nodes in a shell to launch the container with ssh daemon.
-
-```bash
-docker run --rm \
-    -v $PWD/workload:/tests \
-    -v $PWD/ssh_worker:/home/dev/.ssh/ \
-    --name=worker \
-    --network=host  \
-    -w /tests intel/deep-learning:tensorflow-gpu-latest-py3.11 \
-    bash -c '/usr/sbin/sshd -p 12345 -f ~/.ssh/sshd_config -E ~/.ssh/error.log && sleep infinity'
-```
-
-> [!NOTE]
-> That some parameters to the sshd utility need to be modified based on your configuration. For example, you might want to modify the `-p`(port) parameter to specify a different port if 12345 is not available. You can find out more options available to the SSH Daemon [here](https://www.ssh.com/academy/ssh/sshd#command-line-options).
-
-### Run on launcher nodes
-
-Please, run the following command on the launcher nodes in a shell to launch the container with `horovrun` command.
-
-```bash
-docker run --rm -t \
-    -v $PWD/workload:/tests \
-    -v $PWD/ssh_launcher:/home/dev/.ssh/ \
-    --name=launcher \
-    --network=host  \
-    -w /tests intel/deep-learning:tensorflow-gpu-latest-py3.11 \
-    conda run --no-capture-output \
-        -n tensorflow horovodrun --verbose \
-        -np 2 \
-        -H localhost:1,worker:1 \
-        python tensorflow2_keras_mnist.py
-```
 
 > [!NOTE]
 > That the number of processes spawned on each node will be dependent on the parameters specified with `horovodrun` command. You can modify the horovodrun command to your needs from the [documentation here](https://horovod.readthedocs.io/en/stable/running_include.html) and [here](https://horovod.readthedocs.io/en/stable/docker_include.html). For the workflow to work all nodes need to communicate with each other and be able to pass the MPI messages among all processes.  This requires the correct environment setup based on the specific networking setup you have. [Intel® MPI documentation](https://www.intel.com/content/www/us/en/docs/mpi-library/developer-reference-linux/2021-10/environment-variable-reference.html) provides the necessary environment variables to control the communication between processes using MPI.
