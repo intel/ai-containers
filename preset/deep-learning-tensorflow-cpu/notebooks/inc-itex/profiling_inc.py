@@ -15,21 +15,23 @@
 # pylint: skip-file
 
 import tensorflow as tf
+
 print("Tensorflow version {}".format(tf.__version__))
 
-import numpy as np
-import time
 import argparse
-import os
 import json
+import os
+import time
 
-
-import mnist_dataset
 import alexnet
+import mnist_dataset
+import numpy as np
 
 
 def val_data():
-    x_train, y_train, label_train, x_test, y_test, label_test = mnist_dataset.read_data()
+    x_train, y_train, label_train, x_test, y_test, label_test = (
+        mnist_dataset.read_data()
+    )
     return x_test, y_test, label_test
 
 
@@ -54,25 +56,28 @@ def get_concrete_function(graph_def, inputs, outputs, print_graph=False):
 
     return wrap_function.prune(
         tf.nest.map_structure(graph.as_graph_element, inputs),
-        tf.nest.map_structure(graph.as_graph_element, outputs))
+        tf.nest.map_structure(graph.as_graph_element, outputs),
+    )
 
 
 def infer_perf_pb(pb_model_file, val_data, inputs=["x:0"], outputs=["Identity:0"]):
     x_test, y_test, label_test = val_data
     q_model = alexnet.load_pb(pb_model_file)
-    concrete_function = get_concrete_function(graph_def=q_model.as_graph_def(),
-                                              inputs=inputs,
-                                              outputs=outputs,
-                                              print_graph=True)
+    concrete_function = get_concrete_function(
+        graph_def=q_model.as_graph_def(),
+        inputs=inputs,
+        outputs=outputs,
+        print_graph=True,
+    )
 
     bt = time.time()
     _frozen_graph_predictions = concrete_function(x=tf.constant(x_test))
     et = time.time()
 
     accuracy = calc_accuracy(_frozen_graph_predictions[0], label_test)
-    print('accuracy:', accuracy)
+    print("accuracy:", accuracy)
     throughput = x_test.shape[0] / (et - bt)
-    print('max throughput(fps):', throughput)
+    print("max throughput(fps):", throughput)
 
     # latency when BS=1
     times = 1000
@@ -87,7 +92,7 @@ def infer_perf_pb(pb_model_file, val_data, inputs=["x:0"], outputs=["Identity:0"
     et = time.time()
 
     latency = (et - bt) * 1000 / (times - warmup)
-    print('latency(ms):', latency)
+    print("latency(ms):", latency)
 
     return accuracy, throughput, latency
 
@@ -95,26 +100,44 @@ def infer_perf_pb(pb_model_file, val_data, inputs=["x:0"], outputs=["Identity:0"
 def save_res(result):
     accuracy, throughput, latency = result
     res = {}
-    res['accuracy'] = accuracy
-    res['throughput'] = throughput
-    res['latency'] = latency
+    res["accuracy"] = accuracy
+    res["throughput"] = throughput
+    res["latency"] = latency
 
     outfile = args.index + ".json"
-    with open(outfile, 'w') as f:
+    with open(outfile, "w") as f:
         json.dump(res, f)
         print("Save result to {}".format(outfile))
 
+
 parser = argparse.ArgumentParser()
-parser.add_argument('--index', type=str, help='file name of output', required=True)
+parser.add_argument("--index", type=str, help="file name of output", required=True)
 
-parser.add_argument('--input-graph', type=str, help='file name for graph', required=True)
+parser.add_argument(
+    "--input-graph", type=str, help="file name for graph", required=True
+)
 
-parser.add_argument('--num-intra-threads', type=str, help='number of threads for an operator', required=False,
-                    default="24" )
-parser.add_argument('--num-inter-threads', type=str, help='number of threads across operators', required=False,
-                    default="1")
-parser.add_argument('--omp-num-threads', type=str, help='number of threads to use', required=False,
-                    default="24")
+parser.add_argument(
+    "--num-intra-threads",
+    type=str,
+    help="number of threads for an operator",
+    required=False,
+    default="24",
+)
+parser.add_argument(
+    "--num-inter-threads",
+    type=str,
+    help="number of threads across operators",
+    required=False,
+    default="1",
+)
+parser.add_argument(
+    "--omp-num-threads",
+    type=str,
+    help="number of threads to use",
+    required=False,
+    default="24",
+)
 
 args = parser.parse_args()
 os.environ["KMP_BLOCKTIME"] = "1"

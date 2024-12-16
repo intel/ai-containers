@@ -103,5 +103,4 @@ services:
       bash -c "
       conda run -n tensorflow-cpu python -c 'import tensorflow;print(tensorflow.__version__);import intel_extension_for_tensorflow as itex;print(itex.__version__)'
       "
-      
 

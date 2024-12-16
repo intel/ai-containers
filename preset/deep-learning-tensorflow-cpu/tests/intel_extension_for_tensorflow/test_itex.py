@@ -25,6 +25,7 @@ def print_script_description():
     """
     print(description)
 
+
 print_script_description()
 
 import tensorflow as tf

@@ -195,12 +195,12 @@ EXPOSE 8888
 RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
     mkdir ~/.local && chmod a+rwx ~/.local
 
-RUN CONDA_ENV="tensorflow-gpu" && \ 
+RUN CONDA_ENV="tensorflow-gpu" && \
     KERNEL_NAME="TensorFlow GPU" && \
     KERNEL_DIR="${CONDA_ROOT}/share/jupyter/kernels/$CONDA_ENV" && \
     conda run -n "$CONDA_ENV" python -m ipykernel install --prefix "$CONDA_ROOT" --name "$CONDA_ENV" --display-name "$KERNEL_NAME" && \
     conda run -n "$CONDA_ENV" kernda -o -y "$KERNEL_DIR/kernel.json" && \
-    conda run -n base jupyter kernelspec list 
+    conda run -n base jupyter kernelspec list
 
 CMD ["bash", "-c", "source activate tensorflow-gpu && jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 

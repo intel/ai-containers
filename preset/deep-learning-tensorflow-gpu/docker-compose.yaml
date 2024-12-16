@@ -151,5 +151,4 @@ services:
 
       conda run -n tensorflow-gpu python -c 'import horovod.tensorflow as hvd;hvd.init();import horovod.tensorflow'
       "
-      
 

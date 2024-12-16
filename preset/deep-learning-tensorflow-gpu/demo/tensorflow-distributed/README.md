@@ -125,7 +125,7 @@ wget -O workload/tensorflow2_keras_mnist.py https://raw.githubusercontent.com/in
 
 ## Run containers
 
-Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) has been completed, following commands(in order) can be used to launch the script on all nodes. In the following example, 2 instances are launched of a script: 1 on the launcher node(localhost) and 1 on a worker node. You can run the workload on [Intel® Flex/Max GPUs](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu.html). 
+Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) has been completed, following commands(in order) can be used to launch the script on all nodes. In the following example, 2 instances are launched of a script: 1 on the launcher node(localhost) and 1 on a worker node. You can run the workload on [Intel® Flex/Max GPUs](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu.html).
 
 ### Run on [Intel Flex/Max GPUs](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu.html) machines
 

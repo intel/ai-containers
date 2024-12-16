@@ -83,7 +83,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     conda clean -y --all \
     && \
     conda config --add channels ${INTEL_CHANNEL}
-    
+
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 
 # Improve interoperabilty among conda an pypi packages
@@ -134,12 +134,12 @@ EXPOSE 8888
 RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
     mkdir ~/.local && chmod a+rwx ~/.local
 
-RUN CONDA_ENV="tensorflow-cpu" && \ 
+RUN CONDA_ENV="tensorflow-cpu" && \
     KERNEL_NAME="TensorFlow CPU" && \
     KERNEL_DIR="${CONDA_ROOT}/share/jupyter/kernels/$CONDA_ENV" && \
     conda run -n "$CONDA_ENV" python -m ipykernel install --prefix "$CONDA_ROOT" --name "$CONDA_ENV" --display-name "$KERNEL_NAME" && \
     conda run -n "$CONDA_ENV" kernda -o -y "$KERNEL_DIR/kernel.json" && \
-    conda run -n base jupyter kernelspec list 
+    conda run -n base jupyter kernelspec list
 
 CMD ["bash", "-c", "source activate tensorflow-cpu && jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 

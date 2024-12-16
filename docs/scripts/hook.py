@@ -39,8 +39,12 @@ def create_support_matrix():
     # get_repo(models)
     compose_to_csv("preset/data-analytics", "data_analytics")
     compose_to_csv("preset/classical-ml", "classical_ml")
-    compose_to_csv("preset/deep-learning-tensorflow-cpu", "deep_learning_tensorflow_cpu")
-    compose_to_csv("preset/deep-learning_tensorflow_gpu", "deep_learning_tensorflow_gpu")
+    compose_to_csv(
+        "preset/deep-learning-tensorflow-cpu", "deep_learning_tensorflow_cpu"
+    )
+    compose_to_csv(
+        "preset/deep-learning_tensorflow_gpu", "deep_learning_tensorflow_gpu"
+    )
     compose_to_csv("preset/deep-learning", "deep_learning")
     compose_to_csv("preset/inference-optimization", "inference_optimization")
 
