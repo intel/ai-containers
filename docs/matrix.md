@@ -28,9 +28,9 @@
     === "[Classical ML](https://hub.docker.com/r/intel/classical-ml)"
         {{ read_csv('assets/classical_ml.csv') }}
     === "[Deep Learning TensorFlow* CPU](https://hub.docker.com/r/intel/deep-learning)"
-        {{ read_csv('assets/deep_learning_tensorflow_cpu.csv') }}
+        {{ read_csv('assets/deep_learning_tensorflow-cpu.csv') }}
     === "[Deep Learning TensorFlow* GPU](https://hub.docker.com/r/intel/deep-learning)"
-        {{ read_csv('assets/deep_learning_tensorflow_gpu.csv') }}
+        {{ read_csv('assets/deep_learning_tensorflow-gpu.csv') }}
     === "[Deep Learning](https://hub.docker.com/r/intel/deep-learning)"
         {{ read_csv('assets/deep_learning.csv') }}
     === "[Inference Optimization](https://hub.docker.com/r/intel/inference-optimization)"
