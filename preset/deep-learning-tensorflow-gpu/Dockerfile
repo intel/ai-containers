@@ -241,7 +241,7 @@ ENV UCX_TLS=ud,sm,self
 
 USER dev
 
-COPY --chown=dev notebooks /home/dev/jupyter
+# COPY --chown=dev notebooks /home/dev/jupyter
 COPY --chown=dev tests /home/dev/sample-tests
 
 ENV BASH_ENV ~/.bash_profile
