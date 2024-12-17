@@ -191,7 +191,7 @@ Run the following command on the launcher nodes in a shell to launch the contain
         --network=host  \
         -w /tests intel/deep-learning:tensorflow-gpu-latest-py3.11 \
         conda run --no-capture-output \
-            -n tensorflow horovodrun --verbose \
+            -n tensorflow-gpu horovodrun --verbose \
             -np 2 \
             -H localhost:1,worker:1 \
             python tensorflow2_keras_mnist.py
