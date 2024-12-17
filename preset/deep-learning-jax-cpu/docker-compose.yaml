@@ -22,9 +22,10 @@ services:
       args:
         BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
         BASE_TAG: ${BASE_TAG:-22.04}
-        IDP_VERSION: ${IDP_VERSION:-2024.2}
+        IDP_VERSION: ${IDP_VERSION:-2025.0.0}
         INTEL_CHANNEL: ${INTEL_CHANNEL:-https://software.repos.intel.com/python/conda/}
         JAX_VERSION: ${JAX_VERSION:-0.4.34}
+        MKL_VERSION: ${DPNP_VERSION:-2025.0}
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Miniforge3-Linux-x86_64}
         NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4=py311h689*}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.11}

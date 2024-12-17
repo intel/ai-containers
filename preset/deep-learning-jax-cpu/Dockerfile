@@ -79,6 +79,7 @@ ARG IDP_VERSION
 ARG DPNP_VERSION
 ARG MODIN_VERSION
 ARG NUMPY_VERSION
+ARG MKL_VERSION
 
 # JAX  Installation
 ARG PYTHON_VERSION
@@ -91,7 +92,7 @@ RUN conda create -yn 'jax-cpu' \
         "python=${PYTHON_VERSION}" \
         "jax=${JAX_VERSION}" \
         "numpy=${NUMPY_VERSION}" \
-        "mkl=${IDP_VERSION}" \
+        "mkl=${MKL_VERSION}" \
         'ipykernel>=6.29.5' \
         'kernda>=0.3.0' \
         'zipp>=3.19.1' \
