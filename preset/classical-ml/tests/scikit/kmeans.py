@@ -186,7 +186,7 @@ h = 0.02  # point in the mesh [x_min, x_max]x[y_min, y_max].
 # Plot the decision boundary. For that, we will assign a color to each
 x_min, x_max = reduced_data[:, 0].min() - 1, reduced_data[:, 0].max() + 1
 y_min, y_max = reduced_data[:, 1].min() - 1, reduced_data[:, 1].max() + 1
-xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+xx, yy = np.meshgrid(np.linspace(x_min, x_max), np.linspace(y_min, y_max))
 
 # Obtain labels for each point in mesh. Use last trained model.
 Z = kmeans.predict(np.c_[xx.ravel(), yy.ravel()])
