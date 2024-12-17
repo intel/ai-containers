@@ -140,7 +140,7 @@ services:
     depends_on:
       - dl-base
     extends: dl-base
-    image: ${REGISTRY}/${REPO}:deep-learning-tensorflow-gpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+    image: ${REGISTRY}/${REPO}:${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-gpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
     command: >
       bash -c "
       conda run -n tensorflow-gpu python -c 'from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'
