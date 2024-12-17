@@ -195,8 +195,7 @@ Run the following command on the launcher nodes in a shell to launch the contain
     -w /tests/workdir \
     --shm-size 8GB \
     -it intel/deep-learning:pytorch-gpu-latest-py3.11 conda run --no-capture-output \
-        -n pytorch-gpu 'source $(python -c "import oneccl_bindings_for_pytorch as torch_ccl;print(torch_ccl.cwd)")/env/setvars.sh && \
-        mpirun -l -ppn 1 -hosts localhost,worker python pytorch_mnist.py --device xpu --save-model'
+        -n pytorch-gpu 'mpirun -l -ppn 1 -hosts localhost,worker python pytorch_mnist.py --device xpu --save-model'
     ```
 
 > [!NOTE]
