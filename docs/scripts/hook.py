@@ -39,8 +39,6 @@ def create_support_matrix():
     # get_repo(models)
     compose_to_csv("preset/classical-ml", "classical_ml")
     compose_to_csv("preset/deep-learning-jax-cpu", "data_analytics_jax_cpu")
-    compose_to_csv("preset/deep-learning", "deep_learning")
-    compose_to_csv("preset/inference-optimization", "inference_optimization")
 
 
 def on_pre_build(*args, **kwargs):

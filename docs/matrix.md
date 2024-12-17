@@ -27,10 +27,6 @@
         {{ read_csv('assets/classical_ml.csv') }}
     === "[Deep Learning JAX CPU](https://hub.docker.com/r/intel/deep-learning)"
         {{ read_csv('assets/deep_learning_jax_cpu.csv') }}
-    === "[Deep Learning](https://hub.docker.com/r/intel/deep-learning)"
-        {{ read_csv('assets/deep_learning.csv') }}
-    === "[Inference Optimization](https://hub.docker.com/r/intel/inference-optimization)"
-        {{ read_csv('assets/inference_optimization.csv') }}
 
 === "[Workflows](https://hub.docker.com/r/intel/ai-workflows)"
     === "[TorchServe](https://github.com/intel/ai-containers/tree/main/workflows/charts/torchserve)"
