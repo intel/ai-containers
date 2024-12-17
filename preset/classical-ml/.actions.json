@@ -1,5 +1,6 @@
 {
-    "PYTHON_VERSION": ["3.9", "3.10"],
+    "PYTHON_VERSION": ["3.11"],
     "experimental": [true],
+    "RELEASE": ["2025.0.0"],
     "runner_label": ["clx"]
 }

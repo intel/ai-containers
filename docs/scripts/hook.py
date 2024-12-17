@@ -37,12 +37,10 @@ def create_support_matrix():
     compose_to_csv("jax", None)
 
     # get_repo(models)
-    compose_to_csv("preset/data-analytics", "data_analytics")
     compose_to_csv("preset/classical-ml", "classical_ml")
-    compose_to_csv("preset/deep-learning", "deep_learning")
-    compose_to_csv("preset/inference-optimization", "inference_optimization")
     compose_to_csv("preset/deep-learning-pytorch-cpu", "deep_learning_pytorch_cpu")
     compose_to_csv("preset/deep-learning-pytorch-gpu", "deep_learning_pytorch_gpu")
+    compose_to_csv("preset/deep-learning-jax-cpu", "deep_learning_jax_cpu")
 
 
 def on_pre_build(*args, **kwargs):
