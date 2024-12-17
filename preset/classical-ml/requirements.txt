@@ -1,1 +1,2 @@
-dataset-librarian==1.0.4
+jupyterhub==5.2.1
+jupyter-server-proxy==4.4.0
