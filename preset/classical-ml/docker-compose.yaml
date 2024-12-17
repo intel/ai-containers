@@ -24,6 +24,7 @@ services:
         DPNP_VERSION: ${DPNP_VERSION:-0.16.0}
         IDP_VERSION: ${IDP_VERSION:-2025.0.0}
         INTEL_CHANNEL: ${INTEL_CHANNEL:-https://software.repos.intel.com/python/conda/}
+        MKL_VERSION: ${DPNP_VERSION:-2025.0}
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Miniforge3-Linux-x86_64}
         MODIN_VERSION: ${MODIN_VERSION:-0.32.0}
         NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4=py311h689*}

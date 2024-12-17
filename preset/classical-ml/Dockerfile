@@ -84,10 +84,11 @@ ARG XGBOOST_VERSION
 ARG MODIN_VERSION
 ARG NUMPY_VERSION
 ARG SKLEARNEX_VERSION
+ARG MKL_VERSION
 
 RUN conda create -yn classical-ml \
         "python=${PYTHON_VERSION}" \
-        "mkl=${IDP_VERSION}" \
+        "mkl=${MKL_VERSION}" \
         "dpnp=${DPNP_VERSION}" \
         'ipykernel>=6.29.5' \
         'kernda>=0.3.0' \
