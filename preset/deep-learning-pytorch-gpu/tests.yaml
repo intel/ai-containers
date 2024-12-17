@@ -35,4 +35,3 @@ deep-learning-ipex-quantization-notebook-${PYTHON_VERSION:-3.11}-gpu:
   device: ["/dev/dri"]
   notebook: True
   user: root
-
