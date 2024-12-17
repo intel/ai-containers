@@ -30,7 +30,7 @@
     === "[Deep Learning TensorFlow* GPU](https://hub.docker.com/r/intel/deep-learning)"
         {{ read_csv('assets/deep_learning_tensorflow-gpu.csv') }}
     === "[Deep Learning JAX CPU](https://hub.docker.com/r/intel/deep-learning)"
-        {{ read_csv('assets/deep_learning_jax_cpu.csv') }}
+        {{ read_csv('assets/deep_learning_jax-cpu.csv') }}
 
 === "[Workflows](https://hub.docker.com/r/intel/ai-workflows)"
     === "[TorchServe](https://github.com/intel/ai-containers/tree/main/workflows/charts/torchserve)"

@@ -44,7 +44,7 @@ def create_support_matrix():
     compose_to_csv(
         "preset/deep-learning-tensorflow-gpu", "deep_learning_tensorflow_gpu"
     )
-    compose_to_csv("preset/deep-learning-jax-cpu", "deep-learning_jax_cpu")
+    compose_to_csv("preset/deep-learning-jax-cpu", "deep_learning_jax_cpu")
 
 
 def on_pre_build(*args, **kwargs):
