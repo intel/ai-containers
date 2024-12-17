@@ -115,4 +115,3 @@ services:
 
       conda run -n pytorch-cpu python -c 'import oneccl_bindings_for_pytorch as oneccl;print(\"\\nOneCCL:\", oneccl.__version__)'
       "
-
