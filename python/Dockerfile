@@ -130,7 +130,7 @@ ARG OCLOC_VER
 ARG LEVEL_ZERO_VER
 ARG LEVEL_ZERO_DEV_VER
 ARG XPU_SMI_VER
-    
+
 RUN apt-get update && \
         apt-get install -y --no-install-recommends \
             intel-opencl-icd=${ICD_VER} \
