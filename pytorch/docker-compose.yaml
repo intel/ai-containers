@@ -90,7 +90,7 @@ services:
     extends: ipex-base
     depends_on:
       - xpu
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.110xpu}-xpu-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.5.10}-xpu-base
   xpu-jupyter:
     build:
       labels:
@@ -102,7 +102,7 @@ services:
     command: >
       bash -c "python -m jupyter --version"
     extends: ipex-xpu-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.3.110xpu}-xpu-jupyter
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.5.10}-xpu-jupyter
     ports:
       - 8888:8888
   torchserve-cpu:
@@ -134,12 +134,10 @@ services:
     build:
       args:
         PACKAGE_OPTION: pip
-        XPU_SMI_VERSION: ${XPU_SMI_VERSION:-1.2.38}
         PYTHON_BASE: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-xpu-base
       labels:
         dependency.apt.numactl: true
         dependency.apt.openjdk-17-jdk: true
-        dependency.apt.xpu-smi: ${XPU_SMI_VERSION:-1.2.38}
         dependency.idp: false
         dependency.python.pip: serving/torchserve-xpu-requirements.txt
         docs: serving
