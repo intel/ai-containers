@@ -8,5 +8,5 @@ torch-workflow-archiver==0.2.15
 torchserve==0.12.0
 torchtext==0.18.0+cpu
 torchvision==0.20.0
--f https://pytorch-extension.intel.com/release-whl/stable/cpu/us/
+-f https://pytorch-extension.intel.com/release-whl/stable/cpu/cn/
 intel_extension_for_pytorch==2.5.0+cpu
