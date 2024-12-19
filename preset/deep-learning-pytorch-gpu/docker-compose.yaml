@@ -68,8 +68,8 @@ services:
     build:
       target: deep-learning
       labels:
-        docs: deep_learning
-        org.opencontainers.image.title: "AI Tools Selector Preset Containers - Deep Learning PyTorch GPU"
+        docs: deep_learning_pytorch_gpu
+        org.opencontainers.image.title: "AI Tools Selector Preset Containers - Deep Learning PyTorch* GPU"
         org.opencontainers.base.name: "ubuntu:22.04"
         org.opencontainers.image.name: "intel/deep-learning-pytorch-gpu"
         org.opencontainers.image.version: 2025.0.0-py${PYTHON_VERSION:-3.11}

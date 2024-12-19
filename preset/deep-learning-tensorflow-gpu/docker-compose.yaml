@@ -65,8 +65,8 @@ services:
     build:
       target: deep-learning
       labels:
-        docs: deep_learning
-        org.opencontainers.image.title: "AI Tools Selector Preset Containers - Deep Learning TensorFlow GPU"
+        docs: deep_learning_tensorflow_gpu
+        org.opencontainers.image.title: "AI Tools Selector Preset Containers - Deep Learning TensorFlow* GPU"
         org.opencontainers.base.name: "ubuntu:22.04"
         org.opencontainers.image.name: "intel/deep-learning"
         org.opencontainers.image.version: tensorflow-gpu-2025.0.0-py${PYTHON_VERSION:-3.11}

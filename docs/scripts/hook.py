@@ -40,12 +40,8 @@ def create_support_matrix():
     compose_to_csv("preset/classical-ml", "classical_ml")
     compose_to_csv("preset/deep-learning-pytorch-cpu", "deep_learning_pytorch_cpu")
     compose_to_csv("preset/deep-learning-pytorch-gpu", "deep_learning_pytorch_gpu")
-    compose_to_csv(
-        "preset/deep-learning-tensorflow-cpu", "deep_learning_tensorflow_cpu"
-    )
-    compose_to_csv(
-        "preset/deep-learning-tensorflow-gpu", "deep_learning_tensorflow_gpu"
-    )
+    compose_to_csv("preset/deep-learning-tensorflow-cpu", "deep_learning_tensorflow_cpu")
+    compose_to_csv("preset/deep-learning-tensorflow-gpu", "deep_learning_tensorflow_gpu")
     compose_to_csv("preset/deep-learning-jax-cpu", "deep_learning_jax_cpu")
 
 
