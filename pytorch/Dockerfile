@@ -48,7 +48,7 @@ FROM ${PYTHON_BASE} AS ipex-base-idp
 WORKDIR /
 COPY requirements.txt .
 
-RUN conda run -n idp python -m pip install --no-cache-dir -r requirements.txt && \
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
     apt-get clean && conda clean -y --all
 
 FROM ipex-base-${PACKAGE_OPTION} AS jupyter
@@ -79,7 +79,7 @@ FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels-idp
 WORKDIR /
 COPY xpu-requirements.txt .
 
-RUN conda run -n idp python -m pip install --no-cache-dir -r xpu-requirements.txt && \
+RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
 
 FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} AS ipex-xpu-jupyter
@@ -116,11 +116,12 @@ RUN useradd -m -s /bin/bash model-server && \
     mkdir -p /home/model-server/model-store && \
     chown -R model-server /home/model-server/
 
+ARG PYTHON_VERSION
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
     g++ \
     git \
     wget \
-    python3-dev \
+    ${PYTHON_VERSION}-venv \
     python3-distutils \
     python3-venv && \
     rm -rf /var/lib/apt/lists/*

@@ -12,22 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-services:
-  idp:
-    build:
-      args:
-        IDP_VERSION: ${IDP_VERSION:-core}
-      labels:
-        dependency.conda.intel-distribution-for-python: intelpython3_${IDP_VERSION:-core}
-        docs: python
-        org.opencontainers.image.name: "intel/python"
-        org.opencontainers.image.title: "Intel® Distribution for Python Base Image"
-        org.opencontainers.image.version: 3.10-${IDP_VERSION:-core}
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-${IDP_VERSION:-core}-py${PYTHON_VERSION:-3.10}-base
-  xpu:
-    build:
-      labels:
-        org.opencontainers.image.version: 3.10-xpu-${IDP_VERSION:-core}
-        org.opencontainers.image.title: "Intel® Distribution for Python XPU Base Image"
-    extends: idp
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-${IDP_VERSION:-core}-py${PYTHON_VERSION:-3.10}-xpu-base
+# services:
+#   idp:
+#     build:
+#       args:
+#         IDP_VERSION: ${IDP_VERSION:-full}
+#         PYTHON_VERSION: ${PYTHON_VERSION:-3.11}
+#       labels:
+#         dependency.conda.intel-distribution-for-python: intelpython3_${IDP_VERSION:-full}
+#         docs: python
+#         org.opencontainers.image.name: "intel/python"
+#         org.opencontainers.image.title: "Intel® Distribution for Python Base Image"
+#         org.opencontainers.image.version: 3.10-${IDP_VERSION:-full}
+#     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-${IDP_VERSION:-full}-py${PYTHON_VERSION:-3.11}-base
+#   xpu:
+#     build:
+#       labels:
+#         org.opencontainers.image.version: 3.10-xpu-${IDP_VERSION:-full}
+#         org.opencontainers.image.title: "Intel® Distribution for Python XPU Base Image"
+#     extends: idp
+#     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-${IDP_VERSION:-full}-py${PYTHON_VERSION:-3.10}-xpu-base

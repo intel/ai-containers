@@ -19,10 +19,12 @@ services:
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Linux-x86_64}
         no_proxy: ""
         NO_PROXY: ""
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+        IDP_VERSION: ${IDP_VERSION:-core}
       context: .
       labels:
         dependency.apt.wget: true
-        dependency.conda.intel-distribution-for-python: intelpython3_core
+        dependency.conda.intel-distribution-for-python: intelpython3_full
         docs: false
       target: idp
     command: >
