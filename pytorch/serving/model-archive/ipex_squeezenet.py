@@ -27,9 +27,9 @@
 
 # pylint: skip-file
 
-import intel_extension_for_pytorch as ipex
 import torch
 import torchvision.models as models
+import intel_extension_for_pytorch as ipex
 
 # load the model
 model = models.squeezenet1_1(pretrained=True)
