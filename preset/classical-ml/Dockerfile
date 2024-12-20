@@ -28,27 +28,23 @@ RUN apt-get update -y && \
     apt-get install -y --no-install-recommends --fix-missing \
         bzip2 \
         ca-certificates \
-        diffutils \
         gcc \
         git \
         gzip \
         make \
-        patch \
         rsync \
         unzip \
         wget \
         xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
+# Setting up non-root directories
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash -m dev
-RUN echo 'dev:password' | chpasswd
 USER dev
 WORKDIR /home/dev
 
 ENV CONDA_ROOT=/home/dev/conda
 ARG MINIFORGE_VERSION
-ARG PYTHON_VERSION
-ARG IDP_VERSION
 ARG INTEL_CHANNEL
 
 RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-forge/miniforge/releases/latest/download/${MINIFORGE_VERSION}.sh -O miniforge.sh && \
@@ -58,13 +54,14 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
     ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge" && \
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda init --all && \
+    conda update -y conda && \
     conda install -y \
-        'conda==24.9.2' \
-        'jupyterlab==4.2.5' \
-        'jupyterhub==5.2.1' \
-        'notebook==7.2.2' \
-        'jupyter-server-proxy==4.4.0' \
-        'nb_conda_kernels==2.5.1' \
+        'jupyterlab>=4.2.6' \
+        'notebook>=7.1.3' \
+        'nb_conda_kernels>=2.5.1' \
+        "idna>=3.7" \
+        'libarchive>=3.7.7' \
+        'aiohttp>=3.10.11' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -75,6 +72,11 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 RUN conda config --set pip_interop_enabled True
 
+COPY requirements.txt .
+RUN python -m pip install --no-cache-dir \
+    --ignore-installed -r requirements.txt
+
+ARG PYTHON_VERSION
 ARG IDP_VERSION
 ARG DAAL4PY_VERSION
 ARG DPNP_VERSION
@@ -82,29 +84,25 @@ ARG XGBOOST_VERSION
 ARG MODIN_VERSION
 ARG NUMPY_VERSION
 ARG SKLEARNEX_VERSION
+ARG MKL_VERSION
 
 RUN conda create -yn classical-ml \
         "python=${PYTHON_VERSION}" \
-        "daal4py=${DAAL4PY_VERSION}" \
+        "mkl=${MKL_VERSION}" \
         "dpnp=${DPNP_VERSION}" \
-        'ipykernel==6.29.5' \
-        'kernda==0.3.0' \
-        'matplotlib-base==3.9.2' \
+        'ipykernel>=6.29.5' \
+        'kernda>=0.3.0' \
+        'matplotlib-base>=3.9.2' \
         "modin-ray=${MODIN_VERSION}" \
-        'python-dotenv==1.0.1' \
         "scikit-learn-intelex=${SKLEARNEX_VERSION}" \
-        'tqdm==4.66.5' \
         "xgboost=${XGBOOST_VERSION}" \
-        "setuptools>=70.0.0" \
+        "idna>=3.7" \
+        'ray-core>2.9' \
+        'aiohttp>=3.10.11' \
+        "libtiff>=4.7" \
+        "scikit-learn<1.6" \
         && \
     conda clean -y --all
-
-# PyPI packages
-COPY requirements.txt .
-RUN conda run -n 'classical-ml' python -m pip install --no-deps --no-cache-dir -r requirements.txt && \
-    conda clean -y --all
-
-RUN rm -rf requirements.txt
 
 ENV PYTHONSTARTUP=~/.patch_sklearn.py
 COPY base/.patch_sklearn.py ~/.patch_sklearn.py
