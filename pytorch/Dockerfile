@@ -66,7 +66,7 @@ EXPOSE 8888
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
-FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels-pip
+FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels
 
 WORKDIR /
 COPY xpu-requirements.txt .
@@ -74,15 +74,7 @@ COPY xpu-requirements.txt .
 RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
 
-FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels-idp
-
-WORKDIR /
-COPY xpu-requirements.txt .
-
-RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
-    rm -rf xpu-requirements.txt
-
-FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} AS ipex-xpu-jupyter
+FROM ipex-xpu-base-wheels AS ipex-xpu-jupyter
 
 WORKDIR /jupyter
 COPY jupyter-requirements.txt .

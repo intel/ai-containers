@@ -19,7 +19,7 @@ services:
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Linux-x86_64}
         no_proxy: ""
         NO_PROXY: ""
-        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.11}
         IDP_VERSION: ${IDP_VERSION:-core}
       context: .
       labels:
@@ -30,27 +30,27 @@ services:
     command: >
       bash -c "conda env list && python -c 'import mkl'"
     extends: pip
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.10}-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-idp-py${PYTHON_VERSION:-3.11}-base
   pip:
     build:
       args:
         BASE_IMAGE_NAME: ${BASE_IMAGE_NAME:-ubuntu}
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-22.04}
-        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.11}
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
         no_proxy: ""
       context: .
       labels:
         dependency.apt.wget: true
-        dependency.python: ${PYTHON_VERSION:-3.10}
+        dependency.python: ${PYTHON_VERSION:-3.11}
         dependency.python.pip: requirements.txt
         docs: false
         org.opencontainers.base.name: "ubuntu:22.04"
       target: pip
     command: >
       bash -c 'python --version'
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.10}-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.11}-base
     pull_policy: always
   xpu:
     build:
@@ -82,11 +82,11 @@ services:
         dependency.apt.unzip: true
         dependency.apt.xpu-smi: ${XPU_SMI_VER:-1.2.39-66~22.04}
         dependency.idp.pip: false
-        org.opencontainers.base.name: "intel/python:3.10-core"
+        org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.title: "Intel® XPU Base Image"
         org.opencontainers.image.version: ${IPEX_VERSION:-2.5.10}-xpu-${PACKAGE_OPTION:-pip}-base
       target: xpu-base
     command: >
       sh -c 'dpkg -l | grep level-zero;dpkg -l | grep dpcpp;dpkg -l | grep mkl'
     extends: ${PACKAGE_OPTION:-pip}
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-xpu-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xpu-base

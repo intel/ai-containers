@@ -78,8 +78,8 @@ services:
         dependency.idp.pip: false
         org.opencontainers.base.name: "intel/python:3.10-core"
         org.opencontainers.image.title: "Intel® Extension for PyTorch XPU Base Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.3.110}-xpu-${PACKAGE_OPTION:-pip}-base
-      target: ipex-xpu-base-wheels-${PACKAGE_OPTION:-pip}
+        org.opencontainers.image.version: ${IPEX_VERSION:-2.5.10}-xpu-${PACKAGE_OPTION:-pip}-base
+      target: ipex-xpu-base-wheels
     command: >
       python -c "import torch;print(torch.device('xpu'));import
       intel_extension_for_pytorch as
@@ -95,9 +95,9 @@ services:
   #   build:
   #     labels:
   #       dependency.python.pip: jupyter-requirements.txt
-  #       org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.3.110}-xpu-${PACKAGE_OPTION:-pip}-base"
+  #       org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.5.10}-xpu-${PACKAGE_OPTION:-pip}-base"
   #       org.opencontainers.image.title: "Intel® Extension for PyTorch XPU Jupyter Image"
-  #       org.opencontainers.image.version: ${IPEX_VERSION:-2.3.110}-xpu-${PACKAGE_OPTION:-pip}-jupyter
+  #       org.opencontainers.image.version: ${IPEX_VERSION:-2.5.10}-xpu-${PACKAGE_OPTION:-pip}-jupyter
   #     target: ipex-xpu-jupyter
   #   command: >
   #     bash -c "python -m jupyter --version"
