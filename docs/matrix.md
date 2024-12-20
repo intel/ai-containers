@@ -26,15 +26,15 @@
     === "[Classical ML](https://hub.docker.com/r/intel/classical-ml)"
         {{ read_csv('assets/classical_ml.csv') }}
     === "[Deep Learning Pytorch* CPU](https://hub.docker.com/r/intel/deep-learning)"
-        {{ read_csv('assets/deep_learning_pytorch-cpu.csv') }}
+        {{ read_csv('assets/deep_learning_pytorch_cpu.csv') }}
     === "[Deep Learning PyTorch* GPU](https://hub.docker.com/r/intel/deep-learning)"
-        {{ read_csv('assets/deep_learning_pytorch-gpu.csv') }}
+        {{ read_csv('assets/deep_learning_pytorch_gpu.csv') }}
     === "[Deep Learning TensorFlow* CPU](https://hub.docker.com/r/intel/deep-learning)"
-        {{ read_csv('assets/deep_learning_tensorflow-cpu.csv') }}
+        {{ read_csv('assets/deep_learning_tensorflow_cpu.csv') }}
     === "[Deep Learning TensorFlow* GPU](https://hub.docker.com/r/intel/deep-learning)"
-        {{ read_csv('assets/deep_learning_tensorflow-gpu.csv') }}
+        {{ read_csv('assets/deep_learning_tensorflow_gpu.csv') }}
     === "[Deep Learning JAX CPU](https://hub.docker.com/r/intel/deep-learning)"
-        {{ read_csv('assets/deep_learning_jax-cpu.csv') }}
+        {{ read_csv('assets/deep_learning_jax_cpu.csv') }}
 
 === "[Workflows](https://hub.docker.com/r/intel/ai-workflows)"
     === "[TorchServe](https://github.com/intel/ai-containers/tree/main/workflows/charts/torchserve)"
