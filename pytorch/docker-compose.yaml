@@ -51,24 +51,24 @@ services:
       - ${PACKAGE_OPTION:-pip}
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.5.0}-base
     pull_policy: always
-  jupyter:
-    build:
-      labels:
-        dependency.python.pip: jupyter-requirements.txt
-        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.5.0}-${PACKAGE_OPTION:-pip}-base"
-        org.opencontainers.image.title: "Intel® Extension for PyTorch Jupyter Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.5.0}-${PACKAGE_OPTION:-pip}-jupyter
-      target: jupyter
-    command: >
-      bash -c "python -m jupyter --version"
-    environment:
-      http_proxy: ${http_proxy}
-      https_proxy: ${https_proxy}
-    extends: ipex-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.5.0}-jupyter
-    network_mode: host
-    ports:
-      - 8888:8888
+  # jupyter:
+  #   build:
+  #     labels:
+  #       dependency.python.pip: jupyter-requirements.txt
+  #       org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.5.0}-${PACKAGE_OPTION:-pip}-base"
+  #       org.opencontainers.image.title: "Intel® Extension for PyTorch Jupyter Image"
+  #       org.opencontainers.image.version: ${IPEX_VERSION:-2.5.0}-${PACKAGE_OPTION:-pip}-jupyter
+  #     target: jupyter
+  #   command: >
+  #     bash -c "python -m jupyter --version"
+  #   environment:
+  #     http_proxy: ${http_proxy}
+  #     https_proxy: ${https_proxy}
+  #   extends: ipex-base
+  #   image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.5.0}-jupyter
+  #   network_mode: host
+  #   ports:
+  #     - 8888:8888
   ipex-xpu-base:
     build:
       args:
@@ -91,20 +91,20 @@ services:
     depends_on:
       - xpu
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.5.10}-xpu-base
-  xpu-jupyter:
-    build:
-      labels:
-        dependency.python.pip: jupyter-requirements.txt
-        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.3.110}-xpu-${PACKAGE_OPTION:-pip}-base"
-        org.opencontainers.image.title: "Intel® Extension for PyTorch XPU Jupyter Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.3.110}-xpu-${PACKAGE_OPTION:-pip}-jupyter
-      target: ipex-xpu-jupyter
-    command: >
-      bash -c "python -m jupyter --version"
-    extends: ipex-xpu-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.5.10}-xpu-jupyter
-    ports:
-      - 8888:8888
+  # xpu-jupyter:
+  #   build:
+  #     labels:
+  #       dependency.python.pip: jupyter-requirements.txt
+  #       org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.3.110}-xpu-${PACKAGE_OPTION:-pip}-base"
+  #       org.opencontainers.image.title: "Intel® Extension for PyTorch XPU Jupyter Image"
+  #       org.opencontainers.image.version: ${IPEX_VERSION:-2.3.110}-xpu-${PACKAGE_OPTION:-pip}-jupyter
+  #     target: ipex-xpu-jupyter
+  #   command: >
+  #     bash -c "python -m jupyter --version"
+  #   extends: ipex-xpu-base
+  #   image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-ipex-${IPEX_VERSION:-2.5.10}-xpu-jupyter
+  #   ports:
+  #     - 8888:8888
   torchserve-cpu:
     build:
       args:
@@ -144,7 +144,7 @@ services:
         docs: serving
         org.opencontainers.base.name: "intel/python:3.10-core"
         org.opencontainers.image.title: "Intel® Extension for PyTorch XPU Serving Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.3.110}-serving-xpu
+        org.opencontainers.image.version: ${IPEX_VERSION:-2.5.10}-serving-xpu
       target: torchserve-xpu
     command: torchserve --version
     entrypoint: ""
