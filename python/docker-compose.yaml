@@ -25,7 +25,10 @@ services:
       labels:
         dependency.apt.wget: true
         dependency.conda.intel-distribution-for-python: intelpython3_full
-        docs: false
+        docs: python
+        org.opencontainers.image.name: "intel/python"
+        org.opencontainers.image.title: "Intel® Distribution for Python Base Image"
+        org.opencontainers.image.version: 3.11-${IDP_VERSION:-full}
       target: idp
     command: >
       bash -c "conda env list && python -c 'import mkl'"
