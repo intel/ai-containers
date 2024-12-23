@@ -10,10 +10,10 @@ The images below include variations for only the core packages in the [Intel® D
 
 | Tag(s)                 | IDP        |
 | ---------------------- | ---------- |
-| `3.10-full`, `latest`  | `2024.2.0` |
+| `3.11-full`, `latest ` | `2025.0.0` |
+| `3.11-xpu-full`        | `2025.0.0` |
+| `3.10-full`,           | `2024.2.0` |
 | `3.10-core`            | `2024.2.0` |
-| `3.10-xpu-core`        | `2024.2.1` |
-| `3.10-xpu-full`        | `2024.2.1` |
 
 ## Run a Performance Sample
 
@@ -51,7 +51,7 @@ Use the following command to check the availability of Intel dGPU devices on you
 docker run --rm -it \
     -v $PWD/tests:/tests \
     --device /dev/dri \
-    intel/python:3.10-xpu-full \
+    intel/python:3.11-xpu-full \
     bash /tests/xpu_base_layers_test.sh
 ```
 
