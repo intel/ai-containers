@@ -60,30 +60,30 @@ services:
       args:
         CCL_VER: ${CCL_VER:-2021.14.0-505}
         DPCPP_VER: ${DPCPP_VER:-2025.0.4-1519}
-        ICD_VER: ${ICD_VER:-24.39.31294.20-1032~22.04}
-        OCLOC_VER: ${OCLOC_VER:-24.39.31294.21-1032~22.04}
-        LEVEL_ZERO_VER: ${LEVEL_ZERO_VER:-1.17.44.0-1022~22.04}
-        LEVEL_ZERO_DEV_VER: ${LEVEL_ZERO_VER:-1.17.44.0-1022~22.04}
+        ICD_VER: ${ICD_VER:-24.45.31740.15-1057~22.04}
+        OCLOC_VER: ${OCLOC_VER:-24.45.31740.15-1057~22.04}
+        LEVEL_ZERO_VER: ${LEVEL_ZERO_VER:-1.18.5.0-1055~22.04}
+        LEVEL_ZERO_DEV_VER: ${LEVEL_ZERO_VER:-1.18.5.0-1055~22.04}
         MKL_VER: ${MKL_VER:-2025.0.1-14}
         NO_PROXY: ''
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
-        XPU_SMI_VER: ${XPU_SMI_VER:-1.2.39-66~22.04}
+        XPU_SMI_VER: ${XPU_SMI_VER:-1.2.39-67~22.04}
       labels:
         dependency.apt.build-essential: true
         dependency.apt.clinfo: true
         dependency.apt.git: true
         dependency.apt.gnupg2: true
         dependency.apt.gpg-agent: true
-        dependency.apt.intel-level-zero-gpu: ${LEVEL_ZERO_VER:-1.17.44.0-1022~22.04}
+        dependency.apt.intel-level-zero-gpu: ${LEVEL_ZERO_VER:-1.18.5.0-1055~22.04}
         dependency.apt.intel-oneapi-runtime-ccl: ${CCL_VER:-2021.14.0-505}
         dependency.apt.intel-oneapi-runtime-dpcpp-cpp: ${DPCPP_VER:-2025.0.4-1519}
         dependency.apt.intel-oneapi-runtime-mkl: ${MKL_VER:-2025.0.1-14}
-        dependency.apt.intel-opencl-icd: ${ICD_VER:-24.26.30049.10-950~22.04}
-        dependency.apt.level-zero: ${LEVEL_ZERO_VER:-1.17.44.0-1022~22.04}
-        dependency.apt.ocloc-: ${OCLOC_VER:-1.17.44.0-1022~22.04}
+        dependency.apt.intel-opencl-icd: ${ICD_VER:-24.45.31740.15-1057~22.04}
+        dependency.apt.level-zero: ${LEVEL_ZERO_VER:-1.18.5.0-1055~22.04}
+        dependency.apt.ocloc-: ${OCLOC_VER:-24.45.31740.15-1057~22.04}
         dependency.apt.rsync: true
         dependency.apt.unzip: true
-        dependency.apt.xpu-smi: ${XPU_SMI_VER:-1.2.39-66~22.04}
+        dependency.apt.xpu-smi: ${XPU_SMI_VER:-1.2.39-67~22.04}
         dependency.idp.pip: false
         org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.title: "Intel® XPU Base Image"
