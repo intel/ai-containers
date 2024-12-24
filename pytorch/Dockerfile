@@ -176,7 +176,7 @@ CMD ["serve"]
 
 FROM torchserve-base AS torchserve-xpu
 
-ARG GID=109
+ARG GID=110
 
 RUN groupadd -g ${GID} render &&\
     usermod -aG video,render model-server
