@@ -176,9 +176,6 @@ CMD ["serve"]
 
 FROM torchserve-base AS torchserve-xpu
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends pciutils
-
 ARG GID=110
 
 RUN groupadd -g ${GID} render &&\
