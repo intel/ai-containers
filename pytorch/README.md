@@ -48,7 +48,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
 | --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
-| `2.5.10-xpu-pip-base`,`2.5.10-xpu` | [v2.5.1]| [v2.5.10+xpu] | [1057]  |  `8888` | [v0.4.0-Beta]  |
+| `2.5.10-xpu-pip-jupyter` | [v2.5.1]| [v2.5.10+xpu] | [1057]  |  `8888` | [v0.4.0-Beta]  |
 | `2.3.110-xpu-pip-jupyter` | [v2.3.1][torch-v2.3.1] | [v2.3.110+xpu] | [950]  | `8888`     | [v0.4.0-Beta]   |
 | `2.1.40-xpu-pip-jupyter` | [v2.1.0] | [v2.1.40+xpu] | [914]  | `8888`     | [v0.4.0-Beta]   |
 | `2.1.20-xpu-pip-jupyter` | [v2.1.0] | [v2.1.20+xpu] | [803]  | `8888`    | [v0.3.4]        |
