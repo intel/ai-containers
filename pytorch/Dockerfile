@@ -176,7 +176,7 @@ CMD ["serve"]
 
 FROM torchserve-base AS torchserve-xpu
 
-RUN apt-get update && apt-get install -y pciutils 
+RUN apt-get update && apt-get install -y pciutils
 
 ARG GID=110
 
