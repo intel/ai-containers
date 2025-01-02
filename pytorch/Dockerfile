@@ -48,7 +48,7 @@ FROM ${PYTHON_BASE} AS ipex-base-idp
 WORKDIR /
 COPY requirements.txt .
 
-RUN conda run -n idp python -m pip install --no-cache-dir -r requirements.txt && \
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
     apt-get clean && conda clean -y --all
 
 FROM ipex-base-${PACKAGE_OPTION} AS jupyter
@@ -66,7 +66,7 @@ EXPOSE 8888
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
-FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels-pip
+FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels
 
 WORKDIR /
 COPY xpu-requirements.txt .
@@ -74,15 +74,7 @@ COPY xpu-requirements.txt .
 RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
     rm -rf xpu-requirements.txt
 
-FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels-idp
-
-WORKDIR /
-COPY xpu-requirements.txt .
-
-RUN conda run -n idp python -m pip install --no-cache-dir -r xpu-requirements.txt && \
-    rm -rf xpu-requirements.txt
-
-FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} AS ipex-xpu-jupyter
+FROM ipex-xpu-base-wheels AS ipex-xpu-jupyter
 
 WORKDIR /jupyter
 COPY jupyter-requirements.txt .
@@ -116,11 +108,12 @@ RUN useradd -m -s /bin/bash model-server && \
     mkdir -p /home/model-server/model-store && \
     chown -R model-server /home/model-server/
 
+ARG PYTHON_VERSION
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
     g++ \
     git \
     wget \
-    python3-dev \
+    ${PYTHON_VERSION}-venv \
     python3-distutils \
     python3-venv && \
     rm -rf /var/lib/apt/lists/*
@@ -183,41 +176,7 @@ CMD ["serve"]
 
 FROM torchserve-base AS torchserve-xpu
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-        gnupg2 \
-        gpg-agent \
-        rsync && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-    gpg --dearmor --yes --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
-    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        jq \
-        curl \
-        libnl-genl-3-200 \
-        intel-gsc \
-        libdrm2 \
-        intel-metrics-discovery \
-        intel-metrics-library && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
-
-ARG XPU_SMI_VERSION
-
-ARG API_URL=https://api.github.com/repos/intel/xpumanager/releases/tags/V${XPU_SMI_VERSION}
-
-RUN wget -q --header="Accept: application/vnd.github.v3+json" --header="User-Agent: MyClient/1.0.0" -O - "$API_URL" | tee /tmp/asset_data.txt && \
-    wget -q --no-check-certificate "$(jq -r '.assets[] | select(.name | test("^xpu-smi.*u22\\.04_amd64\\.deb$")) | .browser_download_url' < /tmp/asset_data.txt)" && \
-    ldconfig && dpkg -i --force-all -- *.deb && \
-    rm -rf -- *.deb /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list /tmp/asset_data.txt
-
-ARG GID=109
+ARG GID=110
 
 RUN groupadd -g ${GID} render &&\
     usermod -aG video,render model-server
