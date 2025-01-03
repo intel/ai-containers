@@ -27,17 +27,17 @@ services:
         GITHUB_RUN_NUMBER: ${GITHUB_RUN_NUMBER:-0}
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Linux-x86_64}
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
-        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.11}
         REGISTRY: ${REGISTRY}
         REPO: ${REPO}
         TF_VERSION: ${TF_VERSION:-2.15.1}
       target: tf-base-${PACKAGE_OPTION:-pip}
       context: .
       labels:
-        dependency.python: ${PYTHON_VERSION:-3.10}
+        dependency.python: ${PYTHON_VERSION:-3.11}
         dependency.python.pip: requirements.txt
         docs: tensorflow
-        org.opencontainers.base.name: "intel/python:3.10-core"
+        org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.name: "intel/intel-optimized-tensorflow"
         org.opencontainers.image.title: "Intel® Extension for TensorFlow Base Image"
         org.opencontainers.image.version: ${TF_VERSION:-2.15.1}-${PACKAGE_OPTION:-pip}-base
@@ -45,7 +45,7 @@ services:
       - ${PACKAGE_OPTION:-pip}
     command: >
       python -c 'import tensorflow as tf; print("Tensorflow Version:", tf.__version__)'
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_VERSION:-2.15.1}-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-${TF_VERSION:-2.15.1}-base
     pull_policy: always
   jupyter:
     build:
@@ -61,20 +61,19 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     extends: tf-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_VERSION:-2.15.1}-jupyter
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-${TF_VERSION:-2.15.1}-jupyter
     network_mode: host
     volumes:
       - /$PWD:/jupyter
   itex-xpu-base:
     build:
       args:
-        TF_VER: ${TF_VER:-2.15.1}
         no_proxy: ''
         NO_PROXY: ''
-        PYTHON_BASE: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-xpu-base
+        PYTHON_BASE: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xpu-base
       labels:
         dependency.idp.pip: false
-        org.opencontainers.base.name: "intel/python:3.10-core"
+        org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.title: "Intel® Extension for TensorFlow XPU Base Image"
         org.opencontainers.image.version: ${TF_VER:-2.15.0}-xpu-${PACKAGE_OPTION:-pip}-base
       target: itex-xpu-base
@@ -83,16 +82,16 @@ services:
     extends: tf-base
     depends_on:
       - xpu
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.1}-itex-xpu-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-base
   xpu-jupyter:
     build:
       labels:
         dependency.python.pip: jupyter-requirements.txt
-        org.opencontainers.base.name: "intel/intel-optimized-tensorflow:${TF_VERSION:-2.15.1}-xpu-${PACKAGE_OPTION:-pip}-base"
+        org.opencontainers.base.name: "intel/intel-optimized-tensorflow:${TF_VERSION:-2.15.0}-xpu-${PACKAGE_OPTION:-pip}-base"
         org.opencontainers.image.title: "Intel® Extension for TensorFlow XPU Jupyter Image"
         org.opencontainers.image.version: ${TF_VER:-2.15.0}-xpu-${PACKAGE_OPTION:-pip}-jupyter
       target: itex-xpu-jupyter
     extends: itex-xpu-base
     command: >
       bash -c "python -m jupyter --version"
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.1}-itex-xpu-jupyter
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-jupyter

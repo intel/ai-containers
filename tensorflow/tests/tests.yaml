@@ -14,37 +14,37 @@
 
 ---
 import-itex-cpu-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_VERSION:-2.15.1}-base
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-${TF_VERSION:-2.15.1}-base
   cmd: python -c "from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())"
 import-itex-xpu-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.1}-itex-xpu-base
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-base
   cmd: python /tests/xpu_import_test.py
   device: ["/dev/dri"]
   volumes:
     - src: ${PWD}/tensorflow/tests
       dst: /tests
 import-cpu-jupyter-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_VERSION:-2.15.1}-jupyter
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-${TF_VERSION:-2.15.1}-jupyter
   cmd: python -m jupyter --version
 import-xpu-jupyter-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.1}-itex-xpu-jupyter
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-jupyter
   cmd: python -m jupyter --version
   device: ["/dev/dri"]
 itex-cpu-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-${TF_VERSION:-2.15.1}-base
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-${TF_VERSION:-2.15.1}-base
   cmd: python /tests/tf_base_test.py
   volumes:
     - src: ${PWD}/tensorflow/tests
       dst: /tests
 itex-xpu-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.1}-itex-xpu-base
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-base
   cmd: python /tests/tf_base_test.py
   device: ["/dev/dri"]
   volumes:
     - dst: /tests
       src: $PWD/tensorflow/tests
 itex-xpu-jupyter-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-itex-${TF_VERSION:-2.15.1}-itex-xpu-jupyter
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-jupyter
   cmd: papermill --log-output  /jupyter/xpu.ipynb -k python3 -
   notebook: True
   device: ["/dev/dri"]

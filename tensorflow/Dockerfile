@@ -57,7 +57,7 @@ ENV TF_ENABLE_ONEDNN_OPTS=1
 WORKDIR /
 COPY requirements.txt .
 
-RUN conda run -n idp python -m pip install --no-cache-dir -r requirements.txt && \
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
     rm -rf requirements.txt && \
     conda clean -y --all
 
