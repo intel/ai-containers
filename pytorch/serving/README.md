@@ -39,7 +39,7 @@ docker run --rm -it \
            -u root \
            -v $PWD:/home/model-server \
            --device /dev/dri \
-           intel/intel-optimized-pytorch:2.3.110-serving-xpu \
+           intel/intel-optimized-pytorch:2.5.10-serving-xpu \
            sh -c 'python model-archive/ipex_squeezenet.py && \
            torch-model-archiver --model-name squeezenet1_1 \
            --version 1.1 \
@@ -67,13 +67,20 @@ docker run -d --rm --name server \
 
 ```bash
 # Assuming that the above pre-archived model is in the current working directory
+## Find the video and render groups to add to the run command
+
+VIDEO=$(getent group video | sed -E 's,^video:[^:]*:([^:]*):.*$,\1,')
+RENDER=$(getent group render | sed -E 's,^render:[^:]*:([^:]*):.*$,\1,')
+
 docker run -d --rm --name server \
           -v $PWD:/home/model-server/model-store \
           -v $PWD/wf-store:/home/model-server/wf-store \
           -v $PWD/config-xpu.properties:/home/model-server/config.properties \
           --net=host \
           --device /dev/dri \
-          intel/intel-optimized-pytorch:2.3.110-serving-xpu
+          --group-add ${VIDEO} \
+          --group-add ${RENDER} \
+          intel/intel-optimized-pytorch:2.5.10-serving-xpu
 ```
 
 After lauching the container, follow the steps below:

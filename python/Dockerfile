@@ -47,7 +47,7 @@ FROM base AS idp
 
 ARG PYTHON_VERSION
 ARG MINIFORGE_VERSION
-ARG IDP_VERSION=core
+ARG IDP_VERSION=full
 
 RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-${MINIFORGE_VERSION}.sh" -O miniforge.sh && \
     chmod +x miniforge.sh && \
@@ -58,7 +58,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     conda update -y conda && \
     conda config --add channels https://software.repos.intel.com/python/conda/ && \
     conda create -yn idp \
-    "intelpython3_${IDP_VERSION}" \
+    "intelpython3_full" \
     "python=${PYTHON_VERSION}" && \
     conda init --all && \
     apt-get clean && conda clean -y --all && \
@@ -126,18 +126,20 @@ RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] http
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 
 ARG ICD_VER
-ARG LEVEL_ZERO_GPU_VER
+ARG OCLOC_VER
 ARG LEVEL_ZERO_VER
 ARG LEVEL_ZERO_DEV_VER
+ARG XPU_SMI_VER
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-        intel-opencl-icd=${ICD_VER} \
-        intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
-        libze1=${LEVEL_ZERO_VER} \
-        libze-dev=${LEVEL_ZERO_DEV_VER} && \
+        apt-get install -y --no-install-recommends \
+            intel-opencl-icd=${ICD_VER} \
+            intel-ocloc=${OCLOC_VER} \
+            libze1=${LEVEL_ZERO_VER} \
+            libze-dev=${LEVEL_ZERO_DEV_VER} \
+            xpu-smi=${XPU_SMI_VER} && \
         apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
+        rm -rf  /var/lib/apt/lists/*
 
 RUN no_proxy="" NO_PROXY="" wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
     | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \

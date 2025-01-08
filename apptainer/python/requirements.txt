@@ -1,6 +1,6 @@
-numpy==2.2.0
+numpy==2.2.1
 setuptools==75.6.0
-psutil==6.1.0
+psutil==6.1.1
 mkl==2025.0.1
 mkl-include==2025.0.1
 intel-openmp==2025.0.4
