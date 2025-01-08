@@ -8,12 +8,14 @@ The images below include [JAX\*] and [Intel® Extension for OpenXLA\*].
 
 | Tag(s)                     | [JAX\*]   | [Intel® Extension for OpenXLA\*] | [Flax]   | Dockerfile      |
 | -------------------------- | --------- | -------------------------------- | -------- | --------------- |
+| `0.5.0-pip-base`, `latest` | [v0.4.30] | [v0.5.0-jax]                     | [v0.8.5] | [v0.4.1]        |
 | `0.4.0-pip-base`, `latest` | [v0.4.26] | [v0.4.0-jax]                     | [v0.8.2] | [v0.4.1]        |
 
 The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
 
 | Tag(s)              | [JAX\*]   | [Intel® Extension for OpenXLA\*] | [Flax]   | Dockerfile      |
 | ------------------- | --------- | ----------------- | -------- | --------------- |
+| `0.5.0-pip-jupyter` | [v0.4.30] | [v0.5.0-jax]        | [v0.8.5] | [v0.4.1]        |
 | `0.4.0-pip-jupyter` | [v0.4.26] | [v0.4.0-jax]      | [v0.8.2] | [v0.4.1]        |
 
 ### Run the Jupyter Container
@@ -24,7 +26,7 @@ docker run -it --rm \
     --net=host \
     -v $PWD/workspace:/workspace \
     -w /workspace \
-    intel/intel-optimized-xla:0.4.0-pip-jupyter
+    intel/intel-optimized-xla:0.5.0-pip-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
@@ -35,12 +37,14 @@ The images below include [Intel® Distribution for Python*]:
 
 | Tag(s)           | [JAX\*]   | [Intel® Extension for OpenXLA\*] | [Flax]   | Dockerfile      |
 | ---------------- | --------- | ----------------- | -------- | --------------- |
+| `0.5.0-idp-base` | [v0.4.30] | [v0.5.0-jax]        | [v0.8.5] | [v0.4.1]        |
 | `0.4.0-idp-base` | [v0.4.26] | [v0.4.0-jax]      | [v0.8.2] | [v0.4.1]        |
 
 The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
 
 | Tag(s)              | [JAX\*]   | [Intel® Extension for OpenXLA\*] | [Flax]   | Dockerfile      |
 | ------------------- | --------- | ----------------- | -------- | --------------- |
+| `0.5.0-idp-jupyter` | [v0.4.30] | [v0.5.0-jax]        | [v0.8.5] | [v0.4.1]        |
 | `0.4.0-idp-jupyter` | [v0.4.26] | [v0.4.0-jax]      | [v0.8.2] | [v0.4.1]        |
 
 ## Build from Source
@@ -77,10 +81,13 @@ It is the image user's responsibility to ensure that any use of The images below
 [JAX\*]: https://github.com/google/jax
 [Flax]: https://github.com/google/flax
 
+[v0.4.30]: https://github.com/google/jax/releases/tag/jax-v0.4.30
 [v0.4.26]: https://github.com/google/jax/releases/tag/jax-v0.4.26
 
+[v0.5.0-jax]: https://github.com/intel/intel-extension-for-openxla/releases/tag/0.5.0
 [v0.4.0-jax]: https://github.com/intel/intel-extension-for-openxla/releases/tag/0.4.0
 
+[v0.8.5]: https://github.com/google/Flax/releases/tag/v0.8.5
 [v0.8.2]: https://github.com/google/Flax/releases/tag/v0.8.2
 
 [v0.4.1]: https://github.com/intel/ai-containers/blob/main/jax/Dockerfile

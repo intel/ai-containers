@@ -69,6 +69,7 @@ RUN mkdir -p /licenses && \
 ENV PYTHON_VERSION=3.10
 COPY install-python310.sh .
 RUN ./install-python310.sh rhel9.2 && rm install-python310.sh
+RUN echo "/usr/local/lib" > /etc/ld.so.conf.d/python.conf && ldconfig
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 COPY install_efa.sh .
@@ -194,16 +195,10 @@ RUN dnf install --allowerasing -y \
     gperftools-devel && \
     dnf clean all && rm -rf /var/cache/yum
 
-RUN dnf config-manager --add-repo https://yum.repos.intel.com/mkl/setup/intel-mkl.repo -y && \
-    dnf install --allowerasing -y intel-mkl-64bit-2020.4-912 && \
-    dnf clean all && rm -rf /var/cache/yum
-
 # Set LD_PRELOAD after all required installations to
 # avoid warnings during docker creation
 ENV LD_PRELOAD=/lib64/libtcmalloc.so.4
 ENV TCMALLOC_LARGE_ALLOC_REPORT_THRESHOLD=7516192768
-
-RUN rm -rf /tmp/*
 
 USER 1001
 
@@ -238,9 +233,10 @@ RUN python -m pip install -r requirements.txt && \
 RUN cd ${APP_ROOT}/ && \
     git clone https://github.com/HabanaAI/vllm-fork.git && \
     cd vllm-fork && \
-    VLLM_TARGET_DEVICE=hpu pip install -e .
+    git checkout habana_main && \
+    pip install -r requirements-hpu.txt && \
+    VLLM_TARGET_DEVICE=hpu python setup.py develop
 
 WORKDIR ${APP_ROOT}/src
 ENV NOTEBOOK_SAMPLES_LINK="https://raw.githubusercontent.com/intel/ai-containers/refs/heads/main/enterprise/redhat/openshift-ai/gaudi/demo/oneapi-sample.ipynb"
-
 ENTRYPOINT ["bash", "-c", "/opt/app-root/builder/run"]
