@@ -17,8 +17,8 @@ nameOverride: ""
 # -- Full qualified Domain Name
 fullnameOverride: ""
 deploy:
-  # -- Intel Optimized torchserve image
-  image: intel/intel-optimized-pytorch:2.3.0-serving-cpu
+  # -- Torchserve on Intel Image
+  image: intel/intel-optimized-pytorch:2.5.10-serving-xpu
   # -- Add Environment mapping
   env:
     configMapName: intel-proxy-config
@@ -35,7 +35,9 @@ deploy:
     # -- Maximum resources per pod
     limits:
       cpu: 4000m
-      memory: 1Gi
+      memory: 2Gi
+      # -- Intel GPU Device Configuration
+      gpu.intel.com/i915: 1
     # -- Minimum resources per pod
     requests:
       cpu: 1000m

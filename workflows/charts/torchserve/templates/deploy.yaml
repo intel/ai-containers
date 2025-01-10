@@ -29,7 +29,7 @@ spec:
         {{- include "torchserve.selectorLabels" . | nindent 8 }}
     spec:
       containers:
-        - name: torchserve
+        - name: {{ .Chart.Name }}
           image: {{ .Values.deploy.image }}
           args:
             - 'torchserve'
@@ -62,6 +62,8 @@ spec:
             - name: grpc-2
               containerPort: 7071
           volumeMounts:
+            - name: dshm
+              mountPath: /dev/shm
           {{- if .Values.deploy.storage.nfs.enabled }}
             - name: model
               mountPath: /home/model-server/model-store
@@ -71,6 +73,7 @@ spec:
               mountPath: /home/model-server/model-store
           {{- end }}
           resources:
+            {{- toYaml .Values.deploy.resources | nindent 12 }}
             requests:
               cpu: {{ .Values.deploy.resources.requests.cpu }}
               memory: {{ .Values.deploy.resources.requests.memory }}
@@ -81,6 +84,9 @@ spec:
         fsGroup: 1000
         runAsUser: 1000
       volumes:
+        - name: dshm
+          emptyDir:
+            medium: Memory
       {{- if .Values.deploy.storage.nfs.enabled }}
         - name: model
           nfs:
