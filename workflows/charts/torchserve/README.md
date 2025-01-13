@@ -20,6 +20,7 @@ Then, follow the installation notes to test the deployment
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | deploy.env | object | `{"configMapName":"intel-proxy-config","enabled":true}` | Add Environment mapping |
+| deploy.hostname | string | `""` | Name of the GPU Host | 
 | deploy.image | string | `"intel/intel-optimized-pytorch:2.5.10-serving-xpu"` | Intel Optimized torchserve image |
 | deploy.modelConfig | string | `"/home/model-server/config.properties"` | Model Server Configuration file location |
 | deploy.models | string | `"all"` | Models to be loaded |

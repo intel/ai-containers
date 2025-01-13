@@ -51,7 +51,8 @@ deploy:
       path: nil
       readOnly: true
       subPath: nil
-  hostname: pvc566470
+    # -- Name of the GPU Host
+  hostname: ""
 service:
   # -- Type of service
   type: NodePort
