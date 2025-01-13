@@ -18,7 +18,7 @@ nameOverride: ""
 fullnameOverride: ""
 deploy:
   # -- Torchserve on Intel Image
-  image: intel/intel-optimized-pytorch:2.5.10-serving-xpu
+  image: intel/intel-extension-for-pytorch:2.5.10-serving-xpu
   # -- Add Environment mapping
   env:
     configMapName: intel-proxy-config
@@ -42,6 +42,7 @@ deploy:
     requests:
       cpu: 1000m
       memory: 512Mi
+      gpu.intel.com/i915: 1
   storage:
     # -- Network File System (NFS) storage for models
     nfs:
@@ -50,6 +51,7 @@ deploy:
       path: nil
       readOnly: true
       subPath: nil
+  hostname: pvc566470
 service:
   # -- Type of service
   type: NodePort

@@ -64,6 +64,8 @@ spec:
           volumeMounts:
             - name: dshm
               mountPath: /dev/shm
+            - name: dri
+              mountPath: /dev/dri
           {{- if .Values.deploy.storage.nfs.enabled }}
             - name: model
               mountPath: /home/model-server/model-store
@@ -74,19 +76,17 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.deploy.resources | nindent 12 }}
-            requests:
-              cpu: {{ .Values.deploy.resources.requests.cpu }}
-              memory: {{ .Values.deploy.resources.requests.memory }}
-            limits:
-              cpu: {{ .Values.deploy.resources.limits.cpu }}
-              memory: {{ .Values.deploy.resources.limits.memory }}
       securityContext:
-        fsGroup: 1000
         runAsUser: 1000
+        fsGroup: 1000
       volumes:
         - name: dshm
           emptyDir:
             medium: Memory
+        - name: dri
+          hostPath:
+            path: /dev/dri
+            type: Directory
       {{- if .Values.deploy.storage.nfs.enabled }}
         - name: model
           nfs:
@@ -99,3 +99,5 @@ spec:
           persistentVolumeClaim:
             claimName: {{ include "torchserve.fullname" . }}-model-dir
       {{- end }}
+      nodeSelector:
+        kubernetes.io/hostname: {{ .Values.deploy.hostname }}
