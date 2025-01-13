@@ -1,5 +1,5 @@
 numpy==2.2.1
-setuptools==75.6.0
+setuptools==75.8.0
 psutil==6.1.1
 mkl==2025.0.1
 mkl-include==2025.0.1
