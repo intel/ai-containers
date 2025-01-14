@@ -36,6 +36,11 @@ inputs:
     description: 'Path to Test Dir'
     required: true
     type: string
+  test_file:
+    description: 'Name of the test file to use'
+    required: false
+    type: string
+    default: 'tests.yaml'
   token:
     required: true
     type: string
@@ -56,7 +61,7 @@ runs:
           python -m pip install -r mlops/test-runner/requirements.txt
     - name: Test
       shell: bash
-      run: venv/bin/python mlops/test-runner/test_runner.py -f ${{ inputs.test_dir }}/tests.yaml -l ${{ inputs.test_dir }}/logs -a ${{ inputs.recipe_dir }}/.actions.json -v
+      run: venv/bin/python mlops/test-runner/test_runner.py -f ${{ inputs.test_dir }}/${{ inputs.test_file }} -l ${{ inputs.test_dir }}/logs -a ${{ inputs.recipe_dir }}/.actions.json -v
       env:
         CACHE_REGISTRY: ${{ inputs.cache_registry }}
         PYTHONPATH: mlops/test-runner
