@@ -1,0 +1,31 @@
+services:
+  pytorch-notebook:
+    build:
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-registry.access.redhat.com/ubi9/ubi}
+        BASE_TAG: ${RHEL_OS:-9.4}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ""
+      dockerfile: pytorch-cpu.Dockerfile
+    image: "amr-registry.caas.intel.com/aiops/rhoai-oneapi:oneapi-2025.0.0-pytorch-notebook-rhel-${RHEL_OS:-9.4}"
+  tensorflow-notebook:
+    build:
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-registry.access.redhat.com/ubi9/ubi}
+        BASE_TAG: ${RHEL_OS:-9.4}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ""
+      dockerfile: tensorflow-cpu.Dockerfile
+    image: "amr-registry.caas.intel.com/aiops/rhoai-oneapi:oneapi-2025.0.0-tensorflow-notebook-rhel-${RHEL_OS:-9.4}"
+  ml-notebook:
+    build:
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-registry.access.redhat.com/ubi9/ubi}
+        BASE_TAG: ${RHEL_OS:-9.4}
+        http_proxy: ${http_proxy}
+        https_proxy: ${https_proxy}
+        no_proxy: ""
+      dockerfile: classical-ml.Dockerfile
+    image: "amr-registry.caas.intel.com/aiops/rhoai-oneapi:oneapi-2025.0.0-ml-notebook-rhel-${RHEL_OS:-9.4}"

@@ -1,0 +1,43 @@
+# Datascience and useful extensions
+boto3~=1.35.14
+kafka-python-ng~=2.2.2
+kfp~=2.9.0
+matplotlib~=3.9.2
+numpy~=2.1.0
+pandas~=2.2.2
+plotly~=5.23.0
+scikit-learn==1.5.2
+scikit-learn-intelex==2025.0.1
+scipy~=1.14.1
+skl2onnx~=1.17.0
+onnxconverter-common~=1.13.0 # Required for skl2onnx, as upgraded version is not compatible with protobuf
+codeflare-sdk~=0.24.0
+xgboost
+modin[ray]==0.32.0
+
+# DB connectors
+pymongo~=4.8.0
+psycopg~=3.2.1
+pyodbc~=5.1.0
+mysql-connector-python~=9.0.0
+
+# JupyterLab packages
+
+odh-elyra==4.2.0
+
+jupyterlab==4.2.6
+jupyter-bokeh~=4.0.5
+jupyter-server~=2.14.2
+jupyter-server-proxy~=4.3.0
+jupyter-server-terminals~=0.5.3
+jupyterlab-git~=0.50.1
+jupyterlab-lsp~=5.1.0
+jupyterlab-widgets~=3.0.13
+jupyter-resource-usage~=1.1.0
+nbdime~=4.0.1
+nbgitpuller~=1.2.1
+
+# Base packages
+wheel~=0.44.0
+setuptools~=74.1.2
+httpx<0.28.0 #Jupyter server throws an error because newer version had deleted some var that it was using.

@@ -1,0 +1,4 @@
+{
+    "RHEL_OS": ["9.2", "9.4"],
+    "experimental": [true]
+}
