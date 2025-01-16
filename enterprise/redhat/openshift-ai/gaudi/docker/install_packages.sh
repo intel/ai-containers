@@ -27,9 +27,6 @@ case "${BASE_NAME}" in
 *rhel8*)
 	os_string="rhel86"
 	;;
-*amzn2*)
-	os_string="amzn2"
-	;;
 *tencentos*)
 	os_string="tencentos31"
 	;;

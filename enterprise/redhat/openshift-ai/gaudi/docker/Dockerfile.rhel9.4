@@ -29,10 +29,15 @@ RUN echo "[CRB]" > /etc/yum.repos.d/CentOS-Linux-CRB.repo && \
     echo "gpgkey=https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official-SHA256" >> /etc/yum.repos.d/CentOS-Linux-CRB.repo && \
     echo "gpgcheck=1" >> /etc/yum.repos.d/CentOS-Linux-CRB.repo
 
-RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
-    dnf clean all && rm -rf /var/cache/yum
-
 RUN dnf install -y \
+        python3-dnf-plugin-versionlock && \
+    dnf versionlock add redhat-release* && \
+    dnf clean all
+
+RUN dnf update -y && dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
+    dnf clean all
+
+RUN dnf update -y && dnf install -y \
     clang \
     cmake3 \
     cpp \
@@ -49,8 +54,8 @@ RUN dnf install -y \
     lsof \
     python3-devel \
     openssh-clients \
-    openssl-1:3.0.7-28.el9_4 \
-    openssl-devel-1:3.0.7-28.el9_4 \
+    openssl \
+    openssl-devel \
     libjpeg-devel \
     openssh-server \
     lsb_release \
@@ -66,23 +71,14 @@ RUN dnf install -y \
     python3.11-pip \
     python3.11-devel \
     python3.11-rpm \
-    ffmpeg-free \
-    python3-dnf-plugin-versionlock && \
+    ffmpeg-free && \
     # update pkgs (except OS version) for resolving potentials CVEs
-    dnf versionlock add redhat-release* openssl* libcurl-minimal curl-minimal ima-evm-utils python3-rpm rpm* && \
-    dnf update -y && \
+    dnf versionlock add python3-rpm rpm* && \
     dnf clean all && rm -rf /var/cache/yum && \
     rm -f /etc/ssh/ssh_host_*_key*
 
 RUN mkdir -p /licenses && \
     wget -O /licenses/LICENSE https://raw.githubusercontent.com/intel/ai-containers/main/LICENSE
-
-RUN alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 2 && \
-    alternatives --install /usr/bin/python3 python3 /usr/bin/python3.9 1 && \
-    alternatives --set python3 /usr/bin/python3.11 && \
-    alternatives --install /usr/bin/pip3 pip3 /usr/bin/pip3.11 2 && \
-    alternatives --install /usr/bin/pip3 pip3 /usr/bin/pip3.9 1 && \
-    alternatives --set pip3 /usr/bin/pip3.11
 
 COPY install_efa.sh .
 RUN ./install_efa.sh && rm install_efa.sh && rm -rf /etc/ld.so.conf.d/efa.conf /etc/profile.d/efa.sh
@@ -193,31 +189,17 @@ RUN echo "[CRB]" > /etc/yum.repos.d/CentOS-Linux-CRB.repo && \
     echo "gpgkey=https://www.centos.org/keys/RPM-GPG-KEY-CentOS-Official-SHA256" >> /etc/yum.repos.d/CentOS-Linux-CRB.repo && \
     echo "gpgcheck=1" >> /etc/yum.repos.d/CentOS-Linux-CRB.repo
 
-RUN dnf install --allowerasing -y \
-    curl-7.76.1-29.el9_4.1 \
-    cairo-devel \
-    numactl-devel \
-    iproute \
-    which \
-    zlib-devel \
-    lapack-devel \
-    openblas-devel \
-    numactl \
-    gperftools-devel && \
+RUN dnf update -y && dnf install --nodocs --setopt=install_weak_deps=false --allowerasing -y \
+        cairo-devel \
+        numactl-devel \
+        iproute \
+        which \
+        zlib-devel \
+        lapack-devel \
+        openblas-devel \
+        numactl \
+        gperftools-devel && \
     dnf clean all && rm -rf /var/cache/yum
-
-RUN echo "[oneAPI]" >> /etc/yum.repos.d/oneAPI.repo && \
-    echo "name=Intel® oneAPI repository" >> /etc/yum.repos.d/oneAPI.repo && \
-    echo "baseurl=https://yum.repos.intel.com/oneapi" >> /etc/yum.repos.d/oneAPI.repo && \
-    echo 'enabled=1'  >> /etc/yum.repos.d/oneAPI.repo && \
-    echo "gpgcheck=1" >> /etc/yum.repos.d/oneAPI.repo && \
-    echo "repo_gpgcheck=1" >> /etc/yum.repos.d/oneAPI.repo && \
-    echo "gpgkey=https://yum.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB" >> /etc/yum.repos.d/oneAPI.repo
-
-RUN dnf install --allowerasing -y intel-oneapi-mkl-2024.2.0 && \
-    dnf clean all && rm -rf /var/cache/yum
-
-ENV LD_LIBRARY_PATH=/opt/intel/oneapi/mkl/2024.2/lib:${LD_LIBRARY_PATH}
 
 RUN rm -rf /tmp/*
 
@@ -260,9 +242,11 @@ RUN python -m pip install -r requirements.txt && \
 RUN cd ${APP_ROOT}/ && \
     git clone https://github.com/HabanaAI/vllm-fork.git && \
     cd vllm-fork && \
-    VLLM_TARGET_DEVICE=hpu pip install -e .
+    git checkout habana_main && \
+    pip install -r requirements-hpu.txt && \
+    VLLM_TARGET_DEVICE=hpu python setup.py develop
 
 WORKDIR ${APP_ROOT}/src
-ENV JUPYTER_PRELOAD_REPOS="https://github.com/IntelAI/oneAPI-samples"
-ENV REPO_BRANCH="main"
+ENV NOTEBOOK_SAMPLES_LINK="https://raw.githubusercontent.com/intel/ai-containers/refs/heads/main/enterprise/redhat/openshift-ai/gaudi/demo/oneapi-sample.ipynb"
+
 ENTRYPOINT ["bash", "-c", "/opt/app-root/builder/run"]
