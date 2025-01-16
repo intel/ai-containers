@@ -206,9 +206,9 @@ if __name__ == "__main__":
             break
         summary.append([idx + 1, test.name, "PASS"])
         json_summary.append({"Group": test_group, "Test": test.name, "Status": "PASS"})
-    json_summary_path = f"{args.logs_path}/{test_group.replace('/', '-')}-summary.json"
+    JSON_SUMMARY_PATH = f"{args.logs_path}/{test_group.replace('/', '-')}-summary.json"
 
-    with open(json_summary_path, "w", encoding="utf-8") as file:
+    with open(JSON_SUMMARY_PATH, "w", encoding="utf-8") as file:
         json.dump(json_summary, file, indent=4)
 
     # Switch logging context back to the initial state
@@ -223,7 +223,7 @@ if __name__ == "__main__":
         docker.system.prune()
         logging.info("%d Images Removed", len(test_images))
     # DEBUG
-    logging.info("Saved json summary file in: %s", json_summary_path)
+    logging.info("Saved json summary file in: %s", JSON_SUMMARY_PATH)
     # Print Summary Table
     logging.info(
         "\n%s", tabulate(summary, headers=["#", "Test", "Status"], tablefmt="orgtbl")

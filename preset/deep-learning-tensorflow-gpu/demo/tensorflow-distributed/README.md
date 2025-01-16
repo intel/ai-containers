@@ -197,4 +197,5 @@ Run the following command on the launcher nodes in a shell to launch the contain
             python tensorflow2_keras_mnist.py
 
 > [!NOTE]
+
 > That the number of processes spawned on each node will be dependent on the parameters specified with `horovodrun` command. You can modify the horovodrun command to your needs from the [documentation here](https://horovod.readthedocs.io/en/stable/running_include.html) and [here](https://horovod.readthedocs.io/en/stable/docker_include.html). For the workflow to work all nodes need to communicate with each other and be able to pass the MPI messages among all processes.  This requires the correct environment setup based on the specific networking setup you have. [Intel® MPI documentation](https://www.intel.com/content/www/us/en/docs/mpi-library/developer-reference-linux/2021-10/environment-variable-reference.html) provides the necessary environment variables to control the communication between processes using MPI.
