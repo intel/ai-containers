@@ -28,16 +28,16 @@ services:
         GITHUB_RUN_NUMBER: ${GITHUB_RUN_NUMBER:-0}
         IDP_VERSION: core
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Linux-x86_64}
-        PYTHON_VERSION: ${PYTHON_VERSION:-3.10}
+        PYTHON_VERSION: ${PYTHON_VERSION:-3.11}
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
         REGISTRY: ${REGISTRY}
         REPO: ${REPO}
       context: .
       labels:
-        dependency.python: ${PYTHON_VERSION:-3.10}
+        dependency.python: ${PYTHON_VERSION:-3.11}
         dependency.python.pip: requirements.txt
         docs: classical-ml
-        org.opencontainers.base.name: "intel/python:3.10-core"
+        org.opencontainers.base.name: "intel/python:3.11-core"
         org.opencontainers.image.name: "intel/intel-optimized-ml"
         org.opencontainers.image.title: "Intel® Optimized ML Base Image"
         org.opencontainers.image.version: ${SKLEARN_VERSION:-2024.7.0}-${PACKAGE_OPTION:-pip}-base
@@ -46,7 +46,7 @@ services:
       bash -c "python -c 'import sklearnex, sklearn; import xgboost as xgb; print(\"Scikit version:\", sklearn.__version__, \"\\nXGBoost version:\", xgb.__version__)'"
     depends_on:
       - ${PACKAGE_OPTION:-pip}
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SKLEARN_VERSION:-2024.7.0}-xgboost-${XGBOOST_VERSION:-2.1.0}-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-scikit-learn-${SKLEARN_VERSION:-2024.7.0}-xgboost-${XGBOOST_VERSION:-2.1.0}-base
     pull_policy: always
   jupyter:
     build:
@@ -62,5 +62,5 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     extends: ml-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.10}-scikit-learn-${SKLEARN_VERSION:-2024.7.0}-xgboost-${XGBOOST_VERSION:-2.1.0}-jupyter
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-scikit-learn-${SKLEARN_VERSION:-2024.7.0}-xgboost-${XGBOOST_VERSION:-2.1.0}-jupyter
     network_mode: host
