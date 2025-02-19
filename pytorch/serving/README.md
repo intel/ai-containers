@@ -20,7 +20,7 @@ docker run --rm -it \
            --entrypoint='' \
            -u root \
            -v $PWD:/home/model-server \
-           intel/intel-optimized-pytorch:2.6.0-serving-cpu \
+           intel/intel-extension-for-pytorch:2.6.0-serving-cpu \
            torch-model-archiver --model-name squeezenet1_1 \
            --version 1.1 \
            --model-file model-archive/model.py \
@@ -39,7 +39,7 @@ docker run --rm -it \
            -u root \
            -v $PWD:/home/model-server \
            --device /dev/dri \
-           intel/intel-optimized-pytorch:2.5.10-serving-xpu \
+           intel/intel-extension-for-pytorch:2.5.10-serving-xpu \
            sh -c 'python model-archive/ipex_squeezenet.py && \
            torch-model-archiver --model-name squeezenet1_1 \
            --version 1.1 \
@@ -60,7 +60,7 @@ docker run -d --rm --name server \
           -v $PWD:/home/model-server/model-store \
           -v $PWD/wf-store:/home/model-server/wf-store \
           --net=host \
-          intel/intel-optimized-pytorch:2.6.0-serving-cpu
+          intel/intel-extension-for-pytorch:2.6.0-serving-cpu
 ```
 
 #### Run Torchserve for XPU device
@@ -80,7 +80,7 @@ docker run -d --rm --name server \
           --device /dev/dri \
           --group-add ${VIDEO} \
           --group-add ${RENDER} \
-          intel/intel-optimized-pytorch:2.5.10-serving-xpu
+          intel/intel-extension-for-pytorch:2.5.10-serving-xpu
 ```
 
 After lauching the container, follow the steps below:
@@ -138,7 +138,7 @@ As demonstrated in the above example, models must be registered before they can 
               -v $PWD:/home/model-server/model-store \
               -v $PWD/config.properties:/home/model-server/config.properties \
               --net=host \
-              intel/intel-optimized-pytorch:2.4.0-serving-cpu
+              intel/intel-extension-for-pytorch:2.4.0-serving-cpu
     # Verify that the container has launched successfully
     docker logs server
     # Check the models list
