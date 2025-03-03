@@ -32,6 +32,7 @@ class PerfException(Exception):
 
 class Threshold(BaseModel):
     "Constructs a Threshold class."
+
     name: str
     modelName: str
     boundary: float
@@ -41,12 +42,14 @@ class Threshold(BaseModel):
 
 class Volume(BaseModel):
     "Constructs a Volume class."
+
     src: str
     dst: str
 
 
 class Test(BaseModel):
     "Runs the test command."
+
     __test__ = False
     name: str
     cmd: str
