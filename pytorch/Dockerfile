@@ -69,10 +69,15 @@ CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/
 FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels
 
 WORKDIR /
-COPY xpu-requirements.txt .
 
-RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
-    rm -rf xpu-requirements.txt
+COPY torch-xpu-requirements.txt .
+COPY ipex-xpu-requirements.txt .
+
+RUN python -m pip install --no-cache-dir -r torch-xpu-requirements.txt && \
+    rm -rf torch-xpu-requirements.txt
+
+RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
+    rm -rf ipex-xpu-requirements.txt
 
 FROM ipex-xpu-base-wheels AS ipex-xpu-jupyter
 
@@ -142,19 +147,23 @@ tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh
 
 FROM torchserve-base AS compile-cpu
 
-COPY serving/torchserve-requirements.txt .
+COPY serving/torchserve-cpu-requirements.txt .
 COPY requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r requirements.txt && \
-    python -m pip install --no-cache-dir -r torchserve-requirements.txt && \
-    rm -rf requirements.txt torchserve-requirements.txt
+    python -m pip install --no-cache-dir -r torchserve-cpu-requirements.txt && \
+    rm -rf requirements.txt torchserve-cpu-requirements.txt
 
 FROM torchserve-base AS compile-xpu
 
 COPY serving/torchserve-xpu-requirements.txt .
+COPY serving/ipex-xpu-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt && \
     rm -rf torchserve-xpu-requirements.txt
+
+RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
+    rm -rf ipex-xpu-requirements.txt
 
 FROM torchserve-base AS torchserve-cpu
 
@@ -176,7 +185,7 @@ CMD ["serve"]
 
 FROM torchserve-base AS torchserve-xpu
 
-ARG GID=110
+ARG GID=109
 
 RUN groupadd -g ${GID} render &&\
     usermod -aG video,render model-server

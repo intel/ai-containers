@@ -78,7 +78,7 @@ services:
         dependency.idp.pip: false
         org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.title: "Intel® Extension for PyTorch XPU Base Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.5.10}-xpu-${PACKAGE_OPTION:-pip}-base
+        org.opencontainers.image.version: ${IPEX_VERSION:-2.6.10}-xpu-${PACKAGE_OPTION:-pip}-base
       target: ipex-xpu-base-wheels
     command: >
       python -c "import torch;print(torch.device('xpu'));import
