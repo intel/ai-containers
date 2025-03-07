@@ -157,6 +157,8 @@ RUN apt-get update && \
     intel-oneapi-runtime-ccl=${CCL_VER} && \
     rm -rf  /var/lib/apt/lists/*
 
+RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
+
 RUN if eval "which conda >/dev/null"; then \
         echo 'export OCL_ICD_VENDORS="/etc/OpenCL/vendors"' >> ~/.bashrc; \
     fi
