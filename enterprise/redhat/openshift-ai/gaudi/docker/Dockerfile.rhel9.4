@@ -7,6 +7,7 @@ ARG REVISION
 
 LABEL vendor="Intel Corporation"
 LABEL release="${VERSION}-${REVISION}"
+LABEL maintainer="sharvil.shah@intel.com"
 
 ENV HOME="/opt/app-root/src"
 WORKDIR /opt/app-root/src
@@ -34,46 +35,47 @@ RUN dnf install -y \
     dnf versionlock add redhat-release* && \
     dnf clean all
 
-RUN dnf update -y && dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
+RUN dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm && \
     dnf clean all
 
 RUN dnf update -y && dnf install -y \
-    clang \
-    cmake3 \
-    cpp \
-    gcc \
-    gcc-c++ \
-    glibc \
-    glibc-headers \
-    glibc-devel \
-    jemalloc \
-    libarchive \
-    libksba \
-    unzip \
-    llvm \
-    lsof \
-    python3-devel \
-    openssh-clients \
-    openssl \
-    openssl-devel \
-    libjpeg-devel \
-    openssh-server \
-    lsb_release \
-    wget \
-    git \
-    libffi-devel \
-    bzip2 \
-    bzip2-devel \
-    zlib-devel \
-    mesa-libGL \
-    iproute \
-    python3.11 \
-    python3.11-pip \
-    python3.11-devel \
-    python3.11-rpm \
-    ffmpeg-free && \
-    # update pkgs (except OS version) for resolving potentials CVEs
-    dnf versionlock add python3-rpm rpm* && \
+        bzip2 \
+        bzip2-devel \
+        clang \
+        cmake3 \
+        cpp \
+        ffmpeg-free \
+        gcc \
+        gcc-c++ \
+        git \
+        glibc \
+        glibc-devel \
+        glibc-headers \
+        iproute \
+        jemalloc \
+        libarchive \
+        libffi-devel \
+        libjpeg-devel \
+        libksba \
+        llvm \
+        lsb_release \
+        lsof \
+        mesa-libGL \
+        openssh-clients \
+        openssh-server \
+        openssl \
+        openssl-devel \
+        python3-devel \
+        python3.11 \
+        python3.11-devel \
+        python3.11-pip \
+        python3.11-rpm \
+        unzip \
+        wget \
+        zlib-devel && \
+    dnf versionlock add \
+        python3-rpm \
+        rpm* && \
     dnf clean all && rm -rf /var/cache/yum && \
     rm -f /etc/ssh/ssh_host_*_key*
 
@@ -108,7 +110,7 @@ RUN dnf install -y habanalabs-rdma-core-"$VERSION"-"$REVISION".el9 \
     habanalabs-thunk-"$VERSION"-"$REVISION".el9 \
     habanalabs-firmware-tools-"$VERSION"-"$REVISION".el9 \
     habanalabs-graph-"$VERSION"-"$REVISION".el9 && \
-    rm -f /etc/yum.repos.d/habanalabs.repo && rm -f /etc/yum.repos.d/habana.repo && rm -rf /tmp/* && \
+    rm -f /etc/yum.repos.d/habanalabs.repo && rm -rf /tmp/* && \
     dnf clean all && rm -rf /var/cache/yum
 
 RUN rpm -V habanalabs-rdma-core && rpm -V habanalabs-thunk && rpm -V habanalabs-firmware-tools && rpm -V habanalabs-graph
@@ -191,14 +193,15 @@ RUN echo "[CRB]" > /etc/yum.repos.d/CentOS-Linux-CRB.repo && \
 
 RUN dnf update -y && dnf install --nodocs --setopt=install_weak_deps=false --allowerasing -y \
         cairo-devel \
-        numactl-devel \
+        gperftools-devel \
         iproute \
-        which \
-        zlib-devel \
+        jq \
         lapack-devel \
-        openblas-devel \
         numactl \
-        gperftools-devel && \
+        numactl-devel \
+        openblas-devel \
+        which \
+        zlib-devel && \
     dnf clean all && rm -rf /var/cache/yum
 
 RUN rm -rf /tmp/*
