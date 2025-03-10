@@ -16,14 +16,14 @@ import-ipex-cpu-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.6.0}-base
   cmd: python -c "import torch;import intel_extension_for_pytorch as ipex;print(f'torch {torch.__version__} ipex {ipex.__version__}')"
 import-ipex-xpu-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.5.10}-xpu-base
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.6.10}-xpu-base
   cmd: python -c "import torch; import intel_extension_for_pytorch as ipex;[print(f'[{i}] {torch.xpu.get_device_properties(i)}') for i in range(torch.xpu.device_count())];"
   device: ["/dev/dri"]
 import-cpu-jupyter-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.6.0}-jupyter
   cmd: python -m jupyter --version
 import-xpu-jupyter-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.5.10}-xpu-jupyter
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.6.10}-xpu-jupyter
   cmd: python -m jupyter --version
   device: ["/dev/dri"]
 ipex-cpu-${PACKAGE_OPTION:-pip}:
@@ -33,14 +33,14 @@ ipex-cpu-${PACKAGE_OPTION:-pip}:
   - dst: /tests
     src: $PWD/pytorch/tests
 ipex-xpu-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.5.10}-xpu-base
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.6.10}-xpu-base
   cmd: python /tests/ipex-resnet50.py --ipex --device xpu
   device: ["/dev/dri"]
   volumes:
   - dst: /tests
     src: $PWD/pytorch/tests
 ipex-xpu-jupyter-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.5.10}-xpu-jupyter
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.6.10}-xpu-jupyter
   cmd: papermill --log-output  /jupyter/xpu.ipynb -k python3
   device: ["/dev/dri"]
   notebook: True
