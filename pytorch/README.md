@@ -288,7 +288,7 @@ For more details, follow the procedure in the [TorchServe](https://github.com/py
 The images below are [TorchServe*] with XPU Optimizations:
 
 | Tag(s)              | Pytorch  | IPEX         | Driver | Dockerfile      |
-| ------------------- | -------- | ------------ | --------------- |
+| ------------------- | -------- | ------------ | --------------- | ------------- |
 | `2.6.10-serving-xpu` | [v2.6.0] | [v2.6.10+xpu] | [1077]  | [v0.4.0-Beta]  |
 | `2.5.10-serving-xpu` | [v2.5.1] | [v2.5.10+xpu] | [1057]  | [v0.4.0-Beta]  |
 
