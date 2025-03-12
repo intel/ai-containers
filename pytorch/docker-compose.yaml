@@ -78,7 +78,7 @@ services:
         dependency.idp.pip: false
         org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.title: "Intel® Extension for PyTorch XPU Base Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.5.10}-xpu-${PACKAGE_OPTION:-pip}-base
+        org.opencontainers.image.version: ${IPEX_VERSION:-2.6.10}-xpu-${PACKAGE_OPTION:-pip}-base
       target: ipex-xpu-base-wheels
     command: >
       python -c "import torch;print(torch.device('xpu'));import
@@ -90,19 +90,19 @@ services:
     extends: ipex-base
     depends_on:
       - xpu
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.5.10}-xpu-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.6.10}-xpu-base
   xpu-jupyter:
     build:
       labels:
         dependency.python.pip: jupyter-requirements.txt
-        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.5.10}-xpu-${PACKAGE_OPTION:-pip}-base"
+        org.opencontainers.base.name: "intel/intel-optimized-pytorch:${IPEX_VERSION:-2.6.10}-xpu-${PACKAGE_OPTION:-pip}-base"
         org.opencontainers.image.title: "Intel® Extension for PyTorch XPU Jupyter Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.5.10}-xpu-${PACKAGE_OPTION:-pip}-jupyter
+        org.opencontainers.image.version: ${IPEX_VERSION:-2.6.10}-xpu-${PACKAGE_OPTION:-pip}-jupyter
       target: ipex-xpu-jupyter
     command: >
       bash -c "python -m jupyter --version"
     extends: ipex-xpu-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.5.10}-xpu-jupyter
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.6.10}-xpu-jupyter
     ports:
       - 8888:8888
   torchserve-cpu:
@@ -115,7 +115,7 @@ services:
         dependency.apt.openjdk-17-jdk: true
         dependency.idp: false
         dependency.python.ipex: requirements.txt
-        dependency.python.pip: serving/torchserve-requirements.txt
+        dependency.python.pip: serving/torchserve-cpu-requirements.txt
         docs: serving
         org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.title: "Intel® Extension for PyTorch Serving Image"
@@ -141,12 +141,13 @@ services:
         dependency.apt.openjdk-17-jdk: true
         dependency.idp: false
         dependency.python.pip: serving/torchserve-xpu-requirements.txt
+        dependency.python.pip-ipex: serving/ipex-xpu-requirements.txt
         docs: serving
         org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.title: "Intel® Extension for PyTorch XPU Serving Image"
-        org.opencontainers.image.version: ${IPEX_VERSION:-2.5.10}-serving-xpu
+        org.opencontainers.image.version: ${IPEX_VERSION:-2.6.10}-serving-xpu
       target: torchserve-xpu
     command: torchserve --version
     entrypoint: ""
     extends: ipex-xpu-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.11}-torchserve-xpu
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.6.10}-torchserve-xpu
