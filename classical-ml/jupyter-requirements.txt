@@ -1,4 +1,4 @@
-jupyterlab==4.3.5
+jupyterlab==4.3.6
 jupyterhub==5.2.1
-notebook==7.3.2
+notebook==7.3.3
 jupyter-server-proxy>=4.1.2
