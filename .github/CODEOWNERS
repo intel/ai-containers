@@ -1,12 +1,3 @@
-*                @jitendra42 @sharvil10
+*                @jitendra42 @sharvil10 @sramakintel
 /.github/        @sharvil10 @jitendra42 @sramakintel
-/apptainer/      @sramakintel
-/classical-ml/   @jitendra42 @sramakintel @sharvil10
-/docs/           @jitendra42
-/enterprise/     @sharvil10
 /preset/         @jafraustro
-/python/         @jitendra42 @sramakintel @sharvil10
-/pytorch/        @jitendra42 @sramakintel @sharvil10
-/tensorflow/     @jitendra42 @sramakintel @sharvil10
-/test-runner/    @jitendra42
-/workflows/      @sharvil10
