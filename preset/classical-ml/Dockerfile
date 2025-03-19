@@ -59,9 +59,6 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
         'jupyterlab>=4.2.6' \
         'notebook>=7.1.3' \
         'nb_conda_kernels>=2.5.1' \
-        "idna>=3.7" \
-        'libarchive>=3.7.7' \
-        'aiohttp>=3.10.11' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -70,11 +67,15 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
     conda config --add channels ${INTEL_CHANNEL}
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
+
+# Improve interoperabilty among conda an pypi packages
 RUN conda config --set pip_interop_enabled True
 
 COPY requirements.txt .
+
 RUN python -m pip install --no-cache-dir \
     --ignore-installed -r requirements.txt
+RUN rm -rf requirements.txt
 
 ARG PYTHON_VERSION
 ARG IDP_VERSION
@@ -92,15 +93,11 @@ RUN conda create -yn classical-ml \
         "dpnp=${DPNP_VERSION}" \
         'ipykernel>=6.29.5' \
         'kernda>=0.3.0' \
-        'matplotlib-base>=3.9.2' \
+        'matplotlib-base>=3.10.1' \
         "modin-ray=${MODIN_VERSION}" \
         "scikit-learn-intelex=${SKLEARNEX_VERSION}" \
         "xgboost=${XGBOOST_VERSION}" \
-        "idna>=3.7" \
-        'ray-core>2.9' \
-        'aiohttp>=3.10.11' \
-        "libtiff>=4.7" \
-        "scikit-learn<1.6" \
+        "scikit-learn"=1.5.2 \
         && \
     conda clean -y --all
 
