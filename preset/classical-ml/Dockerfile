@@ -95,6 +95,7 @@ RUN conda create -yn classical-ml \
         'kernda>=0.3.0' \
         'matplotlib-base>=3.10.1' \
         "modin-ray=${MODIN_VERSION}" \
+        "ray-core>2.9" \
         "scikit-learn-intelex=${SKLEARNEX_VERSION}" \
         "xgboost=${XGBOOST_VERSION}" \
         "scikit-learn"=1.5.2 \
