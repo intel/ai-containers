@@ -121,7 +121,7 @@ RUN apt-get update && \
     rm -rf  /var/lib/apt/lists/*
 
 RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-    gpg --dearmor --yes --output /usr/share/keyrings/intel-graphics.gpg
+    gpg --yes --dearmor --output /usr/share/keyrings/intel-graphics.gpg
 RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
     tee /etc/apt/sources.list.d/intel-gpu-jammy.list
 
