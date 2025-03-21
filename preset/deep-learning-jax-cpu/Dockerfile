@@ -16,7 +16,7 @@
 ARG BASE_IMAGE="ubuntu"
 ARG BASE_TAG="22.04"
 
-FROM ${BASE_IMAGE}:${BASE_TAG} AS conda-base
+FROM ${BASE_IMAGE}:${BASE_TAG} AS deep-learning-base
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -58,7 +58,6 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
         'jupyterlab>=4.2.6' \
         'notebook>=7.1.3' \
         'nb_conda_kernels>=2.5.1' \
-        'libarchive>=3.7.7' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -73,7 +72,7 @@ COPY requirements.txt .
 RUN python -m pip install --no-cache-dir \
     --ignore-installed -r requirements.txt
 
-FROM conda-base as deep-learning
+FROM deep-learning-base as deep-learning
 
 ARG IDP_VERSION
 ARG DPNP_VERSION
@@ -95,7 +94,6 @@ RUN conda create -yn 'jax-cpu' \
         "mkl=${MKL_VERSION}" \
         'ipykernel>=6.29.5' \
         'kernda>=0.3.0' \
-        'zipp>=3.19.1' \
         && \
     conda clean -y --all
 
