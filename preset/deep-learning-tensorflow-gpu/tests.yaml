@@ -15,13 +15,13 @@
 ---
 deep-learning-itex-${PYTHON_VERSION:-3.11}-gpu:
   cmd: conda run -n tensorflow-gpu python -W ignore sample-tests/intel_extension_for_tensorflow/test_itex.py
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-gpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-gpu-${RELEASE:-2025.1.0}-py${PYTHON_VERSION:-3.11}
   device: ["/dev/dri"]
   user: root
 import-itex-${PYTHON_VERSION:-3.11}-gpu:
   cmd: conda run -n tensorflow-gpu python -c "from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())"
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-gpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-gpu-${RELEASE:-2025.1.0}-py${PYTHON_VERSION:-3.11}
   device: ["/dev/dri"]
 inference-optimization-inc-tensorflow-${PYTHON_VERSION:-3.11}-gpu:
   cmd: conda run -n tensorflow-gpu sample-tests/neural_compressor/run.sh cpu
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-gpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-gpu-${RELEASE:-2025.1.0}-py${PYTHON_VERSION:-3.11}
