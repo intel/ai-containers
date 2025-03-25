@@ -184,11 +184,10 @@ ARG LEVEL_ZERO_VER
 ARG INTEL_LEVEL_ZERO_VER
 ARG XPU_SMI_VER
 
-RUN . /etc/os-release && \
-    wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
         gpg --yes --dearmor --output /usr/share/keyrings/intel-graphics.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu ${VERSION_CODENAME}/lts/2350 unified" | \
-        tee /etc/apt/sources.list.d/intel-gpu-${VERSION_CODENAME}.list  && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
+        tee "/etc/apt/sources.list.d/intel-gpu-jammy.list"  && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         intel-opencl-icd=${ICD_VER} \
@@ -200,7 +199,7 @@ RUN . /etc/os-release && \
 
 ARG DL_ESSENTIALS_VER
 
-RUN wget -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | \
+RUN wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | \
         gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
     echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | \
         tee /etc/apt/sources.list.d/oneAPI.list && \
