@@ -106,5 +106,5 @@ services:
       target: xpu-dl-essentials
     command: >
       sh -c 'dpkg -l | grep level-zero;dpkg -l | grep dpcpp;dpkg -l | grep mkl'
-    extends: ${PACKAGE_OPTION:-pip}
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xpu-dl-essentials
+    extends: pip
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.11}-xpu-dl-essentials
