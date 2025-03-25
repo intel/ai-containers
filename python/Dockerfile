@@ -163,7 +163,7 @@ RUN if eval "which conda >/dev/null"; then \
         echo 'export OCL_ICD_VENDORS="/etc/OpenCL/vendors"' >> ~/.bashrc; \
     fi
 
-FROM ${PACKAGE_OPTION} as xpu-dl-essentials
+FROM pip as xpu-dl-essentials
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
@@ -208,9 +208,3 @@ RUN wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-
         intel-deep-learning-essentials=${DL_ESSENTIALS_VER} && \
     apt-get clean && \
     rm -rf  /var/lib/apt/lists/*
-
-RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
-
-RUN if eval "which conda >/dev/null"; then \
-        echo 'export OCL_ICD_VENDORS="/etc/OpenCL/vendors"' >> ~/.bashrc; \
-    fi
