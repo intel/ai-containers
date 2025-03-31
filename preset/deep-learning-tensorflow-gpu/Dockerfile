@@ -134,6 +134,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
         'jupyterlab>=4.2.6' \
         'notebook>=7.1.3' \
         'nb_conda_kernels>=2.5.1' \
+        'libexpat>=2.7.0' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -181,6 +182,7 @@ RUN conda create -yn 'tensorflow-gpu' \
         'matplotlib-base>=3.10.1' \
         "tensorflow=${TF_VERSION}" \
         'tensorflow-hub>=0.16.1' \
+        'libexpat>=2.7.0' \
         && \
     conda clean -y --all
 

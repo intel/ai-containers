@@ -133,6 +133,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
         'jupyterlab>=4.2.6' \
         'notebook>=7.1.3' \
         'nb_conda_kernels>=2.5.1' \
+        'libexpat>=2.7.0' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -180,6 +181,7 @@ RUN conda create -yn 'pytorch-gpu' \
         "torchvision=${TORCHVISION_XPU_VERSION}" \
         "deepspeed=${DEEPSPEED_VERSION}" \
         'tensorboardx=2.6.2.2' \
+        'libexpat>=2.7.0' \
         && \
     conda clean -y --all
 
