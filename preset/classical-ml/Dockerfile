@@ -38,6 +38,8 @@ RUN apt-get update -y && \
         xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
+RUN apt-get remove libexpat1 -y
+
 # Setting up non-root directories
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash -m dev
 USER dev

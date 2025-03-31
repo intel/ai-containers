@@ -104,6 +104,7 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
         level-zero-dev="${LEVEL_ZERO_DEV_VER}" \
     && \
     rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*list
+RUN apt-get remove libexpat1 -y
 
 ##########################
 # Setting up non-root directories
@@ -185,7 +186,6 @@ RUN conda create -yn 'tensorflow-gpu' \
         'libexpat>=2.7.0' \
         && \
     conda clean -y --all
-
 
 EXPOSE 8888
 
