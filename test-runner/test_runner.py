@@ -217,8 +217,8 @@ if __name__ == "__main__":
     test_images = [expandvars(test.img) for test in tests if test.img]
     if test_images:
         remaining_containers = docker.container.list()
-        for container in remaining_containers:
-            docker.stop(container, time=None)
+        # for container in remaining_containers:
+        #     docker.stop(container, time=None)
         docker.image.remove(test_images, force=True, prune=False)
         docker.system.prune()
         logging.info("%d Images Removed", len(test_images))

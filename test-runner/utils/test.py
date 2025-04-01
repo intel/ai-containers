@@ -166,7 +166,7 @@ class Test(BaseModel):
             img (str): docker image
         """
         try:  # Try for Docker CLI Failure Conditions
-            docker.run(img, ["which", "papermill"])
+            docker.run(img, ["which", "papermill"], remove=True)
         except DockerException as papermill_not_found:
             logging.error("Papermill not found: %s", papermill_not_found)
             default_env = {
