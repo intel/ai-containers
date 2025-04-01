@@ -23,20 +23,20 @@ services:
       args:
         BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
         BASE_TAG: ${BASE_TAG:-22.04}
-        DEEPSPEED_VERSION: ${DEEPSPEED_VERSION:-0.15.4}
-        DPNP_VERSION: ${DPNP_VERSION:-0.16.0}
-        IDP_VERSION: ${IDP_VERSION:-2025.0.0}
+        DEEPSPEED_VERSION: ${DEEPSPEED_VERSION:-0.16.3}
+        DPNP_VERSION: ${DPNP_VERSION:-0.16.0*}
+        IDP_VERSION: ${IDP_VERSION:-2025.0.*}
         INTEL_CHANNEL: ${INTEL_CHANNEL:-https://software.repos.intel.com/python/conda/}
-        IPEX_CPU_VERSION: ${IPEX_CPU_VERSION:-2.5.0}
+        IPEX_CPU_VERSION: ${IPEX_CPU_VERSION:-2.6.0}
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Miniforge3-Linux-x86_64}
-        NEURAL_COMPRESSOR_VERSION: ${NEURAL_COMPRESSOR_VERSION:-3.1.1}
-        NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4=py311h689*}
-        ONECCL_CPU_VERSION: ${ONECCL_CPU_VERSION:-2.5.0}
-        ONNXRUNTIME_VERSION: ${ONNXRUNTIME_VERSION:-1.19.2}
+        NEURAL_COMPRESSOR_VERSION: ${NEURAL_COMPRESSOR_VERSION:-3.2}
+        NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4}
+        ONECCL_CPU_VERSION: ${ONECCL_CPU_VERSION:-2.6.0}
+        ONNXRUNTIME_VERSION: ${ONNXRUNTIME_VERSION:-1.20.1}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.11}
-        TORCHAUDIO_CPU_VERSION: ${TORCHAUDIO_CPU_VERSION:-2.5.0}
-        TORCHVISION_CPU_VERSION: ${TORCHVISION_CPU_VERSION:-0.20.0}
-        TORCH_CPU_VERSION: ${TORCH_CPU_VERSION:-2.5.0}
+        TORCHAUDIO_CPU_VERSION: ${TORCHAUDIO_CPU_VERSION:-2.6.0}
+        TORCHVISION_CPU_VERSION: ${TORCHVISION_CPU_VERSION:-0.21.0}
+        TORCH_CPU_VERSION: ${TORCH_CPU_VERSION:-2.6.0}
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
         no_proxy: ''
@@ -49,13 +49,12 @@ services:
       https_proxy: ${https_proxy}
     network_mode: host
     shm_size: 12GB
-    volumes:
-      - /dev/dri/by-path:/dev/dri/by-path
     command: >
       bash -c "
-      conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);'
+      conda info -e
+      &&
+      conda config --show channels
       "
-
 
   deep-learning:
     build:
@@ -65,7 +64,7 @@ services:
         org.opencontainers.image.title: "AI Tools Selector Preset Containers - Deep Learning PyTorch* CPU"
         org.opencontainers.base.name: "ubuntu:22.04"
         org.opencontainers.image.name: "intel/deep-learning"
-        org.opencontainers.image.version: pytorch-2025.0.0-py${PYTHON_VERSION:-3.11}
+        org.opencontainers.image.version: pytorch-latest-py${PYTHON_VERSION:-3.11}
         dependency.python: ${PYTHON_VERSION:-3.11}
         dependency.python.pip: requirements.txt
         dependency.apt.apt-utils: true
@@ -87,24 +86,24 @@ services:
         dependency.apt.wget: true
         dependency.apt.xz-utils: true
         dependency.conda.accelerate: '==0.32.1'
-        dependency.conda.conda: '==24.11.0'
-        dependency.conda.dpnp: '=0.16.0'
-        dependency.conda.intel-extension-for-pytorch_cpu: '=2.5.0'
+        dependency.conda.conda: '==24.11.3'
+        dependency.conda.deepspeed: '==0.16.3'
+        dependency.conda.dpnp: '==0.16.0'
+        dependency.conda.intel-extension-for-pytorch_cpu: '==2.6.0'
         dependency.conda.ipykernel: '==6.29.5'
-        dependency.conda.jupyterhub: '==5.1.0'
-        dependency.conda.jupyter-server-proxy: '==4.4.0'
         dependency.conda.kernda: '==0.3.0'
-        dependency.conda.notebook: '==7.3.2 '
-        dependency.conda.oneccl_bind_pt_cpu: '=2.5.0'
+        dependency.conda.matplotlib-base: '==3.10.1'
+        dependency.conda.neural-compressor: '==3.2'
+        dependency.conda.oneccl_bind_pt_cpu: '==2.6.0'
         dependency.conda.python: '==3.11.9'
-        dependency.conda.pytorch_cpu: '=2.5.0'
+        dependency.conda.pytorch_cpu: '==2.6.0'
         dependency.conda.tensorboardx: '==2.6.2.2'
-        dependency.conda.torchaudio_cpu: '=2.5.0'
-        dependency.conda.torchvision_cpu: '=0.20.0'
+        dependency.conda.torchaudio_cpu: '==2.6.0'
+        dependency.conda.torchvision_cpu: '==0.21.0'
     depends_on:
       - dl-base
     extends: dl-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-pytorch-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-pytorch-cpu-${RELEASE:-2025.1.0}-py${PYTHON_VERSION:-3.11}
     command: >
       bash -c "
       conda run -n pytorch-cpu python -c 'import torch;print(torch.__version__);import intel_extension_for_pytorch as ipex;print(ipex.__version__);'

@@ -134,7 +134,6 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
         'jupyterlab>=4.2.6' \
         'notebook>=7.1.3' \
         'nb_conda_kernels>=2.5.1' \
-        'libarchive>=3.7.7' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -179,13 +178,9 @@ RUN conda create -yn 'tensorflow-gpu' \
         "neural-compressor=${NEURAL_COMPRESSOR_VERSION}" \
         'ipykernel>=6.29.5' \
         'kernda>=0.3.0' \
-        'matplotlib-base>=3.8.4' \
-        'werkzeug>=3.0.6' \
-        'py-cpuinfo>=9.0.0' \
+        'matplotlib-base>=3.10.1' \
         "tensorflow=${TF_VERSION}" \
         'tensorflow-hub>=0.16.1' \
-        'aiohttp>=3.11' \
-        'typing-extensions>4.5' \
         && \
     conda clean -y --all
 

@@ -1,6 +1,6 @@
 matplotlib==3.10.1
 numpy==1.26.4
-scikit-learn-intelex==2025.2.0
+scikit-learn-intelex==2025.4.0
 threadpoolctl==3.6.0
 xgboost==2.1.4
 pandas==2.2.3
