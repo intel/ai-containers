@@ -372,7 +372,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [v0.28.1]: https://github.com/horovod/horovod/releases/tag/v0.28.1
 [v0.28.0]: https://github.com/horovod/horovod/releases/tag/v0.28.0
 
-[1099]: https://dgpu-docs.intel.com/releases/packages.html?release=Rolling+2507.12&os=Ubuntu+22.04 
+[1099]: https://dgpu-docs.intel.com/releases/packages.html?release=Rolling+2507.12&os=Ubuntu+22.04
 [1077]: https://dgpu-docs.intel.com/releases/packages.html?release=Rolling+2506.18&os=Ubuntu+22.04
 [1057]: https://dgpu-docs.intel.com/releases/packages.html?release=Rolling+2448.13&os=Ubuntu+22.04
 [803.63]: https://dgpu-docs.intel.com/releases/LTS_803.63_20240617.html
