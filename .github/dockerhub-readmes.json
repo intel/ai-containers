@@ -47,6 +47,10 @@
         {
             "fname": "./jax/README.md",
             "repo-name": "intel/intel-optimized-xla"
+        },
+        {
+            "fname": "./vllm/README.md",
+            "repo-name": "intel/vllm"
         }
     ]
 }
