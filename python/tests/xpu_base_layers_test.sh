@@ -31,11 +31,11 @@ if [[ $RUNTIME_ONLY == "True" ]]; then
   	)
 elif [[ $RUNTIME_ONLY == "False" ]]; then
         list=(
-                "/opt/intel/oneapi/compiler"
-                "/opt/intel/oneapi/ccl"
-                "/opt/intel/oneapi/dnnl"
-                "/opt/intel/oneapi/mkl"
-                "/opt/intel/oneapi/dpl"
+                  "/opt/intel/oneapi/compiler"
+                  "/opt/intel/oneapi/ccl"
+                  "/opt/intel/oneapi/dnnl"
+                  "/opt/intel/oneapi/mkl"
+                  "/opt/intel/oneapi/dpl"
     )
 fi
 
