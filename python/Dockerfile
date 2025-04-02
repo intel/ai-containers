@@ -141,6 +141,10 @@ RUN apt-get update && \
         apt-get clean && \
         rm -rf  /var/lib/apt/lists/*
 
+RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list
+
+FROM xpu-base as xpu-base-runtime
+
 RUN no_proxy="" NO_PROXY="" wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
     | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
     echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
@@ -157,54 +161,22 @@ RUN apt-get update && \
     intel-oneapi-runtime-ccl=${CCL_VER} && \
     rm -rf  /var/lib/apt/lists/*
 
-RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list
-
+RUN  rm -rf /etc/apt/sources.list.d/oneAPI.list rm -rf
 RUN if eval "which conda >/dev/null"; then \
         echo 'export OCL_ICD_VENDORS="/etc/OpenCL/vendors"' >> ~/.bashrc; \
     fi
 
-FROM pip as xpu-dl-essentials
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-        apt-utils \
-        build-essential \
-        clinfo \
-        git \
-        gnupg2 \
-        gpg-agent \
-        rsync \
-        unzip && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-ARG ICD_VER
-ARG OCLOC_VER
-ARG LEVEL_ZERO_VER
-ARG INTEL_LEVEL_ZERO_VER
-ARG XPU_SMI_VER
-
-RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-        gpg --yes --dearmor --output /usr/share/keyrings/intel-graphics.gpg && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
-        tee "/etc/apt/sources.list.d/intel-gpu-jammy.list"  && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-        intel-opencl-icd=${ICD_VER} \
-        intel-level-zero-gpu=${INTEL_LEVEL_ZERO_VER} \
-        level-zero=${LEVEL_ZERO_VER} \
-        xpu-smi=${XPU_SMI_VER} && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
+FROM xpu-base as xpu-dl-essentials
 
 ARG DL_ESSENTIALS_VER
 
 RUN wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | \
         gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
     echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | \
-        tee /etc/apt/sources.list.d/oneAPI.list && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
+        tee /etc/apt/sources.list.d/oneAPI.list 
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
         intel-deep-learning-essentials=${DL_ESSENTIALS_VER} && \
     apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
+    rm -rf  /var/lib/apt/lists/* /etc/apt/sources.list.d/oneAPI.list

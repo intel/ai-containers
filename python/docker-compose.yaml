@@ -60,10 +60,10 @@ services:
       args:
         CCL_VER: ${CCL_VER:-2021.14.0-505}
         DPCPP_VER: ${DPCPP_VER:-2025.0.4-1519}
-        ICD_VER: ${ICD_VER:-24.52.32224.14-1077~22.04}
-        OCLOC_VER: ${OCLOC_VER:-24.52.32224.14-1077~22.04}
-        LEVEL_ZERO_VER: ${LEVEL_ZERO_VER:-1.19.2.0-1077~22.04}
-        LEVEL_ZERO_DEV_VER: ${LEVEL_ZERO_VER:-1.19.2.0-1077~22.04}
+        ICD_VER: ${ICD_VER:-25.05.32567.18-1099~22.04}
+        OCLOC_VER: ${OCLOC_VER:-25.05.32567.18-1099~22.04}
+        LEVEL_ZERO_VER: ${LEVEL_ZERO_VER:-1.20.2.0-1098~22.04}
+        LEVEL_ZERO_DEV_VER: ${LEVEL_ZERO_VER:-1.20.2.0-1098~22.04}
         MKL_VER: ${MKL_VER:-2025.0.1-14}
         NO_PROXY: ''
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
@@ -74,13 +74,13 @@ services:
         dependency.apt.git: true
         dependency.apt.gnupg2: true
         dependency.apt.gpg-agent: true
-        dependency.apt.intel-level-zero-gpu: ${LEVEL_ZERO_VER:-1.19.2.0-1077~22.04}
+        dependency.apt.intel-level-zero-gpu: ${LEVEL_ZERO_VER:-1.20.2.0-1098~22.04}
         dependency.apt.intel-oneapi-runtime-ccl: ${CCL_VER:-2021.14.0-505}
         dependency.apt.intel-oneapi-runtime-dpcpp-cpp: ${DPCPP_VER:-2025.0.4-1519}
         dependency.apt.intel-oneapi-runtime-mkl: ${MKL_VER:-2025.0.1-14}
-        dependency.apt.intel-opencl-icd: ${ICD_VER:-24.52.32224.14-1077~22.04}
-        dependency.apt.level-zero: ${LEVEL_ZERO_VER:-1.19.2.0-1077~22.04}
-        dependency.apt.ocloc-: ${OCLOC_VER:-24.52.32224.14-1077~22.04}
+        dependency.apt.intel-opencl-icd: ${ICD_VER:-25.05.32567.18-1099~22.04}
+        dependency.apt.level-zero: ${LEVEL_ZERO_VER:-1.20.2.0-1098~22.04}
+        dependency.apt.ocloc-: ${OCLOC_VER:-25.05.32567.18-1099~22.04}
         dependency.apt.rsync: true
         dependency.apt.unzip: true
         dependency.apt.xpu-smi: ${XPU_SMI_VER:-1.2.39-69~22.04}
@@ -88,7 +88,7 @@ services:
         org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.title: "Intel® XPU Base Image"
         org.opencontainers.image.version: ${IPEX_VERSION:-2.6.10}-xpu-${PACKAGE_OPTION:-pip}-base
-      target: xpu-base
+      target: xpu-base-runtime
     command: >
       sh -c 'dpkg -l | grep level-zero;dpkg -l | grep dpcpp;dpkg -l | grep mkl'
     extends: ${PACKAGE_OPTION:-pip}
@@ -96,15 +96,12 @@ services:
   xpu-dl-essentials:
     build:
       args:
-        ICD_VER: ${ICD_VER:-23.43.27642.67-803.126~22.04}
-        LEVEL_ZERO_VER: ${LEVEL_ZERO_VER:-1.14.0-803.123~22.04}
-        INTEL_LEVEL_ZERO_VER: ${INTEL_LEVEL_ZERO_VER:-1.3.27642.67-803.126~22.04}
         DL_ESSENTIALS_VER: ${DL_ESSENTIALS_VER:-2025.0.2-6}
-        NO_PROXY: ''
-        PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
-        XPU_SMI_VER: ${XPU_SMI_VER:-1.2.33-6~22.04}
+      labels:
+        dependency.apt.dl-essentials: ${DL_ESSENTIALS_VER:-2025.0.2-6}
       target: xpu-dl-essentials
     command: >
       sh -c 'dpkg -l | grep level-zero;dpkg -l | grep dpcpp;dpkg -l | grep mkl'
-    extends: pip
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.11}-xpu-dl-essentials
+    extends: xpu
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xpu-dl-essentials
+    

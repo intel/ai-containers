@@ -95,3 +95,21 @@ services:
     command: >
       bash -c "python -m jupyter --version"
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-jupyter
+  itex-xpu-dl-essentials:
+    build:
+      args:
+        no_proxy: ''
+        NO_PROXY: ''
+        PYTHON_BASE: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xpu-dl-essentials
+      labels:
+        dependency.idp.pip: false
+        org.opencontainers.base.name: "intel/python:3.11-full"
+        org.opencontainers.image.title: "Intel® Extension for TensorFlow XPU Base Image"
+        org.opencontainers.image.version: ${TF_VER:-2.15.1}-xpu-${PACKAGE_OPTION:-pip}-base
+      target: itex-xpu-base
+    command: >
+      bash -c "source /opt/intel/oneapi/setvars.sh && python -c 'import tensorflow as tf;print(tf.__version__);from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'"
+    extends: tf-base
+    depends_on:
+      - xpu-dl-essentials
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-dl-essentials
