@@ -24,18 +24,18 @@ fi
 
 ## checks for the presence of MKL,DPCPP and CCL/MPI Packages in OneAPI directory
 if [[ $RUNTIME_ONLY == "True" ]]; then
-  	 list=(
-  		        "/opt/intel/oneapi/redist/lib"
-  		        "/opt/intel/oneapi/redist/lib/ccl"
-  		        "/opt/intel/oneapi/redist/lib/mpi"
+  	list=(
+  		      "/opt/intel/oneapi/redist/lib"
+  		      "/opt/intel/oneapi/redist/lib/ccl"
+  		      "/opt/intel/oneapi/redist/lib/mpi"
   	)
 elif [[ $RUNTIME_ONLY == "False" ]]; then
-        list=(
-                  "/opt/intel/oneapi/compiler"
-                  "/opt/intel/oneapi/ccl"
-                  "/opt/intel/oneapi/dnnl"
-                  "/opt/intel/oneapi/mkl"
-                  "/opt/intel/oneapi/dpl"
+      list=(
+              "/opt/intel/oneapi/compiler"
+              "/opt/intel/oneapi/ccl"
+              "/opt/intel/oneapi/dnnl"
+              "/opt/intel/oneapi/mkl"
+              "/opt/intel/oneapi/dpl"
     )
 fi
 
