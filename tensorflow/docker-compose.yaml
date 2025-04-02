@@ -78,7 +78,7 @@ services:
         org.opencontainers.image.version: ${TF_VER:-2.15.1}-xpu-${PACKAGE_OPTION:-pip}-base
       target: itex-xpu-base
     command: >
-      bash -c "source /opt/intel/oneapi/setvars.sh && python -c 'import tensorflow as tf;print(tf.__version__);from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'"
+      bash -c "python -c 'import tensorflow as tf;print(tf.__version__);from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'"
     extends: tf-base
     depends_on:
       - xpu-dl-essentials
