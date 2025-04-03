@@ -232,7 +232,6 @@ RUN apt-get install -y --no-install-recommends --fix-missing \
     mkdir -p /var/run/sshd \
     && \
     echo 'LoginGraceTime 0' >> /etc/ssh/sshd_config
-RUN apt-get remove libexpat1 -y
 
 # https://github.com/openucx/ucx/issues/4742#issuecomment-584059909
 ENV UCX_TLS=ud,sm,self
