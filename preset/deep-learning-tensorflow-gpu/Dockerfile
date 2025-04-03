@@ -111,7 +111,7 @@ RUN apt-get remove libexpat1 -y
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash dev
 # RUN groupadd -g 109 render
 ## Add the user to the required groups
-RUN usermod -aG root,video,render dev
+# RUN usermod -aG root,video,render dev
 # Set a password for the user (Optional)
 # RUN echo 'dev:password' | chpasswd
 USER dev
