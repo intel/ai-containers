@@ -103,6 +103,7 @@ RUN conda create -yn classical-ml \
         "xgboost=${XGBOOST_VERSION}" \
         "scikit-learn"=1.5.2 \
         'libexpat>=2.7.0' \
+        'libxml2=2.13' \
         && \
     conda clean -y --all
 
