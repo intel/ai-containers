@@ -79,7 +79,7 @@ services:
     depends_on:
       - dl-base
     extends: dl-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-jax-cpu-${RELEASE:-2025.1.0}-py${PYTHON_VERSION:-3.11}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-jax-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
     command: >
       bash -c "
       conda run -n jax-cpu python -c 'import jax; print(\"Jax Version:\", jax.__version__); import jax.numpy as jnp'
