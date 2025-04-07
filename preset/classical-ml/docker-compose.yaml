@@ -64,7 +64,7 @@ services:
         dependency.conda.python: '==3.11.9'
         dependency.conda.scikit-learn-intelex: '==2025.0.1'
         dependency.conda.xgboost: '==2.1.1'
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${RELEASE:-2025.1.0}-py${PYTHON_VERSION:-3.11}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
     environment:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}

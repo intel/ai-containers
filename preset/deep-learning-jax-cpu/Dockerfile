@@ -38,6 +38,8 @@ RUN apt-get update -y && \
         xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
+RUN apt-get remove libexpat1 -y
+
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash -m dev
 USER dev
 WORKDIR /home/dev
@@ -58,6 +60,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
         'jupyterlab>=4.2.6' \
         'notebook>=7.1.3' \
         'nb_conda_kernels>=2.5.1' \
+        'libexpat>=2.7.0' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -94,6 +97,7 @@ RUN conda create -yn 'jax-cpu' \
         "mkl=${MKL_VERSION}" \
         'ipykernel>=6.29.5' \
         'kernda>=0.3.0' \
+        'libexpat>=2.7.0' \
         && \
     conda clean -y --all
 
