@@ -20,6 +20,7 @@ import-itex-xpu-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-base
   cmd: python /tests/xpu_import_test.py
   device: ["/dev/dri"]
+  user: root
   volumes:
     - src: ${PWD}/tensorflow/tests
       dst: /tests
@@ -30,6 +31,7 @@ import-xpu-jupyter-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-jupyter
   cmd: python -m jupyter --version
   device: ["/dev/dri"]
+  user: root
 itex-cpu-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-${TF_VERSION:-2.15.1}-base
   cmd: python /tests/tf_base_test.py
@@ -40,6 +42,7 @@ itex-xpu-${PACKAGE_OPTION:-pip}:
   img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-base
   cmd: python /tests/tf_base_test.py
   device: ["/dev/dri"]
+  user: root
   volumes:
     - dst: /tests
       src: $PWD/tensorflow/tests
@@ -48,3 +51,12 @@ itex-xpu-jupyter-${PACKAGE_OPTION:-pip}:
   cmd: papermill --log-output  /jupyter/xpu.ipynb -k python3 -
   notebook: True
   device: ["/dev/dri"]
+  user: root
+itex-xpu-dl-essentials-${PACKAGE_OPTION:-pip}:
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-itex-xpu-dl-essentials
+  cmd: bash -c "source /opt/intel/oneapi/setvars.sh && python /tests/tf_base_test.py"
+  device: ["/dev/dri"]
+  user: root
+  volumes:
+    - dst: /tests
+      src: $PWD/tensorflow/tests
