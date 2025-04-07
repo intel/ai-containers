@@ -75,7 +75,7 @@ services:
         dependency.idp.pip: false
         org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.title: "Intel® Extension for TensorFlow XPU Base Image"
-        org.opencontainers.image.version: ${TF_VER:-2.15.0}-xpu-${PACKAGE_OPTION:-pip}-base
+        org.opencontainers.image.version: ${TF_VER:-2.15.1}-xpu-${PACKAGE_OPTION:-pip}-base
       target: itex-xpu-base
     command: >
       sh -c "python -c 'import tensorflow as tf;print(tf.__version__);from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'"
@@ -87,9 +87,9 @@ services:
     build:
       labels:
         dependency.python.pip: jupyter-requirements.txt
-        org.opencontainers.base.name: "intel/intel-optimized-tensorflow:${TF_VERSION:-2.15.0}-xpu-${PACKAGE_OPTION:-pip}-base"
+        org.opencontainers.base.name: "intel/intel-optimized-tensorflow:${TF_VERSION:-2.15.1}-xpu-${PACKAGE_OPTION:-pip}-base"
         org.opencontainers.image.title: "Intel® Extension for TensorFlow XPU Jupyter Image"
-        org.opencontainers.image.version: ${TF_VER:-2.15.0}-xpu-${PACKAGE_OPTION:-pip}-jupyter
+        org.opencontainers.image.version: ${TF_VER:-2.15.1}-xpu-${PACKAGE_OPTION:-pip}-jupyter
       target: itex-xpu-jupyter
     extends: itex-xpu-base
     command: >

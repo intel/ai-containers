@@ -22,14 +22,14 @@ services:
         BASE_IMAGE: ${BASE_IMAGE:-ubuntu}
         BASE_TAG: ${BASE_TAG:-22.04}
         DPNP_VERSION: ${DPNP_VERSION:-0.16.0}
-        IDP_VERSION: ${IDP_VERSION:-2025.0.0}
+        IDP_VERSION: ${IDP_VERSION:-2025.0.*}
         INTEL_CHANNEL: ${INTEL_CHANNEL:-https://software.repos.intel.com/python/conda/}
-        MKL_VERSION: ${DPNP_VERSION:-2025.0}
+        MKL_VERSION: ${DPNP_VERSION:-2025.0.*}
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Miniforge3-Linux-x86_64}
         MODIN_VERSION: ${MODIN_VERSION:-0.32.0}
-        NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4=py311h689*}
+        NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.11}
-        SKLEARNEX_VERSION: ${SKLEARNEX_VERSION:-2025.0}
+        SKLEARNEX_VERSION: ${SKLEARNEX_VERSION:-2025.0.*}
         XGBOOST_VERSION: ${XGBOOST_VERSION:-2.1.1}
         http_proxy: ${http_proxy}
         https_proxy: ${https_proxy}
@@ -41,7 +41,7 @@ services:
         org.opencontainers.image.title: "AI Tools Selector Preset Containers - Classical Machine Learning"
         org.opencontainers.base.name: "ubuntu:22.04"
         org.opencontainers.image.name: "intel/classical-ml"
-        org.opencontainers.image.version: 2025.0.0-py${PYTHON_VERSION:-3.11}
+        org.opencontainers.image.version: latest-py${PYTHON_VERSION:-3.11}
         dependency.python: ${PYTHON_VERSION:-3.11}
         dependency.python.pip: requirements.txt
         dependency.apt.bzip2: true
@@ -54,20 +54,17 @@ services:
         dependency.apt.unzip: true
         dependency.apt.wget: true
         dependency.apt.xz-utils: true
-        dependency.conda.conda: '==24.11.0'
+        dependency.conda.conda: '==24.11.3'
         dependency.conda.dpnp: '=0.16.0'
         dependency.conda.ipykernel: '==6.29.5'
-        dependency.conda.jupyterhub: '==5.2.1'
-        dependency.conda.jupyter-server-proxy: '==4.4.0'
         dependency.conda.kernda: '==0.3.0'
-        dependency.conda.matplotlib-base: '==3.9.2'
+        dependency.conda.matplotlib-base: '==3.10.1'
         dependency.conda.modin-ray: '=0.32.0'
         dependency.conda.nb_conda_kernels: '==2.5.1'
-        dependency.conda.notebook: '==7.2.2'
         dependency.conda.python: '==3.11.9'
-        dependency.conda.scikit-learn-intelex: '=2025.0.0'
-        dependency.conda.xgboost: '=2.1.1'
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+        dependency.conda.scikit-learn-intelex: '==2025.0.1'
+        dependency.conda.xgboost: '==2.1.1'
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-classical-ml-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
     environment:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}

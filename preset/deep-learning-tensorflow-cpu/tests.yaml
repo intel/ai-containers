@@ -15,17 +15,17 @@
 ---
 deep-learning-itex-${PYTHON_VERSION:-3.11}-cpu:
   cmd: conda run -n tensorflow-cpu python -W ignore sample-tests/intel_extension_for_tensorflow/test_itex.py
-  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
 import-itex-${PYTHON_VERSION:-3.11}-cpu:
   cmd: conda run -n tensorflow-cpu python -c "from tensorflow.python.client import device_lib; print(device_lib.list_local_devices())"
-  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
 inference-optimization-inc-tensorflow-${PYTHON_VERSION:-3.11}-cpu:
   cmd: conda run -n tensorflow-cpu sample-tests/neural_compressor/run.sh cpu
-  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
 inference-optimization-inc-itex-notebook-${PYTHON_VERSION:-3.11}-cpu:
   cmd: papermill --log-output jupyter/inc-itex/inc_sample_tensorflow.ipynb result.ipynb -k tensorflow-cpu --cwd jupyter/inc-itex
-  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
   notebook: True
 inference-optimization-onnx-${PYTHON_VERSION:-3.11}-cpu:
   cmd: conda run -n tensorflow-cpu sample-tests/onnx/run.sh
-  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-tensorflow-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}

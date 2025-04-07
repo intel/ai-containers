@@ -15,18 +15,18 @@
 ---
 deep-learning-ipex-${PYTHON_VERSION:-3.11}-cpu:
   cmd: conda run -n pytorch-cpu python -W ignore sample-tests/intel_extension_for_pytorch/test_ipex.py --device cpu --ipex
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-pytorch-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-pytorch-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
 
 inference-optimization-inc-torch-${PYTHON_VERSION:-3.11}-cpu:
   cmd: conda run -n pytorch-cpu sample-tests/neural_compressor/run.sh cpu
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-pytorch-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-pytorch-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
 
 deep-learning-ipex-notebook-${PYTHON_VERSION:-3.11}-cpu:
   cmd: papermill --log-output jupyter/ipex/ResNet50_Inference.ipynb -k pytorch-cpu
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-pytorch-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-pytorch-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
   notebook: True
 
 deep-learning-ipex-quantization-notebook-${PYTHON_VERSION:-3.11}-cpu:
   cmd: papermill --log-output jupyter/ipex-quantization/IntelPytorch_Quantization.ipynb -k pytorch-cpu
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-pytorch-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-pytorch-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
   notebook: True

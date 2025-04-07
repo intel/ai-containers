@@ -50,6 +50,7 @@ RUN apt-get update -y && \
         xz-utils \
     && \
     rm -rf /var/lib/apt/lists/*
+RUN apt-get remove libexpat1 -y
 
 ##########################
 # Setting up non-root directories
@@ -73,7 +74,7 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
         'jupyterlab>=4.2.6' \
         'notebook>=7.1.3' \
         'nb_conda_kernels>=2.5.1' \
-        'libarchive>=3.7.7' \
+        'libexpat>=2.7.0' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -117,7 +118,7 @@ RUN conda create -yn 'pytorch-cpu' \
         "neural-compressor=${NEURAL_COMPRESSOR_VERSION}" \
         'ipykernel>=6.29.5' \
         'kernda>=0.3.0'  \
-        'matplotlib-base>=3.8.4' \
+        'matplotlib-base>=3.10.1' \
         "oneccl_bind_pt=${ONECCL_CPU_VERSION}" \
         "pytorch=${TORCH_CPU_VERSION}" \
         'tensorboardx>=2.6.2.2' \
@@ -126,6 +127,7 @@ RUN conda create -yn 'pytorch-cpu' \
         "onnxruntime=${ONNXRUNTIME_VERSION}" \
         "deepspeed=${DEEPSPEED_VERSION}" \
         'tensorboardx>=2.6.2.2' \
+        'libexpat>=2.7.0' \
         && \
     conda clean -y --all
 

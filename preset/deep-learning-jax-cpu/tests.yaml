@@ -14,14 +14,14 @@
 
 ---
 jax-import-${PYTHON_VERSION:-3.12}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-jax-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-jax-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
   cmd: conda run -n jax-cpu python -c 'import jax; print("Jax Version:", jax.__version__); print(jax.devices())'
   device: ["/dev/dri"]
 jax-import-jupyter-${PYTHON_VERSION:-3.12}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-jax-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-jax-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
   cmd: sh -c "python -m jupyter --version"
 jax-xpu-example-${PYTHON_VERSION:-3.12}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-jax-cpu-${RELEASE:-2025.0.0}-py${PYTHON_VERSION:-3.11}
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-jax-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
   cmd: conda run -n jax-cpu python /tests/example.py
   device: ["/dev/dri"]
   volumes:
