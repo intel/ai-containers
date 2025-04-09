@@ -39,7 +39,7 @@ itex-cpu-${PACKAGE_OPTION:-pip}:
     - src: ${PWD}/tensorflow/tests
       dst: /tests
 itex-xpu-${PACKAGE_OPTION:-pip}:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xpu-base
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-base
   cmd: python /tests/tf_base_test.py
   device: ["/dev/dri"]
   user: root
