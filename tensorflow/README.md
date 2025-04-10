@@ -23,6 +23,12 @@ The images below include support for both CPU and GPU optimizations:
 | `2.14.0.1-xpu`         | [v2.14.1]   | [v2.14.0.1]    | [736]   | [v0.3.4]        |
 | `2.13.0.0-xpu`         | [v2.13.0]   | [v2.13.0.0]    | [647]   | [v0.2.3]        |
 
+The following images include support for Intel® Deep Learning Essentials:
+
+| Tag(s)                 | TensorFlow  | ITEX           | Driver  | DL Essentials | Dockerfile      |
+| ---------------------- | ----------- | -------------- | ------- | --------------- |
+| `2.15.0.3-xpu-pip-dl-essentials` | [v2.15.1]   | [v2.15.0.3]    | [1099]| [2025.0.2-6] | [v0.4.0-Beta]   |
+
 ### Run the XPU Container
 
 ```bash
@@ -286,6 +292,12 @@ The images below are built only with CPU and GPU optimizations and include [Inte
 | `2.15.0.1-xpu-idp-base` | [v2.15.1]   | [v2.15.0.1]  | [803]  | [v0.4.0-Beta] |
 | `2.15.0-xpu-idp-base` | [v2.15.0]   | [v2.15.0.0]  | [803]  | [v0.4.0-Beta] |
 
+The following images include support for Intel® Deep Learning Essentials:
+
+| Tag(s)                 | TensorFlow  | ITEX           | Driver  | DL Essentials | Dockerfile      |
+| ---------------------- | ----------- | -------------- | ------- | --------------- |
+| `2.15.0.3-xpu-idp-dl-essentials` | [v2.15.1]   | [v2.15.0.3]    | [1099]| [2025.0.2-6] | [v0.4.0-Beta]   |
+
 The images below additionally include [Jupyter Notebook](https://jupyter.org/) server:
 
 | Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
@@ -360,9 +372,12 @@ It is the image user's responsibility to ensure that any use of The images below
 [v0.28.1]: https://github.com/horovod/horovod/releases/tag/v0.28.1
 [v0.28.0]: https://github.com/horovod/horovod/releases/tag/v0.28.0
 
+[1099]: https://dgpu-docs.intel.com/releases/packages.html?release=Rolling+2507.12&os=Ubuntu+22.04
 [1077]: https://dgpu-docs.intel.com/releases/packages.html?release=Rolling+2506.18&os=Ubuntu+22.04
 [1057]: https://dgpu-docs.intel.com/releases/packages.html?release=Rolling+2448.13&os=Ubuntu+22.04
 [803.63]: https://dgpu-docs.intel.com/releases/LTS_803.63_20240617.html
 [803]: https://dgpu-docs.intel.com/releases/LTS_803.29_20240131.html
 [736]: https://dgpu-docs.intel.com/releases/stable_736_25_20231031.html
 [647]: https://dgpu-docs.intel.com/releases/stable_647_21_20230714.html
+
+[2025.0.2-6]: https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?packages=dl-essentials&dl-essentials-os=linux&dl-lin=offline
