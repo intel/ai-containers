@@ -2,6 +2,8 @@
 
 vLLM is a fast and easy-to-use library for LLM inference and serving. It has evolved into a community-driven project with contributions from both academia and industry. Intel, as one of the community contributors, is working actively to bring satisfying performance with vLLM on Intel® platforms, including Intel® Xeon® Scalable Processors, Intel® discrete GPUs, as well as Intel® Gaud® AI accelerators. This blog focuses on Intel® discrete GPUs at this time and brings you the necessary information to get the workloads running well on your Intel® graphics cards.
 
+The vLLM used in the latest docker image is based on [v0.8.0](https://github.com/vllm-project/vllm/tree/v0.8.0).
+
 ## 1. What's Supported?
 
 Intel GPUs benefit from enhancements brought by [vLLM V1 engine](https://blog.vllm.ai/2025/01/27/v1-alpha-release.html), including:
@@ -15,21 +17,23 @@ Intel GPUs benefit from enhancements brought by [vLLM V1 engine](https://blog.vl
 
 Moreover, **`chunked_prefill`**, an optimization feature in vLLM that allows large prefill requests to be divided into small chunks and batched together with decode requests, is also enabled. This approach prioritizes decode requests, improving inter-token latency (ITL) and GPU utilization by combining compute-bound (prefill) and memory-bound (decode) requests in the same batch. vLLM v1 engine is built on this feature and in this release, it's also supported on intel GPUs by leveraging corresponding kernel from Intel® Extension for PyTorch\* for model execution.
 
-In a near future release, we will support the following features.
-
-* **Spec decode**: Speculative decoding in vLLM is a technique designed to improve inter-token latency during LLM inference by using a smaller, faster draft model to predict future tokens.
-* **Sliding window**: Sliding window attention is a mechanism used in large language models to manage memory usage efficiently by limiting the context length to a fixed window size. This approach allows the model to focus on the most recent tokens while discarding older ones, which is particularly useful for handling long sequences without exceeding memory constraints.
-* **FP8 KV cache**: We will support FP8 KV cache in this release with kernels from Intel® Extension for PyTorch\*. It allows for a larger number of tokens to be stored in the cache, effectively doubling the space available for KV cache allocation. This increase in storage capacity enhances throughput by enabling the processing of longer context lengths for individual requests or handling more concurrent request batches.
+**Speculative decoding** in vLLM is a technique designed to improve inter-token latency. Currently, only ngram-based spec decode is supported in V1. There will be follow-up work to support other types of spec decode.
 
 The table below lists models that have been verified by Intel. However, there should be broader models that are supported by vLLM work on Intel® GPUs.
 
-| Model Type | Model |
-| ---------- | ---------- |
-| Text-generation | meta-llama/Llama-3.1 8B |
-| Text-generation | deepseek-ai/deepseek-llm-7b-chat |
-| Text-generation | mistralai/Mistral-7B-v0.1 |
-| Text-generation | microsoft/Phi-3-mini-128k-instruct |
-| Text-generation | Qwen/Qwen2-7B-Instruct |
+| Model Type | Model (company/model name) | AWQ | GPTQ |
+| ---------- | -------------------------- | --- | ---- |
+| Text-generation | meta-llama/Llama-3.1 8B | hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4 | hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4 |
+| Text-generation | baichuan-inc/Baichuan-7B | - | TheBloke/baichuan-7B-GPTQ |
+| Text-generation | THUDM/chatglm3-6b | - | ranchlai/chatglm3-6B-gptq-4bit |
+| Text-generation | deepseek-ai/deepseek-llm-7b-chat | TheBloke/deepseek-llm-7B-chat-AWQ | TheBloke/deepseek-llm-7B-chat-GPTQ |
+| Text-generation | mistralai/Mistral-7B-v0.1 | TheBloke/Mistral-7B-v0.1-AWQ | TheBloke/Mistral-7B-v0.1-GPTQ |
+| Text-generation | microsoft/Phi-3-mini-128k-instruct | solidrust/Phi-3-mini-128k-instruct-AWQ | shuyuej/Phi-3-mini-128k-instruct-GPTQ |
+| Text-generation | Qwen/Qwen2-7B-Instruct | Qwen/Qwen2-7B-Instruct-AWQ | Qwen/Qwen2-7B-Instruct-GPTQ-Int4 |
+| Text-generation | DeepSeek distilled Llama | casperhansen/deepseek-r1-distill-llama-8b-awq | jakiAJK/DeepSeek-R1-Distill-Llama-8B_GPTQ-int4 |
+| Text-generation | DeepSeek distilled QWen | casperhansen/deepseek-r1-distill-qwen-7b-awq | jakiAJK/DeepSeek-R1-Distill-Qwen-7B_GPTQ-int4 |
+| multi-modal | llava-hf/llava-1.5-7b-hf | ybelkada/llava-1.5-7b-hf-awq | - |
+| multi-modal | microsoft/Phi-3.5-vision-instruct | Isotr0py/Phi-3.5-vision-instruct-AWQ | - |
 
 ## 2. Limitations
 
@@ -37,12 +41,11 @@ Some of vLLM V1 features may need extra support, including `torch.compile` suppo
 
 The following issues are known issues that we plan to fix in future releases:
 
+* There might be a 90% performance drop with **chunk prefill kernels** on phi-3 model comparing to the previous version.
+* Accuracy value drops to 0 with block size 32
 * The `Bloke/baichuan-7B-GPTQ` model fails with `AttributeError: BaiChuanTokenizer has no attribute vocab_size` error.
 * The `ranchlai/chatglm3-6B-gptq-4bit` model fails with `ChatGLMForConditionalGeneration has no vLLM implementation and the Transformers implementation is not compatible with vLLM` error.
-* Sum of `input token length` and `output token length` has to be small than the `--max_position_embeddings` argument of a model to avoid error `ValueError: This model's maximum context length is xxxx tokens. However, you requested xxxx tokens (xxxx in the messages, xxxx in the completion). Please reduce the length of the messages or completion.`
 * The `jakiAJK_DeepSeek-R1-Distill-Qwen-7B_GPTQ-int4` model and `Qwen_Qwen2-7B-Instruct-GPTQ-Int4` model get the `lm-eval` accuracy value to be 0.
-* The `run-lm-eval-gsm-vllm-baseline.sh` script in the docker image mentioned in this blog doesn't support accuracy testing.
-* When you use the docker image mentioned in this blog, you may see warning messages like `Pin memory is not supported on XPU`. These messages were mistakenly printed and can be omitted.
 * `awq` models occupy memory larger than the model size. For `casperhansen/llama-3-8b-instruct-awq` model (sized 5.74 GB), 8.6GB memory was occupied.
 
 ## 3. How to Get Started
@@ -76,7 +79,7 @@ export HUGGING_FACE_HUB_TOKEN=xxxxxx
 Command:
 
 ```bash
-VLLM_USE_V1=1 W_LONG_MAX_MODEL_LEN=1 VLLM_WORKER_MULTIPROC_METHOD=spawn  python3 -m vllm.entrypoints.openai.api_server --model TechxGenus/Meta-Llama-3-8B-GPTQ --dtype=float16 --device=xpu --enforce-eager --port 8000  --block-size 32 --gpu-memory-util 0.85 --trust-remote-code --disable-sliding-window
+VLLM_USE_V1=1 W_LONG_MAX_MODEL_LEN=1 VLLM_WORKER_MULTIPROC_METHOD=spawn  python3 -m vllm.entrypoints.openai.api_server --model TechxGenus/Meta-Llama-3-8B-GPTQ --dtype=float16 --device=xpu --enforce-eager --port 8000  --block-size 64 --gpu-memory-util 0.85 --trust-remote-code --disable-sliding-window
 ```
 
 Expected output:
