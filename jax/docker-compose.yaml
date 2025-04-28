@@ -40,22 +40,22 @@ services:
         org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.name: "intel/intel-optimized-xla"
         org.opencontainers.image.title: "Intel® Optimized XLA Base Image"
-        org.opencontainers.image.version: ${INTEL_XLA_VERSION:-v0.5.0}-${PACKAGE_OPTION:-pip}-base
+        org.opencontainers.image.version: ${INTEL_XLA_VERSION:-v0.6.0}-${PACKAGE_OPTION:-pip}-base
       target: jax-base
     command: >
       bash -c "python -c 'import jax; print(\"Jax Version:\", jax.__version__)'"
     depends_on:
       - ${PACKAGE_OPTION:-pip}
       - xpu
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xla-${INTEL_XLA_VERSION:-v0.5.0}-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xla-${INTEL_XLA_VERSION:-v0.6.0}-base
     pull_policy: always
   jupyter:
     build:
       labels:
         dependency.python.pip: jupyter-requirements.txt
-        org.opencontainers.base.name: "intel/intel-optimized-xla:${INTEL_XLA_VERSION:-v0.5.0}-base"
+        org.opencontainers.base.name: "intel/intel-optimized-xla:${INTEL_XLA_VERSION:-v0.6.0}-base"
         org.opencontainers.image.title: "Intel® Optimized XLA Jupyter Base Image"
-        org.opencontainers.image.version: ${INTEL_XLA_VERSION:-v0.5.0}-jupyter
+        org.opencontainers.image.version: ${INTEL_XLA_VERSION:-v0.6.0}-jupyter
       target: jupyter
     command: >
       bash -c "python -m jupyter --version"
@@ -63,5 +63,5 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     extends: jax-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xla-${INTEL_XLA_VERSION:-v0.5.0}-jupyter
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xla-${INTEL_XLA_VERSION:-v0.6.0}-jupyter
     network_mode: host
