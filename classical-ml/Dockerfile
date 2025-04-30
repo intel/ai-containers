@@ -58,8 +58,7 @@ COPY base/.patch_sklearn.py ${HOME}/.patch_sklearn.py
 
 RUN mkdir -p /licensing && \
     wget --progress=dot:giga -O - "https://github.com/intel/scikit-learn-intelex/archive/refs/heads/main.tar.gz" | \
-    tar -xz -C /licensing --strip=2 "scikit-learn-intelex-main/doc/third-party-programs-sklearnex.txt" \
-    "scikit-learn-intelex-main/doc/daal4py/third-party-programs.txt"
+    tar -xz -C /licensing --strip=2 "scikit-learn-intelex-main/doc/third-party-programs-sklearnex.txt"
 
 RUN wget --progress=dot:giga --no-check-certificate "https://raw.githubusercontent.com/intel/scikit-learn-intelex/main/LICENSE" -O /licensing/SCIKIT_LICENSE
 
