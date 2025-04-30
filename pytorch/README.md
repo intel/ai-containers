@@ -24,6 +24,7 @@ The images below include support for both CPU and GPU optimizations:
 
 | Tag(s)                 | Pytorch  | IPEX           | Driver | Dockerfile      |
 | ---------------------- | -------- | -------------- | ------ | --------------- |
+| `2.7.10-xpu-pip-base`,`2.7.10-xpu` | [v2.7.0] | [v2.7.10+xpu] | [1077] | [v0.4.0-Beta]  |
 | `2.6.10-xpu-pip-base`,`2.6.10-xpu` | [v2.6.0] | [v2.6.10+xpu] | [1077] | [v0.4.0-Beta]  |
 | `2.5.10-xpu-pip-base`,`2.5.10-xpu` | [v2.5.1] | [v2.5.10+xpu] | [1057] | [v0.4.0-Beta]  |
 | `2.3.110-xpu-pip-base`,`2.3.110-xpu` | [v2.3.1][torch-v2.3.1] | [v2.3.110+xpu] | [950]  | [v0.4.0-Beta]  |
@@ -40,7 +41,7 @@ docker run -it --rm \
     --device /dev/dri \
     -v /dev/dri/by-path:/dev/dri/by-path \
     --ipc=host \
-    intel/intel-extension-for-pytorch:2.6.10-xpu
+    intel/intel-extension-for-pytorch:2.7.10-xpu
 ```
 
 ---
@@ -49,6 +50,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
 | --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
+| `2.7.10-xpu-pip-jupyter` | [v2.7.0]| [v2.7.10+xpu] | [1077]  |  `8888` | [v0.4.0-Beta]  |
 | `2.6.10-xpu-pip-jupyter` | [v2.6.0]| [v2.6.10+xpu] | [1077]  |  `8888` | [v0.4.0-Beta]  |
 | `2.5.10-xpu-pip-jupyter` | [v2.5.1]| [v2.5.10+xpu] | [1057]  |  `8888` | [v0.4.0-Beta]  |
 | `2.3.110-xpu-pip-jupyter` | [v2.3.1][torch-v2.3.1] | [v2.3.110+xpu] | [950]  | `8888`     | [v0.4.0-Beta]   |
@@ -63,7 +65,7 @@ docker run -it --rm \
     -p 8888:8888 \
     --device /dev/dri \
     -v /dev/dri/by-path:/dev/dri/by-path \
-    intel/intel-extension-for-pytorch:2.6.10-xpu-pip-jupyter
+    intel/intel-extension-for-pytorch:2.7.10-xpu-pip-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
@@ -74,6 +76,7 @@ The images below are built only with CPU optimizations (GPU acceleration support
 
 | Tag(s)                     | Pytorch  | IPEX         | Dockerfile      |
 | -------------------------- | -------- | ------------ | --------------- |
+| `2.7.0-pip-base`, `latest` | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
 | `2.6.0-pip-base`, `latest` | [v2.6.0] | [v2.6.0+cpu] | [v0.4.0-Beta]   |
 | `2.5.0-pip-base`, `latest` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
 | `2.4.0-pip-base`           | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
@@ -94,6 +97,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- |
+| `2.7.0-pip-jupyter` | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
 | `2.6.0-pip-jupyter` | [v2.6.0] | [v2.6.0+cpu] | [v0.4.0-Beta]   |
 | `2.5.0-pip-jupyter` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
 | `2.4.0-pip-jupyter` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
@@ -107,7 +111,7 @@ docker run -it --rm \
     -p 8888:8888 \
     -v $PWD/workspace:/workspace \
     -w /workspace \
-    intel/intel-extension-for-pytorch:2.6.0-pip-jupyter
+    intel/intel-extension-for-pytorch:2.7.0-pip-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
@@ -277,6 +281,7 @@ The images below are [TorchServe*] with CPU Optimizations:
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- |
+| `2.7.0-serving-cpu` | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
 | `2.6.0-serving-cpu` | [v2.6.0] | [v2.6.0+cpu] | [v0.4.0-Beta]   |
 | `2.5.0-serving-cpu` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
 | `2.4.0-serving-cpu` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
@@ -289,6 +294,7 @@ The images below are [TorchServe*] with XPU Optimizations:
 
 | Tag(s)              | Pytorch  | IPEX         | Driver | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- | ------------- |
+| `2.7.10-serving-xpu` | [v2.7.0] | [v2.7.10+xpu] | [1077]  | [v0.4.0-Beta]  |
 | `2.6.10-serving-xpu` | [v2.6.0] | [v2.6.10+xpu] | [1077]  | [v0.4.0-Beta]  |
 | `2.5.10-serving-xpu` | [v2.5.1] | [v2.5.10+xpu] | [1057]  | [v0.4.0-Beta]  |
 
@@ -298,6 +304,7 @@ The images below are built only with CPU optimizations (GPU acceleration support
 
 | Tag(s)           | Pytorch  | IPEX         | Dockerfile      |
 | ---------------- | -------- | ------------ | --------------- |
+| `2.7.0-idp-base` | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
 | `2.6.0-idp-base` | [v2.6.0] | [v2.6.0+cpu] | [v0.4.0-Beta]   |
 | `2.5.0-idp-base` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
 | `2.4.0-idp-base` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
@@ -310,6 +317,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- |
+| `2.7.0-idp-jupyter` | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
 | `2.6.0-idp-jupyter` | [v2.6.0] | [v2.6.0+cpu] | [v0.4.0-Beta]   |
 | `2.5.0-idp-jupyter` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
 | `2.4.0-idp-jupyter` | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
@@ -334,6 +342,7 @@ The images below are built only with CPU and GPU optimizations and include [Inte
 
 | Tag(s)           | Pytorch  | IPEX         | Driver | Dockerfile      |
 | ---------------- | -------- | ------------ | -------- | ------ |
+| `2.7.10-xpu-idp-base`| [v2.7.0] | [v2.7.10+xpu] | [1077]  | [v0.4.0-Beta]  |
 | `2.6.10-xpu-idp-base`| [v2.6.0] | [v2.6.10+xpu] | [1077]  | [v0.4.0-Beta]  |
 | `2.5.10-xpu-idp-base`| [v2.5.1] | [v2.5.10+xpu] | [1057]  | [v0.4.0-Beta]  |
 | `2.3.110-xpu-idp-base` | [v2.3.1][torch-v2.3.1] | [v2.3.110+xpu] | [950]  | [v0.4.0-Beta] |
@@ -345,6 +354,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)                | Pytorch  | IPEX          | Driver | Jupyter Port | Dockerfile      |
 | --------------------- | -------- | ------------- | ------ | ------------ | --------------- |
+| `2.7.10-xpu-idp-jupyter` | [v2.7.0] | [v2.7.10+xpu] | [1077]  |  `8888` | [v0.4.0-Beta]  |
 | `2.6.10-xpu-idp-jupyter` | [v2.6.0] | [v2.6.10+xpu] | [1077]  |  `8888` | [v0.4.0-Beta]  |
 | `2.5.10-xpu-idp-jupyter` | [v2.5.1] | [v2.5.10+xpu] | [1057]  |  `8888` | [v0.4.0-Beta]  |
 | `2.3.110-xpu-idp-jupyter` | [v2.3.1][torch-v2.3.1] | [v2.3.110+xpu] | [950]  | `8888` | [v0.4.0-Beta] |
@@ -416,6 +426,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [v0.2.3]: https://github.com/intel/ai-containers/blob/v0.2.3/pytorch/Dockerfile
 [v0.1.0]: https://github.com/intel/ai-containers/blob/v0.1.0/pytorch/Dockerfile
 
+[v2.7.10+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.7.10%2Bxpu
 [v2.6.10+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.6.10%2Bxpu
 [v2.5.10+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.5.10%2Bxpu
 [v2.3.110+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.3.110%2Bxpu
@@ -425,6 +436,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [v2.1.10+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.1.10%2Bxpu
 [v2.0.110+xpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.0.110%2Bxpu
 
+[v2.7.0]: https://github.com/pytorch/pytorch/releases/tag/v2.7.0
 [v2.6.0]: https://github.com/pytorch/pytorch/releases/tag/v2.6.0
 [v2.5.1]: https://github.com/pytorch/pytorch/releases/tag/v2.5.1
 [v2.5.0]: https://github.com/pytorch/pytorch/releases/tag/v2.5.0
@@ -445,6 +457,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [v2.3.1]: https://github.com/intel/neural-compressor/releases/tag/v2.3.1
 [v2.1.1]: https://github.com/intel/neural-compressor/releases/tag/v2.1.1
 
+[v2.7.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.7.0%2Bcpu
 [v2.6.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.6.0%2Bcpu
 [v2.5.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.5.0%2Bcpu
 [v2.4.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.4.0%2Bcpu
