@@ -19,7 +19,7 @@ on:
     - 'test-runner/**'
   push:
     branches:
-    - main
+    - sramakr1/revert_pydantic
 permissions: read-all
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
