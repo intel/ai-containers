@@ -1,7 +1,7 @@
 mkdocs-callouts>=1.13.2
 mkdocs-git-authors-plugin>=0.8.0
 mkdocs-git-revision-date-localized-plugin>=1.2.5
-mkdocs-material==9.6.12
+mkdocs-material==9.6.13
 mkdocs-table-reader-plugin>=2.1.0
 mkdocs==1.6.1
 pandas>=2.0.3
