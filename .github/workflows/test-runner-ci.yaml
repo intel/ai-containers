@@ -100,7 +100,7 @@ jobs:
     #     password: ${{ secrets.REGISTRY_TOKEN }}
     - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
       with:
-        python-version: "3.9"
+        python-version: "3.10"
     - name: Test Container Group
       uses: intel/ai-containers/test-runner@sramakr1/revert_pydantic
       with:
