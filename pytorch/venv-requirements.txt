@@ -1,5 +1,5 @@
 setuptools>=70.0.0
 psutil==7.0.0
-mkl==2025.0.1
-mkl-include==2025.0.1
-intel-openmp==2025.0.5
+mkl==2025.1.0
+mkl-include==2025.1.0
+intel-openmp==2025.1.1
