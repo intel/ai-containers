@@ -15,7 +15,7 @@ Intel GPUs benefit from enhancements brought by [vLLM V1 engine](https://blog.vl
 * Efficient Input Preparation
 
 Besides, following up vLLM V1 design, corresponding optimized kernels are implemented for Intel GPUs.
-* chunked_prefill: 
+* chunked_prefill:
 
   chunked_prefill is an optimization feature in vLLM that allows large prefill requests to be divided into small chunks and batched together with decode requests. This approach prioritizes decode requests, improving inter-token latency (ITL) and GPU utilization by combining compute-bound (prefill) and memory-bound (decode) requests in the same batch. vLLM v1 engine is built on this feature and in this release, it's also supported on intel GPUs by leveraging corresponding kernel from Intel® Extension for PyTorch for model execution.
 
@@ -50,7 +50,7 @@ Some of vLLM V1 features may need extra support, including `torch.compile` suppo
 
 The following issues are known issues:
 * MoE models performance is not optimized, including deepseek-v2 lite, Qwen3, Qwen3-30B-A3B, etc.
-* W8A8 quantized models through llm_compressor are not supported yet, like RedHatAI/DeepSeek-R1-Distill-Qwen-32B-FP8-dynamic. 
+* W8A8 quantized models through llm_compressor are not supported yet, like RedHatAI/DeepSeek-R1-Distill-Qwen-32B-FP8-dynamic.
 
 ## 3. How to Get Started  (To Be Updated)
 
