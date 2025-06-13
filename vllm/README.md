@@ -2,7 +2,7 @@
 
 vLLM is a fast and easy-to-use library for LLM inference and serving. It has evolved into a community-driven project with contributions from both academia and industry. Intel, as one of the community contributors, is working actively to bring satisfying performance with vLLM on Intel® platforms, including Intel® Xeon® Scalable Processors, Intel® discrete GPUs, as well as Intel® Gaud® AI accelerators. This blog focuses on Intel® discrete GPUs at this time and brings you the necessary information to get the workloads running well on your Intel® graphics cards.
 
-The vLLM used in the latest docker image is based on [v0.8.0](https://github.com/vllm-project/vllm/tree/v0.8.0).
+The vLLM used in the latest docker image is based on [v0.8.3](https://github.com/vllm-project/vllm/tree/v0.8.3).
 
 ## 1. What's Supported?
 
@@ -13,42 +13,46 @@ Intel GPUs benefit from enhancements brought by [vLLM V1 engine](https://blog.vl
 * Zero-Overhead Prefix Caching
 * Clean Architecture for Tensor-Parallel Inference
 * Efficient Input Preparation
-* Enhanced Support for Multimodal LLMs
 
-Moreover, **`chunked_prefill`**, an optimization feature in vLLM that allows large prefill requests to be divided into small chunks and batched together with decode requests, is also enabled. This approach prioritizes decode requests, improving inter-token latency (ITL) and GPU utilization by combining compute-bound (prefill) and memory-bound (decode) requests in the same batch. vLLM v1 engine is built on this feature and in this release, it's also supported on intel GPUs by leveraging corresponding kernel from Intel® Extension for PyTorch\* for model execution.
+Besides, following up vLLM V1 design, corresponding optimized kernels are implemented for Intel GPUs.
+* chunked_prefill: 
 
-**Speculative decoding** in vLLM is a technique designed to improve inter-token latency. Currently, only ngram-based spec decode is supported in V1. There will be follow-up work to support other types of spec decode.
+  chunked_prefill is an optimization feature in vLLM that allows large prefill requests to be divided into small chunks and batched together with decode requests. This approach prioritizes decode requests, improving inter-token latency (ITL) and GPU utilization by combining compute-bound (prefill) and memory-bound (decode) requests in the same batch. vLLM v1 engine is built on this feature and in this release, it's also supported on intel GPUs by leveraging corresponding kernel from Intel® Extension for PyTorch for model execution.
 
+* FP8 W8A16:
+
+  vLLM supports FP8 (8-bit floating point) weight using hardware acceleration on GPUs. We support weight-only online dynamic quantization with FP8, which allows for a 2x reduction in model memory requirements and up to a 1.6x improvement in throughput with minimal impact on accuracy.
+  The FP8 types typically supported in hardware have two distinct representations, each useful in different scenarios:
+
+  - **E4M3**: Consists of 1 sign bit, 4 exponent bits, and 3 bits of mantissa. It can store values up to +/-448 and `nan`.
+  - **E5M2**: Consists of 1 sign bit, 5 exponent bits, and 2 bits of mantissa. It can store values up to +/-57344, +/- `inf`, and `nan`. The tradeoff for the increased dynamic range is lower precision of the stored values.
+
+  :::{warning}
+  Currently, we load the model at original precision before quantizing down to 8-bits, so you need enough memory to load the whole model.
+  :::
+
+  Moreover, we support FP8 models quantized using [auto-round](https://github.com/intel/auto-round) methods.
+
+## Optimizations
+* tensor parallel inference: Intel® oneAPI Collective Communications Library(oneCCL) is optimized to provide boosted performance in multi BMG cards inference.
+* GQA kernel optimization: An optimized version of Grouped-Query Attention(GQA) kernel is adopted and obvious perf improvement is observed in models like Qwen and Llama.
+
+## Supported Models(To Be Added)
 The table below lists models that have been verified by Intel. However, there should be broader models that are supported by vLLM work on Intel® GPUs.
 
 | Model Type | Model (company/model name) | AWQ | GPTQ |
 | ---------- | -------------------------- | --- | ---- |
-| Text-generation | meta-llama/Llama-3.1 8B | hugging-quants/Meta-Llama-3.1-8B-Instruct-AWQ-INT4 | hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4 |
-| Text-generation | baichuan-inc/Baichuan-7B | - | TheBloke/baichuan-7B-GPTQ |
-| Text-generation | THUDM/chatglm3-6b | - | ranchlai/chatglm3-6B-gptq-4bit |
-| Text-generation | deepseek-ai/deepseek-llm-7b-chat | TheBloke/deepseek-llm-7B-chat-AWQ | TheBloke/deepseek-llm-7B-chat-GPTQ |
-| Text-generation | mistralai/Mistral-7B-v0.1 | TheBloke/Mistral-7B-v0.1-AWQ | TheBloke/Mistral-7B-v0.1-GPTQ |
-| Text-generation | microsoft/Phi-3-mini-128k-instruct | solidrust/Phi-3-mini-128k-instruct-AWQ | shuyuej/Phi-3-mini-128k-instruct-GPTQ |
-| Text-generation | Qwen/Qwen2-7B-Instruct | Qwen/Qwen2-7B-Instruct-AWQ | Qwen/Qwen2-7B-Instruct-GPTQ-Int4 |
-| Text-generation | DeepSeek distilled Llama | casperhansen/deepseek-r1-distill-llama-8b-awq | jakiAJK/DeepSeek-R1-Distill-Llama-8B_GPTQ-int4 |
-| Text-generation | DeepSeek distilled QWen | casperhansen/deepseek-r1-distill-qwen-7b-awq | jakiAJK/DeepSeek-R1-Distill-Qwen-7B_GPTQ-int4 |
-| multi-modal | llava-hf/llava-1.5-7b-hf | ybelkada/llava-1.5-7b-hf-awq | - |
-| multi-modal | microsoft/Phi-3.5-vision-instruct | Isotr0py/Phi-3.5-vision-instruct-AWQ | - |
+
 
 ## 2. Limitations
 
-Some of vLLM V1 features may need extra support, including `torch.compile` support, LoRA, pipeline parallel on Ray, Structured outputs, EP/TP MoE, DP Attentions, prefix prefill and MLA related.
+Some of vLLM V1 features may need extra support, including `torch.compile` support, speculative decoding, LoRA, pipeline parallel on Ray, Structured outputs, EP/TP MoE, DP Attentions, prefix prefill and MLA related.
 
-The following issues are known issues that we plan to fix in future releases:
+The following issues are known issues:
+* MoE models performance is not optimized, including deepseek-v2 lite, Qwen3, Qwen3-30B-A3B, etc.
+* W8A8 quantized models through llm_compressor are not supported yet, like RedHatAI/DeepSeek-R1-Distill-Qwen-32B-FP8-dynamic. 
 
-* There might be a 90% performance drop with **chunk prefill kernels** on phi-3 model comparing to the previous version.
-* Accuracy value drops to 0 with block size 32
-* The `Bloke/baichuan-7B-GPTQ` model fails with `AttributeError: BaiChuanTokenizer has no attribute vocab_size` error.
-* The `ranchlai/chatglm3-6B-gptq-4bit` model fails with `ChatGLMForConditionalGeneration has no vLLM implementation and the Transformers implementation is not compatible with vLLM` error.
-* The `jakiAJK_DeepSeek-R1-Distill-Qwen-7B_GPTQ-int4` model and `Qwen_Qwen2-7B-Instruct-GPTQ-Int4` model get the `lm-eval` accuracy value to be 0.
-* `awq` models occupy memory larger than the model size. For `casperhansen/llama-3-8b-instruct-awq` model (sized 5.74 GB), 8.6GB memory was occupied.
-
-## 3. How to Get Started
+## 3. How to Get Started  (To Be Updated)
 
 ### 3.1. Prerequisite
 
