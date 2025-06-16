@@ -37,7 +37,7 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-    - uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
+    - uses: docker/setup-buildx-action@18ce135bb5112fa8ce4ed6c17ab05699d7f3a5e0 # v3.11.0
       with:
         driver: docker
     - uses: azure/docker-login@15c4aadf093404726ab2ff205b2cdd33fa6d054c # v2
@@ -85,7 +85,7 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-    - uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
+    - uses: docker/setup-buildx-action@18ce135bb5112fa8ce4ed6c17ab05699d7f3a5e0 # v3.11.0
       with:
         driver: docker
     - uses: azure/docker-login@15c4aadf093404726ab2ff205b2cdd33fa6d054c # v2
