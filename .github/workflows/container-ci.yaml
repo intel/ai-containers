@@ -66,7 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0 # v2.12.0
+      uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863 # v2.12.1
       with:
         egress-policy: audit
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -122,7 +122,7 @@ jobs:
       matrix: ${{ steps.scan-matrix.outputs.matrix }}
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0 # v2.12.0
+      uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863 # v2.12.1
       with:
         egress-policy: audit
     - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
@@ -142,7 +142,7 @@ jobs:
     steps:
     - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
     - name: Harden Runner
-      uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0 # v2.12.0
+      uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863 # v2.12.1
       with:
         egress-policy: audit
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -177,7 +177,7 @@ jobs:
     - name: Cleanup
       if: always()
       run: docker rmi -f ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
-    - uses: github/codeql-action/upload-sarif@fca7ace96b7d713c7035871441bd52efbe39e27e # v3.28.19
+    - uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3.29.0
       with:
         sarif_file: '${{ matrix.container }}-scan.sarif'
         category: '${{ matrix.container }}'
@@ -192,7 +192,7 @@ jobs:
       matrix: ${{ steps.test-matrix.outputs.matrix }}
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0 # v2.12.0
+      uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863 # v2.12.1
       with:
         egress-policy: audit
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -209,7 +209,7 @@ jobs:
         experimental: [true]
       fail-fast: false
     steps:
-    - uses: step-security/harden-runner@0634a2670c59f64b4a01f0f96f84700a4088b9f0 # v2.12.0
+    - uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863 # v2.12.1
       with:
         egress-policy: audit
     - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
