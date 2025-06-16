@@ -3,5 +3,5 @@ numpy==1.26.4
 scikit-learn-intelex==2025.5.0
 threadpoolctl==3.6.0
 xgboost==2.1.4
-pandas==2.2.3
+pandas==2.3.0
 nbconvert==7.16.6
