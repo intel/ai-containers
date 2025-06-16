@@ -17,36 +17,55 @@ Intel GPUs benefit from enhancements brought by [vLLM V1 engine](https://blog.vl
 Besides, following up vLLM V1 design, corresponding optimized kernels are implemented for Intel GPUs.
 * chunked_prefill:
 
-  chunked_prefill is an optimization feature in vLLM that allows large prefill requests to be divided into small chunks and batched together with decode requests. This approach prioritizes decode requests, improving inter-token latency (ITL) and GPU utilization by combining compute-bound (prefill) and memory-bound (decode) requests in the same batch. vLLM v1 engine is built on this feature and in this release, it's also supported on intel GPUs by leveraging corresponding kernel from Intel® Extension for PyTorch for model execution.
+  chunked_prefill is an optimization feature in vLLM that allows large prefill requests to be divided into small chunks and batched together with decode requests. This approach prioritizes decode requests, improving inter-token latency (ITL) and GPU utilization by combining compute-bound (prefill) and memory-bound (decode) requests in the same batch. vLLM v1 engine is built on this feature and in this release, it's also supported on intel GPUs by leveraging corresponding kernel from Intel® Extension\* for PyTorch for model execution.
 
 * FP8 W8A16:
 
   vLLM supports FP8 (8-bit floating point) weight using hardware acceleration on GPUs. We support weight-only online dynamic quantization with FP8, which allows for a 2x reduction in model memory requirements and up to a 1.6x improvement in throughput with minimal impact on accuracy.
-  The FP8 types typically supported in hardware have two distinct representations, each useful in different scenarios:
+
+  Dynamic quantization of an original precision BF16/FP16 model to FP8 can be achieved with vLLM without any calibration data required. You can enable the feature by specifying `--quantization="fp8"` in the command line or setting `quantization="fp8"` in the LLM constructor.
+
+  Besides, the FP8 types typically supported in hardware have two distinct representations, each useful in different scenarios:
 
   - **E4M3**: Consists of 1 sign bit, 4 exponent bits, and 3 bits of mantissa. It can store values up to +/-448 and `nan`.
   - **E5M2**: Consists of 1 sign bit, 5 exponent bits, and 2 bits of mantissa. It can store values up to +/-57344, +/- `inf`, and `nan`. The tradeoff for the increased dynamic range is lower precision of the stored values.
+
+  We support both representations through ENV variable `VLLM_XPU_FP8_DTYPE` with default value `E5M2`.
+
 
   :::{warning}
   Currently, we load the model at original precision before quantizing down to 8-bits, so you need enough memory to load the whole model.
   :::
 
-  Moreover, we support FP8 models quantized using [auto-round](https://github.com/intel/auto-round) methods.
-
 ## Optimizations
-* tensor parallel inference: Intel® oneAPI Collective Communications Library(oneCCL) is optimized to provide boosted performance in multi BMG cards inference.
+* tensor parallel inference: Intel® oneAPI Collective Communications Library(oneCCL) is optimized to provide boosted performance in Intel® Arc™ B-Series graphics cards inference.
 * GQA kernel optimization: An optimized version of Grouped-Query Attention(GQA) kernel is adopted and obvious perf improvement is observed in models like Qwen and Llama.
 
 ## Supported Models(To Be Added)
 The table below lists models that have been verified by Intel. However, there should be broader models that are supported by vLLM work on Intel® GPUs.
 
-| Model Type | Model (company/model name) | AWQ | GPTQ |
-| ---------- | -------------------------- | --- | ---- |
+| Model Type | Model (company/model name) | Dynamic Online FP8 |
+| ---------- | -------------------------- | --- |
+| Text Generation | deepseek-ai/DeepSeek-R1-Distill-Qwen-14B |✅︎|
+| Text Generation | deepseek-ai/DeepSeek-R1-Distill-Qwen-32B |✅︎|
+| Text Generation | deepseek-ai/DeepSeek-R1-Distill-Llama-70B |✅︎|
+| Text Generation | Qwen/Qwen2.5-72B-Instruct |✅︎|
+| Text Generation | Qwen/Qwen3-32B |✅︎|
+| Text Generation | Qwen/Qwen3-30B-A3B |✅︎|
+| Text Generation | meta-llama/Llama-3.1-8B-Instruct |✅︎|
+| Text Generation | baichuan-inc/Baichuan2-13B-Chat |✅︎|
+| Text Generation | THUDM/GLM-4-9B-chat |✅︎|
+| Text Generation | THUDM/CodeGeex4-All-9B |✅︎|
+| Text Generation | chuhac/TeleChat2-35B |✅︎|
+| Text Generation | 01-ai/Yi1.5-34B-Chat |✅︎|
+| Text Generation | THUDM/CodeGeex4-All-9B |✅︎|
+| Text Generation | deepseek-ai/DeepSeek-Coder-33B-base |✅︎|
+| Multi Modality  | Qwen/Qwen2.5-VL-72B-Instruct |✅︎|
 
 
 ## 2. Limitations
 
-Some of vLLM V1 features may need extra support, including `torch.compile` support, speculative decoding, LoRA, pipeline parallel on Ray, Structured outputs, EP/TP MoE, DP Attentions, prefix prefill and MLA related.
+Some of vLLM V1 features may need extra support, including `torch.compile` support, speculative decoding, LoRA, pipeline parallel on Ray, EP/TP MoE, DP Attentions and MLA related.
 
 The following issues are known issues:
 * MoE models performance is not optimized, including deepseek-v2 lite, Qwen3, Qwen3-30B-A3B, etc.
