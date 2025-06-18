@@ -24,8 +24,8 @@ services:
         BASE_TAG: ${BASE_TAG:-22.04}
         IDP_VERSION: ${IDP_VERSION:-2025.0.*}
         INTEL_CHANNEL: ${INTEL_CHANNEL:-https://software.repos.intel.com/python/conda/}
-        JAX_VERSION: ${JAX_VERSION:-0.5.2}
-        MKL_VERSION: ${DPNP_VERSION:-2025.0.*}
+        JAX_VERSION: ${JAX_VERSION:-0.6.*}
+        MKL_VERSION: ${MKL_VERSION:-2025.0.*}
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Miniforge3-Linux-x86_64}
         NUMPY_VERSION: ${NUMPY_VERSION:-1.26.4}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.11}
@@ -41,8 +41,14 @@ services:
       https_proxy: ${https_proxy}
     network_mode: host
     shm_size: 12GB
+    volumes:
+      - /dev/dri/by-path:/dev/dri/by-path
     command: >
-      bash -c " conda --version "
+      bash -c "
+      conda info -e
+      &&
+      conda config --show channels
+      "
 
   deep-learning:
     build:
@@ -52,7 +58,7 @@ services:
         org.opencontainers.image.title: "AI Tools Selector Preset Containers - Deep Learning JAX* CPU"
         org.opencontainers.base.name: "ubuntu:22.04"
         org.opencontainers.image.name: "intel/deep-learning"
-        org.opencontainers.image.version: jax-latest-py${PYTHON_VERSION:-3.11}
+        org.opencontainers.image.version: jax-2025.2.0-py${PYTHON_VERSION:-3.11}
         dependency.python: ${PYTHON_VERSION:-3.11}
         dependency.python.pip: requirements.txt
         dependency.apt.bzip2: true
@@ -65,21 +71,21 @@ services:
         dependency.apt.unzip: true
         dependency.apt.wget: true
         dependency.apt.xz-utils: true
-        dependency.conda.conda: '==24.11.3'
-        dependency.conda.dpnp: '==0.16.0'
+        dependency.conda.conda: '==25.5.1'
+        dependency.conda.dpnp: '=0.16.0'
         dependency.conda.ipykernel: '==6.29.5'
-        dependency.conda.jax: '==0.5.3'
-        dependency.conda.jupyterhub: '==5.2.1'
+        dependency.conda.jax: '=0.6.0'
+        dependency.conda.jupyterhub: '==5.3.0'
         dependency.conda.jupyter-server-proxy: '==4.4.0'
         dependency.conda.kernda: '==0.3.0'
-        dependency.conda.mkl: '==2025.0.1'
+        dependency.conda.mkl: '=2025.0.1'
         dependency.conda.nb_conda_kernels: '==2.5.1'
-        dependency.conda.notebook: '==7.2.2'
+        dependency.conda.notebook: '==7.4.3'
         dependency.conda.python: '==3.11.9'
     depends_on:
       - dl-base
     extends: dl-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-jax-cpu-${RELEASE:-2025.1.1}-py${PYTHON_VERSION:-3.11}
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-deep-learning-jax-cpu-${RELEASE:-2025.2.0}-py${PYTHON_VERSION:-3.11}
     command: >
       bash -c "
       conda run -n jax-cpu python -c 'import jax; print(\"Jax Version:\", jax.__version__); import jax.numpy as jnp'

@@ -23,16 +23,10 @@
             {{ read_csv('assets/max-pvc.csv') }}
 
 === "[Preset Containers](https://github.com/intel/ai-containers/blob/main/preset/README.md)"
-    === "[Classical ML](https://hub.docker.com/r/intel/classical-ml)"
-        {{ read_csv('assets/classical_ml.csv') }}
     === "[Deep Learning Pytorch* CPU](https://hub.docker.com/r/intel/deep-learning)"
         {{ read_csv('assets/deep_learning_pytorch_cpu.csv') }}
     === "[Deep Learning PyTorch* GPU](https://hub.docker.com/r/intel/deep-learning)"
         {{ read_csv('assets/deep_learning_pytorch_gpu.csv') }}
-    === "[Deep Learning TensorFlow* CPU](https://hub.docker.com/r/intel/deep-learning)"
-        {{ read_csv('assets/deep_learning_tensorflow_cpu.csv') }}
-    === "[Deep Learning TensorFlow* GPU](https://hub.docker.com/r/intel/deep-learning)"
-        {{ read_csv('assets/deep_learning_tensorflow_gpu.csv') }}
     === "[Deep Learning JAX CPU](https://hub.docker.com/r/intel/deep-learning)"
         {{ read_csv('assets/deep_learning_jax_cpu.csv') }}
 
