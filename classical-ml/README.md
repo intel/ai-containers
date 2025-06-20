@@ -10,8 +10,7 @@ The images below include [Intel® Extension for Scikit-learn*] and [XGBoost*].
 
 | Tag(s)                                            | Intel SKLearn  | Scikit-learn | XGBoost  | Dockerfile      |
 | ------------------------------------------------- | -------------- | ------------ | -------- | --------------- |
-| `2024.7.0-pip-base`, `latest`                     | [v2024.7.0]    | [v1.5.2]     | [v2.1.1] | [v0.4.0]        |
-| `2024.6.0-pip-base`                               | [v2024.6.0]    | [v1.5.0]     | [v2.1.0] | [v0.4.0]        |
+| `2024.6.0-pip-base`, `latest`                     | [v2024.6.0]    | [v1.5.0]     | [v2.1.0] | [v0.4.0]        |
 | `2024.5.0-pip-base`                               | [v2024.5.0]    | [v1.5.0]     | [v2.1.0] | [v0.4.0]        |
 | `2024.3.0-pip-base`                               | [v2024.3.0]    | [v1.4.2]     | [v2.0.3] | [v0.4.0-Beta]   |
 | `2024.2.0-xgboost-2.0.3-pip-base`                 | [v2024.2.0]    | [v1.4.1]     | [v2.0.3] | [v0.4.0-Beta]   |
@@ -21,7 +20,6 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)                                               | Intel SKLearn  | Scikit-learn | XGBoost  | Dockerfile      |
 | ---------------------------------------------------- | -------------- | ------------ | -------- | --------------- |
-| `2024.7.0-pip-jupyter`                               | [v2024.7.0]    | [v1.5.2]     | [v2.1.1] | [v0.4.0]        |
 | `2024.6.0-pip-jupyter`                               | [v2024.6.0]    | [v1.5.1]     | [v2.1.1] | [v0.4.0]        |
 | `2024.5.0-pip-jupyter`                               | [v2024.5.0]    | [v1.5.0]     | [v2.1.0] | [v0.4.0]        |
 | `2024.3.0-pip-jupyter`                               | [v2024.3.0]    | [v1.4.2]     | [v2.0.3] | [v0.4.0-Beta]   |
@@ -47,7 +45,6 @@ The images below include [Intel® Distribution for Python*]:
 
 | Tag(s)                                            | Intel SKLearn  | Scikit-learn | XGBoost  | Dockerfile      |
 | ------------------------------------------------- | -------------- | ------------ | -------- | --------------- |
-| `2024.7.0-idp-base`                               | [v2024.7.0]    | [v1.5.2]     | [v2.1.1] | [v0.4.0]        |
 | `2024.6.0-idp-base`                               | [v2024.6.0]    | [v1.5.1]     | [v2.1.1] | [v0.4.0]        |
 | `2024.5.0-idp-base`                               | [v2024.5.0]    | [v1.5.0]     | [v2.1.0] | [v0.4.0]        |
 | `2024.3.0-idp-base`                               | [v2024.3.0]    | [v1.4.1]     | [v2.1.0] | [v0.4.0]        |
@@ -58,7 +55,6 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)                                               | Intel SKLearn  | Scikit-learn | XGBoost  | Dockerfile      |
 | ---------------------------------------------------- | -------------- | ------------ | -------- | --------------- |
-| `2024.7.0-idp-jupyter`                               | [v2024.7.0]    | [v1.5.2]     | [v2.1.1] | [v0.4.0]        |
 | `2024.6.0-idp-jupyter`                               | [v2024.6.0]    | [v1.5.1]     | [v2.1.1] | [v0.4.0]        |
 | `2024.5.0-idp-jupyter`                               | [v2024.5.0]    | [v1.5.0]     | [v2.1.0] | [v0.4.0]        |
 | `2024.3.0-idp-jupyter`                               | [v2024.3.0]    | [v1.4.0]     | [v2.1.0] | [v0.4.0]        |
@@ -67,7 +63,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 ## Build from Source
 
-To build the images from source, clone the [AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
+To build the images from source, clone the [Intel® AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
 
 ```bash
 cd classical-ml
@@ -99,14 +95,12 @@ It is the image user's responsibility to ensure that any use of The images below
 [Scikit-learn*]: https://scikit-learn.org/stable/
 [XGBoost*]: https://github.com/dmlc/xgboost
 
-[v2024.7.0]: https://github.com/intel/scikit-learn-intelex/releases/tag/2024.7.0
 [v2024.6.0]: https://github.com/intel/scikit-learn-intelex/releases/tag/2024.6.0
 [v2024.5.0]: https://github.com/intel/scikit-learn-intelex/releases/tag/2024.5.0
 [v2024.3.0]: https://github.com/intel/scikit-learn-intelex/releases/tag/2024.3.0
 [v2024.2.0]: https://github.com/intel/scikit-learn-intelex/releases/tag/2024.2.0
 [v2024.0.0]: https://github.com/intel/scikit-learn-intelex/releases/tag/2024.0.0
 
-[v1.5.2]: https://github.com/scikit-learn/scikit-learn/releases/tag/1.5.2
 [v1.5.1]: https://github.com/scikit-learn/scikit-learn/releases/tag/1.5.1
 [v1.5.0]: https://github.com/scikit-learn/scikit-learn/releases/tag/1.5.0
 [v1.4.2]: https://github.com/scikit-learn/scikit-learn/releases/tag/1.4.2

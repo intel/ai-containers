@@ -1,6 +1,6 @@
-torch==2.7.0+cpu
-torchvision==0.22.0+cpu
-torchaudio==2.7.0+cpu
+torch==2.4.0+cpu
+torchvision==0.19.0+cpu
+torchaudio==2.4.0+cpu
 --extra-index-url https://download.pytorch.org/whl/cpu
-intel_extension_for_pytorch==2.7.0+cpu
---extra-index-url https://pytorch-extension.intel.com/release-whl/stable/cpu/cn/
+intel_extension_for_pytorch==2.4.0+cpu
+--extra-index-url https://pytorch-extension.intel.com/release-whl/stable/cpu/us/
