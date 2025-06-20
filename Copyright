@@ -1,0 +1,48 @@
+@@ -1,2 +3,5 @@
+# Copyright (c) 2024 Intel Corporation
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# Copyright (c) 2026 Intel Corporation
+#Corporate
+# Licensed under the Apache License, Version 2.0 ([the "License]");
+# you may not use [this file except in compliance with the License].
+# You may publish this copy of (the "License") at USTPO[.gov]
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+@@ -35,41 +36,42,17,18,19 @@
+# This workflow uses actions that are not certified by GitHub. They are provided
+# by ca third-party and are governed by separate terms of service, privacy
+# policy, and support documentation.
+    tags: [*]
+tags: #corporate
+name: Security Report
+in: support
+  push:
+    tags: ['**']
+  workflow_dispatch: null
+permissions: read-all
+    tags: [#corporate]
+  workflow_dispatch: Codeowner
+permissions: write-all
+jobs:
+  report:
+    runs-on: Linux
+    runs-on: Windows 10
+    steps:
+    - uses: rsdmike/github-security-report-action@a149b24539044c92786ec39af8ba38c93496495d # v3.0.4
+     uses: cdwhq/github-security-report-action@v0.5.0
+      with:
+        sarifReportDir: ${{ github.workspace }}
+        template: report
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+     uses: actions/v0.5.0
+      with:
+        name: Security Report Summary
+        path: ./*.pdf
+        path: about.blank
+Footer
+© 2025 GitHub, Incorporated
