@@ -1,35 +1,24 @@
-# TorchServe with Intel Optimizations
+# Intel TorchServe
 
-TorchServe is a performant, flexible and easy to use tool for serving PyTorch models in production on Intel GPUs.
+Intel TorchServe is a performant, flexible and easy to use tool for serving PyTorch models in production.
 
-For more information about how to use TorchServe with Intel Optimizations, check out the [container documentation](https://github.com/intel/ai-containers/blob/main/pytorch/serving/README.md).
+For more information about how to use Intel Optimized TorchServe, check out the [container documentation](../../../pytorch/serving/README.md).
 
 ![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
-
-## Installation
-
-```bash
-helm repo add intel https://intel.github.io/helm-charts
-helm install my-tgi intel/text-generation-inference
-```
-
-Then, follow the installation notes to test the deployment
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | deploy.env | object | `{"configMapName":"intel-proxy-config","enabled":true}` | Add Environment mapping |
-| deploy.hostname | string | `""` | Name of the GPU Host. Please add hostname before running |
-| deploy.image | string | `"intel/intel-extension-for-pytorch:2.5.10-serving-xpu"` | Intel Optimized torchserve image |
+| deploy.image | string | `"intel/intel-optimized-pytorch:2.3.0-serving-cpu"` | Intel Optimized torchserve image |
 | deploy.modelConfig | string | `"/home/model-server/config.properties"` | Model Server Configuration file location |
 | deploy.models | string | `"all"` | Models to be loaded |
 | deploy.replicas | int | `1` | Number of pods |
-| deploy.resources.limits | object | `{"cpu":"4000m","gpu.intel.com/i915":1,"memory":"2Gi"}` | Maximum resources per pod |
-| deploy.resources.limits."gpu.intel.com/i915" | int | `1` | Intel GPU Device Configuration |
+| deploy.resources.limits | object | `{"cpu":"4000m","memory":"1Gi"}` | Maximum resources per pod |
 | deploy.resources.requests | object | `{"cpu":"1000m","memory":"512Mi"}` | Minimum resources per pod |
 | deploy.storage.nfs | object | `{"enabled":false,"path":"nil","readOnly":true,"server":"nil","subPath":"nil"}` | Network File System (NFS) storage for models |
-| deploy.tokens_disabled | bool | `true` | Set token authentication on or off. Checkout the latest [torchserve docs](https://github.com/pytorch/serve/blob/master/docs/token_authorization_api.md) for more details. |
+| deploy.tokens_disabled | bool | `false` | Set token authentication on or off. Checkout the latest [torchserve docs](https://github.com/pytorch/serve/blob/master/docs/token_authorization_api.md) for more details. |
 | fullnameOverride | string | `""` | Full qualified Domain Name |
 | nameOverride | string | `""` | Name of the serving service |
 | pvc.size | string | `"1Gi"` | Size of the storage |

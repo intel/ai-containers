@@ -16,7 +16,7 @@
 ARG BASE_IMAGE="ubuntu"
 ARG BASE_TAG="22.04"
 
-FROM ${BASE_IMAGE}:${BASE_TAG} as classical-ml
+FROM ${BASE_IMAGE}:${BASE_TAG} as data-analytics
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -51,11 +51,11 @@ ARG PYTHON_VERSION
 ARG IDP_VERSION
 ARG INTEL_CHANNEL
 
-RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-forge/miniforge/releases/latest/download/${MINIFORGE_VERSION}.sh -O miniforge.sh && \
+RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-forge/miniforge/releases/latest/download/${MINIFORGE_VERSION}.sh" -O miniforge.sh && \
     chmod +x miniforge.sh && \
     ./miniforge.sh -b -p "${CONDA_ROOT}" && \
     rm ./miniforge.sh && \
-    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge" && \
+    ln -s "${CONDA_ROOT}" "${CONDA_ROOT}/../miniforge"  && \
     export PATH="${CONDA_ROOT}/bin/:${PATH}" && \
     conda init --all && \
     conda install -y \
@@ -66,7 +66,6 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
         'mamba==1.5.8' \
         'networkx==3.3' \
         'notebook==7.2.1' \
-        'pip==24.0' \
         'python==3.10.14' \
         'idna>=3.7' \
         'requests>=2.32.0' \
@@ -85,25 +84,18 @@ ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 RUN conda config --set pip_interop_enabled True
 
 ARG IDP_VERSION
-ARG DAAL4PY_VERSION
 ARG DPNP_VERSION
-ARG XGBOOST_VERSION
 ARG MODIN_VERSION
 ARG NUMPY_VERSION
-ARG SKLEARNEX_VERSION
 
-RUN conda create -yn classical-ml \
+RUN conda create -yn data-analytics \
         "python=${PYTHON_VERSION}" \
-        "daal4py=${DAAL4PY_VERSION}" \
         "dpnp=${DPNP_VERSION}" \
         'ipykernel==6.29.5' \
         'kernda==0.3.0' \
         'matplotlib-base==3.8.4' \
         "modin-ray=${MODIN_VERSION}" \
         'python-dotenv==1.0.1' \
-        "scikit-learn-intelex=${SKLEARNEX_VERSION}" \
-        'tqdm==4.66.4' \
-        "xgboost=${XGBOOST_VERSION}" \
         'idna>=3.7' \
         'requests>=2.32.0' \
         'setuptools>=70.0.0' \
@@ -112,30 +104,23 @@ RUN conda create -yn classical-ml \
         && \
     conda clean -y --all
 
-RUN conda run -n classical-ml python -m pip install --no-deps --no-cache-dir \
+RUN conda run -n data-analytics python -m pip install --no-deps --no-cache-dir \
     'dataset-librarian==1.0.4'
-
-ENV PYTHONSTARTUP=~/.patch_sklearn.py
-COPY base/.patch_sklearn.py ~/.patch_sklearn.py
-
-ENV PYTHONSTARTUP=/home/dev/.patch_sklearn.py
-COPY base/.patch_sklearn.py /home/dev/.patch_sklearn.py
 
 EXPOSE 8888
 
 RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \
     mkdir ~/.local && chmod a+rwx ~/.local
 
-WORKDIR /home/dev
 COPY --chown=dev notebooks /home/dev/jupyter
 COPY --chown=dev tests /home/dev/sample-tests
 
-RUN KERNEL_DIR="${CONDA_ROOT}/share/jupyter/kernels/classical-ml" && \
-    conda run -n classical-ml python -m ipykernel install --prefix "$CONDA_ROOT" --name classical-ml --display-name "Classical ML" && \
-    conda run -n classical-ml kernda -o -y "$KERNEL_DIR/kernel.json" && \
+RUN KERNEL_DIR="${CONDA_ROOT}/share/jupyter/kernels/data-analytics" && \
+    conda run -n data-analytics python -m ipykernel install --prefix "$CONDA_ROOT" --name data-analytics --display-name "Data Analytics" && \
+    conda run -n data-analytics kernda -o -y "$KERNEL_DIR/kernel.json" && \
     conda run -n base jupyter kernelspec list
 
-CMD ["bash", "-c", "source activate classical-ml && jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
+CMD ["bash", "-c", "source activate data-analytics && jupyter lab --notebook-dir=~/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root"]
 
 ENV BASH_ENV ~/.bash_profile
-RUN echo "conda activate classical-ml" >> ~/.bashrc
+RUN echo "conda activate data-analytics" >> ~/.bashrc
