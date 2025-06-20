@@ -32,6 +32,7 @@ class PerfException(Exception):
 
 class Threshold(BaseModel):
     "Constructs a Threshold class."
+
     name: str
     modelName: str
     boundary: float
@@ -41,12 +42,14 @@ class Threshold(BaseModel):
 
 class Volume(BaseModel):
     "Constructs a Volume class."
+
     src: str
     dst: str
 
 
 class Test(BaseModel):
     "Runs the test command."
+
     __test__ = False
     name: str
     cmd: str
@@ -163,7 +166,7 @@ class Test(BaseModel):
             img (str): docker image
         """
         try:  # Try for Docker CLI Failure Conditions
-            docker.run(img, ["which", "papermill"])
+            docker.run(img, ["which", "papermill"], remove=True)
         except DockerException as papermill_not_found:
             logging.error("Papermill not found: %s", papermill_not_found)
             default_env = {

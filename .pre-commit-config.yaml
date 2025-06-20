@@ -15,11 +15,11 @@ repos:
   - id: sort-simple-yaml
   - id: trailing-whitespace
   repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.6.0
+  rev: v5.0.0
 - hooks:
   - id: gitleaks
   repo: https://github.com/gitleaks/gitleaks
-  rev: v8.19.3
+  rev: v8.27.2
 - hooks:
   - args: [--license-filepath=.github/license_template.txt, --use-current-year, --detect-license-in-X-top-lines=40, --skip-license-insertion-comment=Copyright]
     files: |
@@ -33,12 +33,12 @@ repos:
   - args: ["--config", ".github/linters/.hadolint.yaml"]
     id: hadolint-docker
   repo: https://github.com/hadolint/hadolint
-  rev: v2.13.0-beta
+  rev: v2.13.1-beta
 - hooks:
-  - args: ["--config", ".github/linters/.markdown-lint.yaml"]
+  - args: ["--config", ".github/linters/.markdown-lint.yml"]
     id: markdownlint
   repo: https://github.com/igorshubovych/markdownlint-cli
-  rev: v0.42.0
+  rev: v0.45.0
 - hooks:
   - id: shellcheck
   repo: https://github.com/koalaman/shellcheck-precommit
@@ -47,7 +47,7 @@ repos:
   - args: ["--config-file", ".github/linters/actionlint.yml"]
     id: actionlint
   repo: https://github.com/rhysd/actionlint
-  rev: v1.7.3
+  rev: v1.7.7
 - hooks:
   - id: helm-docs-container
   repo: https://github.com/norwoodj/helm-docs
@@ -59,12 +59,12 @@ repos:
 - hooks:
   - id: black
   repo: https://github.com/ambv/black
-  rev: 24.8.0
+  rev: 25.1.0
 - hooks:
   - args: ["--sp", ".github/linters"]
     id: isort
   repo: https://github.com/pycqa/isort
-  rev: 5.13.2
+  rev: 6.0.1
 - hooks:
   - args: ["--rcfile=.github/linters/.python-lint"]
     entry: pylint

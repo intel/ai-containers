@@ -48,7 +48,7 @@ FROM ${PYTHON_BASE} AS ipex-base-idp
 WORKDIR /
 COPY requirements.txt .
 
-RUN conda run -n idp python -m pip install --no-cache-dir -r requirements.txt && \
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
     apt-get clean && conda clean -y --all
 
 FROM ipex-base-${PACKAGE_OPTION} AS jupyter
@@ -66,134 +66,27 @@ EXPOSE 8888
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
-FROM ipex-base-${PACKAGE_OPTION} AS multinode
-
-RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
-    python3-dev \
-    gcc \
-    g++ \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-    libopenmpi-dev \
-    numactl \
-    virtualenv
-
-ENV SIGOPT_PROJECT=.
+FROM ${PYTHON_BASE} AS ipex-xpu-base-wheels
 
 WORKDIR /
-COPY multinode/requirements.txt requirements.txt
 
-RUN python -m pip install --no-cache-dir -r requirements.txt && \
-    DS_BUILD_OPS=1 python -m pip install --no-cache-dir deepspeed==0.14.4 && \
-    echo "Y" | pip uninstall nvidia-ml-py && \
-    rm -rf requirements.txt
+COPY torch-xpu-requirements.txt .
+COPY ipex-xpu-requirements.txt .
 
-ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
+RUN python -m pip install --no-cache-dir -r torch-xpu-requirements.txt && \
+    rm -rf torch-xpu-requirements.txt
 
-RUN apt-get install -y --no-install-recommends --fix-missing \
-    openssh-client \
-    openssh-server && \
-    rm /etc/ssh/ssh_host_*_key \
-    /etc/ssh/ssh_host_*_key.pub && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
+    rm -rf ipex-xpu-requirements.txt
 
-RUN mkdir -p /var/run/sshd
-
-ARG PYTHON_VERSION
-
-COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
-
-# modify generate_ssh_keys to be a helper script
-# print how to use helper script on bash startup
-# Avoids loop for further execution of the startup file
-ARG PACKAGE_OPTION=pip
-ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
-RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then PYPATH="/opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages"; fi && \
-    echo "source ${PYPATH}/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
-    cat '/generate_ssh_keys.sh' >> ~/.startup && \
-    rm -rf /generate_ssh_keys.sh
-
-COPY multinode/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
-COPY multinode/sshd_config /etc/ssh/sshd_config
-COPY multinode/ssh_config /etc/ssh/ssh_config
-
-RUN mkdir -p /licensing
-
-RUN wget -q  --no-check-certificate https://raw.githubusercontent.com/oneapi-src/oneCCL/b7d66de16e17f88caffd7c6df4cd5e12b266af84/third-party-programs.txt -O /licensing/oneccl_third_party_programs.txt && \
-    wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/docker/third-party-programs-pytorch.txt -O /licensing/third-party-programs-pytorch.txt && \
-    wget -q  --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licensing/LICENSE
-
-ENTRYPOINT ["/usr/local/bin/dockerd-entrypoint.sh"]
-
-FROM multinode AS hf-genai
-
-COPY hf-genai-requirements.txt .
-
-RUN python -m pip install --no-cache-dir -r hf-genai-requirements.txt && \
-    rm -rf hf-genai-requirements.txt
-
-FROM ${PYTHON_BASE} AS ipex-xpu-base
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    apt-utils \
-    build-essential \
-    clinfo \
-    git \
-    gnupg2 \
-    gpg-agent \
-    rsync \
-    unzip && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-    gpg --dearmor --yes --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
-    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
-
-ARG ICD_VER
-ARG LEVEL_ZERO_GPU_VER
-ARG LEVEL_ZERO_VER
-ARG LEVEL_ZERO_DEV_VER
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    intel-opencl-icd=${ICD_VER} \
-    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
-    libze1=${LEVEL_ZERO_VER} \
-    libze-dev=${LEVEL_ZERO_DEV_VER} && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-RUN rm -rf /etc/apt/sources.list.d/intel-gpu-jammy.list
-
-ENV OCL_ICD_VENDORS=/etc/OpenCL/vendors
-
-FROM ipex-xpu-base AS ipex-xpu-base-wheels-pip
-
-WORKDIR /
-COPY xpu-requirements.txt .
-
-RUN python -m pip install --no-cache-dir -r xpu-requirements.txt && \
-    rm -rf xpu-requirements.txt
-
-FROM ipex-xpu-base AS ipex-xpu-base-wheels-idp
-
-WORKDIR /
-COPY xpu-requirements.txt .
-
-RUN conda run -n idp python -m pip install --no-cache-dir -r xpu-requirements.txt && \
-    rm -rf xpu-requirements.txt
-
-FROM ipex-xpu-base-wheels-${PACKAGE_OPTION} AS ipex-xpu-jupyter
+FROM ipex-xpu-base-wheels AS ipex-xpu-jupyter
 
 WORKDIR /jupyter
 COPY jupyter-requirements.txt .
+
 RUN python -m pip install --no-cache-dir -r jupyter-requirements.txt
 
-RUN if eval "which conda >/dev/null )"; then \
+RUN if eval "which conda >/dev/null"; then \
         echo "conda activate idp" >> ~/.bashrc; \
     fi
 
@@ -220,11 +113,12 @@ RUN useradd -m -s /bin/bash model-server && \
     mkdir -p /home/model-server/model-store && \
     chown -R model-server /home/model-server/
 
+ARG PYTHON_VERSION
 RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
     g++ \
     git \
     wget \
-    python3-dev \
+    ${PYTHON_VERSION}-venv \
     python3-distutils \
     python3-venv && \
     rm -rf /var/lib/apt/lists/*
@@ -253,19 +147,23 @@ tail -f /dev/null" >> /usr/local/bin/dockerd-entrypoint.sh
 
 FROM torchserve-base AS compile-cpu
 
-COPY serving/torchserve-requirements.txt .
+COPY serving/torchserve-cpu-requirements.txt .
 COPY requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r requirements.txt && \
-    python -m pip install --no-cache-dir -r torchserve-requirements.txt && \
-    rm -rf requirements.txt torchserve-requirements.txt
+    python -m pip install --no-cache-dir -r torchserve-cpu-requirements.txt && \
+    rm -rf requirements.txt torchserve-cpu-requirements.txt
 
 FROM torchserve-base AS compile-xpu
 
 COPY serving/torchserve-xpu-requirements.txt .
+COPY serving/ipex-xpu-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt && \
     rm -rf torchserve-xpu-requirements.txt
+
+RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
+    rm -rf ipex-xpu-requirements.txt
 
 FROM torchserve-base AS torchserve-cpu
 
@@ -287,41 +185,7 @@ CMD ["serve"]
 
 FROM torchserve-base AS torchserve-xpu
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-        gnupg2 \
-        gpg-agent \
-        rsync && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-    gpg --dearmor --yes --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy unified" | \
-    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        jq \
-        curl \
-        libnl-genl-3-200 \
-        intel-gsc \
-        libdrm2 \
-        intel-metrics-discovery \
-        intel-metrics-library && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/apt/lists/*
-
-ARG XPU_SMI_VERSION
-
-ARG API_URL=https://api.github.com/repos/intel/xpumanager/releases/tags/V${XPU_SMI_VERSION}
-
-RUN wget -q --header="Accept: application/vnd.github.v3+json" --header="User-Agent: MyClient/1.0.0" -O - "$API_URL" | tee /tmp/asset_data.txt && \
-    wget -q --no-check-certificate "$(jq -r '.assets[] | select(.name | test("^xpu-smi.*u22\\.04_amd64\\.deb$")) | .browser_download_url' < /tmp/asset_data.txt)" && \
-    ldconfig && dpkg -i --force-all -- *.deb && \
-    rm -rf -- *.deb /etc/apt/sources.list.d/intel-gpu-jammy.list /etc/apt/sources.list.d/oneAPI.list /tmp/asset_data.txt
-
-ARG GID=109
+ARG GID=110
 
 RUN groupadd -g ${GID} render &&\
     usermod -aG video,render model-server

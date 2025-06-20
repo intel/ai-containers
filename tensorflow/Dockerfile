@@ -26,6 +26,7 @@ ARG BASE_IMAGE_TAG
 ARG PACKAGE_OPTION=pip
 ARG PYTHON_VERSION
 ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-base
+
 FROM ${PYTHON_BASE} AS tf-base-pip
 
 # Intel Optimizations specific Envs
@@ -56,7 +57,7 @@ ENV TF_ENABLE_ONEDNN_OPTS=1
 WORKDIR /
 COPY requirements.txt .
 
-RUN conda run -n idp python -m pip install --no-cache-dir -r requirements.txt && \
+RUN python -m pip install --no-cache-dir -r requirements.txt && \
     rm -rf requirements.txt && \
     conda clean -y --all
 
@@ -77,130 +78,7 @@ EXPOSE 8888
 
 CMD ["bash", "-c", "source /etc/bash.bashrc && jupyter notebook --notebook-dir=/jupyter --port 8888 --ip 0.0.0.0 --no-browser --allow-root --ServerApp.token= --ServerApp.password= --ServerApp.allow_origin=* --ServerApp.base_url=$NB_PREFIX"]
 
-FROM tf-base-${PACKAGE_OPTION} AS multinode
-
-RUN apt-get update -y && apt-get install -y --no-install-recommends --fix-missing \
-    build-essential \
-    cmake \
-    g++ \
-    gcc \
-    git \
-    libgl1-mesa-glx \
-    libglib2.0-0 \
-    libopenmpi-dev \
-    numactl \
-    openmpi-bin \
-    openmpi-common \
-    python3-dev \
-    unzip \
-    virtualenv
-
-ENV SIGOPT_PROJECT=.
-
-WORKDIR /
-COPY multinode/requirements.txt requirements.txt
-
-RUN python -m pip install --no-cache-dir -r requirements.txt && \
-    rm -rf requirements.txt
-
-ENV LD_LIBRARY_PATH="/lib/x86_64-linux-gnu:${LD_LIBRARY_PATH}:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/opt/mpi/libfabric/lib:/usr/local/lib/python${PYTHON_VERSION}/dist-packages/oneccl_bindings_for_pytorch/lib"
-
-RUN apt-get install -y --no-install-recommends --fix-missing \
-    openssh-client \
-    openssh-server && \
-    rm /etc/ssh/ssh_host_*_key \
-    /etc/ssh/ssh_host_*_key.pub && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /var/run/sshd
-
-# Install Horovod
-ARG HOROVOD_WITH_TENSORFLOW=1
-ARG HOROVOD_WITHOUT_MXNET=1
-ARG HOROVOD_WITHOUT_PYTORCH=1
-ARG HOROVOD_WITHOUT_GLOO=1
-ARG HOROVOD_WITH_MPI=1
-
-ENV LD_LIBRARY_PATH /lib64/:/usr/lib64/:/usr/local/lib64
-
-RUN python -m pip install --no-cache-dir horovod==0.28.1
-
-ARG PYTHON_VERSION
-
-COPY multinode/generate_ssh_keys.sh /generate_ssh_keys.sh
-
-# modify generate_ssh_keys to be a helper script
-# print how to use helper script on bash startup
-# Avoids loop for further execution of the startup file
-ARG PACKAGE_OPTION=pip
-ARG PYPATH="/usr/local/lib/python${PYTHON_VERSION}/dist-packages"
-RUN if [ "${PACKAGE_OPTION}" = "idp" ]; then PYPATH="/opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages"; fi && \
-    echo "source ${PYPATH}/oneccl_bindings_for_pytorch/env/setvars.sh" >> ~/.startup && \
-    cat '/generate_ssh_keys.sh' >> ~/.startup && \
-    rm -rf /generate_ssh_keys.sh
-
-COPY multinode/dockerd-entrypoint.sh /usr/local/bin/dockerd-entrypoint.sh
-COPY multinode/sshd_config /etc/ssh/sshd_config
-COPY multinode/ssh_config /etc/ssh/ssh_config
-
-RUN wget --progress=dot:giga --no-check-certificate https://github.com/intel/neural-compressor/raw/master/docker/third-party-programs-tensorflow.txt -O /licenses/inc-third-party-programs-tensorflow.txt && \
-    wget --progress=dot:giga --no-check-certificate https://raw.githubusercontent.com/intel/neural-compressor/master/LICENSE -O /licenses/INC_LICENSE
-
 FROM ${PYTHON_BASE} AS itex-xpu-base
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    apt-utils \
-    build-essential \
-    clinfo \
-    git \
-    gnupg2 \
-    gpg-agent \
-    rsync \
-    unzip \
-    wget && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-ARG ICD_VER
-ARG LEVEL_ZERO_GPU_VER
-ARG LEVEL_ZERO_VER
-ARG LEVEL_ZERO_DEV_VER
-ARG DPCPP_VER
-ARG MKL_VER
-ARG CCL_VER
-
-RUN no_proxy="" NO_PROXY="" wget --no-check-certificate -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
-    gpg --dearmor --output /usr/share/keyrings/intel-graphics.gpg
-RUN echo "deb [arch=amd64 signed-by=/usr/share/keyrings/intel-graphics.gpg] https://repositories.intel.com/gpu/ubuntu jammy/lts/2350 unified" | \
-    tee /etc/apt/sources.list.d/intel-gpu-jammy.list
-
-RUN no_proxy="" NO_PROXY="" apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    intel-opencl-icd=${ICD_VER} \
-    intel-level-zero-gpu=${LEVEL_ZERO_GPU_VER} \
-    level-zero=${LEVEL_ZERO_VER} \
-    level-zero-dev=${LEVEL_ZERO_DEV_VER} && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
-
-RUN no_proxy="" NO_PROXY="" wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB \
-   | gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
-   echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" \
-   | tee /etc/apt/sources.list.d/oneAPI.list
-
-ARG DPCPP_VER
-ARG MKL_VER
-ARG CCL_VER
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends --fix-missing \
-    intel-oneapi-runtime-dpcpp-cpp=${DPCPP_VER} \
-    intel-oneapi-runtime-mkl=${MKL_VER} \
-    intel-oneapi-runtime-ccl=${CCL_VER} && \
-    apt-get clean && \
-    rm -rf  /var/lib/apt/lists/*
 
 WORKDIR /
 COPY xpu-requirements.txt .

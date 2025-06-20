@@ -264,6 +264,11 @@ Inputs for the action:
     description: 'Path to Test Dir'
     required: true
     type: string
+  test_file:
+    description: 'Name of the test file to use'
+    required: false
+    type: string
+    default: 'tests.yaml'
   token:
     required: true
     type: string

@@ -1,14 +1,17 @@
-# tensorflow-serving-on-intel
-
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
+# TensorFlow Serving on Intel GPU
 
 TensorFlow Serving is a flexible, high-performance serving system for machine learning models, designed for production environments. TensorFlow Serving makes it easy to deploy new algorithms and experiments, while keeping the same server architecture and APIs. TensorFlow Serving provides out-of-the-box integration with TensorFlow models, but can be easily extended to serve other types of models and data.
 
-## Maintainers
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.16.0](https://img.shields.io/badge/AppVersion-1.16.0-informational?style=flat-square)
 
-| Name | Email | Url |
-| ---- | ------ | --- |
-| tylertitsworth | <tyler.titsworth@intel.com> | <https://github.com/tylertitsworth> |
+## Installation
+
+```bash
+helm repo add intel https://intel.github.io/helm-charts
+helm install my-tgi intel/text-generation-inference
+```
+
+Then, follow the installation notes to test the deployment
 
 ## Values
 

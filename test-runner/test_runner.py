@@ -148,7 +148,7 @@ if __name__ == "__main__":
         rmtree(args.logs_path)
         os.makedirs(args.logs_path)
     # Set up Logging for test-runner context
-    unique_identifier = args.logs_path.replace("/", "-")
+    test_group = os.path.dirname(args.file_path)
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -193,24 +193,22 @@ if __name__ == "__main__":
             logging.error(err)
             summary.append([idx + 1, test.name, "FAIL"])
             json_summary.append(
-                {"Group": unique_identifier, "Test": test.name, "Status": "FAIL"}
+                {"Group": test_group, "Test": test.name, "Status": "FAIL"}
             )
             ERROR = True
             continue
         except KeyboardInterrupt:
             summary.append([idx + 1, test.name, "FAIL"])
             json_summary.append(
-                {"Group": unique_identifier, "Test": test.name, "Status": "FAIL"}
+                {"Group": test_group, "Test": test.name, "Status": "FAIL"}
             )
             ERROR = True
             break
         summary.append([idx + 1, test.name, "PASS"])
-        json_summary.append(
-            {"Group": unique_identifier, "Test": test.name, "Status": "PASS"}
-        )
-    json_summary_path = f"test-runner-summary-{unique_identifier}.json"
+        json_summary.append({"Group": test_group, "Test": test.name, "Status": "PASS"})
+    JSON_SUMMARY_PATH = f"{args.logs_path}/{test_group.replace('/', '-')}-summary.json"
 
-    with open(json_summary_path, "w", encoding="utf-8") as file:
+    with open(JSON_SUMMARY_PATH, "w", encoding="utf-8") as file:
         json.dump(json_summary, file, indent=4)
 
     # Switch logging context back to the initial state
@@ -219,13 +217,13 @@ if __name__ == "__main__":
     test_images = [expandvars(test.img) for test in tests if test.img]
     if test_images:
         remaining_containers = docker.container.list()
-        for container in remaining_containers:
-            docker.stop(container, time=None)
+        # for container in remaining_containers:
+        #     docker.stop(container, time=None)
         docker.image.remove(test_images, force=True, prune=False)
         docker.system.prune()
         logging.info("%d Images Removed", len(test_images))
     # DEBUG
-    logging.info("Saved json summary file in: %s", json_summary_path)
+    logging.info("Saved json summary file in: %s", JSON_SUMMARY_PATH)
     # Print Summary Table
     logging.info(
         "\n%s", tabulate(summary, headers=["#", "Test", "Status"], tablefmt="orgtbl")

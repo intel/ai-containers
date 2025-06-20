@@ -1,0 +1,11 @@
+--index-url https://pypi.org/simple
+--extra-index-url https://download.pytorch.org/whl/xpu
+
+torch==2.7.0+xpu
+torchvision==0.22.0+xpu
+torchaudio==2.7.0+xpu
+numpy>=1.26.4
+idna>=3.7
+requests>=2.32.0
+tqdm>=4.66.3
+urllib3>=2.2.2

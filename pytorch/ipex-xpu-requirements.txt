@@ -1,0 +1,3 @@
+intel_extension_for_pytorch==2.7.10+xpu
+oneccl_bind_pt==2.7.0+xpu
+--extra-index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/cn
