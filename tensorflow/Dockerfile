@@ -97,9 +97,9 @@ ARG PYTHON_VERSION
 # RUN if eval "which conda > /dev/null"; then \
 #         rm -rf /opt/conda/envs/idp/lib/python${PYTHON_VERSION}/site-packages/google/auth/crypt/__pycache__/; \
 #         conda clean -y  --all; \
-#     fi 
+#     fi
 
-## For Trivy compliance for key secrets 
+## For Trivy compliance for key secrets
 # RUN pip uninstall -y google-auth google-auth-oauthlib
 
 FROM itex-xpu-base AS itex-xpu-jupyter
