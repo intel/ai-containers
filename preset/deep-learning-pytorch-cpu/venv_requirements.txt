@@ -1,2 +1,2 @@
-evaluate==0.4.3
+evaluate==0.4.4
 optimum-intel
