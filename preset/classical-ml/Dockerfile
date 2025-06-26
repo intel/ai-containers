@@ -38,8 +38,6 @@ RUN apt-get update -y && \
         xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
-RUN apt-get remove libexpat1 -y
-
 # Setting up non-root directories
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash -m dev
 USER dev
@@ -60,8 +58,9 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
     conda install -y \
         'jupyterlab>=4.2.6' \
         'notebook>=7.1.3' \
+        'urllib3>=2.5.0' \
+        'requests>=2.32.4' \
         'nb_conda_kernels>=2.5.1' \
-        'libexpat>=2.7.0' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -71,8 +70,6 @@ RUN wget --progress=dot:giga --no-check-certificate https://github.com/conda-for
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
 
-# Improve interoperabilty among conda an pypi packages
-RUN conda config --set pip_interop_enabled True
 
 COPY requirements.txt .
 
@@ -97,13 +94,11 @@ RUN conda create -yn classical-ml \
         'ipykernel>=6.29.5' \
         'kernda>=0.3.0' \
         'matplotlib-base>=3.10.1' \
-        "modin-ray=${MODIN_VERSION}" \
-        "ray-core>2.9" \
         "scikit-learn-intelex=${SKLEARNEX_VERSION}" \
         "xgboost=${XGBOOST_VERSION}" \
+        'requests>=2.32.4' \
+        'pandas>=2.3.0' \
         "scikit-learn"=1.5.2 \
-        'libexpat>=2.7.0' \
-        'libxml2=2.13' \
         && \
     conda clean -y --all
 
