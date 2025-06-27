@@ -17,7 +17,7 @@ Intel GPUs benefit from enhancements brought by [vLLM V1 engine](https://blog.vl
 Besides, following up vLLM V1 design, corresponding optimized kernels are implemented for Intel GPUs.
 * chunked_prefill:
 
-  chunked_prefill is an optimization feature in vLLM that allows large prefill requests to be divided into small chunks and batched together with decode requests. This approach prioritizes decode requests, improving inter-token latency (ITL) and GPU utilization by combining compute-bound (prefill) and memory-bound (decode) requests in the same batch. vLLM v1 engine is built on this feature and in this release, it's also supported on intel GPUs by leveraging corresponding kernel from Intel® Extension\* for PyTorch for model execution.
+  chunked_prefill is an optimization feature in vLLM that allows large prefill requests to be divided into small chunks and batched together with decode requests. This approach prioritizes decode requests, improving inter-token latency (ITL) and GPU utilization by combining compute-bound (prefill) and memory-bound (decode) requests in the same batch. vLLM v1 engine is built on this feature and in this release, it's also supported on intel GPUs by leveraging corresponding kernel from Intel® Extension for PyTorch\* for model execution.
 
 * FP8 W8A16:
 
@@ -34,14 +34,14 @@ Besides, following up vLLM V1 design, corresponding optimized kernels are implem
 
 
   :::{warning}
-  Currently, we load the model at original precision before quantizing down to 8-bits, so you need enough memory to load the whole model.
+  Currently, we load the model to GPU at original precision before quantizing down to 8-bits, so you need enough memory to load the whole model.
   :::
 
 ## Optimizations
 * tensor parallel inference: Intel® oneAPI Collective Communications Library(oneCCL) is optimized to provide boosted performance in Intel® Arc™ B-Series graphics cards inference.
 * GQA kernel optimization: An optimized version of Grouped-Query Attention(GQA) kernel is adopted and obvious perf improvement is observed in models like Qwen and Llama.
 
-## Supported Models(To Be Added)
+## Supported Models
 The table below lists models that have been verified by Intel. However, there should be broader models that are supported by vLLM work on Intel® GPUs.
 
 | Model Type | Model (company/model name) | Dynamic Online FP8 |
@@ -65,26 +65,25 @@ The table below lists models that have been verified by Intel. However, there sh
 
 ## 2. Limitations
 
-Some of vLLM V1 features may need extra support, including `torch.compile` support, speculative decoding, LoRA, pipeline parallel on Ray, EP/TP MoE, DP Attentions and MLA related.
+Some of vLLM V1 features may need extra support, including `torch.compile` support, speculative decoding, LoRA(Low-Rank Adaptation), pipeline parallel on Ray, EP(Expert Parallelism)/TP(Tensor Parallelism) MoE(Mixture of Experts), DP(Data Parallelism) Attention and MLA(Multi-head Latent Attention).
 
 The following issues are known issues:
-* MoE models performance is not optimized, including deepseek-v2 lite, Qwen3, Qwen3-30B-A3B, etc.
+* MoE models performance is not optimized, including deepseek-v2 lite, Qwen3-30B-A3B, etc.
 * W8A8 quantized models through llm_compressor are not supported yet, like RedHatAI/DeepSeek-R1-Distill-Qwen-32B-FP8-dynamic.
 
-## 3. How to Get Started  (To Be Updated)
+## 3. How to Get Started
 
 ### 3.1. Prerequisite
 
 | OS | Hardware |
 | ---------- | ---------- |
-| Ubuntu 24.10 | Intel® Arc™ B580 |
-| Ubuntu 22.04 | Intel® Data Center GPU Max Series |
+| Ubuntu 24.04 | Intel® Arc™ B-Series |
 
 ### 3.2. Prepare a Serving Environment
 
-1. Follow [instructions](https://dgpu-docs.intel.com/driver/overview.html) to install driver packages.
-2. Get the released docker image with command `docker pull intel/vllm:xpu`
-3. Instantiate a docker container with command `docker run -t -d --shm-size 10g --net=host --ipc=host --privileged -v /dev/dri/by-path:/dev/dri/by-path --name=vllm-test --device /dev/dri:/dev/dri --entrypoint= intel/vllm:xpu /bin/bash`
+1. Get the released docker image with command `docker pull intel/vllm:xpu`
+2. Instantiate a docker container with command `docker run -t -d --shm-size 10g --net=host --ipc=host --privileged -v /dev/dri/by-path:/dev/dri/by-path --name=vllm-test --device /dev/dri:/dev/dri --entrypoint= intel/vllm:xpu /bin/bash`
+3. Source openapi envs to ensure correct variables set with command `docker exec great_taussig  /bin/bash -c  "source /opt/intel/oneapi/setvars.sh"`
 4. Run command `docker exec -it vllm-test bash` in 2 separate terminals to enter container environments for the server and the client respectively.
 
 \* Starting from here, all commands are expected to be run inside the docker container, if not explicitly noted.
@@ -102,8 +101,10 @@ export HUGGING_FACE_HUB_TOKEN=xxxxxx
 Command:
 
 ```bash
-VLLM_USE_V1=1 W_LONG_MAX_MODEL_LEN=1 VLLM_WORKER_MULTIPROC_METHOD=spawn  python3 -m vllm.entrypoints.openai.api_server --model TechxGenus/Meta-Llama-3-8B-GPTQ --dtype=float16 --device=xpu --enforce-eager --port 8000  --block-size 64 --gpu-memory-util 0.85 --trust-remote-code --disable-sliding-window
+TORCH_LLM_ALLREDUCE=1 VLLM_USE_V1=1 VLLM_WORKER_MULTIPROC_METHOD=spawn  python3 -m vllm.entrypoints.openai.api_server --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --dtype=float16 --device=xpu --enforce-eager --port 8000  --block-size 64 --gpu-memory-util 0.9  --no-enable-prefix-caching --trust-remote-code --disable-sliding-window --disable-log-requests --max_num_batched_tokens=8192 --max_model_len 4096 -tp=4 --quantization fp8
 ```
+
+Note that by default fp8 online quantization will use `e5m2` and you can switch to use `e4m3` by explicitly add env `VLLM_XPU_FP8_DTYPE=e4m3`.
 
 Expected output:
 
@@ -145,10 +146,10 @@ We leverage a [benchmarking script](https://github.com/vllm-project/vllm/blob/ma
 Use the command below to shoot serving requests:
 
 ```bash
-python3 benchmarks/benchmark_serving.py --model TechxGenus/Meta-Llama-3-8B-GPTQ --dataset-name random --random-input-len=1024 --random-output-len=1024 --ignore-eos --num-prompt 1 --max-concurrency 16 --request-rate inf --backend vllm --port=8000 --host 0.0.0.0
+python3 benchmarks/benchmark_serving.py --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --dataset-name random --random-input-len=1024 --random-output-len=1024 --ignore-eos --num-prompt 1 --max-concurrency 16 --request-rate inf --backend vllm --port=8000 --host 0.0.0.0
 ```
 
-The command uses model `TechxGenus/Meta-Llama-3-8B-GPTQ`. Both input and output token sizes are set to `1024`. Maximally `16` requests are processed concurrently in the server.
+The command uses model `deepseek-ai/DeepSeek-R1-Distill-Qwen-32B`. Both input and output token sizes are set to `1024`. Maximally `16` requests are processed concurrently in the server.
 
 Expected output:
 
