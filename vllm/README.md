@@ -46,6 +46,7 @@ The table below lists models that have been verified by Intel. However, there sh
 
 | Model Type | Model (company/model name) | Dynamic Online FP8 |
 | ---------- | -------------------------- | --- |
+| Text Generation | deepseek-ai/DeepSeek-R1-Distill-Llama-8B |✅︎|
 | Text Generation | deepseek-ai/DeepSeek-R1-Distill-Qwen-14B |✅︎|
 | Text Generation | deepseek-ai/DeepSeek-R1-Distill-Qwen-32B |✅︎|
 | Text Generation | deepseek-ai/DeepSeek-R1-Distill-Llama-70B |✅︎|
@@ -83,7 +84,7 @@ The following issues are known issues:
 
 1. Get the released docker image with command `docker pull intel/vllm:xpu`
 2. Instantiate a docker container with command `docker run -t -d --shm-size 10g --net=host --ipc=host --privileged -v /dev/dri/by-path:/dev/dri/by-path --name=vllm-test --device /dev/dri:/dev/dri --entrypoint= intel/vllm:xpu /bin/bash`
-3. Source openapi envs to ensure correct variables set with command `docker exec great_taussig  /bin/bash -c  "source /opt/intel/oneapi/setvars.sh"`
+3. Source openapi envs to ensure correct variables set with command `docker exec great_taussig  /bin/bash -c  "source /opt/intel/oneapi/setvars.sh --force"`
 4. Run command `docker exec -it vllm-test bash` in 2 separate terminals to enter container environments for the server and the client respectively.
 
 \* Starting from here, all commands are expected to be run inside the docker container, if not explicitly noted.
