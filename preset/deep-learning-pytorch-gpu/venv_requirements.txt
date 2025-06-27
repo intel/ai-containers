@@ -1,2 +1,2 @@
-evaluate==0.4.3
+evaluate==0.4.4
 # git+https://github.com/huggingface/optimum-intel.git
