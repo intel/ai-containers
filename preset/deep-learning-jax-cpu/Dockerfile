@@ -38,8 +38,6 @@ RUN apt-get update -y && \
         xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
-RUN apt-get remove libexpat1 -y
-
 RUN useradd --uid 1000 -d /home/dev -s /bin/bash -m dev
 USER dev
 WORKDIR /home/dev
@@ -59,8 +57,9 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     conda install -y \
         'jupyterlab>=4.2.6' \
         'notebook>=7.1.3' \
+        'urllib3>=2.5.0' \
+        'requests>=2.32.4' \
         'nb_conda_kernels>=2.5.1' \
-        'libexpat>=2.7.0' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -69,7 +68,6 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     conda config --add channels ${INTEL_CHANNEL}
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
-RUN conda config --set pip_interop_enabled True
 
 COPY requirements.txt .
 RUN python -m pip install --no-cache-dir \
@@ -79,7 +77,6 @@ FROM deep-learning-base as deep-learning
 
 ARG IDP_VERSION
 ARG DPNP_VERSION
-ARG MODIN_VERSION
 ARG NUMPY_VERSION
 ARG MKL_VERSION
 
@@ -97,10 +94,9 @@ RUN conda create -yn 'jax-cpu' \
         "mkl=${MKL_VERSION}" \
         'ipykernel>=6.29.5' \
         'kernda>=0.3.0' \
-        'libexpat>=2.7.0' \
         && \
     conda clean -y --all
-
+RUN conda clean --force-pkgs-dirs
 EXPOSE 8888
 
 RUN mkdir -p ~/jupyter/ && chmod -R a+rwx ~/jupyter/ && \

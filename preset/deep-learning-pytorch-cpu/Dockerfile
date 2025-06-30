@@ -50,7 +50,6 @@ RUN apt-get update -y && \
         xz-utils \
     && \
     rm -rf /var/lib/apt/lists/*
-RUN apt-get remove libexpat1 -y
 
 ##########################
 # Setting up non-root directories
@@ -74,7 +73,8 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
         'jupyterlab>=4.2.6' \
         'notebook>=7.1.3' \
         'nb_conda_kernels>=2.5.1' \
-        'libexpat>=2.7.0' \
+        'urllib3>=2.5.0' \
+        'requests>=2.32.4' \
     && \
     jupyter labextension disable "@jupyterlab/apputils-extension:announcements" \
     && \
@@ -83,9 +83,6 @@ RUN wget --progress=dot:giga --no-check-certificate "https://github.com/conda-fo
     conda config --add channels ${INTEL_CHANNEL}
 
 ENV PATH ${CONDA_ROOT}/condabin:${CONDA_ROOT}/bin/:${PATH}
-
-# Improve interoperabilty among conda an pypi packages
-RUN conda config --set pip_interop_enabled True
 
 COPY requirements.txt .
 RUN python -m pip install --no-cache-dir \
@@ -112,7 +109,9 @@ ARG NEURAL_COMPRESSOR_VERSION
 RUN conda create -yn 'pytorch-cpu' \
     -c huggingface \
         "python=${PYTHON_VERSION}" \
-        'accelerate==0.32.1' \
+        #####################
+        'accelerate' \
+        'mkl=2025.0.*' \
         "dpnp=${DPNP_VERSION}" \
         "intel-extension-for-pytorch=${IPEX_CPU_VERSION}" \
         "neural-compressor=${NEURAL_COMPRESSOR_VERSION}" \
@@ -126,10 +125,10 @@ RUN conda create -yn 'pytorch-cpu' \
         "torchvision=${TORCHVISION_CPU_VERSION}" \
         "onnxruntime=${ONNXRUNTIME_VERSION}" \
         "deepspeed=${DEEPSPEED_VERSION}" \
-        'tensorboardx>=2.6.2.2' \
-        'libexpat>=2.7.0' \
         && \
     conda clean -y --all
+
+RUN conda clean --force-pkgs-dirs
 
 COPY venv_requirements.txt .
 RUN conda run -n 'pytorch-cpu' python -m pip install --no-cache-dir -r venv_requirements.txt && \

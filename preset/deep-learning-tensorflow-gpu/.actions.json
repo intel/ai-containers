@@ -1,5 +1,0 @@
-{
-    "PYTHON_VERSION": ["3.11"],
-    "experimental": [true],
-    "runner_label": ["PVC"]
-}
