@@ -82,7 +82,7 @@ The following issues are known issues:
 
 ### 3.2. Prepare a Serving Environment
 
-1. Get the released docker image with command `docker pull intel/vllm:xpu`
+1. Get the released docker image with command `docker pull intel/vllm:0.8.3-xpu`
 2. Instantiate a docker container with command `docker run -t -d --shm-size 10g --net=host --ipc=host --privileged -v /dev/dri/by-path:/dev/dri/by-path --name=vllm-test --device /dev/dri:/dev/dri --entrypoint= intel/vllm:xpu /bin/bash`
 3. Source openapi envs to ensure correct variables set with command `docker exec great_taussig  /bin/bash -c  "source /opt/intel/oneapi/setvars.sh --force"`
 4. Run command `docker exec -it vllm-test bash` in 2 separate terminals to enter container environments for the server and the client respectively.
@@ -102,7 +102,7 @@ export HUGGING_FACE_HUB_TOKEN=xxxxxx
 Command:
 
 ```bash
-TORCH_LLM_ALLREDUCE=1 VLLM_USE_V1=1 VLLM_WORKER_MULTIPROC_METHOD=spawn  python3 -m vllm.entrypoints.openai.api_server --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --dtype=float16 --device=xpu --enforce-eager --port 8000  --block-size 64 --gpu-memory-util 0.9  --no-enable-prefix-caching --trust-remote-code --disable-sliding-window --disable-log-requests --max_num_batched_tokens=8192 --max_model_len 4096 -tp=4 --quantization fp8
+TORCH_LLM_ALLREDUCE=1 VLLM_USE_V1=1 VLLM_WORKER_MULTIPROC_METHOD=spawn python3 -m vllm.entrypoints.openai.api_server --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --dtype=float16 --device=xpu --enforce-eager --port 8000  --block-size 64 --gpu-memory-util 0.9  --no-enable-prefix-caching --trust-remote-code --disable-sliding-window --disable-log-requests --max_num_batched_tokens=8192 --max_model_len 4096 -tp=4 --quantization fp8
 ```
 
 Note that by default fp8 online quantization will use `e5m2` and you can switch to use `e4m3` by explicitly add env `VLLM_XPU_FP8_DTYPE=e4m3`.
