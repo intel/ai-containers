@@ -26,7 +26,7 @@ jobs:
       groups: ${{ steps.group-list.outputs.FOLDERS }}
     steps:
     - name: Harden Runner
-      uses: step-security/harden-runner@002fdce3c6a235733a90a27c80493a3241e56863 # v2.12.1
+      uses: step-security/harden-runner@6c439dc8bdf85cadbbce9ed30d1c7b959517bc49 # v2.12.2
       with:
         egress-policy: block
         allowed-endpoints: >
@@ -118,7 +118,7 @@ jobs:
         } >> output.txt
     - name: PR-comment
       if: ${{ steps.summary.outputs.summary != 'false' }}
-      uses: marocchino/sticky-pull-request-comment@67d0dec7b07ed060a405f9b2a64b8ab319fdd7db # v2.9.2
+      uses: marocchino/sticky-pull-request-comment@d2ad0de260ae8b0235ce059e63f2949ba9e05943 # v2.9.3
       with:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         number: ${{ github.event.pull_request.number }}
