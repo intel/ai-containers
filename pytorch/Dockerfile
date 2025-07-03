@@ -82,7 +82,7 @@ RUN python -m pip install --no-cache-dir -r torch-xpu-requirements.txt && \
 COPY whls /tmp/whls/
 
 RUN python -m pip install /tmp/whls/* && \
-    rm -rf /tmp/whls 
+    rm -rf /tmp/whls
 
 FROM ipex-xpu-base-wheels AS ipex-xpu-jupyter
 
@@ -176,7 +176,7 @@ RUN python -m pip install --no-cache-dir -r other-requirements.txt && \
 COPY whls /tmp/whls
 
 RUN python -m pip install /tmp/whls/* && \
-    rm -rf /tmp/whls 
+    rm -rf /tmp/whls
 
 FROM torchserve-base AS torchserve-cpu
 
