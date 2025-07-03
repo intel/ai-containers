@@ -308,7 +308,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 | `2.15.0-xpu-idp-jupyter` | [v2.1.0] | [v2.15.0.0]  | [803]  | `8888`   | [v0.4.0-Beta]   |
 
 > [!NOTE]
->  The support for CPU and XPU images containing Intel® Distribution for Python* are deprecated with no new releases. However, pip based images will be supported.
+> The support for CPU and XPU images containing Intel® Distribution for Python* are deprecated with no new releases. However, pip based images will be supported.
 
 ## Build from Source
 
