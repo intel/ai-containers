@@ -156,9 +156,9 @@ ARG CCL_VER
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends --fix-missing \
-    intel-oneapi-runtime-dpcpp-cpp=${DPCPP_VER} \
-    intel-oneapi-runtime-mkl=${MKL_VER} \
-    intel-oneapi-runtime-ccl=${CCL_VER} && \
+    intel-oneapi-runtime-dpcpp-cpp \
+    intel-oneapi-runtime-mkl \
+    intel-oneapi-runtime-ccl && \
     rm -rf  /var/lib/apt/lists/*
 
 RUN  rm -rf /etc/apt/sources.list.d/oneAPI.list

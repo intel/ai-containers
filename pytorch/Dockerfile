@@ -76,8 +76,13 @@ COPY ipex-xpu-requirements.txt .
 RUN python -m pip install --no-cache-dir -r torch-xpu-requirements.txt && \
     rm -rf torch-xpu-requirements.txt
 
-RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
-    rm -rf ipex-xpu-requirements.txt
+# RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
+#     rm -rf ipex-xpu-requirements.txt
+
+COPY whls /tmp/whls/
+
+RUN python -m pip install /tmp/whls/* && \
+    rm -rf /tmp/whls 
 
 FROM ipex-xpu-base-wheels AS ipex-xpu-jupyter
 
@@ -158,12 +163,20 @@ FROM torchserve-base AS compile-xpu
 
 COPY serving/torchserve-xpu-requirements.txt .
 COPY serving/ipex-xpu-requirements.txt .
+COPY serving/other-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt && \
     rm -rf torchserve-xpu-requirements.txt
 
-RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
-    rm -rf ipex-xpu-requirements.txt
+RUN python -m pip install --no-cache-dir -r other-requirements.txt && \
+    rm -rf other-requirements.txt
+
+# RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
+#     rm -rf ipex-xpu-requirements.txt
+COPY whls /tmp/whls
+
+RUN python -m pip install /tmp/whls/* && \
+    rm -rf /tmp/whls 
 
 FROM torchserve-base AS torchserve-cpu
 
