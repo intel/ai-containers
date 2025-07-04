@@ -307,6 +307,9 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 | `2.15.0.1-xpu-idp-jupyter` | [v2.15.1] | [v2.15.0.1]  | [803]  | `8888`   | [v0.4.0-Beta]   |
 | `2.15.0-xpu-idp-jupyter` | [v2.1.0] | [v2.15.0.0]  | [803]  | `8888`   | [v0.4.0-Beta]   |
 
+> [!NOTE]
+> The support for CPU and XPU images containing Intel® Distribution for Python* are deprecated with no new releases. However, pip based images will be supported.
+
 ## Build from Source
 
 To build the images from source, clone the [AI Containers](https://github.com/intel/ai-containers) repository, follow the main `README.md` file to setup your environment, and run the following command:
