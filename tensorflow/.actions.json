@@ -1,5 +1,5 @@
 {
-    "PACKAGE_OPTION": ["pip", "idp"],
+    "PACKAGE_OPTION": ["pip"],
     "experimental": [true],
     "runner_label": ["PVC"]
 }
