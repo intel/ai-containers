@@ -26,12 +26,11 @@ services:
         BASE_IMAGE_TAG: ${BASE_IMAGE_TAG:-22.04}
         GITHUB_RUN_NUMBER: ${GITHUB_RUN_NUMBER:-0}
         MINIFORGE_VERSION: ${MINIFORGE_VERSION:-Linux-x86_64}
-        PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
         PYTHON_VERSION: ${PYTHON_VERSION:-3.11}
         REGISTRY: ${REGISTRY}
         REPO: ${REPO}
         TF_VERSION: ${TF_VERSION:-2.15.1}
-      target: tf-base-${PACKAGE_OPTION:-pip}
+      target: tf-base
       context: .
       labels:
         dependency.python: ${PYTHON_VERSION:-3.11}
@@ -40,20 +39,20 @@ services:
         org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.name: "intel/intel-optimized-tensorflow"
         org.opencontainers.image.title: "Intel® Extension for TensorFlow Base Image"
-        org.opencontainers.image.version: ${TF_VERSION:-2.15.1}-${PACKAGE_OPTION:-pip}-base
+        org.opencontainers.image.version: ${TF_VERSION:-2.15.1}-pip-base
     depends_on:
-      - ${PACKAGE_OPTION:-pip}
+      - pip
     command: >
       python -c 'import tensorflow as tf; print("Tensorflow Version:", tf.__version__)'
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-${TF_VERSION:-2.15.1}-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.11}-${TF_VERSION:-2.15.1}-base
     pull_policy: always
   jupyter:
     build:
       labels:
         dependency.python.pip: jupyter-requirements.txt
-        org.opencontainers.base.name: "intel/intel-optimized-tensorflow:${TF_VERSION:-2.15.1}-${PACKAGE_OPTION:-pip}-base"
+        org.opencontainers.base.name: "intel/intel-optimized-tensorflow:${TF_VERSION:-2.15.1}-pip-base"
         org.opencontainers.image.title: "Intel® Extension for TensorFlow Jupyter Image"
-        org.opencontainers.image.version: ${TF_VERSION:-2.15.1}-${PACKAGE_OPTION:-pip}-jupyter
+        org.opencontainers.image.version: ${TF_VERSION:-2.15.1}-pip-jupyter
       target: jupyter
     command: >
       bash -c "python -m jupyter --version"
@@ -61,7 +60,7 @@ services:
       http_proxy: ${http_proxy}
       https_proxy: ${https_proxy}
     extends: tf-base
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-${TF_VERSION:-2.15.1}-jupyter
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.11}-${TF_VERSION:-2.15.1}-jupyter
     network_mode: host
     volumes:
       - /$PWD:/jupyter
@@ -70,46 +69,46 @@ services:
       args:
         no_proxy: ''
         NO_PROXY: ''
-        PYTHON_BASE: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xpu-base
+        PYTHON_BASE: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.11}-xpu-base
       labels:
         dependency.idp.pip: false
         org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.title: "Intel® Extension for TensorFlow XPU Base Image"
-        org.opencontainers.image.version: ${TF_VER:-2.15.1}-xpu-${PACKAGE_OPTION:-pip}-base
+        org.opencontainers.image.version: ${TF_VER:-2.15.1}-xpu-pip-base
       target: itex-xpu-base
     command: >
       bash -c "python -c 'import tensorflow as tf;print(tf.__version__);from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'"
     extends: tf-base
     depends_on:
       - xpu-dl-essentials
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-base
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-base
   xpu-jupyter:
     build:
       labels:
         dependency.python.pip: jupyter-requirements.txt
-        org.opencontainers.base.name: "intel/intel-optimized-tensorflow:${TF_VERSION:-2.15.1}-xpu-${PACKAGE_OPTION:-pip}-base"
+        org.opencontainers.base.name: "intel/intel-optimized-tensorflow:${TF_VERSION:-2.15.1}-xpu-pip-base"
         org.opencontainers.image.title: "Intel® Extension for TensorFlow XPU Jupyter Image"
-        org.opencontainers.image.version: ${TF_VER:-2.15.1}-xpu-${PACKAGE_OPTION:-pip}-jupyter
+        org.opencontainers.image.version: ${TF_VER:-2.15.1}-xpu-pip-jupyter
       target: itex-xpu-jupyter
     extends: itex-xpu-base
     command: >
       bash -c "python -m jupyter --version"
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-jupyter
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.11}-itex-${TF_VERSION:-2.15.1}-itex-xpu-jupyter
   itex-xpu-dl-essentials:
     build:
       args:
         no_proxy: ''
         NO_PROXY: ''
-        PYTHON_BASE: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xpu-dl-essentials
+        PYTHON_BASE: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.11}-xpu-dl-essentials
       labels:
         dependency.idp.pip: false
         org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.title: "Intel® Extension for TensorFlow XPU Base Image"
-        org.opencontainers.image.version: ${TF_VER:-2.15.1}-xpu-${PACKAGE_OPTION:-pip}-base
+        org.opencontainers.image.version: ${TF_VER:-2.15.1}-xpu-pip-base
       target: itex-xpu-base
     command: >
       bash -c "source /opt/intel/oneapi/setvars.sh && python -c 'import tensorflow as tf;print(tf.__version__);from tensorflow.python.client import device_lib;print(device_lib.list_local_devices())'"
     extends: tf-base
     depends_on:
       - xpu-dl-essentials
-    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-itex-xpu-dl-essentials
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-pip-py${PYTHON_VERSION:-3.11}-itex-xpu-dl-essentials
