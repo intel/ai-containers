@@ -23,11 +23,10 @@ ARG REPO
 ARG GITHUB_RUN_NUMBER
 ARG BASE_IMAGE_NAME
 ARG BASE_IMAGE_TAG
-ARG PACKAGE_OPTION=pip
 ARG PYTHON_VERSION
-ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-${PACKAGE_OPTION}-py${PYTHON_VERSION}-base
+ARG PYTHON_BASE=${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER}-${BASE_IMAGE_NAME}-${BASE_IMAGE_TAG}-pip-py${PYTHON_VERSION}-base
 
-FROM ${PYTHON_BASE} AS tf-base-pip
+FROM ${PYTHON_BASE} AS tf-base
 
 # Intel Optimizations specific Envs
 ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
@@ -43,28 +42,7 @@ RUN python -m pip install --no-cache-dir -r requirements.txt && \
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/THIRD-PARTY-PROGRAMS.txt /licenses/
 ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-program-of-intel-extension-for-tensorflow.txt /licenses/
 
-FROM ${PYTHON_BASE} AS tf-base-idp
-
-# Intel Optimizations specific Envs
-ENV KMP_AFFINITY='granularity=fine,verbose,compact,1,0' \
-    KMP_BLOCKTIME=1 \
-    KMP_SETTINGS=1
-
-ENV PATH /usr/bin:/root/conda/envs/idp/bin:/root/conda/condabin:~/conda/bin/:${PATH}
-
-ENV TF_ENABLE_ONEDNN_OPTS=1
-
-WORKDIR /
-COPY requirements.txt .
-
-RUN python -m pip install --no-cache-dir -r requirements.txt && \
-    rm -rf requirements.txt && \
-    conda clean -y --all
-
-ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/THIRD-PARTY-PROGRAMS.txt /licenses/
-ADD https://raw.githubusercontent.com/intel/intel-extension-for-tensorflow/master/third-party-programs/dockerlayer/third-party-program-of-intel-extension-for-tensorflow.txt /licenses/
-
-FROM tf-base-${PACKAGE_OPTION} AS jupyter
+FROM tf-base AS jupyter
 
 WORKDIR /jupyter
 COPY jupyter-requirements.txt .
