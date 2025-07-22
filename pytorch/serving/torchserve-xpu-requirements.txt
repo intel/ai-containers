@@ -1,5 +1,4 @@
-torch==2.8.0.dev20250618
+torch==2.8.0
+torchvision==0.23.0+xpu
+torchaudio==2.8.0+xpu
 --index-url https://download.pytorch.org/whl/test/xpu
-torchvision==0.23.0.dev20250618+xpu
-torchaudio==2.8.0.dev20250618+xpu
---extra-index-url https://download.pytorch.org/whl/nightly/xpu

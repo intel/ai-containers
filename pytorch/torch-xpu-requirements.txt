@@ -1,9 +1,8 @@
 --index-url https://download.pytorch.org/whl/test/xpu
---extra-index-url https://download.pytorch.org/whl/nightly/xpu
 
-torch==2.8.0.dev20250618
-torchvision==0.23.0.dev20250618+xpu
-torchaudio==2.8.0.dev20250618+xpu
+torch==2.8.0
+torchvision==0.23.0+xpu
+torchaudio==2.8.0+xpu
 numpy>=1.26.4
 idna>=3.7
 requests>=2.32.0
