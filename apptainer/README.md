@@ -4,7 +4,7 @@ Apptainer (formerly Singularity) is an [open-source](https://github.com/apptaine
 
 ## Install Apptainer
 
-You will need a linux system to install and use apptainers. You can install Apptainer either from source or from pre-built packages. Refer to installation instructions provided [here](https://apptainer.org/docs/admin/main/installation.html).
+You will need a linux system to install and use apptainers. You can install Apptainer either from source or from pre-built packages. Refer to installation [instructions] (https://apptainer.org/docs/admin/main/installation.html).
 
 ## Project Setup
 
@@ -20,7 +20,7 @@ apptainer registry login docker://${REGISTRY}
 apptainer pull oras://$REGISTRY/$REPO:latest-sif
 ```
 
-You can refer to the [link](https://apptainer.org/docs/user/latest/docker_and_oci.html#containers-from-other-registries) for
+You can refer to the different container [registries](https://apptainer.org/docs/user/latest/docker_and_oci.html#containers-from-other-registries) for
 Apptainer support for different container registries.
 
 ## Build and Push Apptainer
