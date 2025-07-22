@@ -49,7 +49,7 @@
             "repo-name": "intel/intel-optimized-xla"
         },
         {
-            "fname": "./vllm/README.md",
+            "fname": "./vllm/vllm-readme.md",
             "repo-name": "intel/vllm"
         }
     ]
