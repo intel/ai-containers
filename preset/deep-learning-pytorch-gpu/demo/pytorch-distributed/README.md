@@ -16,7 +16,7 @@ Following are the prerequisites before starting with distributed execution on In
 
 * Make sure all nodes can communicate with each other using networking.
 * SSH is set up correctly to communicate securely between the containers. Instructions to setup SSH correctly with the container are provided in [Setup SSH](#setup-ssh)
-* To run the workload on GPU machine, please make sure you've installed correct drivers on all nodes. You can follow the instructions provided [here](https://dgpu-docs.intel.com/driver/installation.html) to install the stable drivers.
+* To run the workload on GPU machine, please make sure you've installed correct drivers on all nodes. You can follow the [instructions](https://dgpu-docs.intel.com/driver/installation.html) to install the stable drivers.
 
 ## Setup
 
@@ -131,7 +131,7 @@ Once the [prerequisites](#prerequisites) have been met and the [setup](#setup) h
 
 ### Run on [Intel Flex/Max GPUs](https://www.intel.com/content/www/us/en/products/details/discrete-gpus/data-center-gpu.html) machines
 
->**Note:** Before you run on the GPUs you need to make sure the drivers are installed correctly on all nodes. Please follow the instructions provided [here](https://dgpu-docs.intel.com/driver/installation.html) to install the drivers.
+>**Note:** Before you run on the GPUs you need to make sure the drivers are installed correctly on all nodes. Please follow the [instructions](https://dgpu-docs.intel.com/driver/installation.html) to install the drivers.
 
 #### Run on worker nodes
 
@@ -163,7 +163,7 @@ Please, run the following commands on all worker nodes in a shell to launch the 
     ```
 
 > [!NOTE]
-> That some parameters to the sshd utility need to be modified based on your configuration. For example, you might want to modify the `-p`(port) parameter to specify a different port if 12345 is not available. You can find out more options available to the SSH Daemon [here](https://www.ssh.com/academy/ssh/sshd#command-line-options).
+> That some parameters to the sshd utility need to be modified based on your configuration. For example, you might want to modify the `-p`(port) parameter to specify a different port if 12345 is not available. You can find out more [options]((https://www.ssh.com/academy/ssh/sshd#command-line-options)) available to the SSH Daemon.
 
 ##### Run on launcher nodes
 
