@@ -1,6 +1,6 @@
-# Optimize LLM serving with vLLM on Intel? GPUs
+# Optimize LLM serving with vLLM on Intel® GPUs
 
-vLLM is a fast and easy-to-use library for LLM inference and serving. It has evolved into a community-driven project with contributions from both academia and industry. Intel, as one of the community contributors, is working actively to bring satisfying performance with vLLM on Intel? platforms, including Intel? Xeon? Scalable Processors, Intel? discrete GPUs, as well as Intel? Gaud? AI accelerators. This blog focuses on Intel? discrete GPUs at this time and brings you the necessary information to get the workloads running well on your Intel? graphics cards.
+vLLM is a fast and easy-to-use library for LLM inference and serving. It has evolved into a community-driven project with contributions from both academia and industry. Intel, as one of the community contributors, is working actively to bring satisfying performance with vLLM on Intel® platforms, including Intel® Xeon® Scalable Processors, Intel® discrete GPUs, as well as Intel® Gaudi® AI accelerators. This readme focuses on Intel® discrete GPUs at this time and brings you the necessary information to get the workloads running well on your Intel® graphics cards.
 
 ## 1. What's Supported?
 
@@ -13,15 +13,15 @@ Intel GPUs benefit from enhancements brought by [vLLM V1 engine](https://blog.vl
 * Efficient Input Preparation
 * Enhanced Support for Multimodal LLMs
 
-Moreover, **`chunked_prefill`**, an optimization feature in vLLM that allows large prefill requests to be divided into small chunks and batched together with decode requests, is also enabled. This approach prioritizes decode requests, improving inter-token latency (ITL) and GPU utilization by combining compute-bound (prefill) and memory-bound (decode) requests in the same batch. vLLM v1 engine is built on this feature and in this release, it's also supported on intel GPUs by leveraging corresponding kernel from Intel? Extension for PyTorch\* for model execution.
+Moreover, **`chunked_prefill`**, an optimization feature in vLLM that allows large prefill requests to be divided into small chunks and batched together with decode requests, is also enabled. This approach prioritizes decode requests, improving inter-token latency (ITL) and GPU utilization by combining compute-bound (prefill) and memory-bound (decode) requests in the same batch. vLLM v1 engine is built on this feature and in this release, it's also supported on intel GPUs by leveraging corresponding kernel from Intel® Extension for PyTorch\* for model execution.
 
 In a near future release, we will support the following features.
 
 * **Spec decode**: Speculative decoding in vLLM is a technique designed to improve inter-token latency during LLM inference by using a smaller, faster draft model to predict future tokens.
 * **Sliding window**: Sliding window attention is a mechanism used in large language models to manage memory usage efficiently by limiting the context length to a fixed window size. This approach allows the model to focus on the most recent tokens while discarding older ones, which is particularly useful for handling long sequences without exceeding memory constraints.
-* **FP8 KV cache**: We will support FP8 KV cache in this release with kernels from Intel? Extension for PyTorch\*. It allows for a larger number of tokens to be stored in the cache, effectively doubling the space available for KV cache allocation. This increase in storage capacity enhances throughput by enabling the processing of longer context lengths for individual requests or handling more concurrent request batches.
+* **FP8 KV cache**: We will support FP8 KV cache in this release with kernels from Intel® Extension for PyTorch\*. It allows for a larger number of tokens to be stored in the cache, effectively doubling the space available for KV cache allocation. This increase in storage capacity enhances throughput by enabling the processing of longer context lengths for individual requests or handling more concurrent request batches.
 
-The table below lists models that have been verified by Intel. However, there should be broader models that are supported by vLLM work on Intel? GPUs.
+The table below lists models that have been verified by Intel. However, there should be broader models that are supported by vLLM work on Intel® GPUs.
 
 | Model Type | Model |
 | ---------- | ---------- |
@@ -51,14 +51,14 @@ The following issues are known issues that we plan to fix in future releases:
 
 | OS | Hardware |
 | ---------- | ---------- |
-| Ubuntu 24.10 | Intel? Arc? B580 |
-| Ubuntu 22.04 | Intel? Data Center GPU Max Series |
+| Ubuntu 24.10 | Intel® Arc B580 |
+| Ubuntu 22.04 | Intel® Data Center GPU Max Series |
 
 ### 3.2. Prepare a Serving Environment
 
 1. Follow [instructions](https://dgpu-docs.intel.com/driver/overview.html) to install driver packages.
 2. Get the released docker image with command `docker pull intel/vllm:xpu`
-3. Instantiate a docker container with command `docker run -t -d --shm-size 10g --net=host --ipc=host --privileged -v /dev/dri/by-path:/dev/dri/by-path --name=vllm-test --device /dev/dri:/dev/dri --entrypoint= intel/vllm:xpu?/bin/bash`
+3. Instantiate a docker container with command `docker run -t -d --shm-size 10g --net=host --ipc=host --privileged -v /dev/dri/by-path:/dev/dri/by-path --name=vllm-test --device /dev/dri:/dev/dri --entrypoint= intel/vllm:xpu /bin/bash`
 4. Run command `docker exec -it vllm-test bash` in 2 separate terminals to enter container environments for the server and the client respectively.
 
 \* Starting from here, all commands are expected to be run inside the docker container, if not explicitly noted.
