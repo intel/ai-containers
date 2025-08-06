@@ -76,13 +76,8 @@ COPY ipex-xpu-requirements.txt .
 RUN python -m pip install --no-cache-dir -r torch-xpu-requirements.txt && \
     rm -rf torch-xpu-requirements.txt
 
-# RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
-#     rm -rf ipex-xpu-requirements.txt
-
-COPY whls /tmp/whls/
-
-RUN python -m pip install /tmp/whls/* && \
-    rm -rf /tmp/whls
+RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
+    rm -rf ipex-xpu-requirements.txt
 
 FROM ipex-xpu-base-wheels AS ipex-xpu-jupyter
 
@@ -171,12 +166,8 @@ RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt && \
 RUN python -m pip install --no-cache-dir -r other-requirements.txt && \
     rm -rf other-requirements.txt
 
-# RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
-#     rm -rf ipex-xpu-requirements.txt
-COPY whls /tmp/whls
-
-RUN python -m pip install /tmp/whls/* && \
-    rm -rf /tmp/whls
+RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
+    rm -rf ipex-xpu-requirements.txt
 
 FROM torchserve-base AS torchserve-cpu
 
@@ -198,7 +189,7 @@ CMD ["serve"]
 
 FROM torchserve-base AS torchserve-xpu
 
-ARG GID=110
+ARG GID=109
 
 RUN groupadd -g ${GID} render &&\
     usermod -aG video,render model-server

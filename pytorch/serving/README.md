@@ -39,7 +39,7 @@ docker run --rm -it \
            -u root \
            -v $PWD:/home/model-server \
            --device /dev/dri \
-           intel/intel-extension-for-pytorch:2.7.10-serving-xpu \
+           intel/intel-extension-for-pytorch:2.8.10-serving-xpu \
            sh -c 'python model-archive/ipex_squeezenet.py && \
            torch-model-archiver --model-name squeezenet1_1 \
            --version 1.1 \
@@ -80,7 +80,7 @@ docker run -d --rm --name server \
           --device /dev/dri \
           --group-add ${VIDEO} \
           --group-add ${RENDER} \
-          intel/intel-extension-for-pytorch:2.7.10-serving-xpu
+          intel/intel-extension-for-pytorch:2.8.10-serving-xpu
 ```
 
 After lauching the container, follow the steps below:
