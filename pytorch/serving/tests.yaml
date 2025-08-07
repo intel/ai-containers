@@ -13,7 +13,7 @@
 # limitations under the License.
 
 ipex-serving-xpu-model-archive:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.7.10}-torchserve-xpu
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.8.10}-torchserve-xpu
   cmd: /home/model-server/model-archive/mar-test.sh xpu
   entrypoint: /bin/bash
   device: ["/dev/dri"]
@@ -25,7 +25,7 @@ ipex-serving-xpu-model-archive:
   user: root
   workdir: /home/model-server/model-archive
 ipex-serving-xpu-rest-inference:
-  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.7.10}-torchserve-xpu
+  img: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-py${PYTHON_VERSION:-3.11}-ipex-${IPEX_VERSION:-2.8.10}-torchserve-xpu
   cmd: bash /home/model-server/model-store/rest-test.sh
   serving: True
   device: ["/dev/dri"]
