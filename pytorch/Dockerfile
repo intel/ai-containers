@@ -158,13 +158,9 @@ FROM torchserve-base AS compile-xpu
 
 COPY serving/torchserve-xpu-requirements.txt .
 COPY serving/ipex-xpu-requirements.txt .
-COPY serving/other-requirements.txt .
 
 RUN python -m pip install --no-cache-dir -r torchserve-xpu-requirements.txt && \
     rm -rf torchserve-xpu-requirements.txt
-
-RUN python -m pip install --no-cache-dir -r other-requirements.txt && \
-    rm -rf other-requirements.txt
 
 RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
     rm -rf ipex-xpu-requirements.txt
@@ -189,7 +185,7 @@ CMD ["serve"]
 
 FROM torchserve-base AS torchserve-xpu
 
-ARG GID=110
+ARG GID=109
 
 RUN groupadd -g ${GID} render &&\
     usermod -aG video,render model-server
