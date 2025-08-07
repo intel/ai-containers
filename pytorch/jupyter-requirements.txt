@@ -2,3 +2,5 @@ jupyterlab<4.5
 jupyterhub==5.2.1
 notebook==7.4.0a1
 jupyter-server-proxy>=4.1.2
+jinja2>=3.1.6
+setuptools>=78.1.1
