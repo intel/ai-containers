@@ -17,11 +17,11 @@
 import time
 
 from sklearn import metrics
-from sklearn.datasets import fetch_openml
+from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split
 from sklearnex import patch_sklearn
 
-x, y = fetch_openml(name="a9a", return_X_y=True)
+x, y = load_diabetes(return_X_y=True)
 
 x_train, x_test, y_train, y_test = train_test_split(
     x, y, test_size=0.2, random_state=42
