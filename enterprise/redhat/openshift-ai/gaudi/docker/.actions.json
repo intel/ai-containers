@@ -1,5 +1,0 @@
-{
-    "RHEL_OS": ["9.2"],
-    "experimental": [true],
-    "runner_label": ["gaudi2"]
-}
