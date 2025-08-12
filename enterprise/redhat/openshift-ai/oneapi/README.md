@@ -24,7 +24,7 @@ You can access the Intel® oneAPI AI Tools containers from OpenShift* AI dashboa
     oc apply -f https://raw.githubusercontent.com/intel/intel-technology-enabling-for-openshift/main/e2e/inference/accelerator_profile.yaml
     ```
 
-3. Import the Intel AI Tools containers from quay workbench registry of opendatahub ([link](https://quay.io/repository/opendatahub/workbench-images?tab=tags&tag=latest)) to your cluster by applying the image manifests.
+3. Import the Intel AI Tools containers from quay workbench registry of [opendatahub](https://quay.io/repository/opendatahub/workbench-images?tab=tags&tag=latest) to your cluster by applying the image manifests.
 
     ```bash
     oc apply -f https://raw.githubusercontent.com/intel/ai-containers/main/enterprise/redhat/openshift-ai/manifests/intel-optimized-pytorch.yaml
