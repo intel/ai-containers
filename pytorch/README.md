@@ -79,10 +79,10 @@ The images below are built only with CPU optimizations (GPU acceleration support
 | Tag(s)                     | Pytorch  | IPEX         | Dockerfile      |
 | -------------------------- | -------- | ------------ | --------------- |
 | `2.8.0-pip-base`, `latest` | [v2.8.0] | [v2.8.0+cpu] | [v0.4.0-Beta]   |
-| `2.7.0-pip-base`, | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
-| `2.7.0-pip-base`, | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
-| `2.6.0-pip-base`, | [v2.6.0] | [v2.6.0+cpu] | [v0.4.0-Beta]   |
-| `2.5.0-pip-base`, | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
+| `2.7.0-pip-base` | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
+| `2.7.0-pip-base` | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
+| `2.6.0-pip-base` | [v2.6.0] | [v2.6.0+cpu] | [v0.4.0-Beta]   |
+| `2.5.0-pip-base` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
 | `2.4.0-pip-base`           | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
 | `2.3.0-pip-base`           | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
 | `2.2.0-pip-base`           | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
