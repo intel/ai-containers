@@ -78,9 +78,11 @@ The images below are built only with CPU optimizations (GPU acceleration support
 
 | Tag(s)                     | Pytorch  | IPEX         | Dockerfile      |
 | -------------------------- | -------- | ------------ | --------------- |
-| `2.7.0-pip-base`, `latest` | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
-| `2.6.0-pip-base`, `latest` | [v2.6.0] | [v2.6.0+cpu] | [v0.4.0-Beta]   |
-| `2.5.0-pip-base`, `latest` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
+| `2.8.0-pip-base`, `latest` | [v2.8.0] | [v2.8.0+cpu] | [v0.4.0-Beta]   |
+| `2.7.0-pip-base`           | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
+| `2.7.0-pip-base`           | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
+| `2.6.0-pip-base`           | [v2.6.0] | [v2.6.0+cpu] | [v0.4.0-Beta]   |
+| `2.5.0-pip-base`           | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
 | `2.4.0-pip-base`           | [v2.4.0] | [v2.4.0+cpu] | [v0.4.0-Beta]   |
 | `2.3.0-pip-base`           | [v2.3.0] | [v2.3.0+cpu] | [v0.4.0-Beta]   |
 | `2.2.0-pip-base`           | [v2.2.0] | [v2.2.0+cpu] | [v0.3.4]        |
@@ -99,6 +101,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- |
+| `2.8.0-pip-jupyter` | [v2.8.0] | [v2.8.0+cpu] | [v0.4.0-Beta]   |
 | `2.7.0-pip-jupyter` | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
 | `2.6.0-pip-jupyter` | [v2.6.0] | [v2.6.0+cpu] | [v0.4.0-Beta]   |
 | `2.5.0-pip-jupyter` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
@@ -113,7 +116,7 @@ docker run -it --rm \
     -p 8888:8888 \
     -v $PWD/workspace:/workspace \
     -w /workspace \
-    intel/intel-extension-for-pytorch:2.7.0-pip-jupyter
+    intel/intel-extension-for-pytorch:2.8.0-pip-jupyter
 ```
 
 After running the command above, copy the URL (something like `http://127.0.0.1:$PORT/?token=***`) into your browser to access the notebook server.
@@ -283,6 +286,7 @@ The images below are [TorchServe*] with CPU Optimizations:
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- |
+| `2.8.0-serving-cpu` | [v2.8.0] | [v2.8.0+cpu] | [v0.4.0-Beta]   |
 | `2.7.0-serving-cpu` | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
 | `2.6.0-serving-cpu` | [v2.6.0] | [v2.6.0+cpu] | [v0.4.0-Beta]   |
 | `2.5.0-serving-cpu` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
@@ -307,6 +311,7 @@ The images below are built only with CPU optimizations (GPU acceleration support
 
 | Tag(s)           | Pytorch  | IPEX         | Dockerfile      |
 | ---------------- | -------- | ------------ | --------------- |
+| `2.8.0-idp-base` | [v2.8.0] | [v2.8.0+cpu] | [v0.4.0-Beta]   |
 | `2.7.0-idp-base` | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
 | `2.6.0-idp-base` | [v2.6.0] | [v2.6.0+cpu] | [v0.4.0-Beta]   |
 | `2.5.0-idp-base` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
@@ -320,6 +325,7 @@ The images below additionally include [Jupyter Notebook](https://jupyter.org/) s
 
 | Tag(s)              | Pytorch  | IPEX         | Dockerfile      |
 | ------------------- | -------- | ------------ | --------------- |
+| `2.8.0-idp-jupyter` | [v2.8.0] | [v2.8.0+cpu] | [v0.4.0-Beta]   |
 | `2.7.0-idp-jupyter` | [v2.7.0] | [v2.7.0+cpu] | [v0.4.0-Beta]   |
 | `2.6.0-idp-jupyter` | [v2.6.0] | [v2.6.0+cpu] | [v0.4.0-Beta]   |
 | `2.5.0-idp-jupyter` | [v2.5.0] | [v2.5.0+cpu] | [v0.4.0-Beta]   |
@@ -464,6 +470,7 @@ It is the image user's responsibility to ensure that any use of The images below
 [v2.3.1]: https://github.com/intel/neural-compressor/releases/tag/v2.3.1
 [v2.1.1]: https://github.com/intel/neural-compressor/releases/tag/v2.1.1
 
+[v2.8.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.8.0%2Bcpu
 [v2.7.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.7.0%2Bcpu
 [v2.6.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.6.0%2Bcpu
 [v2.5.0+cpu]: https://github.com/intel/intel-extension-for-pytorch/releases/tag/v2.5.0%2Bcpu
@@ -484,6 +491,7 @@ It is the image user's responsibility to ensure that any use of The images below
 <!-- HuggingFace transformers releases -->
 [v4.44.0]: https://github.com/huggingface/transformers/releases/tag/v4.44.0
 
+[1099]: https://dgpu-docs.intel.com/releases/packages.html?release=Rolling+2507.17&os=Ubuntu+22.04
 [1077]: https://dgpu-docs.intel.com/releases/packages.html?release=Rolling+2506.18&os=Ubuntu+22.04
 [1057]: https://dgpu-docs.intel.com/releases/packages.html?release=Rolling+2448.13&os=Ubuntu+22.04
 [950]: https://dgpu-docs.intel.com/releases/stable_950_13_20240814.html
