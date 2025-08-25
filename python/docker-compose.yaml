@@ -67,7 +67,7 @@ services:
         MKL_VER: ${MKL_VER:-2025.2.0-628}
         NO_PROXY: ''
         PACKAGE_OPTION: ${PACKAGE_OPTION:-pip}
-        XPU_SMI_VER: ${XPU_SMI_VER:-1.2.41-77~22.04}
+        XPU_SMI_VER: ${XPU_SMI_VER:-1.2.42-79~22.04}
       labels:
         dependency.apt.build-essential: true
         dependency.apt.clinfo: true
@@ -83,7 +83,7 @@ services:
         dependency.apt.ocloc-: ${OCLOC_VER:-25.05.32567.19-1099~22.04}
         dependency.apt.rsync: true
         dependency.apt.unzip: true
-        dependency.apt.xpu-smi: ${XPU_SMI_VER:-1.2.41-77~22.04}
+        dependency.apt.xpu-smi: ${XPU_SMI_VER:-1.2.42-79~22.04}
         dependency.idp.pip: false
         org.opencontainers.base.name: "intel/python:3.11-full"
         org.opencontainers.image.title: "Intel® XPU Base Image"
