@@ -37,6 +37,7 @@ jobs:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           fetch-depth: 0
+          persist-credentials: false
       - name: Output Modified Group Directories
         id: group-list
         run: |
@@ -78,6 +79,8 @@ jobs:
         with:
           egress-policy: audit
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
       - uses: eWaterCycle/setup-apptainer@4bb22c52d4f63406c49e94c804632975787312b3 # v2.0.0
         with:
           apptainer-version: 1.3.4
@@ -86,7 +89,7 @@ jobs:
           APPTAINER_DOCKER_USERNAME: ${{ secrets.REGISTRY_USER }}
           APPTAINER_DOCKER_PASSWORD: ${{ secrets.REGISTRY_TOKEN }}
         run: apptainer registry login  -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_TOKEN }} docker://${{ secrets.REGISTRY }}
-      - uses: intel/ai-containers/apptainer@main
+      - uses: intel/ai-containers/apptainer@22527f085f2accb495bf4fed7475d683b4120927
         with:
           registry: oras://${{ secrets.REGISTRY }}
           repo: ${{ secrets.REPO }}-apptainer
