@@ -30,6 +30,8 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-    - uses: intel/ai-containers/workflows/charts@main
+      with:
+        persist-credentials: false
+    - uses: intel/ai-containers/workflows/charts@22527f085f2accb495bf4fed7475d683b4120927
       with:
         kubeconfig_path: ${{ secrets.KUBECONFIG_PATH }}

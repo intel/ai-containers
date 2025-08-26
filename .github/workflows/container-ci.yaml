@@ -70,12 +70,18 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      with:
+        persist-credentials: false
     - name: Set Matrix
       id: build-matrix
-      run: echo "matrix=$(jq -c . < ${{ inputs.group_dir }}/.actions.json)" >> $GITHUB_OUTPUT
+      run: echo "matrix=$(jq -c . < ${INPUTS_GROUP_DIR}/.actions.json)" >> $GITHUB_OUTPUT
+      env:
+        INPUTS_GROUP_DIR: ${{ inputs.group_dir }}
     - name: Print Inputs
       if: ${{ inputs.env_overrides }}
-      run: echo "Overrides - ${{ inputs.env_overrides }}" >> $GITHUB_STEP_SUMMARY
+      run: echo "Overrides - ${INPUTS_ENV_OVERRIDES}" >> $GITHUB_STEP_SUMMARY
+      env:
+        INPUTS_ENV_OVERRIDES: ${{ inputs.env_overrides }}
   build-containers:
     needs: [setup-build]
     env: ${{ matrix }}
@@ -89,6 +95,8 @@ jobs:
     - uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       if: ${{ !inputs.no_build }}
+      with:
+        persist-credentials: false
     - uses: azure/docker-login@15c4aadf093404726ab2ff205b2cdd33fa6d054c # v2
       with:
         login-server: ${{ secrets.REGISTRY }}
@@ -103,7 +111,7 @@ jobs:
     - name: Build Container Group
       if: ${{ !inputs.no_build }}
       id: build-group
-      uses: intel/ai-containers/.github@main
+      uses: intel/ai-containers/.github@22527f085f2accb495bf4fed7475d683b4120927
       with:
         group_dir: ${{ inputs.group_dir }}
         env_overrides: ${{ inputs.env_overrides || env.env_overrides || '' }}
@@ -130,7 +138,9 @@ jobs:
         path: matrix
     - name: Set Matrix
       id: scan-matrix
-      run: echo "matrix=$(cat matrix/*-${{ needs.build-containers.outputs.group }}/*.txt | jq -R '.' | jq -sc '. | unique')" >> $GITHUB_OUTPUT
+      run: echo "matrix=$(cat matrix/*-${NEEDS_BUILD_CONTAINERS_OUTPUTS_GROUP}/*.txt | jq -R '.' | jq -sc '. | unique')" >> $GITHUB_OUTPUT
+      env:
+        NEEDS_BUILD_CONTAINERS_OUTPUTS_GROUP: ${{ needs.build-containers.outputs.group }}
   scan-containers:
     needs: [setup-scan]
     if: ${{ !inputs.no_build && github.event_name == 'pull_request' }}
@@ -146,6 +156,8 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      with:
+        persist-credentials: false
     - uses: azure/docker-login@15c4aadf093404726ab2ff205b2cdd33fa6d054c # v2
       with:
         login-server: ${{ secrets.REGISTRY }}
@@ -196,9 +208,13 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      with:
+        persist-credentials: false
     - name: Get Recipes
       id: test-matrix
-      run: echo "matrix=$(find ${{ inputs.group_dir }} -type f -name 'tests.yaml' -exec dirname {} \; | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+      run: echo "matrix=$(find ${INPUTS_GROUP_DIR} -type f -name 'tests.yaml' -exec dirname {} \; | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+      env:
+        INPUTS_GROUP_DIR: ${{ inputs.group_dir }}
   test-containers:
     needs: [setup-build, setup-test]
     if: ${{ needs.setup-test.outputs.matrix != '[]' }}
@@ -213,6 +229,8 @@ jobs:
       with:
         egress-policy: audit
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      with:
+        persist-credentials: false
     - uses: azure/docker-login@15c4aadf093404726ab2ff205b2cdd33fa6d054c # v2
       with:
         login-server: ${{ secrets.REGISTRY }}
@@ -224,7 +242,7 @@ jobs:
     #     username: ${{ secrets.REGISTRY_USER }}
     #     password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Test Container Group
-      uses: intel/ai-containers/test-runner@main
+      uses: intel/ai-containers/test-runner@22527f085f2accb495bf4fed7475d683b4120927
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
         recipe_dir: ${{ inputs.group_dir }}
