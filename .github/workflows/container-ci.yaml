@@ -111,7 +111,7 @@ jobs:
     - name: Build Container Group
       if: ${{ !inputs.no_build }}
       id: build-group
-      uses: intel/ai-containers/.github@22527f085f2accb495bf4fed7475d683b4120927
+      uses: intel/ai-containers/.github@a730bc20074bb576a0c61d791ac5ca23e5dfe33d
       with:
         group_dir: ${{ inputs.group_dir }}
         env_overrides: ${{ inputs.env_overrides || env.env_overrides || '' }}
@@ -242,7 +242,7 @@ jobs:
     #     username: ${{ secrets.REGISTRY_USER }}
     #     password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Test Container Group
-      uses: intel/ai-containers/test-runner@22527f085f2accb495bf4fed7475d683b4120927
+      uses: intel/ai-containers/test-runner@a730bc20074bb576a0c61d791ac5ca23e5dfe33d
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
         recipe_dir: ${{ inputs.group_dir }}
