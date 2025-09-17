@@ -79,6 +79,8 @@ RUN python -m pip install --no-cache-dir -r torch-xpu-requirements.txt && \
 RUN python -m pip install --no-cache-dir -r ipex-xpu-requirements.txt && \
     rm -rf ipex-xpu-requirements.txt
 
+RUN python -m pip install --no-cache-dir oneccl_bind_pt==2.8.0+xpu --index-url https://pytorch-extension.intel.com/release-whl/stable/xpu/cn
+
 FROM ipex-xpu-base-wheels AS ipex-xpu-jupyter
 
 WORKDIR /jupyter
