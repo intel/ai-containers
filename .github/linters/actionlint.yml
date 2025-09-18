@@ -17,3 +17,4 @@ self-hosted-runner:
   - intel-ubuntu-latest
   - k8-runners
   - kubectl
+  - clx
