@@ -85,7 +85,7 @@ jobs:
   build-containers:
     needs: [setup-build]
     env: ${{ matrix }}
-    runs-on: [self-hosted, Linux, clx]
+    runs-on: [self-hosted, clx]
     strategy:
       matrix: ${{ fromJson(needs.setup-build.outputs.matrix) }}
       fail-fast: false
