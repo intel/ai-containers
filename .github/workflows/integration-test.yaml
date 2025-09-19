@@ -72,62 +72,62 @@ jobs:
     with:
       group_dir: ${{ matrix.group }}
     secrets: inherit
-  merge-logs:
-    # download all artifacts across containers
-    needs: [pipeline-ci]
-    if: success() || failure()
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
-    steps:
-    - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v4.0
-      id: download_artifact_outputs
-      with:
-        pattern: test-runner-summary*
-        merge-multiple: true
-    - name: Find Summary
-      id: summary
-      shell: bash
-      run: |
-        SUMMARY=$(find . -maxdepth 1 -name '*summary.json' -print)
-        if [[ -n "$SUMMARY" ]]; then
-          echo "summary=true" >> $GITHUB_OUTPUT
-          echo "Files matching the pattern ./*summary.json"
-          jq -s '[.[] | .[]]' ./*summary.json > combined.json
-          echo "Files found in the directory"
-        else
-          echo "summary=false" >> $GITHUB_OUTPUT
-          echo "No files matching the pattern ./*summary.json"
-        fi
-    - name: Generate TXT file
-      if: ${{ steps.summary.outputs.summary != 'false' }}
-      run: |
-        {
-          echo "### Integration Test Results"
-          echo "Groups Tested: $(jq -r 'map(.Group) | unique | join(", ")' combined.json)"
-          echo -e "\n<details>"
-          echo -e "  <summary>Results</summary>\n"
-          echo "  | Test-Group    | Test        | Status   |"
-          echo "  |:----:|:---:|:---:|"
-          jq -r '.[] | "  | \(.Group) | \(.Test) | \(.Status) |"' combined.json
-          echo -e "\n</details>\n"
-          if jq -e 'all(.[]; .Status == "PASS")' combined.json > /dev/null; then
-            echo "#### Overall Result: PASS ✅"
-          else
-            echo "#### Overall Result: FAIL ❌"
-          fi
-        } >> output.txt
-    - name: PR-comment
-      if: ${{ steps.summary.outputs.summary != 'false' }}
-      uses: marocchino/sticky-pull-request-comment@773744901bac0e8cbb5a0dc842800d45e9b2b405 # v2.9.4
-      with:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        number: ${{ github.event.pull_request.number }}
-        header: test-runner combined summary
-        path: output.txt
-        recreate: true
+  # merge-logs:
+  #   # download all artifacts across containers
+  #   needs: [pipeline-ci]
+  #   if: success() || failure()
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     pull-requests: write
+  #   steps:
+  #   - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v4.0
+  #     id: download_artifact_outputs
+  #     with:
+  #       pattern: test-runner-summary*
+  #       merge-multiple: true
+  #   - name: Find Summary
+  #     id: summary
+  #     shell: bash
+  #     run: |
+  #       SUMMARY=$(find . -maxdepth 1 -name '*summary.json' -print)
+  #       if [[ -n "$SUMMARY" ]]; then
+  #         echo "summary=true" >> $GITHUB_OUTPUT
+  #         echo "Files matching the pattern ./*summary.json"
+  #         jq -s '[.[] | .[]]' ./*summary.json > combined.json
+  #         echo "Files found in the directory"
+  #       else
+  #         echo "summary=false" >> $GITHUB_OUTPUT
+  #         echo "No files matching the pattern ./*summary.json"
+  #       fi
+  #   - name: Generate TXT file
+  #     if: ${{ steps.summary.outputs.summary != 'false' }}
+  #     run: |
+  #       {
+  #         echo "### Integration Test Results"
+  #         echo "Groups Tested: $(jq -r 'map(.Group) | unique | join(", ")' combined.json)"
+  #         echo -e "\n<details>"
+  #         echo -e "  <summary>Results</summary>\n"
+  #         echo "  | Test-Group    | Test        | Status   |"
+  #         echo "  |:----:|:---:|:---:|"
+  #         jq -r '.[] | "  | \(.Group) | \(.Test) | \(.Status) |"' combined.json
+  #         echo -e "\n</details>\n"
+  #         if jq -e 'all(.[]; .Status == "PASS")' combined.json > /dev/null; then
+  #           echo "#### Overall Result: PASS ✅"
+  #         else
+  #           echo "#### Overall Result: FAIL ❌"
+  #         fi
+  #       } >> output.txt
+  #   - name: PR-comment
+  #     if: ${{ steps.summary.outputs.summary != 'false' }}
+  #     uses: marocchino/sticky-pull-request-comment@773744901bac0e8cbb5a0dc842800d45e9b2b405 # v2.9.4
+  #     with:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #       number: ${{ github.event.pull_request.number }}
+  #       header: test-runner combined summary
+  #       path: output.txt
+  #       recreate: true
   status-check:
-    needs: [group-diff, pipeline-ci, merge-logs]
+    needs: [group-diff, pipeline-ci]
     runs-on: ubuntu-latest
     if: always()
     steps:
