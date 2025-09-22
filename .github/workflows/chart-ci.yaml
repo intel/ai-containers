@@ -32,6 +32,6 @@ jobs:
     - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       with:
         persist-credentials: false
-    - uses: intel/ai-containers/workflows/charts@b47fdb7521ea71f718f582ed6dc1de488b546d6c
+    - uses: intel/ai-containers/workflows/charts@9ecbccaae1fd9006f3e5c2e6ce4145a0d6ece76f
       with:
         kubeconfig_path: ${{ secrets.KUBECONFIG_PATH }}
