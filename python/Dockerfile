@@ -165,3 +165,18 @@ RUN  rm -rf /etc/apt/sources.list.d/oneAPI.list
 RUN if eval "which conda >/dev/null"; then \
         echo 'export OCL_ICD_VENDORS="/etc/OpenCL/vendors"' >> ~/.bashrc; \
     fi
+
+FROM xpu-base as xpu-dl-essentials
+
+ARG DL_ESSENTIALS_VER
+
+RUN wget --progress=dot:giga -O- https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS.PUB | \
+        gpg --dearmor | tee /usr/share/keyrings/oneapi-archive-keyring.gpg > /dev/null && \
+    echo "deb [signed-by=/usr/share/keyrings/oneapi-archive-keyring.gpg] https://apt.repos.intel.com/oneapi all main" | \
+        tee /etc/apt/sources.list.d/oneAPI.list
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        intel-deep-learning-essentials=${DL_ESSENTIALS_VER} && \
+    apt-get clean && \
+    rm -rf  /var/lib/apt/lists/* /etc/apt/sources.list.d/oneAPI.list

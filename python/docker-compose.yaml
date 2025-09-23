@@ -93,3 +93,14 @@ services:
       sh -c 'dpkg -l | grep level-zero;dpkg -l | grep dpcpp;dpkg -l | grep mkl'
     extends: ${PACKAGE_OPTION:-pip}
     image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xpu-base
+  xpu-dl-essentials:
+    build:
+      args:
+        DL_ESSENTIALS_VER: ${DL_ESSENTIALS_VER:-2025.0.2-6}
+      labels:
+        dependency.apt.dl-essentials: ${DL_ESSENTIALS_VER:-2025.0.2-6}
+      target: xpu-dl-essentials
+    command: >
+      sh -c 'dpkg -l | grep level-zero;dpkg -l | grep dpcpp;dpkg -l | grep mkl'
+    extends: xpu
+    image: ${REGISTRY}/${REPO}:b-${GITHUB_RUN_NUMBER:-0}-${BASE_IMAGE_NAME:-ubuntu}-${BASE_IMAGE_TAG:-22.04}-${PACKAGE_OPTION:-pip}-py${PYTHON_VERSION:-3.11}-xpu-dl-essentials
