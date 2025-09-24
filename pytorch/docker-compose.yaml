@@ -13,7 +13,8 @@
 # limitations under the License.
 
 include:
-  - ../python/docker-compose.yaml
+  - path:
+      - ../python/docker-compose.yaml
 services:
   ipex-base:
     build:

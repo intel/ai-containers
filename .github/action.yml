@@ -59,6 +59,9 @@ runs:
       shell: bash
       if: ${{ !fromJson(inputs.no-start) }}
       run: |
+        pwd
+        ls -R .
+        ls -R ..
         REGISTRY=${{ inputs.registry }} \
         REPO=${{ inputs.repo }} \
         COMPOSE_PROJECT_NAME=${{ env.project-number }} \
