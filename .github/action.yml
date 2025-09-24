@@ -55,6 +55,13 @@ runs:
     - name: Generate Project Number
       shell: bash
       run: echo "project-number=$(shuf -i 0-10000 -n1)" >> $GITHUB_ENV
+    - name : debug 0
+      shell: bash
+      run: |
+        pwd
+        ls -R .
+        ls -R ..
+      working-directory: ${{ inputs.group_dir }}
     - name: Build Containers
       shell: bash
       if: ${{ !fromJson(inputs.no-start) }}
