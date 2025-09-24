@@ -59,6 +59,7 @@ runs:
       shell: bash
       if: ${{ !fromJson(inputs.no-start) }}
       run: |
+        docker compose version
         REGISTRY=${{ inputs.registry }} \
         REPO=${{ inputs.repo }} \
         COMPOSE_PROJECT_NAME=${{ env.project-number }} \
