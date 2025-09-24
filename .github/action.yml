@@ -59,8 +59,8 @@ runs:
       shell: bash
       run: |
         pwd
-        ls -R .
-        ls -R ..
+        ls .
+        ls ..
       working-directory: ${{ inputs.group_dir }}
     - name: Build Containers
       shell: bash
