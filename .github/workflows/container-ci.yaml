@@ -85,7 +85,7 @@ jobs:
   build-containers:
     needs: [setup-build]
     env: ${{ matrix }}
-    runs-on: [self-hosted, Linux, X64, clx]
+    runs-on: ${{ github.repository_owner == 'intel' && 'intel-ubuntu-latest' || 'ubuntu-latest' }}
     strategy:
       matrix: ${{ fromJson(needs.setup-build.outputs.matrix) }}
       fail-fast: false
