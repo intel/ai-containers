@@ -111,7 +111,7 @@ jobs:
     - name: Build Container Group
       if: ${{ !inputs.no_build }}
       id: build-group
-      uses: intel/ai-containers/.github@9ecbccaae1fd9006f3e5c2e6ce4145a0d6ece76f
+      uses: intel/ai-containers/.github@sramakr1/add_pytorch_test_check
       with:
         group_dir: ${{ inputs.group_dir }}
         env_overrides: ${{ inputs.env_overrides || env.env_overrides || '' }}
