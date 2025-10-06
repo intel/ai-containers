@@ -111,7 +111,7 @@ jobs:
     - name: Build Container Group
       if: ${{ !inputs.no_build }}
       id: build-group
-      uses: intel/ai-containers/.github@9ecbccaae1fd9006f3e5c2e6ce4145a0d6ece76f
+      uses: intel/ai-containers/.github@6ac750b038b7feeeb2fce9fce0cf15338c22b197
       with:
         group_dir: ${{ inputs.group_dir }}
         env_overrides: ${{ inputs.env_overrides || env.env_overrides || '' }}
@@ -170,7 +170,7 @@ jobs:
     #     password: ${{ secrets.REGISTRY_TOKEN }}
     - name: Pull Image
       run: docker pull ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
-    - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+    - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
       with:
         path: ${{ github.workspace }}/.cache/trivy
         key: ${{ github.head_ref || github.ref_name }}-trivy
@@ -189,7 +189,7 @@ jobs:
     - name: Cleanup
       if: always()
       run: docker rmi -f ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
-    - uses: github/codeql-action/upload-sarif@192325c86100d080feab897ff886c34abd4c83a3 # v3.30.3
+    - uses: github/codeql-action/upload-sarif@3599b3baa15b485a2e49ef411a7a4bb2452e7f93 # v3.30.5
       with:
         sarif_file: '${{ matrix.container }}-scan.sarif'
         category: '${{ matrix.container }}'
