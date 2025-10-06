@@ -64,7 +64,7 @@ repos:
   - args: ["--sp", ".github/linters"]
     id: isort
   repo: https://github.com/pycqa/isort
-  rev: 6.0.1
+  rev: 6.1.0
 - hooks:
   - args: ["--rcfile=.github/linters/.python-lint"]
     entry: pylint
