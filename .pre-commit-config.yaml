@@ -47,7 +47,7 @@ repos:
   - args: ["--config-file", ".github/linters/actionlint.yml"]
     id: actionlint
   repo: https://github.com/rhysd/actionlint
-  rev: v1.7.7
+  rev: v1.7.8
 - hooks:
   - id: helm-docs-container
   repo: https://github.com/norwoodj/helm-docs
@@ -64,7 +64,7 @@ repos:
   - args: ["--sp", ".github/linters"]
     id: isort
   repo: https://github.com/pycqa/isort
-  rev: 6.0.1
+  rev: 7.0.0
 - hooks:
   - args: ["--rcfile=.github/linters/.python-lint"]
     entry: pylint
