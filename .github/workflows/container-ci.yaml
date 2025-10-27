@@ -111,7 +111,7 @@ jobs:
     - name: Build Container Group
       if: ${{ !inputs.no_build }}
       id: build-group
-      uses: intel/ai-containers/.github@a88f48eb2ee3d2f4dca7c178914b1db4d7a08b8c
+      uses: intel/ai-containers/.github@fff3ed4b88a6e3df251300356bfa0d7a93d01a01
       with:
         group_dir: ${{ inputs.group_dir }}
         env_overrides: ${{ inputs.env_overrides || env.env_overrides || '' }}
