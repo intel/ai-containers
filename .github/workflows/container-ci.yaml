@@ -111,7 +111,7 @@ jobs:
     - name: Build Container Group
       if: ${{ !inputs.no_build }}
       id: build-group
-      uses: intel/ai-containers/.github@6ac750b038b7feeeb2fce9fce0cf15338c22b197
+      uses: intel/ai-containers/.github@a88f48eb2ee3d2f4dca7c178914b1db4d7a08b8c
       with:
         group_dir: ${{ inputs.group_dir }}
         env_overrides: ${{ inputs.env_overrides || env.env_overrides || '' }}
@@ -189,7 +189,7 @@ jobs:
     - name: Cleanup
       if: always()
       run: docker rmi -f ${{ secrets.REGISTRY }}/${{ secrets.REPO }}:${{ matrix.container }}
-    - uses: github/codeql-action/upload-sarif@3599b3baa15b485a2e49ef411a7a4bb2452e7f93 # v3.30.5
+    - uses: github/codeql-action/upload-sarif@16140ae1a102900babc80a33c44059580f687047 # v4.30.9
       with:
         sarif_file: '${{ matrix.container }}-scan.sarif'
         category: '${{ matrix.container }}'
