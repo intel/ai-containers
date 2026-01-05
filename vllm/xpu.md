@@ -1,65 +1,156 @@
-# Optimize LLM serving with vLLM on Intel® GPUs
+# Optimize LLM Serving with vLLM on Intel® GPUs
 
 vLLM is a fast and easy-to-use library for LLM inference and serving. It has evolved into a community-driven project with contributions from both academia and industry. Intel, as one of the community contributors, is working actively to bring satisfying performance with vLLM on Intel® platforms, including Intel® Xeon® Scalable Processors, Intel® discrete GPUs, as well as Intel® Gaudi® AI accelerators. This readme focuses on Intel® discrete GPUs at this time and brings you the necessary information to get the workloads running well on your Intel® graphics cards.
 
-## 1. What's Supported?
+The vLLM used in this docker image is based on [v0.11.1](https://github.com/vllm-project/vllm/tree/v0.11.1) and validated on [Intel® Arc™ Pro B-Series Graphics](https://www.intel.com/content/www/us/en/products/docs/discrete-gpus/arc/workstations/b-series/overview.html) Cards. It uses following BKC:
 
-Intel GPUs benefit from enhancements brought by [vLLM V1 engine](https://blog.vllm.ai/2025/01/27/v1-alpha-release.html), including:
+| Ingredients | Version          |
+|-------------|------------------|
+| Host OS     | Ubuntu 25.04     |
+| Python      | 3.12             |
+| KMD Driver  | 6.14.0        |
+| OneAPI      | 2025.2.2 with hotfix         |
+| PyTorch     | PyTorch 2.9      |
+| IPEX        | 2.9.10           |
+| OneCCL      | 2021.15.7.6      |
 
-* Optimized Execution Loop & API Server
-* Simple & Flexible Scheduler
-* Zero-Overhead Prefix Caching
-* Clean Architecture for Tensor-Parallel Inference
-* Efficient Input Preparation
-* Enhanced Support for Multimodal LLMs
+## 1. What's New in This Release?
 
-Moreover, **`chunked_prefill`**, an optimization feature in vLLM that allows large prefill requests to be divided into small chunks and batched together with decode requests, is also enabled. This approach prioritizes decode requests, improving inter-token latency (ITL) and GPU utilization by combining compute-bound (prefill) and memory-bound (decode) requests in the same batch. vLLM v1 engine is built on this feature and in this release, it's also supported on intel GPUs by leveraging corresponding kernel from Intel® Extension for PyTorch\* for model execution.
+* Key bug fixes for timeout/accuracy issues found in long time stress run.
+* Experimental support for Expert Parallelism (EP), which allows experts in Mixture-of-Experts (MoE) models to be deployed on separate GPUs. In this release, we support scenarios including TP+EP and DP+EP.
+* More multi-modal models that accept image or audio/video inputs are now supported, such as Whisper-Large-V3, Qwen3-VL-30B-A3B-Instruct, DeepSeek-OCR, and PaddleOCR-VL, etc.
+* FP8 KV cache is experimentally supported to reduce memory footprint by allowing approximately double the amount of space for KV cache allocation. This enables either processing longer context lengths for individual requests, or handling more concurrent request batches. The current implementation focuses primarily on enabling the functionality, with limited performance improvements.
+* More features: cpu kv cache offload, speculative decoding support with 2 more methods(medusa, suffix).
 
-In a near future release, we will support the following features.
+## 2. What's Supported?
 
-* **Spec decode**: Speculative decoding in vLLM is a technique designed to improve inter-token latency during LLM inference by using a smaller, faster draft model to predict future tokens.
-* **Sliding window**: Sliding window attention is a mechanism used in large language models to manage memory usage efficiently by limiting the context length to a fixed window size. This approach allows the model to focus on the most recent tokens while discarding older ones, which is particularly useful for handling long sequences without exceeding memory constraints.
-* **FP8 KV cache**: We will support FP8 KV cache in this release with kernels from Intel® Extension for PyTorch\*. It allows for a larger number of tokens to be stored in the cache, effectively doubling the space available for KV cache allocation. This increase in storage capacity enhances throughput by enabling the processing of longer context lengths for individual requests or handling more concurrent request batches.
+Following up vLLM V1 design, corresponding optimized kernels and features are implemented for Intel GPUs.
 
-The table below lists models that have been verified by Intel. However, there should be broader models that are supported by vLLM work on Intel® GPUs.
+* Chunked prefill:
 
-| Model Type | Model |
-| ---------- | ---------- |
-| Text-generation | meta-llama/Llama-3.1 8B |
-| Text-generation | deepseek-ai/deepseek-llm-7b-chat |
-| Text-generation | mistralai/Mistral-7B-v0.1 |
-| Text-generation | microsoft/Phi-3-mini-128k-instruct |
-| Text-generation | Qwen/Qwen2-7B-Instruct |
+  Chunked prefill is an optimization feature in vLLM that allows large prefill requests to be divided into small chunks and batched together with decode requests. This approach prioritizes decode requests, improving inter-token latency (ITL) and GPU utilization by combining compute-bound (prefill) and memory-bound (decode) requests in the same batch. vLLM v1 engine is built on this feature and in this release, it's also supported on intel GPUs by leveraging corresponding kernel from Intel® Extension for PyTorch\* for model execution.
 
-## 2. Limitations
+* FP8 W8A16 MatMul:
 
-Some of vLLM V1 features may need extra support, including `torch.compile` support, LoRA, pipeline parallel on Ray, Structured outputs, EP/TP MoE, DP Attentions, prefix prefill and MLA related.
+  vLLM supports FP8 (8-bit floating point) weight using hardware acceleration on GPUs. We support weight-only online dynamic quantization with FP8, which allows for a 2x reduction in model memory requirements and up to a 1.6x improvement in throughput with minimal impact on accuracy.
 
-The following issues are known issues that we plan to fix in future releases:
+  Dynamic quantization of an original precision BF16/FP16 model to FP8 can be achieved with vLLM without any calibration data required. You can enable the feature by specifying `--quantization="fp8"` in the command line or setting `quantization="fp8"` in the LLM constructor.
 
-* The `Bloke/baichuan-7B-GPTQ` model fails with `AttributeError: BaiChuanTokenizer has no attribute vocab_size` error.
-* The `ranchlai/chatglm3-6B-gptq-4bit` model fails with `ChatGLMForConditionalGeneration has no vLLM implementation and the Transformers implementation is not compatible with vLLM` error.
-* Sum of `input token length` and `output token length` has to be small than the `--max_position_embeddings` argument of a model to avoid error `ValueError: This model's maximum context length is xxxx tokens. However, you requested xxxx tokens (xxxx in the messages, xxxx in the completion). Please reduce the length of the messages or completion.`
-* The `jakiAJK_DeepSeek-R1-Distill-Qwen-7B_GPTQ-int4` model and `Qwen_Qwen2-7B-Instruct-GPTQ-Int4` model get the `lm-eval` accuracy value to be 0.
-* The `run-lm-eval-gsm-vllm-baseline.sh` script in the docker image mentioned in this blog doesn't support accuracy testing.
-* When you use the docker image mentioned in this blog, you may see warning messages like `Pin memory is not supported on XPU`. These messages were mistakenly printed and can be omitted.
-* `awq` models occupy memory larger than the model size. For `casperhansen/llama-3-8b-instruct-awq` model (sized 5.74 GB), 8.6GB memory was occupied.
+  Besides, the FP8 types typically supported in hardware have two distinct representations, each useful in different scenarios:
 
-## 3. How to Get Started
+  * **E4M3**: Consists of 1 sign bit, 4 exponent bits, and 3 bits of mantissa. It can store values up to +/-448 and `nan`.
+  * **E5M2**: Consists of 1 sign bit, 5 exponent bits, and 2 bits of mantissa. It can store values up to +/-57344, +/- `inf`, and `nan`. The tradeoff for the increased dynamic range is lower precision of the stored values.
 
-### 3.1. Prerequisite
+  We support both representations through ENV variable `VLLM_XPU_FP8_DTYPE` with default value `E5M2`.
+
+  :::{warning}
+  Currently, by default we load the model at original precision before quantizing down to 8-bits, so you need enough memory to load the whole model. To avoid this, adding `VLLM_OFFLOAD_WEIGHTS_BEFORE_QUANT=1` can allow offloading weights to cpu before quantization and quantized weights will be kept in device.
+  :::
+
+* Multi-Modality Support
+
+  This release introduces support for more multi-modal processing of image, audio and video inputs, by leveraging models like whisper-large-v3, Qwen3-VL-30B-A3B-Instruct, DeepSeek-OCR and PaddleOCR-VL. For example, the Qwen3-VL-30B-A3B-Instruct model can be launched on 4 Intel® Arc™ Pro B60 Graphics cards for the multi modality process.
+
+* Pooling Models Support
+
+  vLLM supports pooling models such as embedding, classification and reward models. All of these models are now supported on Intel® GPUs. For detailed usage, refer to [guide](https://docs.vllm.ai/en/latest/models/pooling_models.html).
+
+* Pipeline Parallelism
+
+  Pipeline parallelism distributes model layers across multiple GPUs. Each GPU processes different parts of the model in sequence. For Intel® GPUs, we support it on single node with `mp` as the backend.
+
+* Data Parallelism
+
+  vLLM supports [Data Parallelism](https://docs.vllm.ai/en/latest/serving/data_parallel_deployment.html) deployment, where model weights are replicated across separate instances/GPUs to process independent batches of requests. This will work with both dense and MoE models.
+
+* Expert Parallelism
+
+  Experimental support for [Expert Parallelism](https://docs.vllm.ai/en/stable/serving/expert_parallel_deployment), which allows experts in Mixture-of-Experts (MoE) models to be deployed on separate GPUs. It typically works together with Data Parallelism. In this release, we support TP+EP and DP+EP scenarios.
+
+* MoE models
+
+  Models with MoE structure like GPT-OSS 20B/120B in MXFP4 format, Deepseek-v2-lite, Qwen/Qwen3-30B-A3B and Qwen3-30B-A3B-GPTQ-Int4 are supported. Qwen3-NEXT-80B-A3B-Instruct and Qwen3-NEXT-80B-A3B-Thinking are also supported using online fp8 quantization.
+
+Besides features like [reasoning_outputs](https://docs.vllm.ai/en/latest/features/reasoning_outputs.html), [structured_outputs](https://docs.vllm.ai/en/latest/features/structured_outputs.html) and [tool calling](https://docs.vllm.ai/en/latest/features/tool_calling.html), cpu kv cache offloading is also supported to better handle preemptions. We also have some experimental features supported, including:
+
+* **torch.compile**: Can be enabled for fp16/bf16 path.
+* **speculative decoding**: Supports methods `n-gram`, `EAGLE`, `EAGLE3`, `medusa` and `suffix`.
+* **async scheduling**: Can be enabled by `--async-scheduling`. This may help reduce the CPU overheads, leading to better latency and throughput. However, async scheduling is currently not supported with some features such as structured outputs, speculative decoding, and pipeline parallelism.
+
+## Supported Models
+
+Please note that the following table contains only the models verified by Intel. Support on Intel® GPUs through vLLM extends to a wider array of models.
+
+| Model Type      | Model (company/model name)                | FP16 | Dynamic Online FP8 | MXFP4 |
+|-----------------|-------------------------------------------| --- | --- | -- |
+| Text Generation | Qwen/Qwen3-Next-80B-A3B-Instruct          | |✅︎| |
+| Text Generation | Qwen/Qwen3-Next-80B-A3B-Thinking          | |✅︎| |
+| Text Generation | openai/gpt-oss-20b                        | | |✅︎|
+| Text Generation | openai/gpt-oss-120b                       | | |✅︎|
+| Text Generation | deepseek-ai/DeepSeek-R1-Distill-Llama-8B  |✅︎|✅︎| |
+| Text Generation | deepseek-ai/DeepSeek-R1-Distill-Qwen-14B  |✅︎|✅︎| |
+| Text Generation | deepseek-ai/DeepSeek-R1-Distill-Qwen-32B  |✅︎|✅︎| |
+| Text Generation | deepseek-ai/DeepSeek-R1-Distill-Llama-70B |✅︎|✅︎| |
+| Text Generation | Qwen/Qwen2.5-72B-Instruct                 |✅︎|✅︎| |
+| Text Generation | Qwen/Qwen3-14B                            |✅︎|✅︎| |
+| Text Generation | Qwen/Qwen3-32B                            |✅︎|✅︎| |
+| Text Generation | Qwen/Qwen3-30B-A3B                        |✅︎|✅︎| |
+| Text Generation | Qwen/Qwen3-30B-A3B-GPTQ-Int4              |✅︎|✅︎| |
+| Text Generation | Qwen/Qwen3-coder-30B-A3B-Instruct         |✅︎|✅︎| |
+| Text Generation | Qwen/QwQ-32B                              |✅︎|✅︎| |
+| Text Generation | openbmb/MiniCPM-V-4                       |✅︎|✅︎| |
+| Text Generation | deepseek-ai/DeepSeek-V2-Lite              |✅︎|✅︎| |
+| Text Generation | meta-llama/Llama-3.1-8B-Instruct          |✅︎|✅︎| |
+| Text Generation | baichuan-inc/Baichuan2-13B-Chat           |✅︎|✅︎| |
+| Text Generation | THUDM/GLM-4-9B-chat                       |✅︎|✅︎| |
+| Text Generation | THUDM/GLM-4v-9B-chat                      |✅︎|✅︎| |
+| Text Generation | THUDM/CodeGeex4-All-9B                    |✅︎|✅︎| |
+| Text Generation | chuhac/TeleChat2-35B                      |✅︎|✅︎| |
+| Text Generation | 01-ai/Yi1.5-34B-Chat                      |✅︎|✅︎| |
+| Text Generation | THUDM/CodeGeex4-All-9B                    |✅︎|✅︎| |
+| Text Generation | deepseek-ai/DeepSeek-Coder-33B-base       |✅︎|✅︎| |
+| Text Generation | baichuan-inc/Baichuan2-13B-Chat           |✅︎|✅︎| |
+| Text Generation | meta-llama/Llama-2-13b-chat-hf            |✅︎|✅︎| |
+| Text Generation | Qwen/Qwen1.5-14B-Chat                     |✅︎|✅︎| |
+| Text Generation | Qwen/Qwen1.5-32B-Chat                     |✅︎|✅︎| |
+| Multi Modality  | openai/whisper-large-v3                   |✅︎|✅︎| |
+| Multi Modality  | deepseek-ai/DeepSeek-OCR                  |✅︎|✅︎| |
+| Multi Modality  | PaddlePaddle/PaddleOCR-VL                 |✅︎|✅︎| |
+| Multi Modality  | Qwen/Qwen2-VL-7B-Instruct                 |✅︎|✅︎| |
+| Multi Modality  | Qwen/Qwen2.5-VL-72B-Instruct              |✅︎|✅︎| |
+| Multi Modality  | Qwen/Qwen2.5-VL-32B-Instruct              |✅︎|✅︎| |
+| Multi Modality  | Qwen/Qwen3-VL-30B-A3B-Instruct            |✅︎|✅︎| |
+| Multi Modality  | OpenGVLab/InternVL3_5-8B                  |✅︎|✅︎| |
+| Multi Modality  | OpenGVLab/InternVL3_5-14B                 |✅︎|✅︎| |
+| Multi Modality  | OpenGVLab/InternVL3_5-38B                 |✅︎|✅︎| |
+| Multi Modality  | OpenGVLab/InternVL3_5-30B-A3B             |✅︎|✅︎| |
+| Multi Modality  | THUDM/GLM-4v-9B                           |✅︎|✅︎| |
+| Multi Modality  | openbmb/MiniCPM-V-4                       |✅︎|✅︎| |
+| Embedding Model | Qwen/Qwen3-Embedding-8B                   |✅︎|✅︎| |
+| Reranker Model  | Qwen/Qwen3-Reranker-8B                    |✅︎|✅︎| |
+
+## 3. Limitations
+
+Some of vLLM V1 features may need extra support, including LoRA(Low-Rank Adaptation), pipeline parallel on Ray and MLA(Multi-head Latent Attention).
+
+The following issues are known issues:
+
+* Qwen/Qwen3-30B-A3B FP16/BF16 need set `--gpu-memory-utilization=0.8` due to its high memory consumption.
+* W8A8 quantized models through llm_compressor are not supported yet, like RedHatAI/DeepSeek-R1-Distill-Qwen-32B-FP8-dynamic.
+
+## 4. How to Get Started
+
+### 4.1. Prerequisite
 
 | OS | Hardware |
 | ---------- | ---------- |
-| Ubuntu 24.10 | Intel® Arc B580 |
-| Ubuntu 22.04 | Intel® Data Center GPU Max Series |
+| Ubuntu 25.04 | Intel® Arc™ B-Series |
 
-### 3.2. Prepare a Serving Environment
+### 4.2. Prepare a Serving Environment
 
-1. Follow [instructions](https://dgpu-docs.intel.com/driver/overview.html) to install driver packages.
-2. Get the released docker image with command `docker pull intel/vllm:xpu`
-3. Instantiate a docker container with command `docker run -t -d --shm-size 10g --net=host --ipc=host --privileged -v /dev/dri/by-path:/dev/dri/by-path --name=vllm-test --device /dev/dri:/dev/dri --entrypoint= intel/vllm:xpu /bin/bash`
-4. Run command `docker exec -it vllm-test bash` in 2 separate terminals to enter container environments for the server and the client respectively.
+1. Get the released docker image with command `docker pull intel/vllm:0.11.1-xpu`
+2. Instantiate a docker container with command `docker run -t -d --shm-size 10g --net=host --ipc=host --privileged -v /dev/dri/by-path:/dev/dri/by-path --name=vllm-test --device /dev/dri:/dev/dri --entrypoint= intel/vllm:0.11.1-xpu /bin/bash`
+3. Run command `docker exec -it vllm-test bash` in 2 separate terminals to enter container environments for the server and the client respectively.
 
 \* Starting from here, all commands are expected to be run inside the docker container, if not explicitly noted.
 
@@ -69,15 +160,17 @@ In both environments, you may then wish to set a `HUGGING_FACE_HUB_TOKEN` enviro
 export HUGGING_FACE_HUB_TOKEN=xxxxxx
 ```
 
-### 3.3. Launch Workloads
+### 4.3. Launch Workloads
 
-#### 3.3.1. Launch Server in the Server Environment
+#### 4.3.1. Launch Server in the Server Environment
 
 Command:
 
 ```bash
-VLLM_USE_V1=1 W_LONG_MAX_MODEL_LEN=1 VLLM_WORKER_MULTIPROC_METHOD=spawn  python3 -m vllm.entrypoints.openai.api_server --model TechxGenus/Meta-Llama-3-8B-GPTQ --dtype=float16 --device=xpu --enforce-eager --port 8000  --block-size 32 --gpu-memory-util 0.85 --trust-remote-code --disable-sliding-window
+VLLM_WORKER_MULTIPROC_METHOD=spawn vllm serve --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --dtype=float16 --enforce-eager --port 8000 --block-size 64 --gpu-memory-util 0.9  --no-enable-prefix-caching --trust-remote-code --disable-sliding-window --disable-log-requests --max_num_batched_tokens=8192 --max_model_len 4096 -tp=4 --quantization fp8
 ```
+
+Note that by default fp8 online quantization will use `e5m2` and you can switch to use `e4m3` by explicitly add env `VLLM_XPU_FP8_DTYPE=e4m3`. If there is not enough memory to hold the whole model before quantization to fp8, you can use `VLLM_OFFLOAD_WEIGHTS_BEFORE_QUANT=1` to offload weights to CPU first.
 
 Expected output:
 
@@ -112,17 +205,15 @@ INFO:     Application startup complete.
 
 It may take some time. Showing `INFO:     Application startup complete.` indicates that the server is ready.
 
-#### 3.3.2. Raise Requests for Benchmarking in the Client Environment
-
-We leverage a [benchmarking script](https://github.com/vllm-project/vllm/blob/main/benchmarks/benchmark_serving.py) which is provided in vLLM to perform performance benchmarking. You can use your own client scripts as well.
+#### 4.3.2. Raise Requests for Benchmarking in the Client Environment
 
 Use the command below to shoot serving requests:
 
 ```bash
-python3 benchmarks/benchmark_serving.py --model TechxGenus/Meta-Llama-3-8B-GPTQ --dataset-name random --random-input-len=1024 --random-output-len=1024 --ignore-eos --num-prompt 1 --max-concurrency 16 --request-rate inf --backend vllm --port=8000 --host 0.0.0.0
+vllm bench serve --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --dataset-name random --random-input-len=1024 --random-output-len=1024 --ignore-eos --num-prompt 1 --max-concurrency 16 --request-rate inf --backend vllm --port=8000 --host 0.0.0.0 --ready-check-timeout-sec 1
 ```
 
-The command uses model `TechxGenus/Meta-Llama-3-8B-GPTQ`. Both input and output token sizes are set to `1024`. Maximally `16` requests are processed concurrently in the server.
+The command uses model `deepseek-ai/DeepSeek-R1-Distill-Qwen-32B`. Both input and output token sizes are set to `1024`. Maximally `16` requests are processed concurrently in the server.
 
 Expected output:
 
