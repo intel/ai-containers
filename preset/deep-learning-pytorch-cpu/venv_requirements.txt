@@ -1,2 +1,0 @@
-evaluate==0.4.5
-optimum-intel
