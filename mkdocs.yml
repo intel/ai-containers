@@ -33,8 +33,6 @@ markdown_extensions:
 nav:
 - Getting Started: 'index.md'
 - Containers:
-  - AI Tools Selector: 'preset/README.md'
-  - Classical ML Base: 'classical-ml/README.md'
   - JAX Base: 'jax/README.md'
   - Python Base: 'python/README.md'
   - PyTorch Base: 'pytorch/README.md'

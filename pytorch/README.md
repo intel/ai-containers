@@ -269,7 +269,7 @@ The image below is an extension of the IPEX Multi-Node Container designed to run
 | ------------------------------------- | -------- | ------------ | -------------------- | --------------- | --------------- |
 | `2.4.0-pip-multinode-hf-4.44.0-genai` | [v2.4.0] | [v2.4.0+cpu] | [v2.4.0][ccl-v2.4.0] | [v4.44.0]       | [v0.4.0-Beta]   |
 
-Below is an example that shows single node job with the existing [`finetune.py`](../workflows/charts/huggingface-llm/scripts/finetune.py) script.
+Below is an example that shows single node job with a finetune.py script.
 
 ```bash
 # Change into home directory first and run the command

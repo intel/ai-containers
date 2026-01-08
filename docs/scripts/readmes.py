@@ -16,9 +16,7 @@ import os
 import shutil
 
 readmes = [
-    "classical-ml/README.md",
     "jax/README.md",
-    "preset/README.md",
     "python/README.md",
     "pytorch/README.md",
     "tensorflow/README.md",
