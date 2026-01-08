@@ -39,14 +39,6 @@ updates:
     package-ecosystem: pip
     schedule:
       interval: weekly
-  - directory: /classical-ml
-    groups:
-      classical-ml:
-        patterns:
-          - "*"
-    package-ecosystem: pip
-    schedule:
-      interval: weekly
   - directory: /tensorflow
     groups:
       tensorflow:
@@ -74,30 +66,6 @@ updates:
   - directory: /workflows/charts/huggingface-llm
     groups:
       genai-workflow:
-        patterns:
-          - "*"
-    package-ecosystem: pip
-    schedule:
-      interval: weekly
-  - directory: /preset
-    groups:
-      preset:
-        patterns:
-          - "*"
-    package-ecosystem: pip
-    schedule:
-      interval: weekly
-  - directory: /apptainer/python
-    groups:
-      apptainer:
-        patterns:
-          - "*"
-    package-ecosystem: pip
-    schedule:
-      interval: weekly
-  - directory: enterprise/redhat/openshift-ai/gaudi/docker
-    groups:
-      gaudi-openshift:
         patterns:
           - "*"
     package-ecosystem: pip
