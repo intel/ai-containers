@@ -106,7 +106,7 @@ jobs:
       with:
         python-version: "3.10"
     - name: Test Container Group
-      uses: intel/ai-containers/test-runner@ca57eed69acdb7540f447e5bcd787d8e743b3637
+      uses: intel/ai-containers/test-runner@faf6e6b26fa543b49eabafa671adc391aa3d92b4
       with:
         cache_registry: ${{ secrets.CACHE_REGISTRY }}
         recipe_dir: test-runner
