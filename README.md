@@ -1,4 +1,3 @@
-# AI Containers
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8270/badge)](https://www.bestpractices.dev/projects/8270)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/intel/ai-containers/badge)](https://securityscorecards.dev/viewer/?uri=github.com/intel/ai-containers)
@@ -10,6 +9,14 @@
 [![Test Runner CI](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/test-runner-ci.yaml)
 [![Helm Chart CI](https://github.com/intel/ai-containers/actions/workflows/chart-ci.yaml/badge.svg?event=merge_group)](https://github.com/intel/ai-containers/actions/workflows/chart-ci.yaml)
 [![Weekly Tests](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml/badge.svg?branch=main)](https://github.com/intel/ai-containers/actions/workflows/weekly-test.yaml)
+
+# Deprecation Notice
+
+The Intel® AI Containers project has reached the end of its development. The project will be archived in March 2026. Until then, only critical vulnerabilities (CVEs) will be fixed. No new features will be added
+
+Thanks to all the contributors and users who supported this project!
+
+# AI Containers
 
 This repository contains Dockerfiles, scripts, yaml files, Helm charts, etc. used to scale out AI containers with versions of TensorFlow and PyTorch that have been optimized for Intel platforms. Scaling is done with python, Docker, kubernetes, kubeflow, cnvrg.io, Helm, and other container orchestration frameworks for use in the cloud and on-premise.
 
