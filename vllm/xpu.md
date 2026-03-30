@@ -9,7 +9,7 @@ This release is the first to switch to the optimized kernel library [vllm-xpu-ke
 | Host OS | Ubuntu 25.04 |
 | Python | 3.12 |
 | KMD Driver | 6.14.0 |
-| oneAPI | 2025.3.2.4 with hotfix |
+| oneAPI | 2025.3.2 with hotfix |
 | PyTorch | 2.10 |
 | vllm-xpu-kernels | 0.1.4 |
 | oneCCL | 2021.15.7.8 |
@@ -130,7 +130,7 @@ The following items are also known issues:
    ```bash
    docker run -t -d --shm-size 10g --net=host --ipc=host --privileged \
      -v /dev/dri/by-path:/dev/dri/by-path --name=vllm-test \
-     --device /dev/dri:/dev/dri --entrypoint= intel/vllm:0.17.0-xpu /bin/bash
+     --device /dev/dri:/dev/dri --entrypoint=/bin/bash intel/vllm:0.17.0-xpu
    ```
 
 3. Open two terminals and run `docker exec -it vllm-test bash` in both of them. Use one terminal for the server and the other for the client.
