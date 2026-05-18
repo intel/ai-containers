@@ -28,7 +28,7 @@ repos:
       )$
     id: insert-license
   repo: https://github.com/Lucas-C/pre-commit-hooks
-  rev: v1.5.5
+  rev: v1.5.6
 - hooks:
   - args: ["--config", ".github/linters/.hadolint.yaml"]
     id: hadolint-docker
@@ -38,7 +38,7 @@ repos:
   - args: ["--config", ".github/linters/.markdown-lint.yml"]
     id: markdownlint
   repo: https://github.com/igorshubovych/markdownlint-cli
-  rev: v0.47.0
+  rev: v0.48.0
 - hooks:
   - id: shellcheck
   repo: https://github.com/koalaman/shellcheck-precommit
@@ -47,7 +47,7 @@ repos:
   - args: ["--config-file", ".github/linters/actionlint.yml"]
     id: actionlint
   repo: https://github.com/rhysd/actionlint
-  rev: v1.7.10
+  rev: v1.7.12
 - hooks:
   - id: helm-docs-container
   repo: https://github.com/norwoodj/helm-docs
@@ -59,12 +59,12 @@ repos:
 - hooks:
   - id: black
   repo: https://github.com/ambv/black
-  rev: 25.12.0
+  rev: 26.5.1
 - hooks:
   - args: ["--sp", ".github/linters"]
     id: isort
   repo: https://github.com/pycqa/isort
-  rev: 7.0.0
+  rev: 9.0.0a3
 - hooks:
   - args: ["--rcfile=.github/linters/.python-lint"]
     entry: pylint
