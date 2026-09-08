@@ -8,6 +8,11 @@ This project has been identified as having known security issues.
 
 Contact: webadmin@linux.intel.com
 
+> [!NOTE]
+> While this repository is no longer supported, for those interested, there is a closely related supported repository.
+> 
+> Please review the README at [Intel/Containers](https://github.com/intel/containers)
+
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8270/badge)](https://www.bestpractices.dev/projects/8270)
 [![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/intel/ai-containers/badge)](https://securityscorecards.dev/viewer/?uri=github.com/intel/ai-containers)
