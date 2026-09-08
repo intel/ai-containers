@@ -1,16 +1,16 @@
-## THIS PROJECT IS ARCHIVED 
+## THIS PROJECT IS ARCHIVED
 
-Intel will not provide or guarantee development of or support for this project, including but not limited to, maintenance, bug fixes, new releases or updates. 
+Intel will not provide or guarantee development of or support for this project, including but not limited to, maintenance, bug fixes, new releases or updates.
 
-Patches to this project are no longer accepted by Intel.   
+Patches to this project are no longer accepted by Intel.
 
-This project has been identified as having known security issues. 
+This project has been identified as having known security issues.
 
 Contact: webadmin@linux.intel.com
 
 > [!NOTE]
 > While this repository is no longer supported, for those interested, there is a closely related supported repository.
-> 
+>
 > Please review the README at [Intel/Containers](https://github.com/intel/containers)
 
 
