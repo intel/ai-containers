@@ -1,6 +1,6 @@
 --extra-index-url https://download.pytorch.org/whl/xpu
 
-numpy>=1.26.4
+numpy>=2.5.2
 captum>=0.7.0
 cython>=3.0.10
 pynvml>=11.5.0
